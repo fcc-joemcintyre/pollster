@@ -1,0 +1,85 @@
+.resultArea {
+  width: 100%;
+  max-width: $contentMaxWidth;
+  margin: 16px auto 0px auto;
+  overflow: auto;
+  font-family: sans-serif;
+
+  @media (max-width: 414px) {
+    .selectArea {
+      width: 100%
+    }
+
+    .displayArea {
+      margin-top: 16px;
+      padding-top: 16px;
+      width: 96%
+    }
+  }
+
+  @media (min-width: 415px) {
+    .selectArea {
+      margin-left: 3%;
+      width: 30%;
+      float: left;
+    }
+
+    .displayArea {
+      margin-left: 8%;
+      width: 56%;
+      float: left;
+    }
+  }
+
+  .selectArea {
+    h2 {
+      text-align: center;
+    }
+    select {
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+
+      option {
+        padding: 4px;
+      }
+      option:checked {
+        background-color: lightsteelblue;
+      }
+    }
+  }
+
+  .displayArea {
+    padding: 0px 4px 4px 4px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+
+    h2 {
+      text-align: center;
+    }
+    .totalVotes {
+      text-align: center;
+      font-size: 12px;
+      margin: 0px auto 8px auto;
+    }
+    .poll {
+      font-family: sans-serif;
+      margin: 0px 0px 4px 0px;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .poll:hover {
+      border: 1px solid blue;
+    }
+    .name {
+      color: black;
+      font-size: 18px;
+    }
+    .votes {
+      padding-top: 4px;
+      color: blue;
+      float: right;
+      font-size: 14px;
+    }
+  }
+}
