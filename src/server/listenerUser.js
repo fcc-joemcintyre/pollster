@@ -66,15 +66,19 @@ function verifyLogin (req, res) {
 // register new user. If already existing user, return 403 (Forbidden)
 function register (req, res) {
   console.log ('register');
-  db.insertUser (req.body.username, req.body.password)
-  .then (() => {
-    console.log ('  registered', req.body.username);
-    res.status (200).json ({});
-  })
-  .catch (err => {
-    console.log ('  error', err);
-    res.status (403).json ({});
-  });
+  if (! (req.body && req.body.username && req.body.password)) {
+    res.status (400).json ({});
+  } else {
+    db.insertUser (req.body.username, req.body.password)
+    .then (() => {
+      console.log ('  registered', req.body.username);
+      res.status (200).json ({});
+    })
+    .catch (err => {
+      console.log ('  error', err);
+      res.status (403).json ({});
+    });
+  }
 }
 
 function getProfile (req, res) {
