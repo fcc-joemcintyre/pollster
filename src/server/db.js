@@ -18,11 +18,11 @@ function init (uri) {
           return reject (err);
         }
         db = instance;
-        users = db.collection ('users');
-        users.ensureIndex ({username: 1}, {unique: true})
-        .then (() => {
+        Promise.resolve ().then (() => {
+          users = db.collection ('users');
+          return users.ensureIndex ({username: 1}, {unique: true});
+        }).then (() => {
           polls = db.collection ('polls');
-          console.log ('  completed');
           return resolve ();
         }).catch (err => {
           console.log ('  err', err);
@@ -30,7 +30,6 @@ function init (uri) {
         });
       });
     } else {
-      console.log ('  already completed');
       resolve ();
     }
   });
@@ -42,9 +41,15 @@ function close () {
     if (db) {
       users = null;
       polls = null;
-      db.close ()
-      .then (() => { db = null; resolve (); })
-      .catch (() => { db = null; resolve (); });
+      Promise.resolve ().then (() => {
+        return db.close ();
+      }).then (() => {
+        db = null;
+        resolve ();
+      }).catch (() => {
+        db = null;
+        resolve ();
+      });
     } else {
       resolve ();
     }
@@ -60,24 +65,24 @@ function findUserByUsername (username) {
 // register user type functions.
 function insertUser (username, password) {
   return new Promise ((resolve, reject) => {
-    findUserByUsername (username)
-    .then (result => {
+    Promise.resolve ().then (() => {
+      return findUserByUsername (username);
+    }).then (result => {
       if (result !== null) {
-        reject (new Error ('User already exists'));
-      } else {
-        let userHash = hash.create (password);
-        let user = {
-          username: username,
-          hash: userHash.hash,
-          salt: userHash.salt,
-          name: '',
-          email: ''
-        };
-        users.insert (user, {w:1})
-        .then (result => { resolve (result); });
+        return reject (new Error ('User already exists'));
       }
-    })
-    .catch (err => {
+      let userHash = hash.create (password);
+      let user = {
+        username: username,
+        hash: userHash.hash,
+        salt: userHash.salt,
+        name: '',
+        email: ''
+      };
+      return users.insert (user, {w:1});
+    }).then (result => {
+      resolve (result);
+    }).catch (err => {
       reject (err);
     });
   });
@@ -128,19 +133,9 @@ function removePolls () {
 
 // vote in a poll, for a specific choice.
 function vote (_id, choice) {
-  return new Promise ((resolve, reject) => {
-    polls.update (
+  return polls.update (
       {_id: new ObjectId (_id), 'choices.text': choice},
-      {$inc: { 'choices.$.votes': 1 }},
-      (err, result) => {
-        if (err) {
-          reject (err);
-        } else {
-          resolve (result);
-        }
-      }
-    );
-  });
+      {$inc: { 'choices.$.votes': 1 }});
 }
 
 exports.init = init;
