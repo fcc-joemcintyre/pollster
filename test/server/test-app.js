@@ -1,12 +1,11 @@
 'use strict';
 const request = require ('request');
 const db = require ('../../dist/db');
-const promiseTry = require ('../../dist/promiseTry');
 const url = require ('./test-main').url;
 
-describe ('polls (unauthenticated)', () => {
-  beforeEach ((done) => {
-    promiseTry (() => {
+describe ('polls (unauthenticated)', function () {
+  beforeEach (function (done) {
+    Promise.resolve ().then (() => {
       db.removePolls ();
     }).then (() => {
       let polls = [
@@ -22,8 +21,8 @@ describe ('polls (unauthenticated)', () => {
     });
   });
 
-  describe ('get all polls', (done) => {
-    it ('should return 3 polls', (done) => {
+  describe ('get all polls', function () {
+    it ('should return 3 polls', function (done) {
       request.get (`${url}api/polls`, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
@@ -41,11 +40,11 @@ describe ('polls (unauthenticated)', () => {
   });
 });
 
-describe ('polls (authenticated)', () => {
+describe ('polls (authenticated)', function () {
   let cookie;
   let pollIds = [];
-  beforeEach ((done) => {
-    promiseTry (() => {
+  beforeEach (function (done) {
+    Promise.resolve ().then (() => {
       db.removePolls ();
     }).then (() => {
       db.insertUser ('amy', 'test');
@@ -73,14 +72,14 @@ describe ('polls (authenticated)', () => {
     });
   });
 
-  afterEach ((done) => {
+  afterEach (function (done) {
     request.post (`${url}api/logout`, (err, res, body) => {
       done ();
     });
   });
 
-  describe ('get all polls', (done) => {
-    it ('should return 3 polls', (done) => {
+  describe ('get all polls', function () {
+    it ('should return 3 polls', function (done) {
       let jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
       request.get ({url: `${url}api/polls`, jar: jar}, (err, res, body) => {
@@ -99,8 +98,8 @@ describe ('polls (authenticated)', () => {
     });
   });
 
-  describe ('get single poll', () => {
-    it ('should return 1 poll', (done) => {
+  describe ('get single poll', function () {
+    it ('should return 1 poll', function (done) {
       let jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
       request.get ({url: `${url}api/polls/${pollIds[1]}`, jar: jar}, (err, res, body) => {
@@ -119,8 +118,8 @@ describe ('polls (authenticated)', () => {
     });
   });
 
-  describe ('add a poll', () => {
-    it ('should end with 4 polls', (done) => {
+  describe ('add a poll', function () {
+    it ('should end with 4 polls', function (done) {
       let jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
       let poll = {title: 'Poll anew', choices: ['Cake', 'Pie']};
@@ -147,8 +146,8 @@ describe ('polls (authenticated)', () => {
     });
   });
 
-  describe ('delete a poll', () => {
-    it ('should end with 2 polls', (done) => {
+  describe ('delete a poll', function () {
+    it ('should end with 2 polls', function (done) {
       let jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
       request.del ({url: `${url}api/polls/${pollIds[1]}`, jar: jar}, (err, res, body) => {
@@ -172,8 +171,8 @@ describe ('polls (authenticated)', () => {
     });
   });
 
-  describe ('vote', () => {
-    it ('should add 1 vote to a poll', (done) => {
+  describe ('vote', function () {
+    it ('should add 1 vote to a poll', function (done) {
       let pollId = pollIds[1].toString ();
       request.post (`${url}api/polls/${pollId}/votes/No`, (err, res, body) => {
         if (err) { return done (err); }

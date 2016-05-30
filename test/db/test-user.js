@@ -1,10 +1,9 @@
 'use strict';
 const db = require ('../../dist/db');
-const promiseTry = require ('../../dist/promiseTry');
 
-describe ('users', () => {
-  beforeEach ((done) => {
-    promiseTry (() => {
+describe ('users', function () {
+  beforeEach (function (done) {
+    Promise.resolve ().then (() => {
       return db.insertUser ('amy', 'test');
     }).then (() => {
       done ();
@@ -13,8 +12,8 @@ describe ('users', () => {
     });
   });
 
-  afterEach ((done) => {
-    promiseTry (() => {
+  afterEach (function (done) {
+    Promise.resolve ().then (() => {
       return db.removeUser ('amy');
     }).then (() => {
       done ();
@@ -23,9 +22,9 @@ describe ('users', () => {
     });
   });
 
-  describe ('find amy', () => {
-    it ('should be found', (done) => {
-      promiseTry (() => {
+  describe ('find amy', function () {
+    it ('should be found', function (done) {
+      Promise.resolve ().then (() => {
         return db.findUserByUsername ('amy');
       }).then (result => {
         if (result) {
@@ -39,9 +38,9 @@ describe ('users', () => {
     });
   });
 
-  describe ('find amyy', () => {
-    it ('should not be found', (done) => {
-      promiseTry (() => {
+  describe ('find amyy', function () {
+    it ('should not be found', function (done) {
+      Promise.resolve ().then (() => {
         return db.findUserByUsername ('amyy');
       }).then (result => {
         if (result) {
@@ -55,9 +54,9 @@ describe ('users', () => {
     });
   });
 
-  describe ('update amy', () => {
-    it ('should have new name and email', (done) => {
-      promiseTry (() => {
+  describe ('update amy', function () {
+    it ('should have new name and email', function (done) {
+      Promise.resolve ().then (() => {
         return db.updateUser ('amy', 'Amy Test', 'amy@example.com');
       }).then (() => {
         return db.findUserByUsername ('amy');

@@ -1,10 +1,9 @@
 'use strict';
 const db = require ('../../dist/db');
-const promiseTry = require ('../../dist/promiseTry');
 
-describe ('polls', () => {
-  beforeEach ((done) => {
-    promiseTry (() => {
+describe ('polls', function () {
+  beforeEach (function (done) {
+    Promise.resolve ().then (() => {
       return db.removePolls ({});
     }).then (() => {
       let polls = [
@@ -19,9 +18,9 @@ describe ('polls', () => {
     });
   });
 
-  describe ('find all polls', () => {
-    it ('2 polls should be found', (done) => {
-      promiseTry (() => {
+  describe ('find all polls', function () {
+    it ('2 polls should be found', function (done) {
+      Promise.resolve ().then (() => {
         return db.getPolls ();
       }).then ((result) => {
         if (result.length !== 2) {
@@ -33,9 +32,9 @@ describe ('polls', () => {
     });
   });
 
-  describe ('add poll', () => {
-    it ('3 polls should be found, 2 belonging to amy', (done) => {
-      promiseTry (() => {
+  describe ('add poll', function () {
+    it ('3 polls should be found, 2 belonging to amy', function (done) {
+      Promise.resolve ().then (() => {
         let poll = {creator: 'amy', title: 'Poll 3', choices: [{text: '1', votes: 0}, {text: '2', votes: 0}]};
         return db.insertPoll (poll);
       }).then ((result) => {
@@ -54,9 +53,9 @@ describe ('polls', () => {
     });
   });
 
-  describe ('vote', () => {
-    it ('should show vote counted for every item', (done) => {
-      promiseTry (() => {
+  describe ('vote', function () {
+    it ('should show vote counted for every item', function (done) {
+      Promise.resolve ().then (() => {
         return db.getPolls ();
       }).then (polls => {
         let promises = [];

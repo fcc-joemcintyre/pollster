@@ -10,9 +10,10 @@ let testdb = {
 };
 exports.testdb = testdb;
 
-before ((done) => {
-  mongoClient.connect (uri)
-  .then (dbInstance => {
+before (function (done) {
+  Promise.resolve ().then (() => {
+    return mongoClient.connect (uri);
+  }).then (dbInstance => {
     testdb.db = dbInstance;
     testdb.users = testdb.db.collection ('users');
     return testdb.users.ensureIndex ({username: 1}, {unique: true});
@@ -20,41 +21,33 @@ before ((done) => {
     return testdb.users.remove ({});
   }).then (() => {
     testdb.polls = testdb.db.collection ('polls');
-//    return testdb.bars.ensureIndex ({id: 1}, {unique: true});
-//  }).then (() => {
     return testdb.polls.remove ({});
-  }).then (() => {
-//    let data = [
-//      { id: 'the-dancing-bear-pub-waco', going: [] },
-//      { id: 'dichotomy-coffee-and-spirits-waco-2', going: [] },
-//      { id: 'brazos-bar-and-bistro-waco', going: [] },
-//      { id: 'trojan-cork-and-keg-waco', going: [] }
-//    ];
-//    return testdb.bars.insert (data, {w:1});
-//  }).then (() => {
-    return testdb.db.close ();
   }).then (() => {
     return db.init (uri);
   }).then (() => {
     done ();
-  })
-  .catch (err => {
+  }).catch (err => {
     done (err);
   });
 });
 
-after ((done) => {
-  testdb.db.close ()
-  .then (() => {
+after (function (done) {
+  Promise.resolve ().then (() => {
+    return db.close ();
+  }).then (() => {
+    return testdb.db.close ();
+  }).then (() => {
     done ();
+  }).catch (err => {
+    done (err);
   });
 });
 
-describe ('test-main', () => {
-  describe ('test-user', () => {
+describe ('test-main', function () {
+  describe ('test-user', function () {
     require ('./test-user');
   });
-  describe ('test-app', () => {
+  describe ('test-app', function () {
     require ('./test-app');
   });
 });
