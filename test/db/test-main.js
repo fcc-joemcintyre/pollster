@@ -10,40 +10,51 @@ let testdb = {
 };
 exports.testdb = testdb;
 
-before (function (done) {
-  Promise.resolve ().then (() => {
-    return mongoClient.connect (uri);
-  }).then (dbInstance => {
-    testdb.db = dbInstance;
-    testdb.users = testdb.db.collection ('users');
-    return testdb.users.ensureIndex ({username: 1}, {unique: true});
-  }).then (() => {
-    return testdb.users.remove ({});
-  }).then (() => {
-    testdb.polls = testdb.db.collection ('polls');
-    return testdb.polls.remove ({});
-  }).then (() => {
-    return db.init (uri);
-  }).then (() => {
-    done ();
-  }).catch (err => {
-    done (err);
-  });
+// test db calls with no database connection for error paths
+describe ('test no connection', function () {
+  require ('./test-nodb');
 });
 
-after (function (done) {
-  Promise.resolve ().then (() => {
-    return db.close ();
-  }).then (() => {
-    return testdb.db.close ();
-  }).then (() => {
-    done ();
-  }).catch (err => {
-    done (err);
-  });
+// test init and close functions
+describe ('test init/close', function () {
+  require ('./test-general');
 });
 
+// test application functions
 describe ('test-main', function () {
+  before (function (done) {
+    Promise.resolve ().then (() => {
+      return mongoClient.connect (uri);
+    }).then (dbInstance => {
+      testdb.db = dbInstance;
+      testdb.users = testdb.db.collection ('users');
+      return testdb.users.ensureIndex ({username: 1}, {unique: true});
+    }).then (() => {
+      return testdb.users.remove ({});
+    }).then (() => {
+      testdb.polls = testdb.db.collection ('polls');
+      return testdb.polls.remove ({});
+    }).then (() => {
+      return db.init (uri);
+    }).then (() => {
+      done ();
+    }).catch (err => {
+      done (err);
+    });
+  });
+
+  after (function (done) {
+    Promise.resolve ().then (() => {
+      return db.close ();
+    }).then (() => {
+      return testdb.db.close ();
+    }).then (() => {
+      done ();
+    }).catch (err => {
+      done (err);
+    });
+  });
+
   describe ('test-user', function () {
     require ('./test-user');
   });
