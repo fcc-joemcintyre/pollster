@@ -118,6 +118,21 @@ describe ('polls (authenticated)', function () {
     });
   });
 
+  describe ('get single poll (not found)', function () {
+    it ('should return 404', function (done) {
+      let jar = request.jar ();
+      jar.setCookie (cookie, 'http://localhost:3000');
+      request.get ({url: `${url}api/polls/000000000000000000000000`, jar: jar}, (err, res, body) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 404) {
+          return done ();
+        } else {
+          return done (new Error (`Invalid status code ${res.statusCode}`));
+        }
+      });
+    });
+  });
+
   describe ('add a poll', function () {
     it ('should end with 4 polls', function (done) {
       let jar = request.jar ();
@@ -139,6 +154,34 @@ describe ('polls (authenticated)', function () {
               return done (new Error (`Invalid status code ${res.statusCode}`));
             }
           });
+        } else {
+          return done (new Error (`Invalid status code ${res.statusCode}`));
+        }
+      });
+    });
+  });
+
+  describe ('update a poll', function () {
+    it ('should have updated fields', function (done) {
+      let jar = request.jar ();
+      jar.setCookie (cookie, 'http://localhost:3000');
+      let data = {title: 'UTitle', choices: ['U1', 'U2']};
+      request.post ({url: `${url}api/polls/${pollIds[1]}`, jar: jar, json: data}, (err, res, body) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 200) {
+          if (err) { return done (err); }
+          if (res.statusCode === 200) {
+            request.get ({url: `${url}api/polls/${pollIds[1]}`, jar: jar}, (err, res, body) => {
+              body = JSON.parse (body);
+              if ((body.title === 'UTitle') && (body.choices[0].text === 'U1') && (body.choices[1].text === 'U2')) {
+                return done ();
+              } else {
+                return done (new Error (`Invalid field content: ${JSON.stringify (body)}`));
+              }
+            });
+          } else {
+            return done (new Error (`Invalid status code ${res.statusCode}`));
+          }
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
         }

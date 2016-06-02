@@ -1,6 +1,5 @@
 'use strict';
 const db = require ('./db');
-const promiseTry = require ('./promiseTry');
 
 // Initialize listeners (currently empty)
 function init () {
@@ -8,7 +7,7 @@ function init () {
 
 function getPolls (req, res) {
   console.log ('getPolls');
-  promiseTry (() => {
+  Promise.resolve ().then (() => {
     return db.getPolls ();
   }).then (polls => {
     res.status (200).json (polls);
@@ -20,7 +19,7 @@ function getPolls (req, res) {
 
 function getPoll (req, res) {
   console.log ('getPoll', req.params._id);
-  promiseTry (() => {
+  Promise.resolve ().then (() => {
     return db.getPoll (req.params._id);
   }).then (poll => {
     if (poll) {
@@ -45,7 +44,7 @@ function addPoll (req, res) {
     title: req.body.title,
     choices: choices
   };
-  promiseTry (() => {
+  Promise.resolve ().then (() => {
     return db.insertPoll (poll);
   }).then (result => {
     console.log ('  addPoll added', result.ops[0]._id);
@@ -67,8 +66,8 @@ function updatePoll (req, res) {
     title: req.body.title,
     choices: choices
   };
-  promiseTry (() => {
-    return db.updatePoll (req.body._id, poll);
+  Promise.resolve ().then (() => {
+    return db.updatePoll (req.params._id, poll);
   }).then (() => {
     res.status (200).json ({});
   }).catch (err => {
@@ -79,7 +78,7 @@ function updatePoll (req, res) {
 
 function deletePoll (req, res) {
   console.log ('deletePoll', req.params._id);
-  promiseTry (() => {
+  Promise.resolve ().then (() => {
     return db.removePoll (req.params._id);
   }).then (() => {
     res.status (200).json ({});
@@ -91,7 +90,7 @@ function deletePoll (req, res) {
 
 function vote (req, res) {
   console.log ('vote', req.params._id, req.params.choice);
-  promiseTry (() => {
+  Promise.resolve ().then (() => {
     return db.vote (req.params._id, req.params.choice);
   }).then (() => {
     res.status (200).json ({});
