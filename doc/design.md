@@ -21,6 +21,8 @@ dedicated results page.
 An instance of the application is hosted on Heroku at
 https://pollster-jm/herokuapp.com
 
+# Design
+
 ## Functional Requirements
 
 Client Loading:
@@ -47,6 +49,28 @@ Data Exchange:
   - login, logout, verifyLogin (for continuing session)
   - add, query, edit, remove polls
   - vote in a poll
+
+## Data Definitions
+
+#### User
+
+| Field    | Description |
+| -------- | ----------- |
+| username | Unique, indexed. Short text name for user |
+| hash     | Password hash |
+| salt     | Password salt |
+| name     | Full name |
+| email    | Email address |
+
+#### Polls
+
+| Field      | Description |
+| ---------- | ----------- |
+| creator    | FKey users.username. Poll creator. |
+| title      | Poll title. |
+| choices    | Array of poll choices. |
+|  > text    | Choice text. |
+|  > votes   | Number of votes. |
 
 ## Non-Functional Requirements
 
