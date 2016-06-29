@@ -21,7 +21,7 @@ function init (app) {
   app.post ('/api/polls/:_id/votes/:choice', listenerApp.vote);
 }
 
-// authenticate, if passing continue, otherwise redirect to home page
+// authenticate, if passing continue, otherwise return 401 (auth failure)
 function isAuthenticated (req, res, next) {
   if (req.isAuthenticated ()) {
     return next ();
