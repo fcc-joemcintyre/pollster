@@ -1,9 +1,9 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Link, withRouter} from 'react-router';
 import {getPoll} from '../store/polls';
 import {vote} from '../store/actions';
 
-export default class PollPage extends React.Component {
+class PollPage extends React.Component {
   constructor (props, context) {
     super (props, context);
     let _id = this.props.params._id;
@@ -46,7 +46,7 @@ export default class PollPage extends React.Component {
   render () {
     if (this.state.poll === null) {
       return (
-        <form className='messageForm' onSubmit={() => { this.context.router.push ('/') }}>
+        <form className='messageForm' onSubmit={() => { this.props.router.push ('/') }}>
           <p>Sorry, could not find that poll for you.</p>
           <button>Back to Polls</button>
         </form>
@@ -87,7 +87,7 @@ export default class PollPage extends React.Component {
       );
     }
     buttons.push (
-      <button key='button2' className='dialogGroupButton' onClick={() => this.context.router.push ('/')}>
+      <button key='button2' className='dialogGroupButton' onClick={() => this.props.router.push ('/')}>
         Back to Polls
       </button>
     );
@@ -107,7 +107,8 @@ export default class PollPage extends React.Component {
   }
 }
 
+export default withRouter (PollPage);
+
 PollPage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
-  router: React.PropTypes.object.isRequired
+  store: React.PropTypes.object.isRequired
 }

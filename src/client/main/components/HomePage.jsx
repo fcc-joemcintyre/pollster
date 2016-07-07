@@ -1,7 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Link, withRouter} from 'react-router';
 
-export default class HomePage extends React.Component {
+class HomePage extends React.Component {
   constructor (props, context) {
     super (props, context);
     let s = context.store.getState ();
@@ -35,7 +35,7 @@ export default class HomePage extends React.Component {
         let totalVotes = polls[i].choices.reduce ((a, b) => a + b.votes, 0);
         rows.push (
           <div key={polls[i]._id} className={(i % 2 === 0) ? 'poll even' : 'poll odd'}
-            onClick={() => this.context.router.push ('/polls/' + polls[i]._id)}>
+            onClick={() => this.props.router.push ('/polls/' + polls[i]._id)}>
             <span className='name'>{polls[i].title}</span>
             <span className='votes'>{totalVotes} votes</span>
           </div>
@@ -66,7 +66,8 @@ export default class HomePage extends React.Component {
   }
 }
 
+export default withRouter (HomePage);
+
 HomePage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
-  router: React.PropTypes.object.isRequired
+  store: React.PropTypes.object.isRequired
 }
