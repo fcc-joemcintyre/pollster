@@ -25,9 +25,10 @@
     "mongodb": "2.1.19"
   },
   "scripts": {
-    "test": "npm run test-db && npm run test-server",
+    "test": "npm run test-db && npm run test-server && npm run test-store",
     "test-server": "mocha test/server/test-main.js",
     "test-db": "mocha test/db/test-main.js",
+    "test-store": "mocha --compilers js:babel-register test/store/test-main.js",
     "start": "nodemon dist/main.js --port=3000",
     "build": "gulp",
     "build-stage": "gulp stage",

@@ -1,6 +1,10 @@
 import { SET_POLLS } from './constants';
 import request from 'request';
 
+export function setPolls (polls) {
+  return { type: SET_POLLS, polls };
+}
+
 export function initPolls () {
   return dispatch => {
     return new Promise ((resolve, reject) => {
@@ -11,7 +15,7 @@ export function initPolls () {
           reject (res.statusCode);
         } else {
           let polls = JSON.parse (body);
-          dispatch ({ type: SET_POLLS, polls });
+          dispatch (setPolls (polls));
           resolve ();
         }
       });
