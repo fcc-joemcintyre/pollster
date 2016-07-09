@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import * as types from '../../src/client/account/store/constants';
 import * as actions from '../../src/client/account/store/actions';
+import reducer from '../../src/client/store/rootReducer';
 
 // set location global to mimic browser object
 global.location = { origin: 'http://localhost:3999' };
@@ -140,6 +141,61 @@ describe ('Test account async actions', function () {
       .then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
       });
+    });
+  });
+});
+
+describe ('Test user reducers', function () {
+  const defaultInitialState = Object.freeze ({
+    authenticated: false,
+    username: '',
+    name: '',
+    email: ''
+  });
+
+  describe ('Reducer: default initialization', function () {
+    it ('should return initial state', function () {
+      const expectedObject = {
+        authenticated: false,
+        username: '',
+        name: '',
+        email: ''
+      };
+      assert.deepStrictEqual (reducer (undefined, {}).user, expectedObject);
+    });
+  });
+
+  describe ('Reducer: SET_AUTHENTICATED', function () {
+    it ('should create action to set authentication', function () {
+      const expectedObject = {
+        authenticated: true,
+        username: 'amy',
+        name: '',
+        email: ''
+      };
+      const actualObject = reducer (defaultInitialState, {
+        type: types.SET_AUTHENTICATED,
+        authenticated: true,
+        username: 'amy'
+      }).user;
+      assert.deepStrictEqual (actualObject, expectedObject);
+    });
+  });
+
+  describe ('Reducer: SET_PROFILE', function () {
+    it ('should create action to set profile', function () {
+      const expectedObject = {
+        authenticated: false,
+        username: '',
+        name: 'Amy Tester',
+        email: 'amy@example.com'
+      };
+      const actualObject = reducer (defaultInitialState, {
+        type: types.SET_PROFILE,
+        name: 'Amy Tester',
+        email: 'amy@example.com'
+      }).user;
+      assert.deepStrictEqual (actualObject, expectedObject);
     });
   });
 });
