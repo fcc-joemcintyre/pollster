@@ -5,6 +5,8 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import * as types from '../../src/client/main/store/constants';
 import * as actions from '../../src/client/main/store/actions';
+import pollsReducer from '../../src/client/main/store/polls';
+import freeze from '../freeze';
 
 // set location global to mimic browser object
 global.location = { origin: 'http://localhost:3999' };
@@ -158,6 +160,48 @@ describe ('Test account async actions', function () {
       .then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
       });
+    });
+  });
+});
+
+describe ('Test poll reducers', function () {
+  const initialState = freeze ([
+    {_id:'1000', creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
+    {_id:'1001', creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
+    {_id:'1002', creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+  ]);
+  const newState = [
+    {_id:'1000', creator: 'amy', title: 'Animals', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
+    {_id:'1001', creator: 'amy', title: 'Yes No', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
+    {_id:'1002', creator: 'bob', title: 'Colors', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+  ];
+
+  describe ('Reducer: default initialization', function () {
+    it ('should return initial state', function () {
+      const expectedObject = [];
+      assert.deepStrictEqual (pollsReducer (undefined, {}), expectedObject);
+    });
+  });
+
+  describe ('Reducer: SET_POLLS to initialState', function () {
+    it ('should end in initialState', function () {
+      const expectedObject = initialState;
+      const actualObject = pollsReducer (undefined, {
+        type: types.SET_POLLS,
+        polls: initialState
+      });
+      assert.deepStrictEqual (actualObject, expectedObject);
+    });
+  });
+
+  describe ('Reducer: SET_POLLS from initialState to newState', function () {
+    it ('should end in newState', function () {
+      const expectedObject = newState;
+      const actualObject = pollsReducer (initialState, {
+        type: types.SET_POLLS,
+        polls: newState
+      });
+      assert.deepStrictEqual (actualObject, expectedObject);
     });
   });
 });

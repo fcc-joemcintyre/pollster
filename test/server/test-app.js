@@ -226,7 +226,6 @@ describe ('polls (authenticated)', function () {
               let polls = JSON.parse (body);
               for (let poll of polls) {
                 if (poll._id === pollId) {
-                  console.log (1, poll);
                   if (poll.choices[1].votes === 1) {
                     return done ();
                   } else {
