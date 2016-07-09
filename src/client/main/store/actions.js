@@ -32,7 +32,6 @@ export function addPoll (poll) {
         } else if (res.statusCode !== 200) {
           reject (res.statusCode);
         } else {
-          poll._id = JSON.parse (body)._id;
           dispatch (initPolls ());
           resolve ();
         }
