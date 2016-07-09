@@ -1,4 +1,4 @@
-import { SET_POLLS, ADD_POLL } from './constants';
+import { SET_POLLS } from './constants';
 
 let initialState = [];
 
@@ -6,9 +6,6 @@ export default function polls (state = initialState, action) {
   switch (action.type) {
     case SET_POLLS:
       return action.polls.slice ();
-
-    case ADD_POLL:
-      return state.concat (action.poll);
 
     default:
       return state;
