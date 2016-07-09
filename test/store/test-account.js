@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import * as types from '../../src/client/account/store/constants';
 import * as actions from '../../src/client/account/store/actions';
-import reducer from '../../src/client/store/rootReducer';
+import userReducer from '../../src/client/account/store/user';
 
 // set location global to mimic browser object
 global.location = { origin: 'http://localhost:3999' };
@@ -161,7 +161,7 @@ describe ('Test user reducers', function () {
         name: '',
         email: ''
       };
-      assert.deepStrictEqual (reducer (undefined, {}).user, expectedObject);
+      assert.deepStrictEqual (userReducer (undefined, {}), expectedObject);
     });
   });
 
@@ -173,11 +173,11 @@ describe ('Test user reducers', function () {
         name: '',
         email: ''
       };
-      const actualObject = reducer (defaultInitialState, {
+      const actualObject = userReducer (defaultInitialState, {
         type: types.SET_AUTHENTICATED,
         authenticated: true,
         username: 'amy'
-      }).user;
+      });
       assert.deepStrictEqual (actualObject, expectedObject);
     });
   });
@@ -190,11 +190,11 @@ describe ('Test user reducers', function () {
         name: 'Amy Tester',
         email: 'amy@example.com'
       };
-      const actualObject = reducer (defaultInitialState, {
+      const actualObject = userReducer (defaultInitialState, {
         type: types.SET_PROFILE,
         name: 'Amy Tester',
         email: 'amy@example.com'
-      }).user;
+      });
       assert.deepStrictEqual (actualObject, expectedObject);
     });
   });
