@@ -39,7 +39,7 @@ class PollPage extends React.Component {
       let choice = poll.choices[this.state.selected];
       choice.votes ++;
       this.setState ({voted: true, poll: poll});
-      this.context.store.dispatch (vote (this.state.poll, choice.text));
+      this.context.store.dispatch (vote (this.state.poll._id, choice.text));
     }
   }
 

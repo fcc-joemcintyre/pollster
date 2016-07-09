@@ -32,8 +32,10 @@ export function addPoll (poll) {
         } else if (res.statusCode !== 200) {
           reject (res.statusCode);
         } else {
-          dispatch (initPolls ());
-          resolve ();
+          dispatch (initPolls ())
+          .then (() => {
+            resolve ();
+          });
         }
       });
     });
@@ -49,8 +51,10 @@ export function updatePoll (poll) {
         } else if (res.statusCode !== 200) {
           reject (res.statusCode);
         } else {
-          dispatch (initPolls ());
-          resolve ();
+          dispatch (initPolls ())
+          .then (() => {
+            resolve ();
+          });
         }
       });
     });
@@ -66,25 +70,29 @@ export function deletePoll (_id) {
         } else if (res.statusCode !== 200) {
           reject (res.statusCode);
         } else {
-          dispatch (initPolls ());
-          resolve ();
+          dispatch (initPolls ())
+          .then (() => {
+            resolve ();
+          });
         }
       });
     });
   };
 }
 
-export function vote (poll, choice) {
+export function vote (_id, choice) {
   return dispatch => {
     return new Promise ((resolve, reject) => {
-      request.post (location.origin + '/api/polls/' + poll._id + '/votes/' + choice, {form: poll}, (err, res, body) => {
+      request.post (location.origin + '/api/polls/' + _id + '/votes/' + choice, (err, res, body) => {
         if (err) {
           reject (err);
         } else if (res.statusCode !== 200) {
           reject (res.statusCode);
         } else {
-          dispatch (initPolls ());
-          resolve ();
+          dispatch (initPolls ())
+          .then (() => {
+            resolve ();
+          });
         }
       });
     });
