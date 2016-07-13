@@ -19,7 +19,7 @@ import ResultPage from './ResultPage.jsx';
 import AboutPage from './AboutPage.jsx';
 
 // initialize store
-const store = configureStore ({});
+const store = configureStore ();
 store.dispatch (verifyLogin ())
 .then (() => {
   store.dispatch (initPolls ())
