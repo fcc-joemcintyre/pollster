@@ -15,7 +15,11 @@ let sourcemaps = require ('gulp-sourcemaps');
 let dependencies = [
   'react',
   'react-dom',
-  'react-router'
+  'react-redux',
+  'react-router',
+  'redux',
+  'redux-thunk',
+  'whatwg-fetch'
 ];
 let stageDir = '../pollster-stage';
 let base = 'dist';

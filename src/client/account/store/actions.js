@@ -1,18 +1,27 @@
 import { SET_AUTHENTICATED, SET_PROFILE } from './constants';
-import request from 'request';
+import 'whatwg-fetch';
 
 export function register (username, password) {
   return dispatch => {
     return new Promise ((resolve, reject) => {
-      let form = { form: {username: username, password: password}};
-      request.post (location.origin + '/api/register', form, (err, res, body) => {
-        if (err) {
-          reject (err);
-        } else if (res.statusCode !== 200) {
-          reject (res.statusCode);
+      let data = {username: username, password: password};
+      fetch (location.origin + '/api/register', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify (data)
+      }).then (res => {
+        if (! res.ok) {
+          reject (res.statusText);
         } else {
           resolve ();
         }
+      })
+      .catch (err => {
+        reject (err);
       });
     });
   };
@@ -21,18 +30,27 @@ export function register (username, password) {
 export function login (username, password) {
   return dispatch => {
     return new Promise ((resolve, reject) => {
-      let form = { form: {username: username, password: password}};
-      request.post (location.origin + '/api/login', form, (err, res, body) => {
-        if (err) {
-          reject (err);
-        } else if (res.statusCode !== 200) {
-          reject (res.statusCode);
+      let data = {username: username, password: password};
+      fetch (location.origin + '/api/login', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify (data)
+      }).then (res => {
+        if (! res.ok) {
+          reject (res.statusText);
         } else {
-          let user = JSON.parse (body);
-          dispatch (setAuthenticated (true, user.username));
-          dispatch (setProfile (user.name, user.email));
-          resolve ();
+          return res.json ();
         }
+      }).then (user => {
+        dispatch (setAuthenticated (true, user.username));
+        dispatch (setProfile (user.name, user.email));
+        resolve ();
+      }).catch (err => {
+        reject (err);
       });
     });
   };
@@ -41,15 +59,19 @@ export function login (username, password) {
 export function logout () {
   return dispatch => {
     return new Promise ((resolve, reject) => {
-      request.post (location.origin + '/api/logout', (err, res, body) => {
+      fetch (location.origin + '/api/logout', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      }).then (res => {
         dispatch (setAuthenticated (false, ''));
-        if (err) {
-          reject (err);
-        } else if (res.statusCode !== 200) {
-          reject (res.statusCode);
-        } else {
-          resolve ();
-        }
+        resolve ();
+      }).catch (err => {
+        dispatch (setAuthenticated (false, ''));
+        reject (err);
       });
     });
   };
@@ -58,23 +80,31 @@ export function logout () {
 export function verifyLogin () {
   return dispatch => {
     return new Promise ((resolve, reject) => {
-      request.get (location.origin + '/api/verifylogin', (err, res, body) => {
-        if (err) {
-          reject (err);
-        } else if (res.statusCode !== 200) {
-          reject (res.statusCode);
+      fetch (location.origin + '/api/verifylogin', {
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      }).then (res => {
+        if (! res.ok) {
+          reject (res.statusText);
         } else {
-          let login = JSON.parse (body);
-          if (login.authenticated) {
-            dispatch (setAuthenticated (true, login.user.username));
-            dispatch (setProfile (login.user.name, login.user.email));
-            resolve (true);
-          } else {
-            dispatch (setAuthenticated (false, ''));
-            dispatch (setProfile ('', ''));
-            resolve (false);
-          }
+          return res.json ();
         }
+      }).then (login => {
+        if (login.authenticated) {
+          dispatch (setAuthenticated (true, login.user.username));
+          dispatch (setProfile (login.user.name, login.user.email));
+          resolve (true);
+        } else {
+          dispatch (setAuthenticated (false, ''));
+          dispatch (setProfile ('', ''));
+          resolve (false);
+        }
+      }).catch (err => {
+        reject (err);
       });
     });
   };
@@ -91,15 +121,23 @@ export function updateProfile (name, email) {
         name: name,
         email: email
       };
-      request.post ({url: location.origin + '/api/profile', json: data}, (err, res, body) => {
-        if (err) {
-          reject (err);
-        } else if (res.statusCode !== 200) {
+      fetch (location.origin + '/api/profile', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify (data)
+      }).then (res => {
+        if (! res.ok) {
           reject (res.statusCode);
         } else {
           dispatch (setProfile (name, email));
           resolve ();
         }
+      }).catch (err => {
+        reject (err);
       });
     });
   };
