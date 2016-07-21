@@ -10,6 +10,7 @@ function init () {
 function login (req, res, next) {
   console.log ('login');
   if (! (req.body && req.body.username && req.body.password)) {
+    console.log ('login', '(400) invalid login body', JSON.stringify (req.body));
     res.status (400).json ({});
   } else {
     passport.authenticate ('local', (err, user, info) => {
@@ -18,7 +19,7 @@ function login (req, res, next) {
       }
       // if not a valid user, return 401 auth error
       if (! user) {
-        console.log ('  login', 'unauthenticated');
+        console.log ('  login', '(401) unauthenticated');
         return res.status (401).json ({});
       }
       req.login (user, (err) => {
@@ -71,6 +72,7 @@ function verifyLogin (req, res) {
 function register (req, res) {
   console.log ('register');
   if (! (req.body && req.body.username && req.body.password)) {
+    console.log ('register', '(400) invalid login body', JSON.stringify (req.body));
     res.status (400).json ({});
   } else {
     db.insertUser (req.body.username, req.body.password)
@@ -98,7 +100,7 @@ function updateProfile (req, res) {
     res.status (200).json ({});
   })
   .catch (err => {
-    console.log ('  error', err);
+    console.log ('  error (500)', err);
     res.status (500).json ({});
   });
 }
