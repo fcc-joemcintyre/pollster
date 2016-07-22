@@ -13,6 +13,7 @@ let gzip = require ('gulp-gzip');
 let sourcemaps = require ('gulp-sourcemaps');
 
 let dependencies = [
+  'babel-polyfill',
   'react',
   'react-dom',
   'react-redux',
