@@ -14,7 +14,7 @@
   display: block;
   height: 32px;
   padding: 4px 0px 4px 8px;
-  background-color: #ADD8E6;
+  background-color: white;
 
   h1 {
     float: left;
@@ -53,8 +53,8 @@
 .navApp {
   display: block;
   height: 20px;
-  padding: 0px 0px 4px 8px;
-  background-color: #ADD8E6;
+  padding: 0px 0px 8px 8px;
+  background-color: white;
   border-bottom: 1px solid darkgray;
 
   ul {
@@ -79,7 +79,7 @@
 
       a.active {
         color: black;
-        border-bottom: 2px solid blue;
+        border-bottom: 2px solid #ADD8E6;
       }
     }
   }

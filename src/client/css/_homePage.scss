@@ -4,6 +4,9 @@
   max-width: $contentMaxWidth;
   margin: 0px auto 0px auto;
 
+  .homeMessage {
+    padding: 4px 0 8px 0;
+  }
   p {
     text-align: center;
     font-family: 'Lato', sans-serif;
@@ -18,7 +21,7 @@
 .pollList {
   max-width: 500px;
   margin: 0px auto 0px auto;
-  
+
   .poll {
     font-family: 'Lato', sans-serif;
     padding: 8px;
