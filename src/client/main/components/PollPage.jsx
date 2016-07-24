@@ -55,6 +55,7 @@ class PollPage extends React.Component {
     let totalVotes = this.state.poll.choices.reduce ((a, b) => a + b.votes, 0);
     let rows = [];
     for (let i = 0; i < this.state.poll.choices.length; i ++) {
+      let pollClassName = (i === this.state.selected) ? 'pollItem pollSelected' : 'pollItem';
       let check = (i === this.state.selected) ? <span>&#10003; </span> : <span></span>;
       let choice = <span>{this.state.poll.choices[i].text}</span>;
       let key = 'p-r-' + i;
@@ -63,14 +64,14 @@ class PollPage extends React.Component {
         let percentText = <span className='votes'>{percent}%</span>;
         let gradient = `-webkit-linear-gradient(left, lightgreen 0%, lightgreen ${percent}%, #F0FFF0 ${percent}%, #F0FFF0)`;
         rows.push (
-          <div key={key} className={'poll'}
+          <div key={key} className={pollClassName}
             style={{background: gradient, border: '1px solid #E5FFCC'}}>
             {check}{choice}{percentText}
           </div>
         );
       } else {
         rows.push (
-          <div key={key} className={(i % 2 === 0) ? 'poll even' : 'poll odd'}
+          <div key={key} className={(i % 2 === 0) ? `${pollClassName} even` : `${pollClassName} odd`}
             onClick={() => { this.setState ({selected: i}) }}>
             {check}{choice}
           </div>
@@ -95,10 +96,10 @@ class PollPage extends React.Component {
     return (
       <div className='pollPage'>
         <h2>{this.state.poll.title}</h2>
-        <p>Select your favorite, the poll results will be shown after you vote.</p>
         <div className='pollItems'>
           {rows}
         </div>
+        <p className='pollHint'>Select your favorite, the poll results will be shown after you vote.</p>
         <div className='dialogGroupButtonArea'>
           {buttons}
         </div>
