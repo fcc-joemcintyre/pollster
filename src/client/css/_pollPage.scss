@@ -18,33 +18,51 @@
 }
 
 .pollItems {
-  .pollItem {
-    font-family: 'Lato', sans-serif;
-    padding: 8px;
-    cursor: pointer;
-  }
-  .pollItem:hover {
-    border: 1px solid blue;
-  }
-  .name {
-    color: black;
-    font-size: 18px;
-  }
-  .votes {
-    padding-top: 4px;
-    color: blue;
-    float: right;
-    font-size: 14px;
-  }
-  .odd {
-    border: 1px solid #EEEEEE;
-    background-color: #B0E0E6;
-  }
-  .even {
-    border: 1px solid #EEEEEE;
-    background-color: #AFEEEE;
-  }
-  .pollSelected {
-    background-color: lightgreen;
-  }
+}
+
+.pollItem {
+  font-family: 'Lato', sans-serif;
+  padding: 8px;
+  cursor: pointer;
+}
+.pollItem:hover {
+  border: 1px solid blue;
+}
+.pollItemName {
+  color: black;
+  font-size: 18px;
+}
+.pollItemOdd {
+  border: 1px solid #EEEEEE;
+  background-color: #B0E0E6;
+}
+.pollItemEven {
+  border: 1px solid #EEEEEE;
+  background-color: #AFEEEE;
+}
+.pollItemSelected {
+  background-color: lightgreen;
+}
+
+.votedItemArea {
+  position: relative;
+  width: calc(100% - 2px);
+  height: 38px;
+  overflow: auto;
+  background-color: #F0F8FF;
+  border: 1px solid #EEEEEE;
+  font-family: 'Lato', sans-serif;
+}
+.votedItemName {
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  max-width: calc(100% - 40px);
+  font-size: 18px;
+}
+.votedItemPercent {
+  position: absolute;;
+  right: 8px;
+  top: 11px;
+  font-size: 16px;
 }

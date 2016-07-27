@@ -15,7 +15,8 @@ class PollPage extends React.Component {
       _id: _id,
       poll: poll,
       selected: -1,
-      voted: false
+      voted: false,
+      transition: false
     };
     this.handleVote = this.handleVote.bind (this);
   }
@@ -55,28 +56,46 @@ class PollPage extends React.Component {
     let totalVotes = this.state.poll.choices.reduce ((a, b) => a + b.votes, 0);
     let rows = [];
     for (let i = 0; i < this.state.poll.choices.length; i ++) {
-      let pollClassName = (i === this.state.selected) ? 'pollItem pollSelected' : 'pollItem';
-      let check = (i === this.state.selected) ? <span>&#10003; </span> : <span></span>;
-      let choice = <span>{this.state.poll.choices[i].text}</span>;
       let key = 'p-r-' + i;
       if (this.state.voted) {
+        let text = (i === this.state.selected) ? '\u2713 ' : '';
+        text += this.state.poll.choices[i].text;
         let percent = (totalVotes === 0) ? 0 : Math.floor (this.state.poll.choices[i].votes / totalVotes * 100);
-        let percentText = <span className='votes'>{percent}%</span>;
-        let gradient = `-webkit-linear-gradient(left, lightgreen 0%, lightgreen ${percent}%, #F0FFF0 ${percent}%, #F0FFF0)`;
         rows.push (
-          <div key={key} className={pollClassName}
-            style={{background: gradient, border: '1px solid #E5FFCC'}}>
-            {check}{choice}{percentText}
+          <div key={key} className='votedItemArea'>
+            <div
+              style={{
+                position: 'absolute',
+                left: '0',
+                top: '0',
+                height: '100%',
+                width: `${this.state.transition ? percent : 0}%`,
+                backgroundColor: 'lightsteelblue',
+                transition: 'width 3s'}}
+              >
+            </div>
+            <span className='votedItemName'>{text}</span>
+            <span className='votedItemPercent'>{percent}%</span>
           </div>
         );
       } else {
+        let pollClassName = (i === this.state.selected) ? 'pollItem pollItemSelected' : 'pollItem';
+        let check = (i === this.state.selected) ? <span className='pollItemName'>&#10003; </span> : null;
+        let choice = <span className='pollItemName'>{this.state.poll.choices[i].text}</span>;
         rows.push (
-          <div key={key} className={(i % 2 === 0) ? `${pollClassName} even` : `${pollClassName} odd`}
+          <div key={key} className={(i % 2 === 0) ? `${pollClassName} pollItemEven` : `${pollClassName} pollItemOdd`}
             onClick={() => { this.setState ({selected: i}) }}>
             {check}{choice}
           </div>
         );
       }
+    }
+
+    // on initial display of results, initiate CSS transition
+    if (this.state.voted && (this.state.transition === false)) {
+      setTimeout (() => {
+        this.setState ({transition: true});
+      }, 0);
     }
 
     let buttons = [];
