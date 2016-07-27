@@ -95,7 +95,7 @@ class PollPage extends React.Component {
     if (this.state.voted && (this.state.transition === false)) {
       setTimeout (() => {
         this.setState ({transition: true});
-      }, 0);
+      }, 100);
     }
 
     let buttons = [];
