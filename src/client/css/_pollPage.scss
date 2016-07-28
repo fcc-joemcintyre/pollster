@@ -26,10 +26,9 @@
   cursor: pointer;
 }
 .pollItem:hover {
-  border: 1px solid blue;
+  border: 1px solid $itemHoverBorder;
 }
 .pollItemName {
-  color: black;
   font-size: 18px;
 }
 .pollItemOdd {

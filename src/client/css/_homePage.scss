@@ -28,7 +28,7 @@
     cursor: pointer;
   }
   .poll:hover {
-    border: 1px solid blue;
+    border: 1px solid $itemHoverBorder;
   }
   .name {
     color: black;
@@ -41,11 +41,11 @@
     font-size: 14px;
   }
   .odd {
-    border: 1px solid #EEEEEE;
-    background-color: #B0E0E6;
+    border: 1px solid $itemBorder;
+    background-color: $itemOdd;
   }
   .even {
-    border: 1px solid #EEEEEE;
-    background-color: #AFEEEE;
+    border: 1px solid $itemBorder;
+    background-color: $itemEven;
   }
 }
