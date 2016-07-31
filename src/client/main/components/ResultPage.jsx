@@ -42,10 +42,10 @@ export default class ResultPage extends React.Component {
         let text = <span className='name'>{choice.text}</span>;
         let percent = (totalVotes === 0) ? 0 : Math.floor (choice.votes / totalVotes * 100);
         let percentText = <span className='votes'>{percent}%</span>;
-        let gradient = `-webkit-linear-gradient(left, lightgreen 0%, lightgreen ${percent}%, #F0FFF0 ${percent}%, #F0FFF0)`;
+        let gradient = `-webkit-linear-gradient(left, lightsteelblue 0%, lightsteelblue ${percent}%, #F0F8FF ${percent}%, #F0F8FF)`;
         choices.push (
           <div key={i} className={'poll'}
-            style={{background: gradient, border: '1px solid #E5FFCC'}}>
+            style={{background: gradient, border: '1px solid #EEEEEE'}}>
             {text}{percentText}
           </div>
         );
@@ -65,6 +65,7 @@ export default class ResultPage extends React.Component {
           </select>
         </div>
         <div className='displayArea'>
+          <h2>Poll Results</h2>
           <h2>{(this.state.selected !== -1) ? myPolls[this.state.selected].title : ''}</h2>
           <p className='totalVotes'>Total Votes: {totalVotes}</p>
           {choices}
