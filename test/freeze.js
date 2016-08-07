@@ -1,12 +1,12 @@
 // Freeze an object and all child objects
 export default function freeze (object) {
   Object.freeze (object);
-  let keys = Reflect.ownKeys (object);
-  for (let key of keys) {
-    let child = object[key];
-    let type = typeof (child);
+  const keys = Reflect.ownKeys (object);
+  for (const key of keys) {
+    const child = object[key];
+    const type = typeof (child);
     if ((type === 'object') || (type === 'function')) {
-      if (! Object.isFrozen (child)) {
+      if (!Object.isFrozen (child)) {
         freeze (child);
       }
     }

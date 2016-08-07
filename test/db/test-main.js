@@ -1,12 +1,13 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
+/* eslint global-require: off */
 const mongoClient = require ('mongodb').MongoClient;
 const db = require ('../../dist/db');
 
 const uri = 'mongodb://localhost:27017/pollsterTest';
-let testdb = {
+const testdb = {
   db: null,
   users: null,
-  polls: null
+  polls: null,
 };
 exports.testdb = testdb;
 
@@ -28,7 +29,7 @@ describe ('test-main', function () {
     }).then (dbInstance => {
       testdb.db = dbInstance;
       testdb.users = testdb.db.collection ('users');
-      return testdb.users.ensureIndex ({username: 1}, {unique: true});
+      return testdb.users.ensureIndex ({ username: 1 }, { unique: true });
     }).then (() => {
       return testdb.users.remove ({});
     }).then (() => {

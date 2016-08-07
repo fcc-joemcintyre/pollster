@@ -1,8 +1,8 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 // mongo URI with port number not an active MongoDB instance
-let badMongoUri = 'mongodb://localhost:22222/pollsterTest';
+const badMongoUri = 'mongodb://localhost:22222/pollsterTest';
 
 describe ('init/close', function () {
   describe ('init', function () {
@@ -106,7 +106,7 @@ describe ('users', function () {
   describe ('insertPoll', function () {
     it ('should generate an error', function (done) {
       Promise.resolve ().then (() => {
-        return db.insertPoll ({creator: 'amy'});
+        return db.insertPoll ({ creator: 'amy' });
       }).then (() => {
         done (new Error ('did not fail with no database connection'));
       }).catch (() => {
@@ -118,7 +118,7 @@ describe ('users', function () {
   describe ('updatePoll', function () {
     it ('should generate an error', function (done) {
       Promise.resolve ().then (() => {
-        return db.updatePoll ('000000000000000000000000', {creator: 'amy'});
+        return db.updatePoll ('000000000000000000000000', { creator: 'amy' });
       }).then (() => {
         done (new Error ('did not fail with no database connection'));
       }).catch (() => {

@@ -1,4 +1,5 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const request = require ('request');
 const url = require ('./test-main').url;
 

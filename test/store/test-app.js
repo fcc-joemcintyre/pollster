@@ -1,4 +1,5 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 import assert from 'assert';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -20,7 +21,7 @@ describe ('Test app action creators', function () {
       const polls = [];
       const expectedAction = {
         type: types.SET_POLLS,
-        polls
+        polls,
       };
       const action = actions.setPolls (polls);
       assert.deepStrictEqual (expectedAction, action);
@@ -40,7 +41,7 @@ describe ('Test account async actions', function () {
         .reply (200, []);
 
       const expectedActions = [
-        { type: types.SET_POLLS, polls: [] }
+        { type: types.SET_POLLS, polls: [] },
       ];
       const store = mockStore ({});
       return store.dispatch (actions.initPolls ())
@@ -52,9 +53,20 @@ describe ('Test account async actions', function () {
 
   describe ('init polls (with polls)', function () {
     const polls = [
-      {_id:'1000', creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-      {_id:'1001', creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-      {_id:'1002', creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+      {
+        _id: '1000',
+        creator: 'amy',
+        title: 'Poll a1',
+        choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }] },
+      {
+        _id: '1001',
+        creator: 'amy',
+        title: 'Poll a2',
+        choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }] },
+      { _id: '1002',
+        creator: 'bob',
+        title: 'Poll b1',
+        choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }] },
     ];
     it ('should generate set polls action', function () {
       nock ('http://localhost:3999/')
@@ -62,7 +74,7 @@ describe ('Test account async actions', function () {
         .reply (200, [polls[0], polls[1], polls[2]]);
 
       const expectedActions = [
-        { type: types.SET_POLLS, polls: [polls[0], polls[1], polls[2]] }
+        { type: types.SET_POLLS, polls: [polls[0], polls[1], polls[2]] },
       ];
       const store = mockStore ({});
       return store.dispatch (actions.initPolls ())
@@ -76,17 +88,33 @@ describe ('Test account async actions', function () {
     it ('should generate set polls action', function () {
       nock ('http://localhost:3999/')
         .post ('/api/polls')
-        .reply (200, {_id: '0001'});
+        .reply (200, { _id: '0001' });
       nock ('http://localhost:3999/')
         .get ('/api/polls')
-        .reply (200, [{_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Ice Cream', votes: 0}]}]);
+        .reply (200, [{
+          _id: '0001',
+          creator: 'amy',
+          title: 'Treat',
+          choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
+        }]);
 
       const expectedActions = [
-        { type: types.SET_POLLS, polls: [{_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Ice Cream', votes: 0}]}] }
+        {
+          type: types.SET_POLLS,
+          polls: [{
+            _id: '0001',
+            creator: 'amy',
+            title: 'Treat',
+            choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
+          }],
+        },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.addPoll ({creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Ice Cream', votes: 0}]}))
-      .then (function () {
+      return store.dispatch (actions.addPoll ({
+        creator: 'amy',
+        title: 'Treat',
+        choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
+      })).then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
       });
     });
@@ -99,14 +127,38 @@ describe ('Test account async actions', function () {
         .reply (200, {});
       nock ('http://localhost:3999/')
         .get ('/api/polls')
-        .reply (200, [{_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Blizzard', votes: 0}]}]);
+        .reply (200, [{
+          _id: '0001',
+          creator: 'amy',
+          title: 'Treat',
+          choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }],
+        }]);
 
       const expectedActions = [
-        { type: types.SET_POLLS, polls: [{_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Blizzard', votes: 0}]}] }
+        {
+          type: types.SET_POLLS,
+          polls: [
+            { _id: '0001',
+            creator: 'amy',
+            title: 'Treat',
+            choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }],
+          }],
+        },
       ];
-      const store = mockStore ([{_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Ice Cream', votes: 0}]}]);
-      return store.dispatch (actions.updatePoll ({_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Blizzard', votes: 0}]}))
-      .then (function () {
+      const store = mockStore ([
+        {
+          _id: '0001',
+          creator: 'amy',
+          title: 'Treat',
+          choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
+        },
+      ]);
+      return store.dispatch (actions.updatePoll ({
+        _id: '0001',
+        creator: 'amy',
+        title: 'Treat',
+        choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }],
+      })).then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
       });
     });
@@ -122,9 +174,16 @@ describe ('Test account async actions', function () {
         .reply (200, []);
 
       const expectedActions = [
-        { type: types.SET_POLLS, polls: [] }
+        { type: types.SET_POLLS, polls: [] },
       ];
-      const store = mockStore ([{_id: '0001', creator: 'amy', title: 'Treat', choices: [{text: 'Popsicle', votes: 0}, {text: 'Ice Cream', votes: 0}]}]);
+      const store = mockStore ([
+        {
+          _id: '0001',
+          creator: 'amy',
+          title: 'Treat',
+          choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
+        },
+      ]);
       return store.dispatch (actions.deletePoll ('0001'))
       .then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
@@ -134,14 +193,44 @@ describe ('Test account async actions', function () {
 
   describe ('vote', function () {
     const startPolls = [
-      {_id:'1000', creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-      {_id:'1001', creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-      {_id:'1002', creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+      {
+        _id: '1000',
+        creator: 'amy',
+        title: 'Poll a1',
+        choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+      },
+      {
+        _id: '1001',
+        creator: 'amy',
+        title: 'Poll a2',
+        choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+      },
+      {
+        _id: '1002',
+        creator: 'bob',
+        title: 'Poll b1',
+        choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+      },
     ];
     const endPolls = [
-      {_id:'1000', creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-      {_id:'1001', creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 1}]},
-      {_id:'1002', creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+      {
+        _id: '1000',
+        creator: 'amy',
+        title: 'Poll a1',
+        choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+      },
+      {
+        _id: '1001',
+        creator: 'amy',
+        title: 'Poll a2',
+        choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 1 }],
+      },
+      {
+        _id: '1002',
+        creator: 'bob',
+        title: 'Poll b1',
+        choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+      },
     ];
 
     it ('should generate set polls action', function () {
@@ -153,7 +242,7 @@ describe ('Test account async actions', function () {
         .reply (200, endPolls);
 
       const expectedActions = [
-        { type: types.SET_POLLS, polls: endPolls }
+        { type: types.SET_POLLS, polls: endPolls },
       ];
       const store = mockStore (startPolls);
       return store.dispatch (actions.vote ('1001', 'No'))
@@ -166,14 +255,44 @@ describe ('Test account async actions', function () {
 
 describe ('Test poll reducers', function () {
   const initialState = freeze ([
-    {_id:'1000', creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-    {_id:'1001', creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-    {_id:'1002', creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+    {
+      _id: '1000',
+      creator: 'amy',
+      title: 'Poll a1',
+      choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+    },
+    {
+      _id: '1001',
+      creator: 'amy',
+      title: 'Poll a2',
+      choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+    },
+    {
+      _id: '1002',
+      creator: 'bob',
+      title: 'Poll b1',
+      choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+    },
   ]);
   const newState = [
-    {_id:'1000', creator: 'amy', title: 'Animals', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-    {_id:'1001', creator: 'amy', title: 'Yes No', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-    {_id:'1002', creator: 'bob', title: 'Colors', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+    {
+      _id: '1000',
+      creator: 'amy',
+      title: 'Animals',
+      choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+    },
+    {
+      _id: '1001',
+      creator: 'amy',
+      title: 'Yes No',
+      choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+    },
+    {
+      _id: '1002',
+      creator: 'bob',
+      title: 'Colors',
+      choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+    },
   ];
 
   describe ('Reducer: default initialization', function () {
@@ -188,7 +307,7 @@ describe ('Test poll reducers', function () {
       const expectedObject = initialState;
       const actualObject = pollsReducer (undefined, {
         type: types.SET_POLLS,
-        polls: initialState
+        polls: initialState,
       });
       assert.deepStrictEqual (actualObject, expectedObject);
     });
@@ -199,7 +318,7 @@ describe ('Test poll reducers', function () {
       const expectedObject = newState;
       const actualObject = pollsReducer (initialState, {
         type: types.SET_POLLS,
-        polls: newState
+        polls: newState,
       });
       assert.deepStrictEqual (actualObject, expectedObject);
     });

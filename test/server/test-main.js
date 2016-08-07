@@ -1,4 +1,5 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
+/* eslint global-require: off */
 const mongoClient = require ('mongodb').MongoClient;
 const server = require ('../../dist/server');
 const db = require ('../../dist/db');
@@ -32,13 +33,12 @@ function resetDatabase () {
     Promise.resolve ().then (() => {
       return mongoClient.connect (dbURI);
     }).then (instance => {
-      let db = instance;
-      let users = db.collection ('users');
-      users.ensureIndex ({username: 1}, {unique: true})
+      const users = instance.collection ('users');
+      users.ensureIndex ({ username: 1 }, { unique: true })
       .then (() => {
         return users.remove ({});
       }).then (() => {
-        let polls = db.collection ('polls');
+        const polls = instance.collection ('polls');
         return polls.remove ({});
       }).then (() => {
         resolve ();

@@ -1,12 +1,13 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const request = require ('request');
 const url = require ('./test-main').url;
 
 describe ('login/logout/register', function () {
   describe ('valid login request', function () {
     it ('should return valid login', function (done) {
-      let form = { form: {username:'amy', password:'test'}};
-      request.post (`${url}api/login`, form, (err, res, body) => {
+      const form = { form: { username: 'amy', password: 'test' } };
+      request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           return done ();
@@ -18,8 +19,8 @@ describe ('login/logout/register', function () {
 
   describe ('invalid login request', function () {
     it ('should return 401 error', function (done) {
-      let form = { form: {username:'notauser', password:'test'}};
-      request.post (`${url}api/login`, form, (err, res, body) => {
+      const form = { form: { username: 'notauser', password: 'test' } };
+      request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 401) {
           return done ();
@@ -31,11 +32,11 @@ describe ('login/logout/register', function () {
 
   describe ('valid login and logout request', function () {
     it ('should have no errors', function (done) {
-      let form = { form: {username:'amy', password:'test'}};
-      request.post (`${url}api/login`, form, (err, res, body) => {
+      const form = { form: { username: 'amy', password: 'test' } };
+      request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          request.post (`${url}api/logout`, function (err2, res2, body2) {
+          return request.post (`${url}api/logout`, function (err2, res2) {
             if (res2.statusCode === 200) {
               return done ();
             } else {
@@ -52,33 +53,35 @@ describe ('login/logout/register', function () {
   describe ('check authentication for logged in user', function () {
     let cookie;
     before (function (done) {
-      let form = { form: {username:'amy', password:'test'}};
-      request.post (`${url}api/login`, form, (err, res, body) => {
+      const form = { form: { username: 'amy', password: 'test' } };
+      request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           cookie = res.headers['set-cookie'][0];
-          done ();
+          return done ();
+        } else {
+          return done (new Error (`Invalid status code ${res.statusCode}`));
         }
       });
     });
 
     after (function (done) {
-      request.post (`${url}api/logout`, (err, res, body) => {
+      request.post (`${url}api/logout`, () => {
         done ();
       });
     });
 
     it ('should have no errors', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({url: `${url}api/verifylogin`, jar: jar}, (err, res, body) => {
+      request.get ({ url: `${url}api/verifylogin`, jar }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          body = JSON.parse (body);
-          if (body.authenticated === true) {
+          const data = JSON.parse (body);
+          if (data.authenticated === true) {
             return done ();
           } else {
-            return done (new Error (`Invalid data ${JSON.stringify (body)}`));
+            return done (new Error (`Invalid data ${JSON.stringify (data)}`));
           }
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
@@ -91,11 +94,11 @@ describe ('login/logout/register', function () {
     it ('should return false with no errors', function (done) {
       request.get (`${url}api/verifylogin`, (err, res, body) => {
         if (res.statusCode === 200) {
-          body = JSON.parse (body);
-          if (body.authenticated === false) {
+          const data = JSON.parse (body);
+          if (data.authenticated === false) {
             return done ();
           } else {
-            return done (new Error (`Invalid response ${JSON.stringify (body)}`));
+            return done (new Error (`Invalid response ${JSON.stringify (data)}`));
           }
         } else {
           return done (new Error (`Invalid authenticated status code ${res.statusCode}`));
@@ -106,15 +109,15 @@ describe ('login/logout/register', function () {
 
   describe ('register, login and logout', function () {
     it ('should have no errors', function (done) {
-      let form = { form: {username:'newuser', password:'test'}};
-      request.post (`${url}api/register`, form, (err, res, body) => {
+      const form = { form: { username: 'newuser', password: 'test' } };
+      request.post (`${url}api/register`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          let form2 = { form: {username:'newuser', password:'test'}};
-          request.post (`${url}api/login`, form2, function (err2, res2, body2) {
+          const form2 = { form: { username: 'newuser', password: 'test' } };
+          return request.post (`${url}api/login`, form2, (err2, res2) => {
             if (err2) { return done (err2); }
             if (res2.statusCode === 200) {
-              request.post (`${url}api/logout`, function (err3, res3, body3) {
+              return request.post (`${url}api/logout`, (err3, res3) => {
                 if (res3.statusCode === 200) {
                   return done ();
                 } else {
@@ -134,11 +137,11 @@ describe ('login/logout/register', function () {
 
   describe ('register same user twice', function () {
     it ('should fail on second register call', function (done) {
-      let form = { form: {username:'newuser2', password:'test'}};
-      request.post (`${url}api/register`, form, (err, res, body) => {
+      const form = { form: { username: 'newuser2', password: 'test' } };
+      request.post (`${url}api/register`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          request.post (`${url}api/register`, form, (err2, res2, body2) => {
+          return request.post (`${url}api/register`, form, (err2, res2) => {
             if (err2) { return done (err2); }
             if (res2.statusCode === 403) {
               return done ();
@@ -156,34 +159,36 @@ describe ('login/logout/register', function () {
 describe ('profile', function () {
   let cookie;
   beforeEach (function (done) {
-    let form = { form: {username:'amy', password:'test'}};
-    request.post (`${url}api/login`, form, (err, res, body) => {
+    const form = { form: { username: 'amy', password: 'test' } };
+    request.post (`${url}api/login`, form, (err, res) => {
       if (err) { return done (err); }
       if (res.statusCode === 200) {
         cookie = res.headers['set-cookie'][0];
-        done ();
+        return done ();
+      } else {
+        return done (new Error (`Invalid status code ${res.statusCode}`));
       }
     });
   });
 
   afterEach (function (done) {
-    request.post (`${url}api/logout`, (err, res, body) => {
+    request.post (`${url}api/logout`, () => {
       done ();
     });
   });
 
   describe ('get initial profile', function () {
     it ('should have no errors', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({url: `${url}api/profile`, jar: jar}, (err, res, body) => {
+      request.get ({ url: `${url}api/profile`, jar }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          body = JSON.parse (body);
-          if ((body.name === '') && (body.email === '')) {
+          const data = JSON.parse (body);
+          if ((data.name === '') && (data.email === '')) {
             return done ();
           } else {
-            return done (new Error (`Invalid data ${JSON.stringify (body)}`));
+            return done (new Error (`Invalid data ${JSON.stringify (data)}`));
           }
         } else {
           return done (new Error (`Invalid register status code ${res.statusCode}`));
@@ -194,25 +199,27 @@ describe ('profile', function () {
 
   describe ('update profile', function () {
     it ('should have no errors', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      let form = {name: 'Test', email: 'test@example.com'};
-      request.post ({url: `${url}api/profile`, jar: jar, form: form}, (err, res, body) => {
+      const form = { name: 'Test', email: 'test@example.com' };
+      request.post ({ url: `${url}api/profile`, jar, form }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          request.get ({url: `${url}api/profile`, jar: jar}, (err, res, body) => {
-            if (err) { return done (err); }
-            if (res.statusCode === 200) {
-              body = JSON.parse (body);
-              if ((body.name === 'Test') && (body.email === 'test@example.com')) {
+          return request.get ({ url: `${url}api/profile`, jar }, (err2, res2, body2) => {
+            if (err2) { return done (err2); }
+            if (res2.statusCode === 200) {
+              const data = JSON.parse (body2);
+              if ((data.name === 'Test') && (data.email === 'test@example.com')) {
                 return done ();
               } else {
-                return done (new Error (`Invalid data ${JSON.stringify (body)}`));
+                return done (new Error (`Invalid data ${JSON.stringify (data)}`));
               }
             } else {
-              return done (new Error (`Invalid register status code ${res.statusCode}`));
+              return done (new Error (`Invalid register status code ${res2.statusCode}`));
             }
           });
+        } else {
+          return done (new Error (`Invalid status code ${res.statusCode}`));
         }
       });
     });
@@ -222,7 +229,7 @@ describe ('profile', function () {
 describe ('REST call validation', function () {
   describe ('login: missing body', function () {
     it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, {form: {}}, (err, res, body) => {
+      request.post (`${url}api/login`, { form: {} }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();
@@ -234,7 +241,7 @@ describe ('REST call validation', function () {
 
   describe ('Login: missing username', function () {
     it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, {form: { password: 'password'}}, (err, res, body) => {
+      request.post (`${url}api/login`, { form: { password: 'password' } }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();
@@ -246,7 +253,7 @@ describe ('REST call validation', function () {
 
   describe ('login: missing password', function () {
     it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, {form: { username: 'username'}}, (err, res, body) => {
+      request.post (`${url}api/login`, { form: { username: 'username' } }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();
@@ -258,7 +265,7 @@ describe ('REST call validation', function () {
 
   describe ('register: missing body', function () {
     it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, (err, res, body) => {
+      request.post (`${url}api/register`, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();
@@ -270,7 +277,7 @@ describe ('REST call validation', function () {
 
   describe ('register: missing username', function () {
     it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, {form: { password: 'password'}}, (err, res, body) => {
+      request.post (`${url}api/register`, { form: { password: 'password' } }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();
@@ -282,7 +289,7 @@ describe ('REST call validation', function () {
 
   describe ('register: missing password', function () {
     it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, {form: { username: 'username'}}, (err, res, body) => {
+      request.post (`${url}api/register`, { form: { username: 'username' } }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();

@@ -1,8 +1,8 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 // mongo URI with port number not an active MongoDB instance
-let mongoUri = 'mongodb://localhost:27017/pinsterTest';
+const mongoUri = 'mongodb://localhost:27017/pinsterTest';
 
 describe ('init/close', function () {
   describe ('call init twice', function () {

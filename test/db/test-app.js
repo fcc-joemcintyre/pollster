@@ -1,4 +1,4 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 describe ('polls', function () {
@@ -6,9 +6,17 @@ describe ('polls', function () {
     Promise.resolve ().then (() => {
       return db.removePolls ({});
     }).then (() => {
-      let polls = [
-        {creator: 'amy', title: 'Poll 1', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-        {creator: 'bob', title: 'Poll 2', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+      const polls = [
+        {
+          creator: 'amy',
+          title: 'Poll 1',
+          choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+        },
+        {
+          creator: 'bob',
+          title: 'Poll 2',
+          choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+        },
       ];
       return db.insertPoll (polls);
     }).then (() => {
@@ -35,7 +43,11 @@ describe ('polls', function () {
   describe ('add poll', function () {
     it ('3 polls should be found, 2 belonging to amy', function (done) {
       Promise.resolve ().then (() => {
-        let poll = {creator: 'amy', title: 'Poll 3', choices: [{text: '1', votes: 0}, {text: '2', votes: 0}]};
+        const poll = {
+          creator: 'amy',
+          title: 'Poll 3',
+          choices: [{ text: '1', votes: 0 }, { text: '2', votes: 0 }],
+        };
         return db.insertPoll (poll);
       }).then ((result) => {
         if (result.result.n !== 1) {
@@ -58,24 +70,24 @@ describe ('polls', function () {
       Promise.resolve ().then (() => {
         return db.getPolls ();
       }).then (polls => {
-        let promises = [];
-        for (let poll of polls) {
-          for (let choice of poll.choices) {
+        const promises = [];
+        for (const poll of polls) {
+          for (const choice of poll.choices) {
             promises.push (db.vote (poll._id, choice.text));
           }
         }
         Promise.all (promises)
         .then (() => {
           return db.getPolls ();
-        }).then (polls => {
-          for (let poll of polls) {
-            for (let choice of poll.choices) {
+        }).then (polls2 => {
+          for (const poll of polls2) {
+            for (const choice of poll.choices) {
               if (choice.votes !== 1) {
                 return done (new Error ('Votes not recorded correctly', JSON.stringify (poll)));
               }
             }
           }
-          done ();
+          return done ();
         });
       }).catch (err => {
         done (err);

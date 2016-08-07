@@ -1,4 +1,5 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const request = require ('request');
 const db = require ('../../dist/db');
 const url = require ('./test-main').url;
@@ -8,10 +9,22 @@ describe ('polls (unauthenticated)', function () {
     Promise.resolve ().then (() => {
       db.removePolls ();
     }).then (() => {
-      let polls = [
-        {creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-        {creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-        {creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+      const polls = [
+        {
+          creator: 'amy',
+          title: 'Poll a1',
+          choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+        },
+        {
+          creator: 'amy',
+          title: 'Poll a2',
+          choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+        },
+        {
+          creator: 'bob',
+          title: 'Poll b1',
+          choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+        },
       ];
       return db.insertPoll (polls);
     }).then (() => {
@@ -26,11 +39,11 @@ describe ('polls (unauthenticated)', function () {
       request.get (`${url}api/polls`, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          body = JSON.parse (body);
-          if (body.length === 3) {
+          const data = JSON.parse (body);
+          if (data.length === 3) {
             return done ();
           } else {
-            return done (new Error (`Invalid number of polls: ${body.length}`));
+            return done (new Error (`Invalid number of polls: ${data.length}`));
           }
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
@@ -49,22 +62,34 @@ describe ('polls (authenticated)', function () {
     }).then (() => {
       db.insertUser ('amy', 'test');
     }).then (() => {
-      let polls = [
-        {creator: 'amy', title: 'Poll a1', choices: [{text: 'Tigers', votes: 0}, {text: 'Bears', votes: 0}]},
-        {creator: 'amy', title: 'Poll a2', choices: [{text: 'Yes', votes: 0}, {text: 'No', votes: 0}]},
-        {creator: 'bob', title: 'Poll b1', choices: [{text: 'Red', votes: 0}, {text: 'Blue', votes: 0}]}
+      const polls = [
+        {
+          creator: 'amy',
+          title: 'Poll a1',
+          choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+        },
+        {
+          creator: 'amy',
+          title: 'Poll a2',
+          choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+        },
+        {
+          creator: 'bob',
+          title: 'Poll b1',
+          choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+        },
       ];
       return db.insertPoll (polls);
     }).then (result => {
       pollIds = result.insertedIds;
-      let form = { form: {username:'amy', password:'test'}};
-      request.post (`${url}api/login`, form, (err, res, body) => {
+      const form = { form: { username: 'amy', password: 'test' } };
+      request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           cookie = res.headers['set-cookie'][0];
-          done ();
+          return done ();
         } else {
-          done (new Error ('statusCode:' + res.statusCode));
+          return done (new Error (`statusCode: ${res.statusCode}`));
         }
       });
     }).catch (err => {
@@ -73,23 +98,23 @@ describe ('polls (authenticated)', function () {
   });
 
   afterEach (function (done) {
-    request.post (`${url}api/logout`, (err, res, body) => {
+    request.post (`${url}api/logout`, () => {
       done ();
     });
   });
 
   describe ('get all polls', function () {
     it ('should return 3 polls', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({url: `${url}api/polls`, jar: jar}, (err, res, body) => {
+      request.get ({ url: `${url}api/polls`, jar }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          body = JSON.parse (body);
-          if (body.length === 3) {
+          const data = JSON.parse (body);
+          if (data.length === 3) {
             return done ();
           } else {
-            return done (new Error (`Invalid number of polls: ${body.length}`));
+            return done (new Error (`Invalid number of polls: ${data.length}`));
           }
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
@@ -100,16 +125,16 @@ describe ('polls (authenticated)', function () {
 
   describe ('get single poll', function () {
     it ('should return 1 poll', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({url: `${url}api/polls/${pollIds[1]}`, jar: jar}, (err, res, body) => {
+      request.get ({ url: `${url}api/polls/${pollIds[1]}`, jar }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          body = JSON.parse (body);
-          if (body.creator) {
+          const data = JSON.parse (body);
+          if (data.creator) {
             return done ();
           } else {
-            return done (new Error (`Invalid polls: ${body}`));
+            return done (new Error (`Invalid polls: ${data}`));
           }
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
@@ -120,9 +145,9 @@ describe ('polls (authenticated)', function () {
 
   describe ('get single poll (not found)', function () {
     it ('should return 404', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({url: `${url}api/polls/000000000000000000000000`, jar: jar}, (err, res, body) => {
+      request.get ({ url: `${url}api/polls/000000000000000000000000`, jar }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 404) {
           return done ();
@@ -135,23 +160,23 @@ describe ('polls (authenticated)', function () {
 
   describe ('add a poll', function () {
     it ('should end with 4 polls', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      let poll = {title: 'Poll anew', choices: ['Cake', 'Pie']};
-      request.post ({url: `${url}api/polls`, jar: jar, json: poll}, (err, res, body) => {
+      const poll = { title: 'Poll anew', choices: ['Cake', 'Pie'] };
+      request.post ({ url: `${url}api/polls`, jar, json: poll }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          request.get ({url: `${url}api/polls`, jar: jar}, (err, res, body) => {
-            if (err) { return done (err); }
-            if (res.statusCode === 200) {
-              body = JSON.parse (body);
-              if (body.length === 4) {
+          return request.get ({ url: `${url}api/polls`, jar }, (err2, res2, body2) => {
+            if (err2) { return done (err2); }
+            if (res2.statusCode === 200) {
+              const data = JSON.parse (body2);
+              if (data.length === 4) {
                 return done ();
               } else {
-                return done (new Error (`Invalid poll count: ${body.length}`));
+                return done (new Error (`Invalid poll count: ${data.length}`));
               }
             } else {
-              return done (new Error (`Invalid status code ${res.statusCode}`));
+              return done (new Error (`Invalid status code ${res2.statusCode}`));
             }
           });
         } else {
@@ -163,25 +188,28 @@ describe ('polls (authenticated)', function () {
 
   describe ('update a poll', function () {
     it ('should have updated fields', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      let data = {title: 'UTitle', choices: ['U1', 'U2']};
-      request.post ({url: `${url}api/polls/${pollIds[1]}`, jar: jar, json: data}, (err, res, body) => {
+      const json = { title: 'UTitle', choices: ['U1', 'U2'] };
+      request.post ({ url: `${url}api/polls/${pollIds[1]}`, jar, json }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          if (err) { return done (err); }
-          if (res.statusCode === 200) {
-            request.get ({url: `${url}api/polls/${pollIds[1]}`, jar: jar}, (err, res, body) => {
-              body = JSON.parse (body);
-              if ((body.title === 'UTitle') && (body.choices[0].text === 'U1') && (body.choices[1].text === 'U2')) {
+          const fullUrl = `${url}api/polls/${pollIds[1]}`;
+          return request.get ({ url: fullUrl, jar }, (err2, res2, body2) => {
+            if (err2) { return done (err2); }
+            if (res2.statusCode === 200) {
+              const data = JSON.parse (body2);
+              if ((data.title === 'UTitle') &&
+                  (data.choices[0].text === 'U1') &&
+                  (data.choices[1].text === 'U2')) {
                 return done ();
               } else {
-                return done (new Error (`Invalid field content: ${JSON.stringify (body)}`));
+                return done (new Error (`Invalid field content: ${JSON.stringify (data)}`));
               }
-            });
-          } else {
-            return done (new Error (`Invalid status code ${res.statusCode}`));
-          }
+            } else {
+              return done (new Error (`Invalid status code ${res2.statusCode}`));
+            }
+          });
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
         }
@@ -191,24 +219,26 @@ describe ('polls (authenticated)', function () {
 
   describe ('delete a poll', function () {
     it ('should end with 2 polls', function (done) {
-      let jar = request.jar ();
+      const jar = request.jar ();
       jar.setCookie (cookie, 'http://localhost:3000');
-      request.del ({url: `${url}api/polls/${pollIds[1]}`, jar: jar}, (err, res, body) => {
+      request.del ({ url: `${url}api/polls/${pollIds[1]}`, jar }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          request.get ({url: `${url}api/polls`, jar: jar}, (err, res, body) => {
-            if (err) { return done (err); }
-            if (res.statusCode === 200) {
-              body = JSON.parse (body);
-              if (body.length === 2) {
+          return request.get ({ url: `${url}api/polls`, jar }, (err2, res2, body2) => {
+            if (err2) { return done (err2); }
+            if (res2.statusCode === 200) {
+              const data = JSON.parse (body2);
+              if (data.length === 2) {
                 return done ();
               } else {
-                return done (new Error (`Invalid poll count: ${body.length}`));
+                return done (new Error (`Invalid poll count: ${data.length}`));
               }
             } else {
-              return done (new Error (`Invalid status code ${res.statusCode}`));
+              return done (new Error (`Invalid status code ${res2.statusCode}`));
             }
           });
+        } else {
+          return done (new Error (`Invalid status code ${res.statusCode}`));
         }
       });
     });
@@ -216,20 +246,20 @@ describe ('polls (authenticated)', function () {
 
   describe ('vote', function () {
     it ('should add 1 vote to a poll', function (done) {
-      let pollId = pollIds[1].toString ();
-      request.post (`${url}api/polls/${pollId}/votes/No`, (err, res, body) => {
+      const pollId = pollIds[1].toString ();
+      request.post (`${url}api/polls/${pollId}/votes/No`, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          request.get (`${url}api/polls`, (err, res, body) => {
-            if (err) { return done (err); }
-            if (res.statusCode === 200) {
-              let polls = JSON.parse (body);
-              for (let poll of polls) {
+          return request.get (`${url}api/polls`, (err2, res2, body2) => {
+            if (err2) { return done (err2); }
+            if (res2.statusCode === 200) {
+              const polls = JSON.parse (body2);
+              for (const poll of polls) {
                 if (poll._id === pollId) {
                   if (poll.choices[1].votes === 1) {
                     return done ();
                   } else {
-                    return done (new Error (`Invalid vote count: ${JSON.stringify (poll, null, 2)}`));
+                    return done (new Error (`Bad vote count: ${JSON.stringify (poll, null, 2)}`));
                   }
                 }
               }
@@ -238,6 +268,8 @@ describe ('polls (authenticated)', function () {
               return done (new Error (`Invalid status code ${res.statusCode}`));
             }
           });
+        } else {
+          return done (new Error (`Invalid status code ${res.statusCode}`));
         }
       });
     });

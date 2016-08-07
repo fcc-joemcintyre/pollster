@@ -1,4 +1,4 @@
-'use strict';
+/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 describe ('users', function () {
@@ -63,8 +63,7 @@ describe ('users', function () {
       }).then (result => {
         if ((result.name === 'Amy Test') && (result.email === 'amy@example.com')) {
           done ();
-        }
-        else {
+        } else {
           done (new Error ('invalid update', result));
         }
       }).catch (err => {
