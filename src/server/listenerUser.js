@@ -87,6 +87,7 @@ function register (req, res) {
 }
 
 function getProfile (req, res) {
+  console.log ('getProfile', req.user.username);
   res.status (200).json ({
     name: req.user.name,
     email: req.user.email,
@@ -94,8 +95,10 @@ function getProfile (req, res) {
 }
 
 function updateProfile (req, res) {
+  console.log ('updateProfile', req.user.username, req.body.name, req.body.email);
   db.updateUser (req.user.username, req.body.name, req.body.email)
   .then (() => {
+    console.log ('  update successful');
     res.status (200).json ({});
   })
   .catch (err => {
