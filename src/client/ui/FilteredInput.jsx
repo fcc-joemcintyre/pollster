@@ -1,11 +1,20 @@
 import React from 'react';
 
 const FilteredInput = (props) => {
+  // remove FilteredInput props from props to passthrough to <input> element
+  const passthrough = {};
+  const keys = Reflect.ownKeys (props);
+  for (const key of keys) {
+    if ((key !== 'key') && (key !== 'ref') && (key !== 'filter')) {
+      passthrough[key] = props[key];
+    }
+  }
+
   return (
     <input
-      {...props}
+      {...passthrough}
       onKeyPress={(e) => {
-        if (this.props.filter.test (e.key) === false) {
+        if (props.filter.test (e.key) === false) {
           e.preventDefault ();
         }
       }}
@@ -13,7 +22,7 @@ const FilteredInput = (props) => {
   );
 };
 
-FilteredInput.PropTypes = {
+FilteredInput.propTypes = {
   filter: React.PropTypes.object.isRequired,
 };
 
