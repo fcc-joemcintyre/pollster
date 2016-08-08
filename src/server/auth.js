@@ -1,4 +1,3 @@
-'use strict';
 const passport = require ('passport');
 const Strategy = require ('passport-local').Strategy;
 const db = require ('./db');
@@ -10,10 +9,10 @@ function init () {
   passport.use (new Strategy ((username, password, callback) => {
     db.findUserByUsername (username)
     .then (user => {
-      if (! user) {
+      if (!user) {
         return callback (null, false);
       }
-      let passwordMatch = hash.compare (password, user.hash, user.salt);
+      const passwordMatch = hash.compare (password, user.hash, user.salt);
       return callback (null, (passwordMatch) ? user : false);
     })
     .catch (err => {

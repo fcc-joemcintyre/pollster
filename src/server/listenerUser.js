@@ -1,4 +1,3 @@
-'use strict';
 const passport = require ('passport');
 const db = require ('./db');
 
@@ -9,28 +8,28 @@ function init () {
 // Login, authenticating user and creating a session
 function login (req, res, next) {
   console.log ('login');
-  if (! (req.body && req.body.username && req.body.password)) {
+  if (!(req.body && req.body.username && req.body.password)) {
     console.log ('login', '(400) invalid login body', JSON.stringify (req.body));
     res.status (400).json ({});
   } else {
-    passport.authenticate ('local', (err, user, info) => {
+    passport.authenticate ('local', (err, user) => {
       if (err) {
         return next (err);
       }
       // if not a valid user, return 401 auth error
-      if (! user) {
+      if (!user) {
         console.log ('  login', '(401) unauthenticated');
         return res.status (401).json ({});
       }
-      req.login (user, (err) => {
-        if (err) {
-          return next (err);
+      return req.login (user, (err2) => {
+        if (err2) {
+          return next (err2);
         }
         console.log ('  login', user.username);
-        let result = {
+        const result = {
           username: user.username,
           name: req.user.name,
-          email: req.user.email
+          email: req.user.email,
         };
         return res.status (200).json (result);
       });
@@ -58,8 +57,8 @@ function verifyLogin (req, res) {
       user: {
         username: req.user.username,
         name: req.user.name,
-        email: req.user.email
-      }
+        email: req.user.email,
+      },
     };
     console.log ('  verified', req.user.username);
   } else {
@@ -71,7 +70,7 @@ function verifyLogin (req, res) {
 // register new user. If already existing user, return 403 (Forbidden)
 function register (req, res) {
   console.log ('register');
-  if (! (req.body && req.body.username && req.body.password)) {
+  if (!(req.body && req.body.username && req.body.password)) {
     console.log ('register', '(400) invalid login body', JSON.stringify (req.body));
     res.status (400).json ({});
   } else {
@@ -90,7 +89,7 @@ function register (req, res) {
 function getProfile (req, res) {
   res.status (200).json ({
     name: req.user.name,
-    email: req.user.email
+    email: req.user.email,
   });
 }
 

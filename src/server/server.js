@@ -1,4 +1,3 @@
-'use strict';
 const express = require ('express');
 const bodyParser = require ('body-parser');
 const cookieParser = require ('cookie-parser');
@@ -15,12 +14,13 @@ const db = require ('./db');
 const sessionSecret = process.env.SESSION_SECRET || 'randomtext_aseroja';
 
 // ensure HTTPS is used for all interactions
-let httpsOnly = (req, res, next) => {
+const httpsOnly = (req, res, next) => {
   if (req.headers['x-forwarded-proto'] &&
     req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect (['https://', req.hostname, req.url].join (''));
+    res.redirect (['https://', req.hostname, req.url].join (''));
+  } else {
+    next ();
   }
-  next ();
 };
 
 // Start the server.
@@ -31,7 +31,7 @@ function start (port, dbLocation) {
       return db.init (dbLocation);
     }).then (() => {
       // set up static HTML serving
-      let app = express ();
+      const app = express ();
 
       // if production deployment, only allow https connections
       if (process.env.NODE_ENV === 'production') {
@@ -41,11 +41,11 @@ function start (port, dbLocation) {
       // set up HTTP parsers and session manager
       app.use (cookieParser ());
       app.use (bodyParser.json ());
-      app.use (bodyParser.urlencoded ({extended:true}));
+      app.use (bodyParser.urlencoded ({ extended: true }));
       app.use (expressSession ({
         secret: sessionSecret,
         saveUninitialized: true,
-        resave: true
+        resave: true,
       }));
 
       // set up passport authentication, attach to express session manager
@@ -57,18 +57,18 @@ function start (port, dbLocation) {
       routes.init (app);
 
       app.get ('*.js', (req, res) => {
-        let file = path.join (__dirname, 'public' + req.path + '.gz');
+        const file = path.join (__dirname, `public${req.path}.gz`);
         if (fs.existsSync (file)) {
           res.set ({
             'content-type': 'text/javascript',
-            'content-encoding': 'gzip'
+            'content-encoding': 'gzip',
           });
           res.sendFile (file);
         } else {
           res.set ({
-            'content-type': 'text/javascript'
+            'content-type': 'text/javascript',
           });
-          res.sendFile (path.join (__dirname, 'public' + req.path));
+          res.sendFile (path.join (__dirname, `public${req.path}`));
         }
       });
 
@@ -85,7 +85,7 @@ function start (port, dbLocation) {
       });
 
       app.listen (port, () => {
-        console.log ('Server listening on port ' + port);
+        console.log (`Server listening on port ${port}`);
         resolve ();
       });
     }).catch (err => {

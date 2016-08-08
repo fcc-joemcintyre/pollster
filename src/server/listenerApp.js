@@ -1,4 +1,3 @@
-'use strict';
 const db = require ('./db');
 
 // Initialize listeners (currently empty)
@@ -35,14 +34,14 @@ function getPoll (req, res) {
 
 function addPoll (req, res) {
   console.log ('addPoll', req.body);
-  let choices = [];
-  for (let choice of req.body.choices) {
-    choices.push ({text: choice, votes: 0});
+  const choices = [];
+  for (const choice of req.body.choices) {
+    choices.push ({ text: choice, votes: 0 });
   }
-  let poll = {
+  const poll = {
     creator: req.user.username,
     title: req.body.title,
-    choices: choices
+    choices,
   };
   Promise.resolve ().then (() => {
     return db.insertPoll (poll);
@@ -57,14 +56,14 @@ function addPoll (req, res) {
 
 function updatePoll (req, res) {
   console.log ('updatePoll', req.body);
-  let choices = [];
-  for (let choice of req.body.choices) {
-    choices.push ({text: choice, votes: 0});
+  const choices = [];
+  for (const choice of req.body.choices) {
+    choices.push ({ text: choice, votes: 0 });
   }
-  let poll = {
+  const poll = {
     creator: req.user.username,
     title: req.body.title,
-    choices: choices
+    choices,
   };
   Promise.resolve ().then (() => {
     return db.updatePoll (req.params._id, poll);

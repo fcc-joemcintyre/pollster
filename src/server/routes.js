@@ -1,4 +1,3 @@
-'use strict';
 const listenerUser = require ('./listenerUser');
 const listenerApp = require ('./listenerApp');
 
@@ -24,7 +23,7 @@ function init (app) {
 // authenticate, if passing continue, otherwise return 401 (auth failure)
 function isAuthenticated (req, res, next) {
   if (req.isAuthenticated ()) {
-    return next ();
+    next ();
   }
   res.status (401).json ({});
 }
