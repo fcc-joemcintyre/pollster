@@ -1,6 +1,6 @@
 import React from 'react';
-import {withRouter} from 'react-router';
-import {register, login} from '../store/actions';
+import { withRouter } from 'react-router';
+import { register, login } from '../store/actions';
 import FilteredInput from '../../ui/FilteredInput.jsx';
 
 const nameChars = /[A-Za-z0-9]/;
@@ -13,18 +13,18 @@ class RegisterPage extends React.Component {
       username: '',
       password: '',
       verify: '',
-      error: false
-    }
+      error: false,
+    };
     this.register = this.register.bind (this);
   }
 
   register (event) {
     event.preventDefault ();
-    if (! ((this.state.username === '') || (this.state.password === ''))) {
+    if (!((this.state.username === '') || (this.state.password === ''))) {
       this.context.store.dispatch (register (this.state.username, this.state.password))
-      .then (success => {
+      .then (() => {
         this.context.store.dispatch (login (this.state.username, this.state.password))
-        .then (success => {
+        .then (() => {
           this.setState ({ error: false });
           if (this.props.location.state && this.props.location.nextPathname) {
             this.props.router.replace (this.props.location.nextPathname);
@@ -32,21 +32,21 @@ class RegisterPage extends React.Component {
             this.props.router.replace ('/');
           }
         })
-        .catch (error => {
+        .catch (() => {
           this.setState ({ error: true });
         });
       });
     }
   }
 
-  render() {
+  render () {
     return (
       <div className='dialogUser'>
         <h2>Register</h2>
-        <hr/>
+        <hr />
         <form onSubmit={this.register}>
           <FilteredInput
-            autoFocus={true}
+            autoFocus
             type='text'
             placeholder='user name'
             maxLength={20}
@@ -54,27 +54,32 @@ class RegisterPage extends React.Component {
             autoCorrect='off'
             filter={nameChars}
             onChange={e => {
-              this.setState ({username: e.target.value});
-            }}/>
+              this.setState ({ username: e.target.value });
+            }}
+          />
           <FilteredInput
             type='password'
             placeholder='password'
             maxLength={20}
             filter={pwChars}
             onChange={e => {
-              this.setState ({password: e.target.value});
-            }}/>
+              this.setState ({ password: e.target.value });
+            }}
+          />
           <FilteredInput
             type='password'
             placeholder='verify password'
             maxLength={20}
             filter={pwChars}
             onChange={e => {
-              this.setState ({verify: e.target.value});
-            }}/>
-          <button className='dialogButton'
+              this.setState ({ verify: e.target.value });
+            }}
+          />
+          <button
+            className='dialogButton'
             disabled={(this.state.username === '') || (this.state.password === '')
-              || (this.state.password !== this.state.verify)}>
+              || (this.state.password !== this.state.verify)}
+          >
             Register
           </button>
         </form>
@@ -85,6 +90,11 @@ class RegisterPage extends React.Component {
 
 export default withRouter (RegisterPage);
 
+RegisterPage.propTypes = {
+  location: React.PropTypes.object.isRequired,
+  router: React.PropTypes.object.isRequired,
+};
+
 RegisterPage.contextTypes = {
-  store: React.PropTypes.object.isRequired
-}
+  store: React.PropTypes.object.isRequired,
+};

@@ -1,10 +1,10 @@
 import { SET_AUTHENTICATED, SET_PROFILE } from './constants';
 
-let initialState = {
+const initialState = {
   authenticated: false,
   username: '',
   name: '',
-  email: ''
+  email: '',
 };
 
 export default function user (state = initialState, action) {
@@ -12,13 +12,13 @@ export default function user (state = initialState, action) {
     case SET_AUTHENTICATED:
       return Object.assign ({}, state, {
         authenticated: action.authenticated,
-        username: action.username
+        username: action.username,
       });
 
     case SET_PROFILE:
       return Object.assign ({}, state, {
         name: action.name,
-        email: action.email
+        email: action.email,
       });
 
     default:

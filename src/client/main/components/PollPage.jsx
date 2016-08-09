@@ -1,31 +1,31 @@
 import React from 'react';
-import {Link, withRouter} from 'react-router';
-import {getPoll} from '../store/polls';
-import {vote} from '../store/actions';
+import { withRouter } from 'react-router';
+import { getPoll } from '../store/polls';
+import { vote } from '../store/actions';
 
 class PollPage extends React.Component {
   constructor (props, context) {
     super (props, context);
     let _id = this.props.params._id;
-    let poll = getPoll (context.store.getState (), _id);
+    const poll = getPoll (context.store.getState (), _id);
     if (poll === null) {
       _id = -1;
     }
     this.state = {
-      _id: _id,
-      poll: poll,
+      _id,
+      poll,
       selected: -1,
       voted: false,
-      transition: false
+      transition: false,
     };
     this.handleVote = this.handleVote.bind (this);
   }
 
   componentWillMount () {
     this.unsubscribe = this.context.store.subscribe (() => {
-      let poll = getPoll (this.context.store.getState (), this.state._id);
+      const poll = getPoll (this.context.store.getState (), this.state._id);
       if (this.state.poll !== poll) {
-        this.setState ({poll: poll});
+        this.setState ({ poll });
       }
     });
   }
@@ -34,12 +34,12 @@ class PollPage extends React.Component {
     this.unsubscribe ();
   }
 
-  handleVote (event) {
+  handleVote () {
     if (this.state.selected !== -1) {
-      let poll = Object.assign ({}, this.state.poll);
-      let choice = poll.choices[this.state.selected];
+      const poll = Object.assign ({}, this.state.poll);
+      const choice = poll.choices[this.state.selected];
       choice.votes ++;
-      this.setState ({voted: true, poll: poll});
+      this.setState ({ voted: true, poll });
       this.context.store.dispatch (vote (this.state.poll._id, choice.text));
     }
   }
@@ -47,20 +47,23 @@ class PollPage extends React.Component {
   render () {
     if (this.state.poll === null) {
       return (
-        <form className='messageForm' onSubmit={() => { this.props.router.push ('/') }}>
+        <form className='messageForm' onSubmit={() => { this.props.router.push ('/'); }}>
           <p>Sorry, could not find that poll for you.</p>
           <button>Back to Polls</button>
         </form>
       );
     }
-    let totalVotes = this.state.poll.choices.reduce ((a, b) => a + b.votes, 0);
+    const totalVotes = this.state.poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
     let rows = [];
-    for (let i = 0; i < this.state.poll.choices.length; i ++) {
-      let key = 'p-r-' + i;
+    for (let i = 0; i < this.state.poll.choices.length; i++) {
+      let key = `p-r-${i}`;
       if (this.state.voted) {
         let text = (i === this.state.selected) ? '\u2713 ' : '';
         text += this.state.poll.choices[i].text;
-        let percent = (totalVotes === 0) ? 0 : Math.floor (this.state.poll.choices[i].votes / totalVotes * 100);
+        let percent = 0;
+        if (totalVotes > 0) {
+          percent = Math.floor ((this.state.poll.choices[i].votes / totalVotes) * 100);
+        }
         rows.push (
           <div key={key} className='votedItemArea'>
             <div
@@ -71,20 +74,25 @@ class PollPage extends React.Component {
                 height: '100%',
                 width: `${this.state.transition ? percent : 0}%`,
                 backgroundColor: 'lightsteelblue',
-                transition: 'width 3s'}}
-              >
-            </div>
+                transition: 'width 3s',
+              }}
+            />
             <span className='votedItemName'>{text}</span>
             <span className='votedItemPercent'>{percent}%</span>
           </div>
         );
       } else {
-        let pollClassName = (i === this.state.selected) ? 'pollItem pollItemSelected' : 'pollItem';
-        let check = (i === this.state.selected) ? <span className='pollItemName'>&#10003; </span> : null;
+        const pollClassName = (i === this.state.selected) ?
+          'pollItem pollItemSelected' : 'pollItem';
+        let check = (i === this.state.selected) ?
+          <span className='pollItemName'>&#10003; </span> : null;
         let choice = <span className='pollItemName'>{this.state.poll.choices[i].text}</span>;
         rows.push (
-          <div key={key} className={(i % 2 === 0) ? `${pollClassName} pollItemEven` : `${pollClassName} pollItemOdd`}
-            onClick={() => { this.setState ({selected: i}) }}>
+          <div
+            key={key}
+            className={`${pollClassName} ${(i % 2 === 0) ? 'pollItemEven' : 'pollItemOdd'}`}
+            onClick={() => { this.setState ({ selected: i }); }}
+          >
             {check}{choice}
           </div>
         );
@@ -94,7 +102,7 @@ class PollPage extends React.Component {
     // on initial display of results, initiate CSS transition
     if (this.state.voted && (this.state.transition === false)) {
       setTimeout (() => {
-        this.setState ({transition: true});
+        this.setState ({ transition: true });
       }, 100);
     }
 
@@ -107,7 +115,11 @@ class PollPage extends React.Component {
       );
     }
     buttons.push (
-      <button key='button2' className='dialogGroupButton' onClick={() => this.props.router.push ('/')}>
+      <button
+        key='button2'
+        className='dialogGroupButton'
+        onClick={() => { this.props.router.push ('/'); }}
+      >
         Back to Polls
       </button>
     );
@@ -118,7 +130,9 @@ class PollPage extends React.Component {
         <div className='pollItems'>
           {rows}
         </div>
-        <p className='pollHint'>Select your favorite, the poll results will be shown after you vote.</p>
+        <p className='pollHint'>
+          Select your favorite, the poll results will be shown after you vote.
+        </p>
         <div className='dialogGroupButtonArea'>
           {buttons}
         </div>
@@ -129,6 +143,11 @@ class PollPage extends React.Component {
 
 export default withRouter (PollPage);
 
+PollPage.propTypes = {
+  params: React.PropTypes.object.isRequired,
+  router: React.PropTypes.object.isRequired,
+};
+
 PollPage.contextTypes = {
-  store: React.PropTypes.object.isRequired
-}
+  store: React.PropTypes.object.isRequired,
+};

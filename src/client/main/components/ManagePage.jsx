@@ -1,21 +1,21 @@
 import React from 'react';
-import {addPoll, updatePoll, deletePoll} from '../store/actions';
+import { addPoll, updatePoll, deletePoll } from '../store/actions';
 
 export default class ManagePage extends React.Component {
   constructor (props, context) {
     super (props, context);
-    let allPolls = context.store.getState ().polls;
-    let creator = context.store.getState ().user.username;
-    let myPolls = allPolls.filter (poll => {
+    const allPolls = context.store.getState ().polls;
+    const creator = context.store.getState ().user.username;
+    const myPolls = allPolls.filter (poll => {
       return (poll.creator === creator);
     });
     this.state = {
       polls: myPolls,
-      creator: creator,
+      creator,
       selected: 0,
       title: (myPolls.length === 0) ? '' : myPolls[0].title,
-      choices: (myPolls.length === 0) ? ['', ''] : generateChoices (myPolls[0].choices)
-    }
+      choices: (myPolls.length === 0) ? ['', ''] : generateChoices (myPolls[0].choices),
+    };
 
     this.onSelectPoll = this.onSelectPoll.bind (this);
     this.onAddPoll = this.onAddPoll.bind (this);
@@ -25,17 +25,17 @@ export default class ManagePage extends React.Component {
 
   componentWillMount () {
     this.unsubscribe = this.context.store.subscribe (() => {
-      let allPolls = this.context.store.getState ().polls;
-      let creator = this.context.store.getState ().user.username;
-      let myPolls = allPolls.filter (poll => {
+      const allPolls = this.context.store.getState ().polls;
+      const creator = this.context.store.getState ().user.username;
+      const myPolls = allPolls.filter (poll => {
         return (poll.creator === creator);
       });
       this.setState ({
         polls: myPolls,
-        creator: creator,
+        creator,
         selected: 0,
         title: (myPolls.length === 0) ? '' : myPolls[0].title,
-        choices: (myPolls.length === 0) ? ['', ''] : generateChoices (myPolls[0].choices)
+        choices: (myPolls.length === 0) ? ['', ''] : generateChoices (myPolls[0].choices),
       });
     });
   }
@@ -49,31 +49,31 @@ export default class ManagePage extends React.Component {
       this.setState ({
         selected: index,
         title: this.state.polls[index].title,
-        choices: generateChoices (this.state.polls[index].choices)
+        choices: generateChoices (this.state.polls[index].choices),
       });
     } else {
       this.setState ({
         selected: index,
         title: '',
-        choices: ['', '']
+        choices: ['', ''],
       });
     }
   }
 
   onAddPoll () {
-    let poll = {
+    const poll = {
       title: this.state.title,
-      choices: this.state.choices.slice (0, this.state.choices.length - 1)
+      choices: this.state.choices.slice (0, this.state.choices.length - 1),
     };
     this.context.store.dispatch (addPoll (poll));
-    this.setState ({title: '', choices: ['',''], selected: 0});
+    this.setState ({ title: '', choices: ['', ''], selected: 0 });
   }
 
   onSavePoll () {
-    let poll = {
+    const poll = {
       _id: this.state.polls[this.state.selected]._id,
       title: this.state.title,
-      choices: this.state.choices.slice (0, this.state.choices.length - 1)
+      choices: this.state.choices.slice (0, this.state.choices.length - 1),
     };
     this.context.store.dispatch (updatePoll (poll));
   }
@@ -83,9 +83,9 @@ export default class ManagePage extends React.Component {
   }
 
   render () {
-    let newPoll = (this.state.selected === this.state.polls.length);
+    const newPoll = (this.state.selected === this.state.polls.length);
     let polls = [];
-    for (let i = 0; i < this.state.polls.length; i ++) {
+    for (let i = 0; i < this.state.polls.length; i++) {
       polls.push (
         <option key={i} value={i}>
           {this.state.polls[i].title}
@@ -100,22 +100,24 @@ export default class ManagePage extends React.Component {
 
     // Poll edit area
     let choices = [];
-    for (let i = 0; i < this.state.choices.length; i ++) {
+    for (let i = 0; i < this.state.choices.length; i++) {
       choices.push (
         <div key={i}>
-          <label>Choice</label>
-          <input type='text'
+          <label htmlFor='mp-choice'>Choice</label>
+          <input
+            id='mp-choice'
+            type='text'
             value={this.state.choices[i]}
             maxLength={30}
             onChange={(e) => {
               this.state.choices[i] = e.target.value;
-              let t2 = this.state.choices.filter (choice => choice.trim () !== '');
+              let t2 = this.state.choices.filter (choice => { return choice.trim () !== ''; });
               if (t2.length === 0) {
                 t2 = ['', ''];
               } else {
                 t2.push ('');
               }
-              this.setState ({choices: t2});
+              this.setState ({ choices: t2 });
             }}
           />
         </div>
@@ -139,12 +141,14 @@ export default class ManagePage extends React.Component {
     let poll = (
       <div>
         <div>
-          <label>Title</label>
-          <input type='text'
+          <label htmlFor='mp-title'>Title</label>
+          <input
+            id='mp-title'
+            type='text'
             value={this.state.title}
             maxLength={30}
             onChange={(e) => {
-              this.setState ({title: e.target.value});
+              this.setState ({ title: e.target.value });
             }}
           />
         </div>
@@ -165,11 +169,13 @@ export default class ManagePage extends React.Component {
       <div className='managePage'>
         <div className='editArea'>
           <div className='selectPoll'>
-            <label>My polls</label>
+            <label htmlFor='mp-mypolls'>My polls</label>
             <select
+              id='mp-mypolls'
               value={this.state.selected}
-              autoFocus={true}
-              onChange={(e) => {this.onSelectPoll (Number (e.target.value))}}>
+              autoFocus
+              onChange={(e) => { this.onSelectPoll (Number (e.target.value)); }}
+            >
               {polls}
             </select>
           </div>
@@ -196,7 +202,7 @@ function generateChoices (list) {
       break;
     default:
       result = [];
-      for (let choice of list) {
+      for (const choice of list) {
         result.push (choice.text);
       }
       result.push ('');
@@ -206,5 +212,5 @@ function generateChoices (list) {
 }
 
 ManagePage.contextTypes = {
-  store: React.PropTypes.object.isRequired
-}
+  store: React.PropTypes.object.isRequired,
+};

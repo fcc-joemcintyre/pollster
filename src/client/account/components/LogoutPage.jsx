@@ -1,5 +1,5 @@
 import React from 'react';
-import {logout} from '../store/actions';
+import { logout } from '../store/actions';
 
 export default class LogoutPage extends React.Component {
   // On component load, call logout
@@ -7,7 +7,7 @@ export default class LogoutPage extends React.Component {
     this.context.store.dispatch (logout ());
   }
 
-  render() {
+  render () {
     return (
       <div className='dialogMessage'>
         <p>You are now logged out.</p>
@@ -17,5 +17,5 @@ export default class LogoutPage extends React.Component {
 }
 
 LogoutPage.contextTypes = {
-  store: React.PropTypes.object.isRequired
+  store: React.PropTypes.object.isRequired,
 };

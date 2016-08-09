@@ -1,6 +1,6 @@
 import React from 'react';
-import {withRouter} from 'react-router';
-import {login} from '../store/actions';
+import { withRouter } from 'react-router';
+import { login } from '../store/actions';
 import FilteredInput from '../../ui/FilteredInput.jsx';
 
 const nameChars = /[A-Za-z0-9]/;
@@ -12,16 +12,16 @@ class LoginPage extends React.Component {
     this.state = {
       username: '',
       password: '',
-      error: false
-    }
+      error: false,
+    };
     this.login = this.login.bind (this);
   }
 
   login (event) {
     event.preventDefault ();
-    if (! ((this.state.username === '') || (this.state.password === ''))) {
+    if (!((this.state.username === '') || (this.state.password === ''))) {
       this.context.store.dispatch (login (this.state.username, this.state.password))
-      .then (success => {
+      .then (() => {
         this.setState ({ error: false });
         if (this.props.location.state && this.props.location.state.nextPathname) {
           this.props.router.replace (this.props.location.state.nextPathname);
@@ -29,13 +29,13 @@ class LoginPage extends React.Component {
           this.props.router.replace ('/');
         }
       })
-      .catch (error => {
+      .catch (() => {
         this.setState ({ error: true });
       });
     }
   }
 
-  render() {
+  render () {
     let errorMessage;
     if (this.state.error) {
       errorMessage = <span className='errorMessage'>Login failed, try again.</span>;
@@ -43,10 +43,11 @@ class LoginPage extends React.Component {
     return (
       <div className='dialogUser'>
         <h2>Login</h2>
-        <hr/>
+        <hr />
         <form onSubmit={this.login}>
           {errorMessage}
-          <FilteredInput autoFocus={true}
+          <FilteredInput
+            autoFocus
             type='text'
             placeholder='user name'
             maxLength={20}
@@ -54,18 +55,22 @@ class LoginPage extends React.Component {
             autoCorrect='off'
             filter={nameChars}
             onChange={(e) => {
-              this.setState ({username: e.target.value});
-            }}/>
+              this.setState ({ username: e.target.value });
+            }}
+          />
           <input
             type='password'
             placeholder='password'
             maxLength={20}
             filter={pwChars}
             onChange={(e) => {
-              this.setState ({password: e.target.value});
-            }}/>
-          <button className='dialogButton'
-            disabled={(this.state.username === '') || (this.state.password === '')}>
+              this.setState ({ password: e.target.value });
+            }}
+          />
+          <button
+            className='dialogButton'
+            disabled={(this.state.username === '') || (this.state.password === '')}
+          >
             Login
           </button>
         </form>
@@ -76,6 +81,11 @@ class LoginPage extends React.Component {
 
 export default withRouter (LoginPage);
 
+LoginPage.propTypes = {
+  location: React.PropTypes.object.isRequired,
+  router: React.PropTypes.object.isRequired,
+};
+
 LoginPage.contextTypes = {
-  store: React.PropTypes.object.isRequired
-}
+  store: React.PropTypes.object.isRequired,
+};

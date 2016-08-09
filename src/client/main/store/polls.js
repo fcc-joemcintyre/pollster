@@ -1,6 +1,6 @@
 import { SET_POLLS } from './constants';
 
-let initialState = [];
+const initialState = [];
 
 export default function polls (state = initialState, action) {
   switch (action.type) {
@@ -13,7 +13,7 @@ export default function polls (state = initialState, action) {
 }
 
 export function getPoll (state, _id) {
-  for (let poll of state.polls) {
+  for (const poll of state.polls) {
     if (poll._id === _id) {
       return poll;
     }

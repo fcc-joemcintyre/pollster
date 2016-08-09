@@ -1,12 +1,12 @@
 import 'babel-polyfill';
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
-import {Provider} from 'react-redux';
+import { render } from 'react-dom';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
 import Nav from './Nav.jsx';
 import configureStore from '../../store/configureStore';
-import {verifyLogin} from '../../account/store/actions';
-import {initPolls} from '../store/actions';
+import { verifyLogin } from '../../account/store/actions';
+import { initPolls } from '../store/actions';
 
 import HomePage from './HomePage.jsx';
 import RegisterPage from '../../account/components/RegisterPage.jsx';
@@ -29,16 +29,16 @@ store.dispatch (verifyLogin ())
     render (
       <Router history={browserHistory}>
         <Route path='/' component={App}>
-          <IndexRoute component={HomePage}/>
-          <Route path='register' component={RegisterPage}/>
-          <Route path='login' component={LoginPage}/>
-          <Route path='profile' component={ProfilePage} onEnter={requireAuth}/>
-          <Route path='logout' component={LogoutPage} onEnter={requireAuth}/>
-          <Route path='polls/:_id' component={PollPage}/>
-          <Route path='manage' component={ManagePage} onEnter={requireAuth}/>
-          <Route path='results' component={ResultPage} onEnter={requireAuth}/>
-          <Route path='about' component={AboutPage}/>
-          <Route path='*' component={NotFoundPage}/>
+          <IndexRoute component={HomePage} />
+          <Route path='register' component={RegisterPage} />
+          <Route path='login' component={LoginPage} />
+          <Route path='profile' component={ProfilePage} onEnter={requireAuth} />
+          <Route path='logout' component={LogoutPage} onEnter={requireAuth} />
+          <Route path='polls/:_id' component={PollPage} />
+          <Route path='manage' component={ManagePage} onEnter={requireAuth} />
+          <Route path='results' component={ResultPage} onEnter={requireAuth} />
+          <Route path='about' component={AboutPage} />
+          <Route path='*' component={NotFoundPage} />
         </Route>
       </Router>,
       document.getElementById ('app')
@@ -51,16 +51,16 @@ export default class App extends React.Component {
   constructor (props) {
     super (props);
     this.state = {
-      authenticated: store.getState ().user.authenticated
+      authenticated: store.getState ().user.authenticated,
     };
   }
 
   // on mount, subscribe to listen for authentication status changes
   componentWillMount () {
     this.unsubscribe = store.subscribe (() => {
-      let authenticated = store.getState ().user.authenticated;
+      const authenticated = store.getState ().user.authenticated;
       if (this.state.authenticated !== authenticated) {
-        this.setState ({authenticated: authenticated});
+        this.setState ({ authenticated });
       }
     });
   }
@@ -76,7 +76,7 @@ export default class App extends React.Component {
       <Provider store={store}>
         <div className='page'>
           <div className='pageHeader'>
-            <Nav loggedIn={this.state.authenticated}/>
+            <Nav loggedIn={this.state.authenticated} />
           </div>
           <div className='pageContent'>
             {this.props.children}
@@ -87,6 +87,10 @@ export default class App extends React.Component {
   }
 }
 
+App.propTypes = {
+  children: React.PropTypes.node,
+};
+
 // When a route requires an authenticated user, set onEnter to this
 // method. If no authenticated user, change the route to the login
 // route, then continue to the original route.
@@ -95,8 +99,8 @@ function requireAuth (nextState, replace) {
     replace ({
       pathname: '/login',
       state: {
-        nextPathname: nextState.location.pathname
-      }
+        nextPathname: nextState.location.pathname,
+      },
     });
   }
 }
