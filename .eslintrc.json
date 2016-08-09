@@ -16,6 +16,8 @@
     "no-spaced-func": "off",
     "no-underscore-dangle": "off",
     "no-use-before-define": "off",
-    "space-before-function-paren": ["error", "always"]
+    "space-before-function-paren": ["error", "always"],
+
+    "jsx-quotes": ["error", "prefer-single"]
   }
 }
