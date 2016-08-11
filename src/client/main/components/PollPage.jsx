@@ -67,14 +67,9 @@ class PollPage extends React.Component {
         rows.push (
           <div key={key} className='votedItemArea'>
             <div
+              className='votedItemBar'
               style={{
-                position: 'absolute',
-                left: '0',
-                top: '0',
-                height: '100%',
                 width: `${this.state.transition ? percent : 0}%`,
-                backgroundColor: 'lightsteelblue',
-                transition: 'width 3s',
               }}
             />
             <span className='votedItemName'>{text}</span>

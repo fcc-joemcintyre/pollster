@@ -52,6 +52,14 @@
   border: 1px solid $itemBorder;
   font-family: 'Lato', sans-serif;
 }
+.votedItemBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: $votedBar;
+  transition: width 3s;
+}
 .votedItemName {
   position: absolute;
   left: 8px;
