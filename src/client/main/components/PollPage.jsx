@@ -38,7 +38,7 @@ class PollPage extends React.Component {
     if (this.state.selected !== -1) {
       const poll = Object.assign ({}, this.state.poll);
       const choice = poll.choices[this.state.selected];
-      choice.votes ++;
+      choice.votes += 1;
       this.setState ({ voted: true, poll });
       this.context.store.dispatch (vote (this.state.poll._id, choice.text));
     }
