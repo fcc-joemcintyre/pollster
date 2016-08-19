@@ -17,6 +17,14 @@
     "no-underscore-dangle": "off",
     "no-use-before-define": "off",
     "space-before-function-paren": ["error", "always"],
+    "space-unary-ops": [2, {
+      "words": true,
+      "nonwords": true,
+      "overrides": {
+        "+": false,
+        "-": false
+      }
+    }],
 
     "jsx-quotes": ["error", "prefer-single"]
   }

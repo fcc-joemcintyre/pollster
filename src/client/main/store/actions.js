@@ -16,7 +16,7 @@ export function initPolls () {
         },
         credentials: 'same-origin',
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           return reject (res.statusText);
         } else {
           return res.json ();
@@ -43,7 +43,7 @@ export function addPoll (poll) {
         credentials: 'same-origin',
         body: JSON.stringify (poll),
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           reject (res.statusText);
         } else {
           dispatch (initPolls ())
@@ -70,7 +70,7 @@ export function updatePoll (poll) {
         credentials: 'same-origin',
         body: JSON.stringify (poll),
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           reject (res.statusText);
         } else {
           dispatch (initPolls ())
@@ -96,7 +96,7 @@ export function deletePoll (_id) {
         },
         credentials: 'same-origin',
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           reject (res.statusText);
         } else {
           dispatch (initPolls ())
@@ -122,7 +122,7 @@ export function vote (_id, choice) {
         },
         credentials: 'same-origin',
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           reject (res.statusCode);
         } else {
           dispatch (initPolls ())

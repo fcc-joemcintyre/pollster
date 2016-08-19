@@ -31,7 +31,7 @@ class HomePage extends React.Component {
       rows.push (<p>{' '}</p>);
       rows.push (<p>There are no active polls - be the first to add a new one!</p>);
     } else {
-      for (let i = 0; i < polls.length; i++) {
+      for (let i = 0; i < polls.length; i ++) {
         let totalVotes = polls[i].choices.reduce ((a, b) => { return a + b.votes; }, 0);
         rows.push (
           <div

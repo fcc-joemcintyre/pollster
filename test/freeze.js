@@ -6,7 +6,7 @@ export default function freeze (object) {
     const child = object[key];
     const type = typeof (child);
     if ((type === 'object') || (type === 'function')) {
-      if (!Object.isFrozen (child)) {
+      if (! Object.isFrozen (child)) {
         freeze (child);
       }
     }

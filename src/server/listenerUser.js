@@ -8,7 +8,7 @@ function init () {
 // Login, authenticating user and creating a session
 function login (req, res, next) {
   console.log ('login');
-  if (!(req.body && req.body.username && req.body.password)) {
+  if (! (req.body && req.body.username && req.body.password)) {
     console.log ('login', '(400) invalid login body', JSON.stringify (req.body));
     res.status (400).json ({});
   } else {
@@ -17,7 +17,7 @@ function login (req, res, next) {
         return next (err);
       }
       // if not a valid user, return 401 auth error
-      if (!user) {
+      if (! user) {
         console.log ('  login', '(401) unauthenticated');
         return res.status (401).json ({});
       }
@@ -70,7 +70,7 @@ function verifyLogin (req, res) {
 // register new user. If already existing user, return 403 (Forbidden)
 function register (req, res) {
   console.log ('register');
-  if (!(req.body && req.body.username && req.body.password)) {
+  if (! (req.body && req.body.username && req.body.password)) {
     console.log ('register', '(400) invalid login body', JSON.stringify (req.body));
     res.status (400).json ({});
   } else {

@@ -25,7 +25,7 @@ export default class ResultPage extends React.Component {
     }
 
     let polls = [];
-    for (let i = 0; i < myPolls.length; i++) {
+    for (let i = 0; i < myPolls.length; i ++) {
       polls.push (
         <option key={i} value={i}>
           {myPolls[i].title}
@@ -38,7 +38,7 @@ export default class ResultPage extends React.Component {
     if (this.state.selected >= 0) {
       const currentPoll = myPolls[this.state.selected];
       totalVotes = currentPoll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
-      for (let i = 0; i < currentPoll.choices.length; i++) {
+      for (let i = 0; i < currentPoll.choices.length; i ++) {
         const choice = currentPoll.choices[i];
         let text = <span className='name'>{choice.text}</span>;
         let percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);

@@ -85,7 +85,7 @@ export default class ManagePage extends React.Component {
   render () {
     const newPoll = (this.state.selected === this.state.polls.length);
     let polls = [];
-    for (let i = 0; i < this.state.polls.length; i++) {
+    for (let i = 0; i < this.state.polls.length; i ++) {
       polls.push (
         <option key={i} value={i}>
           {this.state.polls[i].title}
@@ -100,7 +100,7 @@ export default class ManagePage extends React.Component {
 
     // Poll edit area
     let choices = [];
-    for (let i = 0; i < this.state.choices.length; i++) {
+    for (let i = 0; i < this.state.choices.length; i ++) {
       choices.push (
         <div key={i}>
           <label htmlFor='mp-choice'>Choice</label>

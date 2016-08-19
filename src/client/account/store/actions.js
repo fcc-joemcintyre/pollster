@@ -14,7 +14,7 @@ export function register (username, password) {
         credentials: 'same-origin',
         body: JSON.stringify (data),
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           reject (res.statusText);
         } else {
           resolve ();
@@ -40,7 +40,7 @@ export function login (username, password) {
         credentials: 'same-origin',
         body: JSON.stringify (data),
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           return reject (res.statusText);
         } else {
           return res.json ();
@@ -88,7 +88,7 @@ export function verifyLogin () {
         },
         credentials: 'same-origin',
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           return reject (res.statusText);
         } else {
           return res.json ();
@@ -127,7 +127,7 @@ export function updateProfile (name, email) {
         credentials: 'same-origin',
         body: JSON.stringify (data),
       }).then (res => {
-        if (!res.ok) {
+        if (! res.ok) {
           return reject (res.statusCode);
         } else {
           dispatch (setProfile (name, email));

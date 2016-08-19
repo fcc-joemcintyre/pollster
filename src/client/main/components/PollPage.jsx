@@ -55,7 +55,7 @@ class PollPage extends React.Component {
     }
     const totalVotes = this.state.poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
     let rows = [];
-    for (let i = 0; i < this.state.poll.choices.length; i++) {
+    for (let i = 0; i < this.state.poll.choices.length; i ++) {
       let key = `p-r-${i}`;
       if (this.state.voted) {
         let text = (i === this.state.selected) ? '\u2713 ' : '';
