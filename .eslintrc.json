@@ -9,6 +9,7 @@
 
   "rules": {
     "arrow-body-style": ["error", "always"],
+    "func-call-spacing": ["error", "always"],
     "func-names": "off",
     "newline-per-chained-call": "off",
     "no-console": "off",

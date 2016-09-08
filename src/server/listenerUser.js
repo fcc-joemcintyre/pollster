@@ -33,7 +33,7 @@ function login (req, res, next) {
         };
         return res.status (200).json (result);
       });
-    })(req, res, next);
+    }) (req, res, next);
   }
 }
 

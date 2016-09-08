@@ -47,7 +47,7 @@ function processCommand (args) {
   // validate arguments, assign defaults
   const port = getInteger (result.port);
   if ((port === null) || (port < 0) || (port > 65535)) {
-    errors.push ('Invalid port number (${result.port}). Must be integer between 0 and 65535');
+    errors.push (`Invalid port number (${result.port}). Must be integer between 0 and 65535`);
   } else if (port === 0) {
     result.port = defaults.port;
   } else {
