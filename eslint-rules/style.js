@@ -162,7 +162,7 @@ module.exports = {
     'no-new-object': 'error',
 
     // disallow use of unary operators, ++ and --
-    'no-plusplus': 'error',
+    'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
 
     // disallow specified syntax
     'no-restricted-syntax': ['error', 'LabeledStatement'],
