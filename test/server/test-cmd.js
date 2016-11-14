@@ -1,4 +1,3 @@
-/* eslint prefer-arrow-callback: off */
 const assert = require ('assert');
 const processCommand = require ('../../dist/cmd').processCommand;
 

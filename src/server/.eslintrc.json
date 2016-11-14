@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "../../eslint-rules/node.js"
+  ],
+
+  "rules": {
+    "no-console": "off"
+  }
+}

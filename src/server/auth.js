@@ -8,14 +8,14 @@ function init () {
   // local authentication using database for user registry
   passport.use (new Strategy ((username, password, callback) => {
     db.findUserByUsername (username)
-    .then (user => {
+    .then ((user) => {
       if (! user) {
         return callback (null, false);
       }
       const passwordMatch = hash.compare (password, user.hash, user.salt);
       return callback (null, (passwordMatch) ? user : false);
     })
-    .catch (err => {
+    .catch ((err) => {
       return callback (err);
     });
   }));
@@ -28,10 +28,10 @@ function init () {
   // set function to get user from username
   passport.deserializeUser ((username, callback) => {
     db.findUserByUsername (username)
-    .then (user => {
+    .then ((user) => {
       return callback (null, user);
     })
-    .catch (err => {
+    .catch ((err) => {
       return callback (err);
     });
   });

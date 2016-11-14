@@ -1,5 +1,3 @@
-/* eslint prefer-arrow-callback: off */
-/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 import assert from 'assert';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';

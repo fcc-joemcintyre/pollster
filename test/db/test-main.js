@@ -1,4 +1,3 @@
-/* eslint prefer-arrow-callback: off */
 /* eslint global-require: off */
 const mongoClient = require ('mongodb').MongoClient;
 const db = require ('../../dist/db');
@@ -26,7 +25,7 @@ describe ('test-main', function () {
   before (function (done) {
     Promise.resolve ().then (() => {
       return mongoClient.connect (uri);
-    }).then (dbInstance => {
+    }).then ((dbInstance) => {
       testdb.db = dbInstance;
       testdb.users = testdb.db.collection ('users');
       return testdb.users.ensureIndex ({ username: 1 }, { unique: true });
@@ -39,7 +38,7 @@ describe ('test-main', function () {
       return db.init (uri);
     }).then (() => {
       done ();
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });
@@ -51,7 +50,7 @@ describe ('test-main', function () {
       return testdb.db.close ();
     }).then (() => {
       done ();
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });

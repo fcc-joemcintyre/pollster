@@ -23,7 +23,7 @@ function init (uri) {
         }).then (() => {
           polls = db.collection ('polls');
           return resolve ();
-        }).catch (err2 => {
+        }).catch ((err2) => {
           console.log ('  err', err2);
           return reject (err2);
         });
@@ -66,7 +66,7 @@ function insertUser (username, password) {
   return new Promise ((resolve, reject) => {
     Promise.resolve ().then (() => {
       return findUserByUsername (username);
-    }).then (result => {
+    }).then ((result) => {
       if (result !== null) {
         return reject (new Error ('User already exists'));
       }
@@ -79,9 +79,9 @@ function insertUser (username, password) {
         email: '',
       };
       return users.insert (user, { w: 1 });
-    }).then (result => {
+    }).then ((result) => {
       resolve (result);
-    }).catch (err => {
+    }).catch ((err) => {
       reject (err);
     });
   });

@@ -1,6 +1,4 @@
-/* eslint prefer-arrow-callback: off */
 /* eslint global-require: off */
-/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 
 // establish global fetch objects to mimic browser variables
 import 'isomorphic-fetch';

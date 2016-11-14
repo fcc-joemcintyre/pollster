@@ -1,4 +1,3 @@
-/* eslint prefer-arrow-callback: off */
 /* eslint global-require: off */
 const mongoClient = require ('mongodb').MongoClient;
 const server = require ('../../dist/server');
@@ -23,7 +22,7 @@ before (function (done) {
     return server.start (port, dbURI);
   }).then (() => {
     done ();
-  }).catch (err => {
+  }).catch ((err) => {
     done (err);
   });
 });
@@ -32,7 +31,7 @@ function resetDatabase () {
   return new Promise ((resolve, reject) => {
     Promise.resolve ().then (() => {
       return mongoClient.connect (dbURI);
-    }).then (instance => {
+    }).then ((instance) => {
       const users = instance.collection ('users');
       users.ensureIndex ({ username: 1 }, { unique: true })
       .then (() => {
@@ -43,7 +42,7 @@ function resetDatabase () {
       }).then (() => {
         resolve ();
       });
-    }).catch (err => {
+    }).catch ((err) => {
       reject (err);
     });
   });

@@ -1,5 +1,3 @@
-/* eslint prefer-arrow-callback: off */
-/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 import assert from 'assert';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -137,8 +135,8 @@ describe ('Test account async actions', function () {
       const expectedActions = [
         {
           type: types.SET_POLLS,
-          polls: [
-            { _id: '0001',
+          polls: [{
+            _id: '0001',
             creator: 'amy',
             title: 'Treat',
             choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }],

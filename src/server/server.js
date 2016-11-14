@@ -30,6 +30,7 @@ function start (port, dbLocation) {
     Promise.resolve ().then (() => {
       return db.init (dbLocation);
     }).then (() => {
+      /* eslint max-statements: off */
       // set up static HTML serving
       const app = express ();
 
@@ -88,7 +89,7 @@ function start (port, dbLocation) {
         console.log (`Server listening on port ${port}`);
         resolve ();
       });
-    }).catch (err => {
+    }).catch ((err) => {
       reject (err);
     });
   });

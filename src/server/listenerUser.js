@@ -1,8 +1,9 @@
 const passport = require ('passport');
 const db = require ('./db');
 
-// Initialize listeners (currently empty)
+// Initialize listeners
 function init () {
+  // empty
 }
 
 // Login, authenticating user and creating a session
@@ -79,7 +80,7 @@ function register (req, res) {
       console.log ('  registered', req.body.username);
       res.status (200).json ({});
     })
-    .catch (err => {
+    .catch ((err) => {
       console.log ('  error', err);
       res.status (403).json ({});
     });
@@ -101,7 +102,7 @@ function updateProfile (req, res) {
     console.log ('  update successful');
     res.status (200).json ({});
   })
-  .catch (err => {
+  .catch ((err) => {
     console.log ('  error (500)', err);
     res.status (500).json ({});
   });

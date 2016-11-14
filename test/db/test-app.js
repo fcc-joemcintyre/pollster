@@ -1,4 +1,3 @@
-/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 describe ('polls', function () {
@@ -21,7 +20,7 @@ describe ('polls', function () {
       return db.insertPoll (polls);
     }).then (() => {
       done ();
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });
@@ -36,7 +35,7 @@ describe ('polls', function () {
         }
         return done ();
       })
-      .catch (err => { done (err); });
+      .catch ((err) => { done (err); });
     });
   });
 
@@ -59,7 +58,7 @@ describe ('polls', function () {
           return done (new Error (`Wrong number of polls: ${result.length}`));
         }
         return done ();
-      }).catch (err => {
+      }).catch ((err) => {
         done (err);
       });
     });
@@ -69,7 +68,7 @@ describe ('polls', function () {
     it ('should show vote counted for every item', function (done) {
       Promise.resolve ().then (() => {
         return db.getPolls ();
-      }).then (polls => {
+      }).then ((polls) => {
         const promises = [];
         for (const poll of polls) {
           for (const choice of poll.choices) {
@@ -79,7 +78,7 @@ describe ('polls', function () {
         Promise.all (promises)
         .then (() => {
           return db.getPolls ();
-        }).then (polls2 => {
+        }).then ((polls2) => {
           for (const poll of polls2) {
             for (const choice of poll.choices) {
               if (choice.votes !== 1) {
@@ -89,7 +88,7 @@ describe ('polls', function () {
           }
           return done ();
         });
-      }).catch (err => {
+      }).catch ((err) => {
         done (err);
       });
     });

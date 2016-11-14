@@ -105,6 +105,12 @@ The application also uses the following environment variables,
 
 HTTP Session secret (any text string).
 
+## Acknowledgements
+
+ESLint rules derived from Airbnb Javascript Style Guide,
+Copyright (c) 2014-2016 Airbnb under The MIT license, at
+https://github.com/airbnb/javascript
+
 ## License
 
 MIT

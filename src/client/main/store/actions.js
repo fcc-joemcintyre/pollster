@@ -6,7 +6,7 @@ export function setPolls (polls) {
 }
 
 export function initPolls () {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls`, {
         method: 'get',
@@ -15,16 +15,16 @@ export function initPolls () {
           'content-type': 'application/json',
         },
         credentials: 'same-origin',
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           return reject (res.statusText);
         } else {
           return res.json ();
         }
-      }).then (polls => {
+      }).then ((polls) => {
         dispatch (setPolls (polls));
         return resolve ();
-      }).catch (err => {
+      }).catch ((err) => {
         return reject (err);
       });
     });
@@ -32,7 +32,7 @@ export function initPolls () {
 }
 
 export function addPoll (poll) {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls`, {
         method: 'post',
@@ -42,7 +42,7 @@ export function addPoll (poll) {
         },
         credentials: 'same-origin',
         body: JSON.stringify (poll),
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           reject (res.statusText);
         } else {
@@ -51,7 +51,7 @@ export function addPoll (poll) {
             return resolve ();
           });
         }
-      }).catch (err => {
+      }).catch ((err) => {
         reject (err);
       });
     });
@@ -59,7 +59,7 @@ export function addPoll (poll) {
 }
 
 export function updatePoll (poll) {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls/${poll._id}`, {
         method: 'post',
@@ -69,7 +69,7 @@ export function updatePoll (poll) {
         },
         credentials: 'same-origin',
         body: JSON.stringify (poll),
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           reject (res.statusText);
         } else {
@@ -78,7 +78,7 @@ export function updatePoll (poll) {
             resolve ();
           });
         }
-      }).catch (err => {
+      }).catch ((err) => {
         reject (err);
       });
     });
@@ -86,7 +86,7 @@ export function updatePoll (poll) {
 }
 
 export function deletePoll (_id) {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls/${_id}`, {
         method: 'delete',
@@ -95,7 +95,7 @@ export function deletePoll (_id) {
           'content-type': 'application/json',
         },
         credentials: 'same-origin',
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           reject (res.statusText);
         } else {
@@ -104,7 +104,7 @@ export function deletePoll (_id) {
             resolve ();
           });
         }
-      }).catch (err => {
+      }).catch ((err) => {
         reject (err);
       });
     });
@@ -112,7 +112,7 @@ export function deletePoll (_id) {
 }
 
 export function vote (_id, choice) {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls/${_id}/votes/${choice}`, {
         method: 'post',
@@ -121,7 +121,7 @@ export function vote (_id, choice) {
           'content-type': 'application/json',
         },
         credentials: 'same-origin',
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           reject (res.statusCode);
         } else {
@@ -130,7 +130,7 @@ export function vote (_id, choice) {
             resolve ();
           });
         }
-      }).catch (err => {
+      }).catch ((err) => {
         reject (err);
       });
     });

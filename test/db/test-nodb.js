@@ -1,4 +1,3 @@
-/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 // mongo URI with port number not an active MongoDB instance

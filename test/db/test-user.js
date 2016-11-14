@@ -1,4 +1,3 @@
-/* eslint prefer-arrow-callback: off */
 const db = require ('../../dist/db');
 
 describe ('users', function () {
@@ -7,7 +6,7 @@ describe ('users', function () {
       return db.insertUser ('amy', 'test');
     }).then (() => {
       done ();
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });
@@ -17,7 +16,7 @@ describe ('users', function () {
       return db.removeUser ('amy');
     }).then (() => {
       done ();
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });
@@ -26,13 +25,13 @@ describe ('users', function () {
     it ('should be found', function (done) {
       Promise.resolve ().then (() => {
         return db.findUserByUsername ('amy');
-      }).then (result => {
+      }).then ((result) => {
         if (result) {
           done ();
         } else {
           done (new Error ('not found'));
         }
-      }).catch (err => {
+      }).catch ((err) => {
         done (err);
       });
     });
@@ -42,13 +41,13 @@ describe ('users', function () {
     it ('should not be found', function (done) {
       Promise.resolve ().then (() => {
         return db.findUserByUsername ('amyy');
-      }).then (result => {
+      }).then ((result) => {
         if (result) {
           done (new Error ('should not be found'));
         } else {
           done ();
         }
-      }).catch (err => {
+      }).catch ((err) => {
         done (err);
       });
     });
@@ -60,13 +59,13 @@ describe ('users', function () {
         return db.updateUser ('amy', 'Amy Test', 'amy@example.com');
       }).then (() => {
         return db.findUserByUsername ('amy');
-      }).then (result => {
+      }).then ((result) => {
         if ((result.name === 'Amy Test') && (result.email === 'amy@example.com')) {
           done ();
         } else {
           done (new Error ('invalid update', result));
         }
-      }).catch (err => {
+      }).catch ((err) => {
         done (err);
       });
     });

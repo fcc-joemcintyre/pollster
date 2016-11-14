@@ -13,14 +13,14 @@ export function register (username, password) {
         },
         credentials: 'same-origin',
         body: JSON.stringify (data),
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           reject (res.statusText);
         } else {
           resolve ();
         }
       })
-      .catch (err => {
+      .catch ((err) => {
         reject (err);
       });
     });
@@ -28,7 +28,7 @@ export function register (username, password) {
 }
 
 export function login (username, password) {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       const data = { username, password };
       fetch (`${location.origin}/api/login`, {
@@ -39,17 +39,17 @@ export function login (username, password) {
         },
         credentials: 'same-origin',
         body: JSON.stringify (data),
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           return reject (res.statusText);
         } else {
           return res.json ();
         }
-      }).then (user => {
+      }).then ((user) => {
         dispatch (setAuthenticated (true, user.username));
         dispatch (setProfile (user.name, user.email));
         return resolve ();
-      }).catch (err => {
+      }).catch ((err) => {
         return reject (err);
       });
     });
@@ -57,7 +57,7 @@ export function login (username, password) {
 }
 
 export function logout () {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/logout`, {
         method: 'post',
@@ -69,7 +69,7 @@ export function logout () {
       }).then (() => {
         dispatch (setAuthenticated (false, ''));
         return resolve ();
-      }).catch (err => {
+      }).catch ((err) => {
         dispatch (setAuthenticated (false, ''));
         return reject (err);
       });
@@ -78,7 +78,7 @@ export function logout () {
 }
 
 export function verifyLogin () {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/verifylogin`, {
         method: 'get',
@@ -87,13 +87,13 @@ export function verifyLogin () {
           'content-type': 'application/json',
         },
         credentials: 'same-origin',
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           return reject (res.statusText);
         } else {
           return res.json ();
         }
-      }).then (data => {
+      }).then ((data) => {
         if (data.authenticated) {
           dispatch (setAuthenticated (true, data.user.username));
           dispatch (setProfile (data.user.name, data.user.email));
@@ -103,7 +103,7 @@ export function verifyLogin () {
           dispatch (setProfile ('', ''));
           return resolve (false);
         }
-      }).catch (err => {
+      }).catch ((err) => {
         return reject (err);
       });
     });
@@ -115,7 +115,7 @@ export function setAuthenticated (authenticated, username) {
 }
 
 export function updateProfile (name, email) {
-  return dispatch => {
+  return (dispatch) => {
     return new Promise ((resolve, reject) => {
       const data = { name, email };
       fetch (`${location.origin}/api/profile`, {
@@ -126,14 +126,14 @@ export function updateProfile (name, email) {
         },
         credentials: 'same-origin',
         body: JSON.stringify (data),
-      }).then (res => {
+      }).then ((res) => {
         if (! res.ok) {
           return reject (res.statusCode);
         } else {
           dispatch (setProfile (name, email));
           return resolve ();
         }
-      }).catch (err => {
+      }).catch ((err) => {
         return reject (err);
       });
     });

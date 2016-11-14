@@ -1,5 +1,3 @@
-/* eslint prefer-arrow-callback: off */
-/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const request = require ('request');
 const db = require ('../../dist/db');
 const url = require ('./test-main').url;
@@ -29,7 +27,7 @@ describe ('polls (unauthenticated)', function () {
       return db.insertPoll (polls);
     }).then (() => {
       done ();
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });
@@ -80,7 +78,7 @@ describe ('polls (authenticated)', function () {
         },
       ];
       return db.insertPoll (polls);
-    }).then (result => {
+    }).then ((result) => {
       pollIds = result.insertedIds;
       const form = { form: { username: 'amy', password: 'test' } };
       request.post (`${url}api/login`, form, (err, res) => {
@@ -92,7 +90,7 @@ describe ('polls (authenticated)', function () {
           return done (new Error (`statusCode: ${res.statusCode}`));
         }
       });
-    }).catch (err => {
+    }).catch ((err) => {
       done (err);
     });
   });

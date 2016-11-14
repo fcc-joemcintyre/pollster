@@ -21,6 +21,6 @@
     "start": "node dist/main.js --port=3000"
   },
   "engines": {
-    "node": "6.7.0"
+    "node": "6.9.1"
   }
 }

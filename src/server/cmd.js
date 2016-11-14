@@ -11,9 +11,10 @@ function getInteger (value) {
 /**
  * Valid command options
  *  [-p | --port] port to listen on, default 3000
- * @param {[String]} Array of arguments
+ * @param {[String]} args Array of arguments
  * @returns {Object} code:{Integer}, exit:{Boolean}, port:{Integer}
  */
+/* eslint max-statements: off */
 function processCommand (args) {
   let showHelp = false;
   const errors = [];
