@@ -118,7 +118,7 @@ module.exports = {
     // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/extensions.md
     'import/extensions': ['error', 'always', {
       js: 'never',
-      jsx: 'never',
+      jsx: 'always',
     }],
 
     // Enforce a convention in module import order
