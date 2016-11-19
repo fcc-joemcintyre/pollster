@@ -33,7 +33,7 @@
     "start": "nodemon dist/main.js --port=3000",
     "build": "gulp",
     "build-stage": "gulp stage",
-    "lint": "eslint src/** && eslint test/**",
+    "lint": "eslint --ext .js --ext .jsx src/** && eslint test/**",
     "lintrules": "eslint eslint-rules/**",
     "coverage": "npm run c-db && npm run c-server && npm run c-combine",
     "c-server": "./node_modules/istanbul/lib/cli.js cover --dir ./coverage/server ./node_modules/mocha/bin/_mocha test/server/test-main.js -- -R spec",
