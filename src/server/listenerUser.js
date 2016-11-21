@@ -1,16 +1,26 @@
+const Ajv = require ('ajv');
 const passport = require ('passport');
 const db = require ('./db');
+const schemaLogin = require ('./schema/login.json');
+const schemaRegister = require ('./schema/register.json');
+const schemaUpdateProfile = require ('./schema/updateProfile.json');
+
+// object holding validator instance and pre-compiled schemas
+const validator = {};
 
 // Initialize listeners
 function init () {
-  // empty
+  validator.ajv = new Ajv ();
+  validator.login = validator.ajv.compile (schemaLogin);
+  validator.register = validator.ajv.compile (schemaRegister);
+  validator.updateProfile = validator.ajv.compile (schemaUpdateProfile);
 }
 
 // Login, authenticating user and creating a session
 function login (req, res, next) {
   console.log ('login');
-  if (! (req.body && req.body.username && req.body.password)) {
-    console.log ('login', '(400) invalid login body', JSON.stringify (req.body));
+  if (validator.login (req.body) === false) {
+    console.log ('login', '(400) invalid body', validator.login.errors);
     res.status (400).json ({});
   } else {
     passport.authenticate ('local', (err, user) => {
@@ -71,8 +81,8 @@ function verifyLogin (req, res) {
 // register new user. If already existing user, return 403 (Forbidden)
 function register (req, res) {
   console.log ('register');
-  if (! (req.body && req.body.username && req.body.password)) {
-    console.log ('register', '(400) invalid login body', JSON.stringify (req.body));
+  if (validator.register (req.body) === false) {
+    console.log ('register', '(400) invalid body', validator.register.errors);
     res.status (400).json ({});
   } else {
     db.insertUser (req.body.username, req.body.password)
@@ -96,16 +106,21 @@ function getProfile (req, res) {
 }
 
 function updateProfile (req, res) {
-  console.log ('updateProfile', req.user.username, req.body.name, req.body.email);
-  db.updateUser (req.user.username, req.body.name, req.body.email)
-  .then (() => {
-    console.log ('  update successful');
-    res.status (200).json ({});
-  })
-  .catch ((err) => {
-    console.log ('  error (500)', err);
-    res.status (500).json ({});
-  });
+  console.log ('updateProfile', req.user.username);
+  if (validator.updateProfile (req.body) === false) {
+    console.log ('updateProfile', '(400) invalid body', validator.updateProfile.errors);
+    res.status (400).json ({});
+  } else {
+    db.updateUser (req.user.username, req.body.name, req.body.email)
+    .then (() => {
+      console.log ('  update successful');
+      res.status (200).json ({});
+    })
+    .catch ((err) => {
+      console.log ('  error (500)', err);
+      res.status (500).json ({});
+    });
+  }
 }
 
 exports.init = init;

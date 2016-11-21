@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "username": { "type": "string", "maxLength": 20 },
+    "password": { "type": "string", "maxLength": 20 }
+  },
+  "required": ["username", "password"],
+  "additionalProperties": false
+}

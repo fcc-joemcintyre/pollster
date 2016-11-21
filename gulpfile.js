@@ -43,7 +43,7 @@ gulp.task ('set-stage', function () {
 gulp.task ('watch', function () {
   gulp.watch ('src/client/index.html', ['html']);
   gulp.watch ('src/client/images/*', ['images']);
-  gulp.watch ('src/server/*.js', ['server']);
+  gulp.watch (['src/server/**/*.js*'], ['server']);
   gulp.watch ('src/client/css/**/*.scss', ['styles']);
   gulp.watch (dependencies, ['vendor']);
 });
@@ -62,7 +62,7 @@ gulp.task ('images', function () {
 
 // copy server
 gulp.task ('server', function () {
-  return gulp.src ('src/server/*.js')
+  return gulp.src (['src/server/**/*.js*'])
     .pipe (gulp.dest (base));
 });
 

@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "name": { "type": "string", "maxLength": 40 },
+    "email": { "type": "string", "maxLength": 60 }
+  },
+  "required": ["name", "email"],
+  "additionalProperties": false
+}
