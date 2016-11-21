@@ -1,3 +1,4 @@
+/* eslint-env node */
 /* eslint prefer-arrow-callback: off */
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const gulp = require ('gulp');
@@ -27,9 +28,9 @@ const stageDir = '../pollster-stage';
 let base = 'dist';
 
 gulp.task ('default', ['html', 'images', 'server', 'styles', 'vendor',
- 'browserify-watch', 'watch']);
+  'browserify-watch', 'watch']);
 gulp.task ('stage', ['set-stage', 'html', 'images', 'server', 'styles',
-'vendor-stage', 'browserify-stage']);
+  'vendor-stage', 'browserify-stage']);
 
 // set the destination for staging output and copy stage root files
 gulp.task ('set-stage', function () {
