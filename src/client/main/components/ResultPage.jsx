@@ -11,7 +11,7 @@ export default class ResultPage extends React.Component {
 
   render () {
     const store = this.context.store.getState ();
-    const myPolls = store.polls.filter (poll => {
+    const myPolls = store.polls.filter ((poll) => {
       return (poll.creator === store.user.username);
     });
 
@@ -24,7 +24,7 @@ export default class ResultPage extends React.Component {
       );
     }
 
-    let polls = [];
+    const polls = [];
     for (let i = 0; i < myPolls.length; i ++) {
       polls.push (
         <option key={i} value={i}>
@@ -33,16 +33,16 @@ export default class ResultPage extends React.Component {
       );
     }
 
-    let choices = [];
+    const choices = [];
     let totalVotes = 0;
     if (this.state.selected >= 0) {
       const currentPoll = myPolls[this.state.selected];
       totalVotes = currentPoll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
       for (let i = 0; i < currentPoll.choices.length; i ++) {
         const choice = currentPoll.choices[i];
-        let text = <span className='name'>{choice.text}</span>;
-        let percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);
-        let percentText = <span className='votes'>{percent}%</span>;
+        const text = <span className='name'>{choice.text}</span>;
+        const percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);
+        const percentText = <span className='votes'>{percent}%</span>;
         const color = 'lightsteelblue';
         const c = '-webkit-linear-gradient';
         const grad = `${c}(left, ${color} 0%, ${color} ${percent}%, #F0F8FF ${percent}%, #F0F8FF)`;

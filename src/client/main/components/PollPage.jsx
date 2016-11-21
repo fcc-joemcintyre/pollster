@@ -54,9 +54,9 @@ class PollPage extends React.Component {
       );
     }
     const totalVotes = this.state.poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
-    let rows = [];
+    const rows = [];
     for (let i = 0; i < this.state.poll.choices.length; i ++) {
-      let key = `p-r-${i}`;
+      const key = `p-r-${i}`;
       if (this.state.voted) {
         let text = (i === this.state.selected) ? '\u2713 ' : '';
         text += this.state.poll.choices[i].text;
@@ -79,9 +79,9 @@ class PollPage extends React.Component {
       } else {
         const pollClassName = (i === this.state.selected) ?
           'pollItem pollItemSelected' : 'pollItem';
-        let check = (i === this.state.selected) ?
+        const check = (i === this.state.selected) ?
           <span className='pollItemName'>&#10003; </span> : null;
-        let choice = <span className='pollItemName'>{this.state.poll.choices[i].text}</span>;
+        const choice = <span className='pollItemName'>{this.state.poll.choices[i].text}</span>;
         rows.push (
           <div
             key={key}
@@ -101,7 +101,7 @@ class PollPage extends React.Component {
       }, 100);
     }
 
-    let buttons = [];
+    const buttons = [];
     if (this.state.voted === false) {
       buttons.push (
         <button key='button1' className='dialogGroupButton' onClick={this.handleVote}>
@@ -138,6 +138,7 @@ class PollPage extends React.Component {
 
 export default withRouter (PollPage);
 
+/* eslint react/forbid-prop-types: off */
 PollPage.propTypes = {
   params: React.PropTypes.object.isRequired,
   router: React.PropTypes.object.isRequired,

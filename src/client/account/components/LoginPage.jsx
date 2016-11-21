@@ -19,7 +19,7 @@ class LoginPage extends React.Component {
 
   login (event) {
     event.preventDefault ();
-    if (!((this.state.username === '') || (this.state.password === ''))) {
+    if (! ((this.state.username === '') || (this.state.password === ''))) {
       this.context.store.dispatch (login (this.state.username, this.state.password))
       .then (() => {
         this.setState ({ error: false });
@@ -81,6 +81,7 @@ class LoginPage extends React.Component {
 
 export default withRouter (LoginPage);
 
+/* eslint react/forbid-prop-types: off */
 LoginPage.propTypes = {
   location: React.PropTypes.object.isRequired,
   router: React.PropTypes.object.isRequired,

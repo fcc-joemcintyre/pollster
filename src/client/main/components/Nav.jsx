@@ -3,8 +3,8 @@ import { Link, IndexLink } from 'react-router';
 
 // Header with application and common navigation
 const Nav = ({ loggedIn }) => {
-  let appLinks = [];
-  let titleLinks = [];
+  const appLinks = [];
+  const titleLinks = [];
 
   appLinks.push (<li key='a1'><IndexLink to='/' activeClassName='active'>Polls</IndexLink></li>);
   if (loggedIn) {

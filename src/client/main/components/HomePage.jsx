@@ -26,13 +26,13 @@ class HomePage extends React.Component {
 
   render () {
     const polls = this.state.polls;
-    let rows = [];
+    const rows = [];
     if (polls.length === 0) {
       rows.push (<p>{' '}</p>);
       rows.push (<p>There are no active polls - be the first to add a new one!</p>);
     } else {
       for (let i = 0; i < polls.length; i ++) {
-        let totalVotes = polls[i].choices.reduce ((a, b) => { return a + b.votes; }, 0);
+        const totalVotes = polls[i].choices.reduce ((a, b) => { return a + b.votes; }, 0);
         rows.push (
           <div
             key={polls[i]._id}
@@ -71,6 +71,7 @@ class HomePage extends React.Component {
 
 export default withRouter (HomePage);
 
+/* eslint react/forbid-prop-types: off */
 HomePage.propTypes = {
   router: React.PropTypes.object.isRequired,
 };

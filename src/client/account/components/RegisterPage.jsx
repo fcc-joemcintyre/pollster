@@ -20,7 +20,7 @@ class RegisterPage extends React.Component {
 
   register (event) {
     event.preventDefault ();
-    if (!((this.state.username === '') || (this.state.password === ''))) {
+    if (! ((this.state.username === '') || (this.state.password === ''))) {
       this.context.store.dispatch (register (this.state.username, this.state.password))
       .then (() => {
         this.context.store.dispatch (login (this.state.username, this.state.password))
@@ -53,7 +53,7 @@ class RegisterPage extends React.Component {
             autoCapitalize='none'
             autoCorrect='off'
             filter={nameChars}
-            onChange={e => {
+            onChange={(e) => {
               this.setState ({ username: e.target.value });
             }}
           />
@@ -62,7 +62,7 @@ class RegisterPage extends React.Component {
             placeholder='password'
             maxLength={20}
             filter={pwChars}
-            onChange={e => {
+            onChange={(e) => {
               this.setState ({ password: e.target.value });
             }}
           />
@@ -71,7 +71,7 @@ class RegisterPage extends React.Component {
             placeholder='verify password'
             maxLength={20}
             filter={pwChars}
-            onChange={e => {
+            onChange={(e) => {
               this.setState ({ verify: e.target.value });
             }}
           />
@@ -90,6 +90,7 @@ class RegisterPage extends React.Component {
 
 export default withRouter (RegisterPage);
 
+/* eslint react/forbid-prop-types: off */
 RegisterPage.propTypes = {
   location: React.PropTypes.object.isRequired,
   router: React.PropTypes.object.isRequired,

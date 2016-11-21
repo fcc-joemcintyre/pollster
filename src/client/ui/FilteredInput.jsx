@@ -22,6 +22,7 @@ const FilteredInput = (props) => {
   );
 };
 
+/* eslint react/forbid-prop-types: off */
 FilteredInput.propTypes = {
   filter: React.PropTypes.object.isRequired,
 };

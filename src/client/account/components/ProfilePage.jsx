@@ -40,7 +40,7 @@ class ProfilePage extends React.Component {
               value={this.state.name}
               maxLength={20}
               filter={nameChars}
-              onChange={e => {
+              onChange={(e) => {
                 this.setState ({ name: e.target.value });
               }}
             />
@@ -54,7 +54,7 @@ class ProfilePage extends React.Component {
               maxLength={20}
               autoCapitalize='none'
               autoCorrect='off'
-              onChange={e => {
+              onChange={(e) => {
                 this.setState ({ email: e.target.value });
               }}
             />
@@ -68,6 +68,7 @@ class ProfilePage extends React.Component {
 
 export default withRouter (ProfilePage);
 
+/* eslint react/forbid-prop-types: off */
 ProfilePage.propTypes = {
   router: React.PropTypes.object.isRequired,
 };

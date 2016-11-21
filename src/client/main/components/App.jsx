@@ -26,6 +26,7 @@ store.dispatch (verifyLogin ())
   store.dispatch (initPolls ())
   .then (() => {
     // setup router (react-router) with browserHistory
+    /* eslint no-use-before-define: off */
     render (
       <Router history={browserHistory}>
         <Route path='/' component={App}>

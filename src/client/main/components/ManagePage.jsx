@@ -6,7 +6,7 @@ export default class ManagePage extends React.Component {
     super (props, context);
     const allPolls = context.store.getState ().polls;
     const creator = context.store.getState ().user.username;
-    const myPolls = allPolls.filter (poll => {
+    const myPolls = allPolls.filter ((poll) => {
       return (poll.creator === creator);
     });
     this.state = {
@@ -27,7 +27,7 @@ export default class ManagePage extends React.Component {
     this.unsubscribe = this.context.store.subscribe (() => {
       const allPolls = this.context.store.getState ().polls;
       const creator = this.context.store.getState ().user.username;
-      const myPolls = allPolls.filter (poll => {
+      const myPolls = allPolls.filter ((poll) => {
         return (poll.creator === creator);
       });
       this.setState ({
@@ -84,7 +84,7 @@ export default class ManagePage extends React.Component {
 
   render () {
     const newPoll = (this.state.selected === this.state.polls.length);
-    let polls = [];
+    const polls = [];
     for (let i = 0; i < this.state.polls.length; i ++) {
       polls.push (
         <option key={i} value={i}>
@@ -99,7 +99,7 @@ export default class ManagePage extends React.Component {
     );
 
     // Poll edit area
-    let choices = [];
+    const choices = [];
     for (let i = 0; i < this.state.choices.length; i ++) {
       choices.push (
         <div key={i}>
@@ -111,7 +111,7 @@ export default class ManagePage extends React.Component {
             maxLength={30}
             onChange={(e) => {
               this.state.choices[i] = e.target.value;
-              let t2 = this.state.choices.filter (choice => { return choice.trim () !== ''; });
+              let t2 = this.state.choices.filter ((choice) => { return choice.trim () !== ''; });
               if (t2.length === 0) {
                 t2 = ['', ''];
               } else {
@@ -138,7 +138,7 @@ export default class ManagePage extends React.Component {
         </div>
       );
     }
-    let poll = (
+    const poll = (
       <div>
         <div>
           <label htmlFor='mp-title'>Title</label>
