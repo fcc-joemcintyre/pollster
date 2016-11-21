@@ -38,7 +38,7 @@ class ProfilePage extends React.Component {
               autoFocus
               type='text'
               value={this.state.name}
-              maxLength={20}
+              maxLength={40}
               filter={nameChars}
               onChange={(e) => {
                 this.setState ({ name: e.target.value });
@@ -51,7 +51,7 @@ class ProfilePage extends React.Component {
               id='email'
               type='text'
               value={this.state.email}
-              maxLength={20}
+              maxLength={60}
               autoCapitalize='none'
               autoCorrect='off'
               onChange={(e) => {
