@@ -261,6 +261,42 @@ describe ('REST call validation', function () {
     });
   });
 
+  describe ('login: extraneous data', function () {
+    it ('should fail with 400', function (done) {
+      request.post (`${url}api/login`, { form: { username: 'username', password: 'password', extra: 'extra' } }, (err, res) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 400) {
+          return done ();
+        }
+        return done (new Error (`Invalid statusCode ${res.statusCode}`));
+      });
+    });
+  });
+
+  describe ('login: invalid username length', function () {
+    it ('should fail with 400', function (done) {
+      request.post (`${url}api/login`, { form: { username: 'usernameIsOver20Length', password: 'password' } }, (err, res) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 400) {
+          return done ();
+        }
+        return done (new Error (`Invalid statusCode ${res.statusCode}`));
+      });
+    });
+  });
+
+  describe ('login: invalid password length', function () {
+    it ('should fail with 400', function (done) {
+      request.post (`${url}api/login`, { form: { username: 'username', password: 'passwordIsOver20Length' } }, (err, res) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 400) {
+          return done ();
+        }
+        return done (new Error (`Invalid statusCode ${res.statusCode}`));
+      });
+    });
+  });
+
   describe ('register: missing body', function () {
     it ('should fail with 400', function (done) {
       request.post (`${url}api/register`, (err, res) => {
@@ -288,6 +324,42 @@ describe ('REST call validation', function () {
   describe ('register: missing password', function () {
     it ('should fail with 400', function (done) {
       request.post (`${url}api/register`, { form: { username: 'username' } }, (err, res) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 400) {
+          return done ();
+        }
+        return done (new Error (`Invalid statusCode ${res.statusCode}`));
+      });
+    });
+  });
+
+  describe ('register: extraneous data', function () {
+    it ('should fail with 400', function (done) {
+      request.post (`${url}api/register`, { form: { username: 'username', password: 'password', extra: 'extra' } }, (err, res) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 400) {
+          return done ();
+        }
+        return done (new Error (`Invalid statusCode ${res.statusCode}`));
+      });
+    });
+  });
+
+  describe ('register: invalid username length', function () {
+    it ('should fail with 400', function (done) {
+      request.post (`${url}api/register`, { form: { username: 'usernameIsOver20Length', password: 'password' } }, (err, res) => {
+        if (err) { return done (err); }
+        if (res.statusCode === 400) {
+          return done ();
+        }
+        return done (new Error (`Invalid statusCode ${res.statusCode}`));
+      });
+    });
+  });
+
+  describe ('register: invalid password length', function () {
+    it ('should fail with 400', function (done) {
+      request.post (`${url}api/register`, { form: { username: 'username', password: 'passwordIsOver20Length' } }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 400) {
           return done ();
