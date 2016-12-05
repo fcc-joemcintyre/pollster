@@ -9,6 +9,9 @@ module.exports = {
     // enforce one true brace style
     'brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
 
+    // enforce or disallow capitalization of the first letter of a comment
+    'capitalize-comments': 'off',
+
     // require camel case names
     'camelcase': ['error', { properties: 'never' }],
 
