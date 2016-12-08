@@ -1,8 +1,14 @@
+const Ajv = require ('ajv');
 const db = require ('./db');
+const schemaPoll = require ('./schema/poll.json');
+
+// object holding validator instance and pre-compiled schemas
+const validator = {};
 
 // Initialize listeners
 function init () {
-  // empty
+  validator.ajv = new Ajv ();
+  validator.poll = validator.ajv.compile (schemaPoll);
 }
 
 function getPolls (req, res) {
@@ -35,45 +41,55 @@ function getPoll (req, res) {
 
 function addPoll (req, res) {
   console.log ('addPoll', req.body);
-  const choices = [];
-  for (const choice of req.body.choices) {
-    choices.push ({ text: choice, votes: 0 });
+  if (validator.poll (req.body) === false) {
+    console.log ('addPoll', '(400) invalid body', validator.poll.errors);
+    res.status (400).json ({});
+  } else {
+    const choices = [];
+    for (const choice of req.body.choices) {
+      choices.push ({ text: choice, votes: 0 });
+    }
+    const poll = {
+      creator: req.user.username,
+      title: req.body.title,
+      choices,
+    };
+    Promise.resolve ().then (() => {
+      return db.insertPoll (poll);
+    }).then ((result) => {
+      console.log ('  addPoll added', result.ops[0]._id);
+      res.status (200).json ({ _id: result.ops[0]._id });
+    }).catch ((err) => {
+      console.log ('  addPoll error', err);
+      res.status (500).json ({});
+    });
   }
-  const poll = {
-    creator: req.user.username,
-    title: req.body.title,
-    choices,
-  };
-  Promise.resolve ().then (() => {
-    return db.insertPoll (poll);
-  }).then ((result) => {
-    console.log ('  addPoll added', result.ops[0]._id);
-    res.status (200).json ({ _id: result.ops[0]._id });
-  }).catch ((err) => {
-    console.log ('  addPoll error', err);
-    res.status (500).json ({});
-  });
 }
 
 function updatePoll (req, res) {
   console.log ('updatePoll', req.body);
-  const choices = [];
-  for (const choice of req.body.choices) {
-    choices.push ({ text: choice, votes: 0 });
+  if (validator.poll (req.body) === false) {
+    console.log ('updatePoll', '(400) invalid body', validator.poll.errors);
+    res.status (400).json ({});
+  } else {
+    const choices = [];
+    for (const choice of req.body.choices) {
+      choices.push ({ text: choice, votes: 0 });
+    }
+    const poll = {
+      creator: req.user.username,
+      title: req.body.title,
+      choices,
+    };
+    Promise.resolve ().then (() => {
+      return db.updatePoll (req.params._id, poll);
+    }).then (() => {
+      res.status (200).json ({});
+    }).catch ((err) => {
+      console.log ('updatePoll error', err);
+      res.status (500).json ({});
+    });
   }
-  const poll = {
-    creator: req.user.username,
-    title: req.body.title,
-    choices,
-  };
-  Promise.resolve ().then (() => {
-    return db.updatePoll (req.params._id, poll);
-  }).then (() => {
-    res.status (200).json ({});
-  }).catch ((err) => {
-    console.log ('updatePoll error', err);
-    res.status (500).json ({});
-  });
 }
 
 function deletePoll (req, res) {
