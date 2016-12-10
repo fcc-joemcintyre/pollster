@@ -1,5 +1,7 @@
-const request = require ('request');
+const requestBase = require ('request');
 const url = require ('./test-main').url;
+
+const request = requestBase.defaults ({ jar: true });
 
 describe ('login/logout/register', function () {
   describe ('valid login request', function () {
@@ -49,13 +51,11 @@ describe ('login/logout/register', function () {
   });
 
   describe ('check authentication for logged in user', function () {
-    let cookie;
     before (function (done) {
       const form = { form: { username: 'amy', password: 'test' } };
       request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          cookie = res.headers['set-cookie'][0];
           return done ();
         } else {
           return done (new Error (`Invalid status code ${res.statusCode}`));
@@ -70,9 +70,7 @@ describe ('login/logout/register', function () {
     });
 
     it ('should have no errors', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({ url: `${url}api/verifylogin`, jar }, (err, res, body) => {
+      request.get ({ url: `${url}api/verifylogin` }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           const data = JSON.parse (body);
@@ -155,13 +153,11 @@ describe ('login/logout/register', function () {
 });
 
 describe ('profile', function () {
-  let cookie;
   beforeEach (function (done) {
     const form = { form: { username: 'amy', password: 'test' } };
     request.post (`${url}api/login`, form, (err, res) => {
       if (err) { return done (err); }
       if (res.statusCode === 200) {
-        cookie = res.headers['set-cookie'][0];
         return done ();
       } else {
         return done (new Error (`Invalid status code ${res.statusCode}`));
@@ -177,9 +173,7 @@ describe ('profile', function () {
 
   describe ('get initial profile', function () {
     it ('should have no errors', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({ url: `${url}api/profile`, jar }, (err, res, body) => {
+      request.get ({ url: `${url}api/profile` }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           const data = JSON.parse (body);
@@ -189,7 +183,7 @@ describe ('profile', function () {
             return done (new Error (`Invalid data ${JSON.stringify (data)}`));
           }
         } else {
-          return done (new Error (`Invalid register status code ${res.statusCode}`));
+          return done (new Error (`Invalid status code ${res.statusCode}`));
         }
       });
     });
@@ -197,13 +191,11 @@ describe ('profile', function () {
 
   describe ('update profile', function () {
     it ('should have no errors', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
       const form = { name: 'Test', email: 'test@example.com' };
-      request.post ({ url: `${url}api/profile`, jar, form }, (err, res) => {
+      request.post ({ url: `${url}api/profile`, form }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          return request.get ({ url: `${url}api/profile`, jar }, (err2, res2, body2) => {
+          return request.get ({ url: `${url}api/profile` }, (err2, res2, body2) => {
             if (err2) { return done (err2); }
             if (res2.statusCode === 200) {
               const data = JSON.parse (body2);

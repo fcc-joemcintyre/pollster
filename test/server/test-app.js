@@ -1,6 +1,8 @@
-const request = require ('request');
+const requestBase = require ('request');
 const db = require ('../../dist/db');
 const url = require ('./test-main').url;
+
+const request = requestBase.defaults ({ jar: true });
 
 describe ('polls (unauthenticated)', function () {
   beforeEach (function (done) {
@@ -52,7 +54,6 @@ describe ('polls (unauthenticated)', function () {
 });
 
 describe ('polls (authenticated)', function () {
-  let cookie;
   let pollIds = [];
   beforeEach (function (done) {
     Promise.resolve ().then (() => {
@@ -84,7 +85,6 @@ describe ('polls (authenticated)', function () {
       request.post (`${url}api/login`, form, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          cookie = res.headers['set-cookie'][0];
           return done ();
         } else {
           return done (new Error (`statusCode: ${res.statusCode}`));
@@ -103,9 +103,7 @@ describe ('polls (authenticated)', function () {
 
   describe ('get all polls', function () {
     it ('should return 3 polls', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({ url: `${url}api/polls`, jar }, (err, res, body) => {
+      request.get ({ url: `${url}api/polls` }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           const data = JSON.parse (body);
@@ -123,9 +121,7 @@ describe ('polls (authenticated)', function () {
 
   describe ('get single poll', function () {
     it ('should return 1 poll', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({ url: `${url}api/polls/${pollIds[1]}`, jar }, (err, res, body) => {
+      request.get ({ url: `${url}api/polls/${pollIds[1]}` }, (err, res, body) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           const data = JSON.parse (body);
@@ -143,9 +139,7 @@ describe ('polls (authenticated)', function () {
 
   describe ('get single poll (not found)', function () {
     it ('should return 404', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
-      request.get ({ url: `${url}api/polls/000000000000000000000000`, jar }, (err, res) => {
+      request.get ({ url: `${url}api/polls/000000000000000000000000` }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 404) {
           return done ();
@@ -158,13 +152,11 @@ describe ('polls (authenticated)', function () {
 
   describe ('add a poll', function () {
     it ('should end with 4 polls', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
       const poll = { title: 'Poll anew', choices: ['Cake', 'Pie'] };
-      request.post ({ url: `${url}api/polls`, jar, json: poll }, (err, res) => {
+      request.post ({ url: `${url}api/polls`, json: poll }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          return request.get ({ url: `${url}api/polls`, jar }, (err2, res2, body2) => {
+          return request.get ({ url: `${url}api/polls` }, (err2, res2, body2) => {
             if (err2) { return done (err2); }
             if (res2.statusCode === 200) {
               const data = JSON.parse (body2);
@@ -186,14 +178,12 @@ describe ('polls (authenticated)', function () {
 
   describe ('update a poll', function () {
     it ('should have updated fields', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
       const json = { title: 'UTitle', choices: ['U1', 'U2'] };
-      request.post ({ url: `${url}api/polls/${pollIds[1]}`, jar, json }, (err, res) => {
+      request.post ({ url: `${url}api/polls/${pollIds[1]}`, json }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
           const fullUrl = `${url}api/polls/${pollIds[1]}`;
-          return request.get ({ url: fullUrl, jar }, (err2, res2, body2) => {
+          return request.get ({ url: fullUrl }, (err2, res2, body2) => {
             if (err2) { return done (err2); }
             if (res2.statusCode === 200) {
               const data = JSON.parse (body2);
@@ -217,12 +207,10 @@ describe ('polls (authenticated)', function () {
 
   describe ('delete a poll', function () {
     it ('should end with 2 polls', function (done) {
-      const jar = request.jar ();
-      jar.setCookie (cookie, 'http://localhost:3000');
-      request.del ({ url: `${url}api/polls/${pollIds[1]}`, jar }, (err, res) => {
+      request.del ({ url: `${url}api/polls/${pollIds[1]}` }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
-          return request.get ({ url: `${url}api/polls`, jar }, (err2, res2, body2) => {
+          return request.get ({ url: `${url}api/polls` }, (err2, res2, body2) => {
             if (err2) { return done (err2); }
             if (res2.statusCode === 200) {
               const data = JSON.parse (body2);

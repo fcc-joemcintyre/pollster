@@ -1,7 +1,6 @@
 const express = require ('express');
 const bodyParser = require ('body-parser');
-const cookieParser = require ('cookie-parser');
-const expressSession = require ('express-session');
+const cookieSession = require ('cookie-session');
 const fs = require ('fs');
 const path = require ('path');
 const passport = require ('passport');
@@ -30,7 +29,6 @@ function start (port, dbLocation) {
     Promise.resolve ().then (() => {
       return db.init (dbLocation);
     }).then (() => {
-      /* eslint max-statements: off */
       // set up static HTML serving
       const app = express ();
 
@@ -40,13 +38,11 @@ function start (port, dbLocation) {
       }
 
       // set up HTTP parsers and session manager
-      app.use (cookieParser ());
       app.use (bodyParser.json ());
       app.use (bodyParser.urlencoded ({ extended: true }));
-      app.use (expressSession ({
+      app.use (cookieSession ({
+        name: 'session',
         secret: sessionSecret,
-        saveUninitialized: true,
-        resave: true,
       }));
 
       // set up passport authentication, attach to express session manager
