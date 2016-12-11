@@ -135,6 +135,10 @@ module.exports = {
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-uses-vars.md
     'react/jsx-uses-vars': 'error',
 
+    // Prevent usage of Array index in keys
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-array-index-key.md
+    'react/no-array-index-key': 'warn',
+
     // Prevent usage of dangerous JSX properties
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-danger.md
     'react/no-danger': 'warn',
@@ -190,6 +194,10 @@ module.exports = {
     // Prevent missing React when using JSX
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/react-in-jsx-scope.md
     'react/react-in-jsx-scope': 'error',
+
+    // Enforce a defaultProps definition for every prop that is not a required prop
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/require-default-props.md
+    'react/require-default-props': 'warn',
 
     // Restrict file extensions that may be required
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/require-extension.md

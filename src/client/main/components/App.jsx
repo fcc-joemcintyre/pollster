@@ -89,7 +89,7 @@ export default class App extends React.Component {
 }
 
 App.propTypes = {
-  children: React.PropTypes.node,
+  children: React.PropTypes.node.isRequired,
 };
 
 // When a route requires an authenticated user, set onEnter to this

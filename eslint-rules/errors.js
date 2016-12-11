@@ -9,6 +9,9 @@ module.exports = {
       functions: 'never',
     }],
 
+    // disallow await inside of loops
+    'no-await-in-loop': 'error',
+
     // disallow assignment in conditional expressions
     'no-cond-assign': ['error', 'always'],
 
