@@ -43,7 +43,7 @@ gulp.task ('set-stage', function () {
 gulp.task ('watch', function () {
   gulp.watch ('src/client/index.html', ['html']);
   gulp.watch ('src/client/images/*', ['images']);
-  gulp.watch (['src/server/**/*.js*'], ['server']);
+  gulp.watch ('src/server/**/*.js*', ['server']);
   gulp.watch ('src/client/css/**/*.scss', ['styles']);
   gulp.watch (dependencies, ['vendor']);
 });
@@ -62,7 +62,7 @@ gulp.task ('images', function () {
 
 // copy server
 gulp.task ('server', function () {
-  return gulp.src (['src/server/**/*.js*'])
+  return gulp.src ('src/server/**/*.js*')
     .pipe (gulp.dest (base));
 });
 
@@ -127,7 +127,7 @@ gulp.task ('vendor-stage', function () {
 
 gulp.task ('browserify-stage', function () {
   process.env.NODE_ENV = 'production';
-  const bundler = browserify ({ entries: 'src/client/main/components/App.jsx', debug: true });
+  const bundler = browserify ({ entries: 'src/client/main/components/App.jsx', debug: false });
   bundler.external (dependencies);
   bundler.transform (babelify, { presets: ['es2015', 'react'] });
   bundler.on ('update', rebundle);
@@ -145,8 +145,8 @@ gulp.task ('browserify-stage', function () {
       .pipe (source ('bundle.js'))
       .pipe (buffer ())
       .pipe (uglify ({ mangle: false }))
-      .pipe (gulp.dest (`${base}/public/js/`))
+      .pipe (gulp.dest (`${base}/public/js`))
       .pipe (gzip ({ append: true }))
-      .pipe (gulp.dest (`${base}/public/js/`));
+      .pipe (gulp.dest (`${base}/public/js`));
   }
 });
