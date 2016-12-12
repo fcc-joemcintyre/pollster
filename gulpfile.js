@@ -27,8 +27,8 @@ const dependencies = [
 const stageDir = '../pollster-stage';
 let base = 'dist';
 
-gulp.task ('default', ['html', 'images', 'server', 'styles', 'vendor',
-  'browserify-watch', 'watch']);
+gulp.task ('default', ['html', 'images', 'server', 'styles', 'vendor-dev',
+  'browserify-dev', 'watch']);
 gulp.task ('stage', ['set-stage', 'html', 'images', 'server', 'styles',
   'vendor-stage', 'browserify-stage']);
 
@@ -66,18 +66,6 @@ gulp.task ('server', function () {
     .pipe (gulp.dest (base));
 });
 
-// compile third-party dependencies
-gulp.task ('vendor', function () {
-  return browserify ()
-    .require (dependencies)
-    .bundle ()
-    .pipe (source ('vendor.bundle.js'))
-    .pipe (buffer ())
-    .pipe (uglify ({ mangle: false }))
-    .pipe (gzip ({ append: true }))
-    .pipe (gulp.dest (`${base}/public/js`));
-});
-
 // compile stylesheets
 gulp.task ('styles', function () {
   return gulp.src ('src/client/css/main.scss')
@@ -86,8 +74,19 @@ gulp.task ('styles', function () {
     .pipe (gulp.dest (`${base}/public/css`));
 });
 
+// compile third-party dependencies
+gulp.task ('vendor-dev', function () {
+  return browserify ()
+    .require (dependencies)
+    .bundle ()
+    .pipe (source ('vendor.bundle.js'))
+    .pipe (buffer ())
+    .pipe (uglify ({ mangle: false }))
+    .pipe (gulp.dest (`${base}/public/js`));
+});
+
 // compile and package application
-gulp.task ('browserify-watch', function () {
+gulp.task ('browserify-dev', function () {
   const config = { entries: 'src/client/main/components/App.jsx', debug: true };
   const bundler = watchify (browserify (config, watchify.args));
   bundler.external (dependencies);
@@ -106,7 +105,6 @@ gulp.task ('browserify-watch', function () {
       })
       .pipe (source ('bundle.js'))
       .pipe (buffer ())
-      .pipe (gzip ({ append: true }))
       .pipe (sourcemaps.init ({ loadMaps: true }))
       .pipe (sourcemaps.write ('.'))
       .pipe (gulp.dest (`${base}/public/js/`));
@@ -122,6 +120,7 @@ gulp.task ('vendor-stage', function () {
     .pipe (source ('vendor.bundle.js'))
     .pipe (buffer ())
     .pipe (uglify ({ mangle: false }))
+    .pipe (gulp.dest (`${base}/public/js`))
     .pipe (gzip ({ append: true }))
     .pipe (gulp.dest (`${base}/public/js`));
 });
@@ -146,6 +145,7 @@ gulp.task ('browserify-stage', function () {
       .pipe (source ('bundle.js'))
       .pipe (buffer ())
       .pipe (uglify ({ mangle: false }))
+      .pipe (gulp.dest (`${base}/public/js/`))
       .pipe (gzip ({ append: true }))
       .pipe (gulp.dest (`${base}/public/js/`));
   }

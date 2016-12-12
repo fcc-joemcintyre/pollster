@@ -55,7 +55,7 @@ function start (port, dbLocation) {
 
       app.get ('*.js', (req, res) => {
         const file = path.join (__dirname, `public${req.path}.gz`);
-        if (fs.existsSync (file)) {
+        if (req.acceptsEncodings ('gzip') && fs.existsSync (file)) {
           res.set ({
             'content-type': 'text/javascript',
             'content-encoding': 'gzip',
