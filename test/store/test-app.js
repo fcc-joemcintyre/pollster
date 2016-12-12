@@ -108,11 +108,8 @@ describe ('Test account async actions', function () {
         },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.addPoll ({
-        creator: 'amy',
-        title: 'Treat',
-        choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
-      })).then (function () {
+      return store.dispatch (actions.addPoll ('Treat', [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }]))
+      .then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
       });
     });
@@ -151,12 +148,9 @@ describe ('Test account async actions', function () {
           choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
         },
       ]);
-      return store.dispatch (actions.updatePoll ({
-        _id: '0001',
-        creator: 'amy',
-        title: 'Treat',
-        choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }],
-      })).then (function () {
+      return store.dispatch (actions.updatePoll ('0001', 'Treat',
+        [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }]))
+      .then (function () {
         assert.deepStrictEqual (store.getActions (), expectedActions);
       });
     });

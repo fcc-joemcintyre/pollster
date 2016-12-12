@@ -61,21 +61,15 @@ export default class ManagePage extends React.Component {
   }
 
   onAddPoll () {
-    const poll = {
-      title: this.state.title,
-      choices: this.state.choices.slice (0, this.state.choices.length - 1),
-    };
-    this.context.store.dispatch (addPoll (poll));
+    const choices = this.state.choices.slice (0, this.state.choices.length - 1);
+    this.context.store.dispatch (addPoll (this.state.title, choices));
     this.setState ({ title: '', choices: ['', ''], selected: 0 });
   }
 
   onSavePoll () {
-    const poll = {
-      _id: this.state.polls[this.state.selected]._id,
-      title: this.state.title,
-      choices: this.state.choices.slice (0, this.state.choices.length - 1),
-    };
-    this.context.store.dispatch (updatePoll (poll));
+    const _id = this.state.polls[this.state.selected]._id;
+    const choices = this.state.choices.slice (0, this.state.choices.length - 1);
+    this.context.store.dispatch (updatePoll (_id, this.state.title, choices));
   }
 
   onDeletePoll () {
