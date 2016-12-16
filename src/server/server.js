@@ -1,6 +1,7 @@
 const express = require ('express');
 const bodyParser = require ('body-parser');
 const cookieSession = require ('cookie-session');
+const helmet = require ('helmet');
 const fs = require ('fs');
 const path = require ('path');
 const passport = require ('passport');
@@ -36,6 +37,9 @@ function start (port, dbLocation) {
       if (process.env.NODE_ENV === 'production') {
         app.use (httpsOnly);
       }
+
+      // Express security best practices
+      app.use (helmet ());
 
       // set up HTTP parsers and session manager
       app.use (bodyParser.json ());
