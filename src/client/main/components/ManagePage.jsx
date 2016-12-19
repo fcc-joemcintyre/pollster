@@ -12,9 +12,9 @@ export default class ManagePage extends React.Component {
     this.state = {
       polls: myPolls,
       creator,
-      selected: 0,
-      title: (myPolls.length === 0) ? '' : myPolls[0].title,
-      choices: (myPolls.length === 0) ? ['', ''] : generateChoices (myPolls[0].choices),
+      selected: 'create',
+      title: '',
+      choices: ['', ''],
     };
 
     this.onSelectPoll = this.onSelectPoll.bind (this);
@@ -33,9 +33,9 @@ export default class ManagePage extends React.Component {
       this.setState ({
         polls: myPolls,
         creator,
-        selected: 0,
-        title: (myPolls.length === 0) ? '' : myPolls[0].title,
-        choices: (myPolls.length === 0) ? ['', ''] : generateChoices (myPolls[0].choices),
+        selected: 'create',
+        title: '',
+        choices: ['', ''],
       });
     });
   }
@@ -44,18 +44,19 @@ export default class ManagePage extends React.Component {
     this.unsubscribe ();
   }
 
-  onSelectPoll (index) {
-    if (index < this.state.polls.length) {
+  onSelectPoll (_id) {
+    if (_id === 'create') {
       this.setState ({
-        selected: index,
-        title: this.state.polls[index].title,
-        choices: generateChoices (this.state.polls[index].choices),
-      });
-    } else {
-      this.setState ({
-        selected: index,
+        selected: 'create',
         title: '',
         choices: ['', ''],
+      });
+    } else {
+      const selected = this.state.polls.find ((poll) => { return poll._id === _id; });
+      this.setState ({
+        selected: _id,
+        title: selected.title,
+        choices: generateChoices (selected.choices),
       });
     }
   }
@@ -63,60 +64,55 @@ export default class ManagePage extends React.Component {
   onAddPoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
     this.context.store.dispatch (addPoll (this.state.title, choices));
-    this.setState ({ title: '', choices: ['', ''], selected: 0 });
+    this.setState ({ title: '', choices: ['', ''], selected: 'create' });
   }
 
   onSavePoll () {
-    const _id = this.state.polls[this.state.selected]._id;
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.context.store.dispatch (updatePoll (_id, this.state.title, choices));
+    this.context.store.dispatch (updatePoll (this.state.selected, this.state.title, choices));
   }
 
   onDeletePoll () {
-    this.context.store.dispatch (deletePoll (this.state.polls[this.state.selected]._id));
+    this.context.store.dispatch (deletePoll (this.state.selected));
   }
 
   render () {
-    const newPoll = (this.state.selected === this.state.polls.length);
-    const polls = [];
-    for (let i = 0; i < this.state.polls.length; i ++) {
-      polls.push (
-        <option key={i} value={i}>
-          {this.state.polls[i].title}
+    const newPoll = (this.state.selected === 'create');
+    const polls = this.state.polls.map ((poll) => {
+      return (
+        <option key={poll._id} value={poll._id}>
+          {poll.title}
         </option>
       );
-    }
-    polls.push (
-      <option key={this.state.polls.length} value={this.state.polls.length}>
+    });
+    polls.unshift (
+      <option key={'create'} value={'create'}>
         {'<Create new poll>'}
       </option>
     );
 
+    /* eslint react/no-array-index-key: off */
     // Poll edit area
-    const choices = [];
-    for (let i = 0; i < this.state.choices.length; i ++) {
-      choices.push (
-        <div key={i}>
-          <label htmlFor='mp-choice'>Choice</label>
-          <input
-            id='mp-choice'
-            type='text'
-            value={this.state.choices[i]}
-            maxLength={30}
-            onChange={(e) => {
-              this.state.choices[i] = e.target.value;
-              let t2 = this.state.choices.filter ((choice) => { return choice.trim () !== ''; });
-              if (t2.length === 0) {
-                t2 = ['', ''];
-              } else {
-                t2.push ('');
-              }
-              this.setState ({ choices: t2 });
-            }}
-          />
-        </div>
+    const choices = this.state.choices.map ((choice, index) => {
+      return (
+        <Choice
+          key={`choice${index}`}
+          id={`id-choice-${index}`}
+          choice={choice}
+          index={index}
+          onChange={(i, text) => {
+            const temp = this.state.choices.slice (0);
+            temp[i] = text;
+            const list = temp.filter ((a) => { return (a.length > 0); });
+            list.push ('');
+            if (list.length === 1) {
+              list.push ('');
+            }
+            this.setState ({ choices: list });
+          }}
+        />
       );
-    }
+    });
     let buttonArea;
     if (newPoll) {
       buttonArea = (
@@ -135,9 +131,9 @@ export default class ManagePage extends React.Component {
     const poll = (
       <div>
         <div>
-          <label htmlFor='mp-title'>Title</label>
+          <label htmlFor='id-title'>Title</label>
           <input
-            id='mp-title'
+            id='id-title'
             type='text'
             value={this.state.title}
             maxLength={30}
@@ -154,7 +150,7 @@ export default class ManagePage extends React.Component {
       share = (
         <div className='sharePoll'>
           <h2>Share this Poll</h2>
-          <p>http://pollster-jm.herokuapp.com/polls/{this.state.polls[this.state.selected]._id}</p>
+          <p>http://pollster-jm.herokuapp.com/polls/{this.state.selected}</p>
         </div>
       );
     }
@@ -163,12 +159,12 @@ export default class ManagePage extends React.Component {
       <div className='managePage'>
         <div className='editArea'>
           <div className='selectPoll'>
-            <label htmlFor='mp-mypolls'>My polls</label>
+            <label htmlFor='id-mypolls'>My polls</label>
             <select
-              id='mp-mypolls'
+              id='id-mypolls'
               value={this.state.selected}
               autoFocus
-              onChange={(e) => { this.onSelectPoll (Number (e.target.value)); }}
+              onChange={(e) => { this.onSelectPoll (e.target.value); }}
             >
               {polls}
             </select>
@@ -195,10 +191,7 @@ function generateChoices (list) {
       result = [list[0].text, ''];
       break;
     default:
-      result = [];
-      for (const choice of list) {
-        result.push (choice.text);
-      }
+      result = list.map ((item) => { return item.text; });
       result.push ('');
       break;
   }
@@ -207,4 +200,28 @@ function generateChoices (list) {
 
 ManagePage.contextTypes = {
   store: React.PropTypes.object.isRequired,
+};
+
+const Choice = (props) => {
+  return (
+    <div>
+      <label htmlFor={props.id}>Choice</label>
+      <input
+        id={props.id}
+        type='text'
+        value={props.choice}
+        maxLength={30}
+        onChange={(e) => {
+          props.onChange (props.index, e.target.value.trim ());
+        }}
+      />
+    </div>
+  );
+};
+
+Choice.propTypes = {
+  id: React.PropTypes.string.isRequired,
+  index: React.PropTypes.number.isRequired,
+  choice: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func.isRequired,
 };
