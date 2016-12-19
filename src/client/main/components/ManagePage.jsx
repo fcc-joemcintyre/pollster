@@ -1,21 +1,28 @@
 import React from 'react';
 import { addPoll, updatePoll, deletePoll } from '../store/actions';
+import IntegerInput from '../../ui/IntegerInput.jsx';
+
+function getDefaults () {
+  return {
+    selected: 'create',
+    title: '',
+    choices: ['', ''],
+    voteLimit: false,
+    maxVotes: 0,
+    dateLimit: false,
+    endDate: '',
+  };
+}
 
 export default class ManagePage extends React.Component {
   constructor (props, context) {
     super (props, context);
     const allPolls = context.store.getState ().polls;
     const creator = context.store.getState ().user.username;
-    const myPolls = allPolls.filter ((poll) => {
+    const polls = allPolls.filter ((poll) => {
       return (poll.creator === creator);
     });
-    this.state = {
-      polls: myPolls,
-      creator,
-      selected: 'create',
-      title: '',
-      choices: ['', ''],
-    };
+    this.state = Object.assign ({ polls, creator }, getDefaults ());
 
     this.onSelectPoll = this.onSelectPoll.bind (this);
     this.onAddPoll = this.onAddPoll.bind (this);
@@ -27,16 +34,11 @@ export default class ManagePage extends React.Component {
     this.unsubscribe = this.context.store.subscribe (() => {
       const allPolls = this.context.store.getState ().polls;
       const creator = this.context.store.getState ().user.username;
-      const myPolls = allPolls.filter ((poll) => {
+      const polls = allPolls.filter ((poll) => {
         return (poll.creator === creator);
       });
-      this.setState ({
-        polls: myPolls,
-        creator,
-        selected: 'create',
-        title: '',
-        choices: ['', ''],
-      });
+      const newState = Object.assign ({ polls, creator }, getDefaults ());
+      this.setState (newState);
     });
   }
 
@@ -46,30 +48,32 @@ export default class ManagePage extends React.Component {
 
   onSelectPoll (_id) {
     if (_id === 'create') {
-      this.setState ({
-        selected: 'create',
-        title: '',
-        choices: ['', ''],
-      });
+      this.setState (getDefaults ());
     } else {
       const selected = this.state.polls.find ((poll) => { return poll._id === _id; });
       this.setState ({
         selected: _id,
         title: selected.title,
         choices: generateChoices (selected.choices),
+        voteLimit: selected.voteLimit,
+        maxVotes: selected.maxVotes,
+        dateLimit: selected.dateLimit,
+        endDate: selected.endDate,
       });
     }
   }
 
   onAddPoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.context.store.dispatch (addPoll (this.state.title, choices));
-    this.setState ({ title: '', choices: ['', ''], selected: 'create' });
+    this.context.store.dispatch (addPoll (this.state.title, choices, this.state.voteLimit,
+      this.state.maxVotes, this.state.dateLimit, this.state.endDate));
+    this.setState (getDefaults ());
   }
 
   onSavePoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.context.store.dispatch (updatePoll (this.state.selected, this.state.title, choices));
+    this.context.store.dispatch (updatePoll (this.state.selected, this.state.title, choices,
+      this.state.voteLimit, this.state.maxVotes, this.state.dateLimit, this.state.endDate));
   }
 
   onDeletePoll () {
@@ -128,37 +132,11 @@ export default class ManagePage extends React.Component {
         </div>
       );
     }
-    const poll = (
-      <div>
-        <div>
-          <label htmlFor='id-title'>Title</label>
-          <input
-            id='id-title'
-            type='text'
-            value={this.state.title}
-            maxLength={30}
-            onChange={(e) => {
-              this.setState ({ title: e.target.value });
-            }}
-          />
-        </div>
-        {choices}
-      </div>
-    );
-    let share = null;
-    if (newPoll === false) {
-      share = (
-        <div className='sharePoll'>
-          <h2>Share this Poll</h2>
-          <p>http://pollster-jm.herokuapp.com/polls/{this.state.selected}</p>
-        </div>
-      );
-    }
 
     return (
-      <div className='managePage'>
-        <div className='editArea'>
-          <div className='selectPoll'>
+      <div className='app-manage-page'>
+        <div className='app-manage-content'>
+          <div className='app-manage-select'>
             <label htmlFor='id-mypolls'>My polls</label>
             <select
               id='id-mypolls'
@@ -169,13 +147,69 @@ export default class ManagePage extends React.Component {
               {polls}
             </select>
           </div>
-          <div className='editPoll'>
+
+          <div className='app-manage-poll'>
             <h2>{newPoll ? 'Add a new poll' : 'Edit poll'}</h2>
-            {poll}
+            <div className='app-manage-section'>
+              <label htmlFor='id-title' className='app-manage-label1'>Title</label>
+              <input
+                id='id-title'
+                className='app-manage-input1 app-manage-vspacing'
+                type='text'
+                value={this.state.title}
+                maxLength={30}
+                onChange={(e) => {
+                  this.setState ({ title: e.target.value });
+                }}
+              />
+              {choices}
+            </div>
+            <hr />
+            <div className='app-manage-section'>
+              <div className='app-manage-subtitle'>Closing Criteria</div>
+              <label id='id-limit1' className='app-manage-label2'>
+                <input
+                  id='id-limit1'
+                  className='app-manage-input2'
+                  type='checkbox'
+                  checked={this.state.voteLimit}
+                  onChange={(e) => { this.setState ({ voteLimit: e.target.checked }); }}
+                />
+                Vote Limit
+              </label>
+              <IntegerInput
+                className='app-manage-maxVotes'
+                value={this.state.maxVotes}
+                onChange={(maxVotes) => { this.setState ({ maxVotes }); }}
+              />
+              <br />
+              <label id='id-limit2' className='app-manage-label2'>
+                <input
+                  id='id-limit2'
+                  className='app-manage-input2'
+                  type='checkbox'
+                  checked={this.state.dateLimit}
+                  onChange={(e) => { this.setState ({ dateLimit: e.target.checked }); }}
+                />
+                End Date
+              </label>
+              <input
+                className='app-manage-date'
+                value={this.state.endDate}
+                onChange={(e) => { this.setState ({ endDate: e.target.value }); }}
+              />
+            </div>
+            <hr />
             {buttonArea}
           </div>
         </div>
-        {share}
+        {
+          (newPoll) ? null :
+          <div className='sharePoll'>
+            <h2>Share this Poll</h2>
+            <p>http://pollster-jm.herokuapp.com/polls/{this.state.selected}</p>
+          </div>
+        }
       </div>
     );
   }
@@ -205,9 +239,10 @@ ManagePage.contextTypes = {
 const Choice = (props) => {
   return (
     <div>
-      <label htmlFor={props.id}>Choice</label>
+      <label htmlFor={props.id} className='app-manage-label1'>Choice</label>
       <input
         id={props.id}
+        className='app-manage-input1'
         type='text'
         value={props.choice}
         maxLength={30}

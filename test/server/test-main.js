@@ -48,7 +48,7 @@ function resetDatabase () {
   });
 }
 
-describe ('test-main', function () {
+describe ('server', function () {
   describe ('test-cmd', function () {
     require ('./test-cmd');
   });

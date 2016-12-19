@@ -31,7 +31,7 @@ export function initPolls () {
   };
 }
 
-export function addPoll (title, choices) {
+export function addPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate) {
   return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls`, {
@@ -41,7 +41,7 @@ export function addPoll (title, choices) {
           'content-type': 'application/json',
         },
         credentials: 'same-origin',
-        body: JSON.stringify ({ title, choices }),
+        body: JSON.stringify ({ title, choices, voteLimit, maxVotes, dateLimit, endDate }),
       }).then ((res) => {
         if (! res.ok) {
           reject (res.statusText);
@@ -58,7 +58,7 @@ export function addPoll (title, choices) {
   };
 }
 
-export function updatePoll (_id, title, choices) {
+export function updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate) {
   return (dispatch) => {
     return new Promise ((resolve, reject) => {
       fetch (`${location.origin}/api/polls/${_id}`, {
@@ -68,7 +68,7 @@ export function updatePoll (_id, title, choices) {
           'content-type': 'application/json',
         },
         credentials: 'same-origin',
-        body: JSON.stringify ({ title, choices }),
+        body: JSON.stringify ({ title, choices, voteLimit, maxVotes, dateLimit, endDate }),
       }).then ((res) => {
         if (! res.ok) {
           reject (res.statusText);

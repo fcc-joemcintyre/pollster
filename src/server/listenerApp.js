@@ -53,6 +53,10 @@ function addPoll (req, res) {
       creator: req.user.username,
       title: req.body.title,
       choices,
+      voteLimit: req.body.voteLimit,
+      maxVotes: req.body.maxVotes,
+      dateLimit: req.body.dateLimit,
+      endDate: req.body.endDate,
     };
     Promise.resolve ().then (() => {
       return db.insertPoll (poll);
@@ -80,6 +84,10 @@ function updatePoll (req, res) {
       creator: req.user.username,
       title: req.body.title,
       choices,
+      voteLimit: req.body.voteLimit,
+      maxVotes: req.body.maxVotes,
+      dateLimit: req.body.dateLimit,
+      endDate: req.body.endDate,
     };
     Promise.resolve ().then (() => {
       return db.updatePoll (req.params._id, poll);

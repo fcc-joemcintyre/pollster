@@ -1,23 +1,20 @@
-.managePage {
+.app-manage-page {
   width: 100%;
   max-width: 600px;
   margin: 16px auto 0px auto;
   overflow: auto;
-
-  .editArea {
-    margin: 0 auto 0 auto;
-    max-width: 400px;
-  }
 }
 
-.selectPoll {
+.app-manage-content {
+  margin: 0 auto 0 auto;
+  max-width: 400px;
+}
+
+.app-manage-select {
   width: 100%;
   max-width: 400px;
   margin-left: 12px;
 
-  h2 {
-    text-align: center;
-  }
   label {
     display: inline-block;
     text-align: right;
@@ -33,13 +30,10 @@
     option {
       padding: 4px;
     }
-    option:checked {
-      background-color: lightsteelblue;
-    }
   }
 }
 
-.editPoll {
+.app-manage-poll {
   padding-top: 16px;
   width: 96%;
   max-width: 400px;
@@ -50,42 +44,66 @@
   h2 {
     text-align: center;
   }
-  div {
-    div {
-      margin-top: 4px;
-      margin-left: 4px;
 
-      label {
-        display: inline-block;
-        text-align: left;
-        width: 60px;
-      }
-      input[type=text] {
-        margin-left: 8px;
-        font-size: 16px;
-        width: 70%;
-        max-width: 270px;
-      }
-    }
-
-    div:first-child {
-      padding-bottom: 8px;
-    }
+  hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
+}
 
-  .buttonArea {
-    margin-top: 12px;
-    text-align: center;
+.app-manage-label1 {
+  display: inline-block;
+  padding-left: 4px;
+  width: 90px;
+}
 
-    button {
-      display: inline;
-      margin: 0px 4px 4px 4px;
-      border: 1px solid lightgray;
-      border-radius: 8px;
-      padding: 6px 10px 6px 10px;
-      background-color: white;
-      font-size: 14px;
-    }
+.app-manage-input1 {
+  font-size: 16px;
+  width: 70%;
+  max-width: 240px;
+}
+
+.app-manage-label2 {
+  display: inline-block;
+  width: 100px;
+}
+
+.app-manage-input2 {
+}
+
+.app-manage-maxVotes {
+  font-size: 16px;
+  width: 100px;
+  margin-left: 10px;
+}
+
+.app-manage-date {
+  font-size: 16px;
+  width: 100px;
+  margin-left: 10px;
+}
+
+.app-manage-vspacing {
+  margin-bottom: 16px;
+}
+
+.app-manage-subtitle {
+  margin-left: 4px;
+  margin-bottom: 12px;
+}
+
+.buttonArea {
+  margin-top: 12px;
+  text-align: center;
+
+  button {
+    display: inline;
+    margin: 0px 4px 4px 4px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    padding: 6px 10px 6px 10px;
+    background-color: white;
+    font-size: 14px;
   }
 }
 

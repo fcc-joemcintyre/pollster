@@ -14,16 +14,28 @@ describe ('polls (unauthenticated)', function () {
           creator: 'amy',
           title: 'Poll a1',
           choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+          voteLimit: false,
+          maxVotes: 0,
+          dateLimit: false,
+          endDate: '',
         },
         {
           creator: 'amy',
           title: 'Poll a2',
           choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+          voteLimit: false,
+          maxVotes: 0,
+          dateLimit: false,
+          endDate: '',
         },
         {
           creator: 'bob',
           title: 'Poll b1',
           choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+          voteLimit: false,
+          maxVotes: 0,
+          dateLimit: false,
+          endDate: '',
         },
       ];
       return db.insertPoll (polls);
@@ -66,16 +78,28 @@ describe ('polls (authenticated)', function () {
           creator: 'amy',
           title: 'Poll a1',
           choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+          voteLimit: false,
+          maxVotes: 0,
+          dateLimit: false,
+          endDate: '',
         },
         {
           creator: 'amy',
           title: 'Poll a2',
           choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+          voteLimit: false,
+          maxVotes: 0,
+          dateLimit: false,
+          endDate: '',
         },
         {
           creator: 'bob',
           title: 'Poll b1',
           choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+          voteLimit: false,
+          maxVotes: 0,
+          dateLimit: false,
+          endDate: '',
         },
       ];
       return db.insertPoll (polls);
@@ -152,7 +176,14 @@ describe ('polls (authenticated)', function () {
 
   describe ('add a poll', function () {
     it ('should end with 4 polls', function (done) {
-      const poll = { title: 'Poll anew', choices: ['Cake', 'Pie'] };
+      const poll = {
+        title: 'Poll anew',
+        choices: ['Cake', 'Pie'],
+        voteLimit: false,
+        maxVotes: 0,
+        dateLimit: false,
+        endDate: '',
+      };
       request.post ({ url: `${url}api/polls`, json: poll }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
@@ -178,7 +209,14 @@ describe ('polls (authenticated)', function () {
 
   describe ('update a poll', function () {
     it ('should have updated fields', function (done) {
-      const json = { title: 'UTitle', choices: ['U1', 'U2'] };
+      const json = {
+        title: 'UTitle',
+        choices: ['U1', 'U2'],
+        voteLimit: true,
+        maxVotes: 1000,
+        dateLimit: true,
+        endDate: '12/31/2017',
+      };
       request.post ({ url: `${url}api/polls/${pollIds[1]}`, json }, (err, res) => {
         if (err) { return done (err); }
         if (res.statusCode === 200) {
@@ -189,7 +227,11 @@ describe ('polls (authenticated)', function () {
               const data = JSON.parse (body2);
               if ((data.title === 'UTitle') &&
                   (data.choices[0].text === 'U1') &&
-                  (data.choices[1].text === 'U2')) {
+                  (data.choices[1].text === 'U2') &&
+                  (data.voteLimit === true) &&
+                  (data.maxVotes === 1000) &&
+                  (data.dateLimit === true) &&
+                  (data.endDate === '12/31/2017')) {
                 return done ();
               } else {
                 return done (new Error (`Invalid field content: ${JSON.stringify (data)}`));
