@@ -1,30 +1,35 @@
 import React from 'react';
 
-const FilteredInput = (props) => {
-  // remove FilteredInput props from props to passthrough to <input> element
-  const passthrough = {};
-  const keys = Reflect.ownKeys (props);
-  for (const key of keys) {
-    if ((key !== 'key') && (key !== 'ref') && (key !== 'filter')) {
-      passthrough[key] = props[key];
-    }
+export default class FilteredInput extends React.Component {
+  focus () {
+    this.ref.focus ();
   }
 
-  return (
-    <input
-      {...passthrough}
-      onKeyPress={(e) => {
-        if (props.filter.test (e.key) === false) {
-          e.preventDefault ();
-        }
-      }}
-    />
-  );
-};
+  render () {
+    // remove FilteredInput props from props to passthrough to <input> element
+    const passthrough = {};
+    const keys = Reflect.ownKeys (this.props);
+    for (const key of keys) {
+      if (key !== 'filter') {
+        passthrough[key] = this.props[key];
+      }
+    }
+
+    return (
+      <input
+        {...passthrough}
+        ref={(ref) => { this.ref = ref; }}
+        onKeyPress={(e) => {
+          if (this.props.filter.test (e.key) === false) {
+            e.preventDefault ();
+          }
+        }}
+      />
+    );
+  }
+}
 
 /* eslint react/forbid-prop-types: off */
 FilteredInput.propTypes = {
   filter: React.PropTypes.object.isRequired,
 };
-
-export default FilteredInput;
