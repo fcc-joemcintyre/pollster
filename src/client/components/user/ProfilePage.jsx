@@ -1,6 +1,6 @@
 import React from 'react';
-import { updateProfile } from '../store/actions';
-import FilteredInput from '../../ui/FilteredInput.jsx';
+import { updateProfile } from '../../store/userActions';
+import FilteredInput from '../ui/FilteredInput.jsx';
 
 const nameChars = /[A-Za-z -.,]/;
 

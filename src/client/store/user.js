@@ -1,4 +1,4 @@
-import { SET_AUTHENTICATED, SET_PROFILE } from './constants';
+import { SET_AUTHENTICATED, SET_PROFILE } from './userConstants';
 
 const initialState = {
   authenticated: false,

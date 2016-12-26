@@ -5,19 +5,19 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import Nav from './Nav.jsx';
 import configureStore from '../../store/configureStore';
-import { verifyLogin } from '../../account/store/actions';
-import { initPolls } from '../store/actions';
+import { verifyLogin } from '../../store/userActions';
+import { initPolls } from '../../store/pollsActions';
 
-import HomePage from './HomePage.jsx';
-import RegisterPage from '../../account/components/RegisterPage.jsx';
-import LoginPage from '../../account/components/LoginPage.jsx';
-import LogoutPage from '../../account/components/LogoutPage.jsx';
-import ProfilePage from '../../account/components/ProfilePage.jsx';
+import HomePage from '../app/HomePage.jsx';
+import RegisterPage from '../user/RegisterPage.jsx';
+import LoginPage from '../user/LoginPage.jsx';
+import LogoutPage from '../user/LogoutPage.jsx';
+import ProfilePage from '../user/ProfilePage.jsx';
 import NotFoundPage from './NotFoundPage.jsx';
-import PollPage from './PollPage.jsx';
-import ManagePage from './ManagePage.jsx';
-import ResultPage from './ResultPage.jsx';
-import AboutPage from './AboutPage.jsx';
+import PollPage from '../app/PollPage.jsx';
+import ManagePage from '../app/ManagePage.jsx';
+import ResultPage from '../app/ResultPage.jsx';
+import AboutPage from '../app/AboutPage.jsx';
 
 // initialize store
 const store = configureStore ();

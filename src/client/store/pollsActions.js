@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { SET_POLLS } from './constants';
+import { SET_POLLS } from './pollsConstants';
 
 export function setPolls (polls) {
   return { type: SET_POLLS, polls };

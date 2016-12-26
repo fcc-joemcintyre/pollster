@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { getPoll } from '../store/polls';
-import { vote } from '../store/actions';
+import { getPoll } from '../../store/polls';
+import { vote } from '../../store/pollsActions';
 
 class PollPage extends React.Component {
   constructor (props, context) {

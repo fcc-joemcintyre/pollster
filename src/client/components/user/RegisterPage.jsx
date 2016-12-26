@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { register, login } from '../store/actions';
-import FilteredInput from '../../ui/FilteredInput.jsx';
+import { register, login } from '../../store/userActions';
+import FilteredInput from '../ui/FilteredInput.jsx';
 
 const nameChars = /[A-Za-z0-9]/;
 const pwChars = /[A-Za-z0-9!@#$%^&*-+_=]/;

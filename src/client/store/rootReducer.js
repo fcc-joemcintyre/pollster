@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import user from '../account/store/user';
-import polls from '../main/store/polls';
+import user from './user';
+import polls from './polls';
 
 const rootReducer = combineReducers ({
   user,

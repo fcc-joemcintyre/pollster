@@ -1,5 +1,5 @@
 import React from 'react';
-import { logout } from '../store/actions';
+import { logout } from '../../store/userActions';
 
 export default class LogoutPage extends React.Component {
   // On component load, call logout

@@ -1,6 +1,6 @@
 import React from 'react';
-import { addPoll, updatePoll, deletePoll } from '../store/actions';
-import IntegerInput from '../../ui/IntegerInput.jsx';
+import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
+import IntegerInput from '../ui/IntegerInput.jsx';
 
 function getDefaults () {
   return {

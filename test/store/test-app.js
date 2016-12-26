@@ -2,9 +2,9 @@ import assert from 'assert';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
-import * as types from '../../src/client/main/store/constants';
-import * as actions from '../../src/client/main/store/actions';
-import pollsReducer from '../../src/client/main/store/polls';
+import * as types from '../../src/client/store/pollsConstants';
+import * as actions from '../../src/client/store/pollsActions';
+import pollsReducer from '../../src/client/store/polls';
 import freeze from '../freeze';
 
 // set location global to mimic browser object

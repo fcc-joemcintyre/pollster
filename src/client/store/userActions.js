@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { SET_AUTHENTICATED, SET_PROFILE } from './constants';
+import { SET_AUTHENTICATED, SET_PROFILE } from './userConstants';
 
 export function register (username, password) {
   return () => {

@@ -1,4 +1,4 @@
-import { SET_POLLS } from './constants';
+import { SET_POLLS } from './pollsConstants';
 
 const initialState = [];
 
