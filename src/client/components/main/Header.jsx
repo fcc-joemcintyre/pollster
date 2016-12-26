@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
 // Header with application and common navigation
-const Nav = ({ loggedIn }) => {
+const Header = ({ loggedIn }) => {
   const appLinks = [];
   const titleLinks = [];
 
@@ -19,15 +19,15 @@ const Nav = ({ loggedIn }) => {
   appLinks.push (<li key='a5'><Link to='/about' activeClassName='active'>About</Link></li>);
 
   return (
-    <div className='nav'>
-      <div className='navTitle'>
-        <h1>Pollster</h1>
-        <ul style={{ float: 'right' }}>
+    <div className='app-h-area'>
+      <div className='app-h-line1'>
+        <div className='app-h-title'>Pollster</div>
+        <ul className='app-h-menuRight'>
           {titleLinks}
         </ul>
       </div>
-      <div className='navApp'>
-        <ul style={{ float: 'left' }}>
+      <div className='app-h-line2'>
+        <ul className='app-h-menuLeft'>
           {appLinks}
         </ul>
       </div>
@@ -35,8 +35,8 @@ const Nav = ({ loggedIn }) => {
   );
 };
 
-export default Nav;
+export default Header;
 
-Nav.propTypes = {
+Header.propTypes = {
   loggedIn: React.PropTypes.bool.isRequired,
 };

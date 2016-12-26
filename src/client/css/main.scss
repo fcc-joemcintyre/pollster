@@ -1,4 +1,3 @@
-$headerMaxWidth: 800px;
 $contentMaxWidth: 790px;
 
 @import 'colors';
@@ -16,7 +15,8 @@ $contentMaxWidth: 790px;
   height: 100%;
 }
 
-.page {
+body {
+  background-color: $colorScreenEdge;
 }
 
 .pageContent {

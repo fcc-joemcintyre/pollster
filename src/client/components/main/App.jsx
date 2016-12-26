@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
-import Nav from './Nav.jsx';
+import Header from './Header.jsx';
 import configureStore from '../../store/configureStore';
 import { verifyLogin } from '../../store/userActions';
 import { initPolls } from '../../store/pollsActions';
@@ -76,9 +76,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <div className='page'>
-          <div className='pageHeader'>
-            <Nav loggedIn={this.state.authenticated} />
-          </div>
+          <Header loggedIn={this.state.authenticated} />
           <div className='pageContent'>
             {this.props.children}
           </div>
