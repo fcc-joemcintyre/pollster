@@ -104,7 +104,12 @@ class PollPage extends React.Component {
     const buttons = [];
     if (this.state.voted === false) {
       buttons.push (
-        <button key='button1' className='dialogGroupButton' onClick={this.handleVote}>
+        <button
+          key='button1'
+          className='dialogGroupButton'
+          disabled={(this.state.selected === -1)}
+          onClick={this.handleVote}
+        >
           Vote
         </button>
       );
