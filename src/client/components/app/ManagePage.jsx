@@ -134,7 +134,7 @@ export default class ManagePage extends React.Component {
     }
 
     return (
-      <div className='app-manage-page'>
+      <div className='app-page'>
         <div className='app-manage-content'>
           <div className='app-manage-select'>
             <label htmlFor='id-mypolls'>My polls</label>

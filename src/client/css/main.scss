@@ -3,12 +3,12 @@ $contentMaxWidth: 790px;
 @import 'colors';
 @import 'defaults';
 @import 'header';
+@import 'page';
 @import 'dialog';
 @import 'homePage';
 @import 'pollPage';
 @import 'managePage';
 @import 'resultsPage';
-@import 'aboutPage';
 
 #app {
   width: 100%;
@@ -17,12 +17,4 @@ $contentMaxWidth: 790px;
 
 body {
   background-color: $colorScreenEdge;
-}
-
-.pageContent {
-  width: 90%;
-  max-width: $contentMaxWidth;
-  padding-top: 12px;
-  margin: 0px auto 0px auto;
-  overflow: auto;
 }

@@ -27,7 +27,7 @@ export default class ResultPage extends React.Component {
     const polls = [];
     for (let i = 0; i < myPolls.length; i ++) {
       polls.push (
-        <option key={i} value={i}>
+        <option className='app-results-option' key={i} value={i}>
           {myPolls[i].title}
         </option>
       );
@@ -40,16 +40,16 @@ export default class ResultPage extends React.Component {
       totalVotes = currentPoll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
       for (let i = 0; i < currentPoll.choices.length; i ++) {
         const choice = currentPoll.choices[i];
-        const text = <span className='name'>{choice.text}</span>;
+        const text = <span className='app-results-name'>{choice.text}</span>;
         const percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);
-        const percentText = <span className='votes'>{percent}%</span>;
+        const percentText = <span className='app-results-votes'>{percent}%</span>;
         const color = 'lightsteelblue';
         const c = '-webkit-linear-gradient';
         const grad = `${c}(left, ${color} 0%, ${color} ${percent}%, #F0F8FF ${percent}%, #F0F8FF)`;
         choices.push (
           <div
             key={i}
-            className={'poll'}
+            className={'app-results-poll'}
             style={{ background: grad, border: '1px solid #EEEEEE' }}
           >
             {text}{percentText}
@@ -59,10 +59,11 @@ export default class ResultPage extends React.Component {
     }
 
     return (
-      <div className='resultArea'>
-        <div className='selectArea'>
-          <h2>My Polls</h2>
+      <div className='app-page'>
+        <div className='app-results-selectArea'>
+          <div className='app-results-label1'>My Polls</div>
           <select
+            className='app-results-select'
             value={this.state.selected}
             size={5}
             autoFocus
@@ -71,10 +72,10 @@ export default class ResultPage extends React.Component {
             {polls}
           </select>
         </div>
-        <div className='displayArea'>
-          <h2>Poll Results</h2>
-          <h2>{(this.state.selected !== -1) ? myPolls[this.state.selected].title : ''}</h2>
-          <p className='totalVotes'>Total Votes: {totalVotes}</p>
+        <div className='app-results-label2'>Poll Results</div>
+        <div className='app-results-display'>
+          <div className='app-results-title'>{(this.state.selected !== -1) ? myPolls[this.state.selected].title : ''}</div>
+          <p className='app-results-totalVotes'>Total Votes: {totalVotes}</p>
           {choices}
         </div>
       </div>

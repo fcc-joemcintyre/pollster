@@ -1,49 +1,42 @@
-.pollPage {
-  overflow: auto;
-  width: 90%;
-  max-width: 500px;
-  margin: 0px auto 0px auto;
-
-  h2 {
-    font-family: 'Jura', sans-serif;
-    text-align: center;
-    margin: 8px auto 12px auto;
-  }
-  .pollHint {
-    text-align: center;
-    font-family: 'Lato', sans-serif;
-    margin-top: 12px;
-    margin-bottom: 0px;
-  }
+.app-poll-pollHint {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  margin-top: 12px;
+  margin-bottom: 0px;
 }
 
-.pollItems {
+.app-poll-pollItems {
 }
 
-.pollItem {
+.app-poll-pollItem {
   font-family: 'Lato', sans-serif;
   padding: 8px;
   cursor: pointer;
 }
-.pollItem:hover {
+
+.app-poll-pollItem:hover {
   border: 1px solid $itemHoverBorder;
 }
-.pollItemName {
+
+.app-poll-pollItemName {
   font-size: 18px;
 }
-.pollItemOdd {
+
+.app-poll-pollItemOdd {
   border: 1px solid $itemBorder;
   background-color: $itemOdd;
 }
-.pollItemEven {
+
+.app-poll-pollItemEven {
   border: 1px solid $itemBorder;
   background-color: $itemEven;
 }
-.pollItemSelected {
+
+.app-poll-pollItemSelected {
   background-color: $itemSelected;
 }
 
-.votedItemArea {
+.app-poll-votedItemArea {
   position: relative;
   width: calc(100% - 2px);
   height: 38px;
@@ -52,7 +45,8 @@
   border: 1px solid $itemBorder;
   font-family: 'Lato', sans-serif;
 }
-.votedItemBar {
+
+.app-poll-votedItemBar {
   position: absolute;
   left: 0;
   top: 0;
@@ -60,14 +54,16 @@
   background-color: $votedBar;
   transition: width 3s;
 }
-.votedItemName {
+
+.app-poll-votedItemName {
   position: absolute;
   left: 8px;
   top: 10px;
   max-width: calc(100% - 40px);
   font-size: 18px;
 }
-.votedItemPercent {
+
+.app-poll-votedItemPercent {
   position: absolute;;
   right: 8px;
   top: 11px;

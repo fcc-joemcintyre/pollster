@@ -1,0 +1,21 @@
+.app-page {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.app-page-content {
+  height: calc(100vh - 100px);
+  width: 100%;
+  max-width: $contentMaxWidth;
+  padding: 100px 0px 16px 0px;
+  margin: 0px auto 0px auto;
+  overflow: auto;
+  background-color: white;
+}
+
+.app-page-title {
+  text-align: center;
+  font-family: 'Jura', sans-serif;
+  font-size: 24px;
+  margin: 0px 0px 12px 0px;
+}

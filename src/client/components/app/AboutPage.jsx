@@ -2,8 +2,9 @@ import React from 'react';
 
 const AboutPage = () => {
   return (
-    <div className='aboutPage'>
-      <h2>About Pollster</h2>
+    <div className='app-page'>
+      <div className='app-page-title'>About Pollster</div>
+      <br />
       <p>Written by Joe McIntyre, Pollster is a full stack project defined by
         FreeCodeCamp. (
         <a

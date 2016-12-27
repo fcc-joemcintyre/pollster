@@ -65,27 +65,27 @@ class PollPage extends React.Component {
           percent = Math.floor ((this.state.poll.choices[i].votes / totalVotes) * 100);
         }
         rows.push (
-          <div key={key} className='votedItemArea'>
+          <div key={key} className='app-poll-votedItemArea'>
             <div
-              className='votedItemBar'
+              className='app-poll-votedItemBar'
               style={{
                 width: `${this.state.transition ? percent : 0}%`,
               }}
             />
-            <span className='votedItemName'>{text}</span>
-            <span className='votedItemPercent'>{percent}%</span>
+            <span className='app-poll-votedItemName'>{text}</span>
+            <span className='app-poll-votedItemPercent'>{percent}%</span>
           </div>
         );
       } else {
         const pollClassName = (i === this.state.selected) ?
-          'pollItem pollItemSelected' : 'pollItem';
+          'app-poll-pollItem app-poll-pollItemSelected' : 'app-poll-pollItem';
         const check = (i === this.state.selected) ?
-          <span className='pollItemName'>&#10003; </span> : null;
-        const choice = <span className='pollItemName'>{this.state.poll.choices[i].text}</span>;
+          <span className='app-poll-pollItemName'>&#10003; </span> : null;
+        const choice = <span className='app-poll-pollItemName'>{this.state.poll.choices[i].text}</span>;
         rows.push (
           <div
             key={key}
-            className={`${pollClassName} ${(i % 2 === 0) ? 'pollItemEven' : 'pollItemOdd'}`}
+            className={`${pollClassName} ${(i % 2 === 0) ? 'app-poll-pollItemEven' : 'app-poll-pollItemOdd'}`}
             onClick={() => { this.setState ({ selected: i }); }}
           >
             {check}{choice}
@@ -125,12 +125,12 @@ class PollPage extends React.Component {
     );
 
     return (
-      <div className='pollPage'>
-        <h2>{this.state.poll.title}</h2>
-        <div className='pollItems'>
+      <div className='app-page'>
+        <div className='app-page-title'>{this.state.poll.title}</div>
+        <div className='app-poll-items'>
           {rows}
         </div>
-        <p className='pollHint'>
+        <p className='app-poll-hint'>
           Select your favorite, the poll results will be shown after you vote.
         </p>
         <div className='dialogGroupButtonArea'>

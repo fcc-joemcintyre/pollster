@@ -75,9 +75,9 @@ export default class App extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <div className='page'>
+        <div className='app-page'>
           <Header loggedIn={this.state.authenticated} />
-          <div className='pageContent'>
+          <div className='app-page-content'>
             {this.props.children}
           </div>
         </div>

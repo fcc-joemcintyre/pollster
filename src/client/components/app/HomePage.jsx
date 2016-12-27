@@ -36,11 +36,11 @@ class HomePage extends React.Component {
         rows.push (
           <div
             key={polls[i]._id}
-            className={(i % 2 === 0) ? 'poll even' : 'poll odd'}
+            className={(i % 2 === 0) ? 'app-home-poll app-home-even' : 'app-home-poll app-home-odd'}
             onClick={() => { this.props.router.push (`/polls/${polls[i]._id}`); }}
           >
-            <span className='name'>{polls[i].title}</span>
-            <span className='votes'>{totalVotes} votes</span>
+            <span className='app-home-name'>{polls[i].title}</span>
+            <span className='app-home-votes'>{totalVotes} votes</span>
           </div>
         );
       }
@@ -48,7 +48,7 @@ class HomePage extends React.Component {
     let message = null;
     if (this.state.loggedIn === false) {
       message = (
-        <div className='homeMessage'>
+        <div className='app-home-message'>
           <p>Welcome to Pollster, your place to vote and create new polls!</p>
           <p>To create your own polls, <i>Register</i> to create a free account
             and then <i>Login</i> anytime to manage your polls and see the results.</p>
@@ -58,10 +58,10 @@ class HomePage extends React.Component {
     }
 
     return (
-      <div className='homePage'>
+      <div className='app-page'>
         {message}
-        <h2>Active Polls</h2>
-        <div className='pollList'>
+        <div className='app-page-title'>Active Polls</div>
+        <div className='app-home-list'>
           {rows}
         </div>
       </div>

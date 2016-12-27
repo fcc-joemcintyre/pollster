@@ -1,83 +1,59 @@
-.resultArea {
-  width: 100%;
-  max-width: $contentMaxWidth;
-  margin: 16px auto 0px auto;
-  overflow: auto;
-  font-family: sans-serif;
+.app-results-label1,
+.app-results-label2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
 
-  @media (max-width: 414px) {
-    .selectArea {
-      width: 100%
-    }
+.app-results-label2 {
+  margin-top: 20px;
+}
 
-    .displayArea {
-      margin-top: 16px;
-      padding-top: 16px;
-      width: 96%
-    }
-  }
+.app-results-select {
+  font-size: 16px;
+  cursor: pointer;
+}
 
-  @media (min-width: 415px) {
-    .selectArea {
-      margin-left: 3%;
-      width: 30%;
-      float: left;
-    }
+.app-results-option {
+  padding: 4px;
+}
 
-    .displayArea {
-      margin-left: 8%;
-      width: 56%;
-      float: left;
-    }
-  }
+.app-results-option:checked {
+    background-color: lightsteelblue;
+}
 
-  .selectArea {
-    h2 {
-      text-align: center;
-    }
-    select {
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
+.app-results-display {
+  width: calc(100% - 16px);
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
 
-      option {
-        padding: 4px;
-      }
-      option:checked {
-        background-color: lightsteelblue;
-      }
-    }
-  }
+.app-results-title {
+  font-size: 20px;
+  text-align: center;
+}
 
-  .displayArea {
-    padding: 0px 4px 4px 4px;
-    border: 1px solid lightgray;
-    border-radius: 4px;
+.app-results-totalVotes {
+  text-align: center;
+  font-size: 12px;
+  margin: 0px auto 8px auto;
+}
 
-    h2 {
-      text-align: center;
-    }
-    .totalVotes {
-      text-align: center;
-      font-size: 12px;
-      margin: 0px auto 8px auto;
-    }
-    .poll {
-      font-family: sans-serif;
-      margin: 0px 0px 4px 0px;
-      padding: 8px;
-      cursor: pointer;
-    }
-    .poll:hover {
-      border: 1px solid $itemHoverBorder;
-    }
-    .name {
-      font-size: 18px;
-    }
-    .votes {
-      padding-top: 4px;
-      float: right;
-      font-size: 14px;
-    }
-  }
+.app-results-poll {
+  margin: 0px 0px 4px 0px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.app-results-poll:hover {
+  border: 1px solid $itemHoverBorder;
+}
+
+.app-results-name {
+  font-size: 18px;
+}
+
+.app-results-votes {
+  padding-top: 4px;
+  float: right;
+  font-size: 14px;
 }

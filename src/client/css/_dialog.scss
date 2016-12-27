@@ -1,6 +1,5 @@
 // dialogs
 .dialogMessage {
-  padding-top: 40px;
   font-family: 'Lato', sans-serif;
   text-align: center;
 }
@@ -37,7 +36,7 @@
 
 .dialogUser {
   padding-top: 8px;
-  margin: 24px auto 0px auto;
+  margin: 0px auto 0px auto;
   width: 90%;
   max-width: 400px;
   border: 1px solid lightgray;
@@ -53,7 +52,7 @@
 
     input[type=text] {
       display: block;
-      width: 90%;
+      width: 80%;
       max-width: 380px;
       margin: 16px auto 0px auto;
       height: 32px;
@@ -66,7 +65,7 @@
     }
     input[type=password] {
       display: block;
-      width: 90%;
+      width: 80%;
       max-width: 380px;
       margin: 16px auto 0px auto;
       height: 32px;
@@ -82,7 +81,7 @@
 
 .dialogProfile {
   padding-top: 8px;
-  margin: 24px auto 0px auto;
+  margin: 0px auto 0px auto;
   width: 90%;
   max-width: 400px;
   border: 1px solid lightgray;
