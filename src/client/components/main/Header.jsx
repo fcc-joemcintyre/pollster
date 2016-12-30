@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
+import { logout } from '../../store/userActions';
 
 // Header with application and common navigation
-const Header = ({ loggedIn }) => {
+const Header = ({ loggedIn }, context) => {
   const appLinks = [];
   const titleLinks = [];
 
@@ -11,7 +12,9 @@ const Header = ({ loggedIn }) => {
     appLinks.push (<li key='a2'><Link to='/manage' activeClassName='active'>Manage</Link></li>);
     appLinks.push (<li key='a3'><Link to='/results' activeClassName='active'>Results</Link></li>);
     appLinks.push (<li key='a4'><Link to='/profile' activeClassName='active'>Profile</Link></li>);
-    titleLinks.push (<li key='t1'><Link to='/logout'>Logout</Link></li>);
+    titleLinks.push (
+      <li key='t1' onClick={() => { context.store.dispatch (logout ()); }}><Link to='/'>Logout</Link></li>
+    );
   } else {
     titleLinks.push (<li key='t2'><Link to='/register'>Register</Link></li>);
     titleLinks.push (<li key='t3'><Link to='/login'>Login</Link></li>);
@@ -39,4 +42,8 @@ export default Header;
 
 Header.propTypes = {
   loggedIn: React.PropTypes.bool.isRequired,
+};
+
+Header.contextTypes = {
+  store: React.PropTypes.object.isRequired,
 };

@@ -11,7 +11,6 @@ import { initPolls } from '../../store/pollsActions';
 import HomePage from '../app/HomePage.jsx';
 import RegisterPage from '../user/RegisterPage.jsx';
 import LoginPage from '../user/LoginPage.jsx';
-import LogoutPage from '../user/LogoutPage.jsx';
 import ProfilePage from '../user/ProfilePage.jsx';
 import NotFoundPage from './NotFoundPage.jsx';
 import PollPage from '../app/PollPage.jsx';
@@ -34,7 +33,6 @@ store.dispatch (verifyLogin ())
           <Route path='register' component={RegisterPage} />
           <Route path='login' component={LoginPage} />
           <Route path='profile' component={ProfilePage} onEnter={requireAuth} />
-          <Route path='logout' component={LogoutPage} onEnter={requireAuth} />
           <Route path='polls/:_id' component={PollPage} />
           <Route path='manage' component={ManagePage} onEnter={requireAuth} />
           <Route path='results' component={ResultPage} onEnter={requireAuth} />
