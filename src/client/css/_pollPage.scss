@@ -15,7 +15,7 @@
 }
 
 .app-poll-pollItem:hover {
-  border: 1px solid $itemHoverBorder;
+  border: 1px solid $colorItemHoverBorder;
 }
 
 .app-poll-pollItemName {
@@ -23,17 +23,17 @@
 }
 
 .app-poll-pollItemOdd {
-  border: 1px solid $itemBorder;
-  background-color: $itemOdd;
+  border: 1px solid $colorItemBorder;
+  background-color: $colorItemOdd;
 }
 
 .app-poll-pollItemEven {
-  border: 1px solid $itemBorder;
-  background-color: $itemEven;
+  border: 1px solid $colorItemBorder;
+  background-color: $colorItemEven;
 }
 
 .app-poll-pollItemSelected {
-  background-color: $itemSelected;
+  background-color: $colorItemSelected;
 }
 
 .app-poll-votedItemArea {
@@ -41,8 +41,8 @@
   width: calc(100% - 2px);
   height: 38px;
   overflow: auto;
-  background-color: $votedBackground;
-  border: 1px solid $itemBorder;
+  background-color: $colorVotedBackground;
+  border: 1px solid $colorItemBorder;
   font-family: 'Lato', sans-serif;
 }
 
@@ -51,7 +51,7 @@
   left: 0;
   top: 0;
   height: 100%;
-  background-color: $votedBar;
+  background-color: $colorVotedBar;
   transition: width 3s;
 }
 

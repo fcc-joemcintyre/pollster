@@ -20,7 +20,7 @@
 }
 
 .app-home-poll:hover {
-  border: 1px solid $itemHoverBorder;
+  border: 1px solid $colorItemHoverBorder;
 }
 
 .app-home-name {
@@ -36,11 +36,11 @@
 }
 
 .app-home-odd {
-  border: 1px solid $itemBorder;
-  background-color: $itemOdd;
+  border: 1px solid $colorItemBorder;
+  background-color: $colorItemOdd;
 }
 
 .app-home-even {
-  border: 1px solid $itemBorder;
-  background-color: $itemEven;
+  border: 1px solid $colorItemBorder;
+  background-color: $colorItemEven;
 }
