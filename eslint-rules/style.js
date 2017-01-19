@@ -135,7 +135,7 @@ module.exports = {
     'no-inline-comments': 'off',
 
     // disallow if as the only statement in an else block
-    'no-lonely-if': 'error',
+    'no-lonely-if': 'off',
 
     // disallow un-paren'd mixes of different operators
     'no-mixed-operators': ['error', {
