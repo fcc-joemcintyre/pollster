@@ -1,4 +1,4 @@
-const mongoClient = require ('mongodb').MongoClient;
+const MongoClient = require ('mongodb').MongoClient;
 const ObjectId = require ('mongodb').ObjectId;
 const hash = require ('./hash');
 
@@ -11,7 +11,7 @@ function init (uri) {
   console.log ('db.init');
   return new Promise ((resolve, reject) => {
     if (db === null) {
-      return mongoClient.connect (uri, (err, instance) => {
+      return MongoClient.connect (uri, (err, instance) => {
         if (err) {
           console.log ('  err', err);
           return reject (err);
@@ -57,84 +57,128 @@ function close () {
 
 // Find single user by user name
 function findUserByUsername (username) {
-  return users.findOne ({ username });
+  if (users) {
+    return users.findOne ({ username });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // Insert single user with username, password only populated. Suitable for
 // register user type functions.
 function insertUser (username, password) {
-  return new Promise ((resolve, reject) => {
-    Promise.resolve ().then (() => {
-      return findUserByUsername (username);
-    }).then ((result) => {
-      if (result !== null) {
-        return reject (new Error ('User already exists'));
-      }
-      const userHash = hash.create (password);
-      const user = {
-        username,
-        hash: userHash.hash,
-        salt: userHash.salt,
-        name: '',
-        email: '',
-      };
-      return users.insert (user, { w: 1 });
-    }).then ((result) => {
-      resolve (result);
-    }).catch ((err) => {
-      reject (err);
+  if (users) {
+    return new Promise ((resolve, reject) => {
+      Promise.resolve ().then (() => {
+        return findUserByUsername (username);
+      }).then ((result) => {
+        if (result !== null) {
+          return reject (new Error ('User already exists'));
+        }
+        const userHash = hash.create (password);
+        const user = {
+          username,
+          hash: userHash.hash,
+          salt: userHash.salt,
+          name: '',
+          email: '',
+        };
+        return users.insert (user, { w: 1 });
+      }).then ((result) => {
+        resolve (result);
+      }).catch ((err) => {
+        reject (err);
+      });
     });
-  });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // Update user information (not username or password).
 function updateUser (username, name, email) {
-  return users.update (
-    { username },
-    { $set: { name, email } }
-  );
+  if (users) {
+    return users.update (
+      { username },
+      { $set: { name, email } }
+    );
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // remove user by username
 function removeUser (username) {
-  return users.remove ({ username });
+  if (users) {
+    return users.remove ({ username });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // get all polls
 function getPolls () {
-  return polls.find ().toArray ();
+  if (polls) {
+    return polls.find ().toArray ();
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // get a single poll
 function getPoll (_id) {
-  return polls.findOne ({ _id: new ObjectId (_id) });
+  if (polls) {
+    return polls.findOne ({ _id: new ObjectId (_id) });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // add a new poll
 function insertPoll (poll) {
-  return polls.insert (poll, { w: 1 });
+  if (polls) {
+    return polls.insert (poll, { w: 1 });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // update a poll by _id
 function updatePoll (_id, poll) {
-  return polls.update ({ _id: new ObjectId (_id) }, poll);
+  if (polls) {
+    return polls.update ({ _id: new ObjectId (_id) }, poll);
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // remove a poll by _id
 function removePoll (_id) {
-  return polls.remove ({ _id: new ObjectId (_id) });
+  if (polls) {
+    return polls.remove ({ _id: new ObjectId (_id) });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // remove all polls
 function removePolls () {
-  return polls.remove ({});
+  if (polls) {
+    return polls.remove ({});
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 // vote in a poll, for a specific choice.
 function vote (_id, choice) {
-  return polls.update (
+  if (polls) {
+    return polls.update (
       { _id: new ObjectId (_id), 'choices.text': choice },
       { $inc: { 'choices.$.votes': 1 } });
+  } else {
+    return Promise.reject (new Error ('Database not available'));
+  }
 }
 
 exports.init = init;
