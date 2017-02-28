@@ -69,9 +69,15 @@ describe ('polls (authenticated)', function () {
   let pollIds = [];
   beforeEach (function (done) {
     Promise.resolve ().then (() => {
-      db.removePolls ();
+      return db.removePolls ();
     }).then (() => {
-      db.insertUser ('amy', 'test');
+      return db.findUserByUsername ('amy');
+    }).then ((amy) => {
+      if (amy) {
+        return Promise.resolve ();
+      } else {
+        return db.insertUser ('amy', 'test');
+      }
     }).then (() => {
       const polls = [
         {
