@@ -152,6 +152,9 @@ module.exports = {
     // disallow mixed spaces and tabs for indentation
     'no-mixed-spaces-and-tabs': 'error',
 
+    // disallow use of chained assignment expressions
+    'no-multi-assign': 'error',
+
     // disallow multiple empty lines and only one newline at the end
     'no-multiple-empty-lines': ['error', { 'max': 2, 'maxEOF': 1 }],
 
@@ -190,6 +193,10 @@ module.exports = {
 
     // disallow whitespace before properties
     'no-whitespace-before-property': 'error',
+
+    // enforce the location of single-line statements
+    // NOTE: ignored if curly: 'all' in best-practices.js
+    'nonblock-statement-body-position': ['error', 'beside'],
 
     // enforce consistent spacing inside braces
     'object-curly-spacing': ['error', 'always'],
@@ -265,6 +272,9 @@ module.exports = {
 
     // require or disallow a space immediately following the // or /* in a comment
     'spaced-comment': 'off',
+
+    // Rule to check spacing between template tags and their literals
+    'template-tag-spacing': ['error', 'always'],
 
     // require or disallow the Unicode Byte Order Mark
     'unicode-bom': ['error', 'never'],

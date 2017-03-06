@@ -74,6 +74,7 @@ module.exports = {
     'object-shorthand': ['error', 'always', {
       ignoreConstructors: false,
       avoidQuotes: true,
+      avoidExplicitReturnArrows: true,
     }],
 
     // suggest using arrow functions as callbacks
@@ -87,6 +88,9 @@ module.exports = {
       destructuring: 'any',
       ignoreReadBeforeAssign: true,
     }],
+
+    // Prefer destructuring from arrays and objects
+    'prefer-destructuring': 'off',
 
     // disallow parseInt() in favor of binary, octal, and hexadecimal literals
     'prefer-numeric-literals': 'error',

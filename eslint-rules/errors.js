@@ -12,6 +12,9 @@ module.exports = {
     // disallow await inside of loops
     'no-await-in-loop': 'error',
 
+    // The rule should warn against code that tries to compare against -0
+    'no-compare-neg-zero': 'error',
+
     // disallow assignment in conditional expressions
     'no-cond-assign': ['error', 'always'],
 
@@ -53,6 +56,7 @@ module.exports = {
       conditionalAssign: true,
       nestedBinaryExpressions: false,
       returnAssign: false,
+      ignoreJSX: 'none',
     }],
 
     // disallow unnecessary semicolons
