@@ -70,7 +70,7 @@ module.exports = {
 
     // Limit maximum of props on a single line in JSX
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-max-props-per-line.md
-    'react/jsx-max-props-per-line': ['off', { maximum: 1 }],
+    'react/jsx-max-props-per-line': ['off', { maximum: 1, when: 'always' }],
 
     // Prevent usage of .bind() in JSX props
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md
@@ -189,7 +189,7 @@ module.exports = {
 
     // Prevent missing props validation in a React component definition
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prop-types.md
-    'react/prop-types': ['error', { ignore: [], customValidators: [] }],
+    'react/prop-types': ['error', { ignore: [], customValidators: [], skipUndeclared: false }],
 
     // Prevent missing React when using JSX
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/react-in-jsx-scope.md
@@ -301,6 +301,18 @@ module.exports = {
     // Prevent passing of children as props
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-children-prop.md
     'react/no-children-prop': 'error',
+
+    // Forbid foreign propTypes
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/forbid-foreign-prop-types.md
+    'react/forbid-foreign-prop-types': 'off',
+
+    // Prevent void DOM elements (e.g. <img />, <br />) from receiving children
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/void-dom-elements-no-children.md
+    'react/void-dom-elements-no-children': 'error',
+
+    // Forbid certain elements
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/forbid-elements.md
+    'react/forbid-elements': 'off',
   },
 
   'settings': {
