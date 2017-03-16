@@ -9,12 +9,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "ajv": "4.11.3",
+    "ajv": "4.11.5",
     "babel-polyfill": "6.23.0",
-    "body-parser": "1.16.1",
+    "body-parser": "1.17.1",
     "cookie-session": "1.2.0",
-    "express": "4.14.1",
-    "helmet": "3.4.1",
+    "express": "4.15.2",
+    "helmet": "3.5.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
     "react": "15.4.2",
@@ -24,7 +24,7 @@
     "redux": "3.6.0",
     "redux-thunk": "2.2.0",
     "mongodb": "2.2.24",
-    "whatwg-fetch": "2.0.2"
+    "whatwg-fetch": "2.0.3"
   },
   "scripts": {
     "test": "npm run test-db && npm run test-server && npm run test-store",
@@ -42,12 +42,12 @@
     "c-combine": "./node_modules/istanbul/lib/cli.js report --dir ./coverage --include **/*coverage.json json lcov"
   },
   "devDependencies": {
-    "babel-core": "6.23.1",
-    "babel-preset-es2015": "6.22.0",
+    "babel-core": "6.24.0",
+    "babel-preset-es2015": "6.24.0",
     "babel-preset-react": "6.23.0",
     "babelify": "7.3.0",
     "browserify": "14.1.0",
-    "eslint": "3.17.0",
+    "eslint": "3.17.1",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-react": "6.10.0",
     "gulp": "3.9.1",
@@ -55,7 +55,7 @@
     "gulp-gzip": "1.4.0",
     "gulp-sass": "3.1.0",
     "gulp-sourcemaps": "2.4.1",
-    "gulp-uglify": "2.0.1",
+    "gulp-uglify": "2.1.0",
     "gulp-util": "3.0.8",
     "isomorphic-fetch": "2.2.1",
     "istanbul": "0.4.5",
@@ -70,6 +70,6 @@
     "watchify": "3.9.0"
   },
   "engines": {
-    "node": "6.9.5"
+    "node": "6.10.0"
   }
 }
