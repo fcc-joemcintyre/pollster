@@ -9,29 +9,25 @@ let polls = null;
 // connect to database and set up collections
 function init (uri) {
   console.log ('db.init');
-  return new Promise ((resolve, reject) => {
-    if (db === null) {
-      return MongoClient.connect (uri, (err, instance) => {
-        if (err) {
-          console.log ('  err', err);
-          return reject (err);
-        }
-        db = instance;
-        return Promise.resolve ().then (() => {
-          users = db.collection ('users');
-          return users.ensureIndex ({ username: 1 }, { unique: true });
-        }).then (() => {
-          polls = db.collection ('polls');
-          return resolve ();
-        }).catch ((err2) => {
-          console.log ('  err', err2);
-          return reject (err2);
-        });
-      });
-    } else {
-      return resolve ();
-    }
-  });
+  if (db) {
+    return Promise.resolve ();
+  }
+
+  //return new Promise ((resolve, reject) => {
+    return Promise.resolve ().then (() => {
+      return MongoClient.connect (uri);
+    }).then ((instance) => {
+      db = instance;
+      users = db.collection ('users');
+      polls = db.collection ('polls');
+      return users.ensureIndex ({ username: 1 }, { unique: true });
+    }).then (() => {
+      return Promise.resolve ();
+    }).catch ((err) => {
+      console.log ('db.init connect error', err);
+      return Promise.reject (err);
+    });
+  //});
 }
 
 // Close database and null out references
