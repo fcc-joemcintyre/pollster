@@ -13,21 +13,19 @@ function init (uri) {
     return Promise.resolve ();
   }
 
-  //return new Promise ((resolve, reject) => {
-    return Promise.resolve ().then (() => {
-      return MongoClient.connect (uri);
-    }).then ((instance) => {
-      db = instance;
-      users = db.collection ('users');
-      polls = db.collection ('polls');
-      return users.ensureIndex ({ username: 1 }, { unique: true });
-    }).then (() => {
-      return Promise.resolve ();
-    }).catch ((err) => {
-      console.log ('db.init connect error', err);
-      return Promise.reject (err);
-    });
-  //});
+  return Promise.resolve ().then (() => {
+    return MongoClient.connect (uri);
+  }).then ((instance) => {
+    db = instance;
+    users = db.collection ('users');
+    polls = db.collection ('polls');
+    return users.ensureIndex ({ username: 1 }, { unique: true });
+  }).then (() => {
+    return Promise.resolve ();
+  }).catch ((err) => {
+    console.log ('db.init connect error', err);
+    return Promise.reject (err);
+  });
 }
 
 // Close database and null out references
