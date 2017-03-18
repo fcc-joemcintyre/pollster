@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-export default class FilteredInput extends React.Component {
+export default class FilteredInput extends Component {
   focus () {
-    this.ref.focus ();
+    if (this.ref) {
+      this.ref.focus ();
+    }
   }
 
   render () {
@@ -10,7 +12,7 @@ export default class FilteredInput extends React.Component {
     const passthrough = {};
     const keys = Reflect.ownKeys (this.props);
     for (const key of keys) {
-      if (key !== 'filter') {
+      if ((key !== 'key') && (key !== 'ref') && (key !== 'filter')) {
         passthrough[key] = this.props[key];
       }
     }
@@ -31,5 +33,5 @@ export default class FilteredInput extends React.Component {
 
 /* eslint react/forbid-prop-types: off */
 FilteredInput.propTypes = {
-  filter: React.PropTypes.object.isRequired,
+  filter: PropTypes.object.isRequired,
 };
