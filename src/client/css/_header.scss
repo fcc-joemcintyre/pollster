@@ -3,24 +3,24 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0;
+  padding: 4px 0 12px 0;
   margin: 0;
   background-color: $colorHeaderBG;
   border-bottom: 1px solid darkgray;
 }
 
 .app-h-line1 {
-  width: calc(100% - 16px);
+  padding: 0px 8px 12px 8px;
   max-width: $contentMaxWidth;
-  margin: 0px auto 0px auto;
+  margin: 0 auto 0 auto;
+  overflow: auto;
 }
 
 .app-h-title {
   float: left;
-  margin: 4px 0px 8px 0px;
   font-family: 'Jura', sans-serif;
   text-shadow: 2px 2px 2px #CCCCCC;
-  font-size: 28px;
+  font-size: 40px;
   font-style: italic;
 }
 
