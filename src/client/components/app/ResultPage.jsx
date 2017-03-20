@@ -18,8 +18,9 @@ export default class ResultPage extends React.Component {
     // if no active polls for user, display message
     if (myPolls.length === 0) {
       return (
-        <div className='messageForm'>
-          <p>You do not have any active polls.</p>
+        <div className='app-page-content'>
+          <h1><center>Poll Results</center></h1>
+          <p><center>You do not have any polls yet</center></p>
         </div>
       );
     }
@@ -59,7 +60,8 @@ export default class ResultPage extends React.Component {
     }
 
     return (
-      <div className='app-page'>
+      <div className='app-page-content'>
+        <h1><center>Poll Results</center></h1>
         <div className='app-results-selectArea'>
           <div className='app-results-label1'>My Polls</div>
           <select

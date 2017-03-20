@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import LoginForm from './LoginForm.jsx';
 import { login } from '../../store/userActions';
-import { createField } from '../util/formHelpers';
+import { createField, updateFieldValue } from '../util/formHelpers';
 
 const defaultText = 'Enter login information';
 
@@ -12,8 +12,10 @@ class LoginPage extends React.Component {
     super (props, context);
     this.state = {
       message: { status: 'info', text: defaultText },
-      username: createField ('username', '', []),
-      password: createField ('password', '', []),
+      fields: {
+        username: createField ('username', '', []),
+        password: createField ('password', '', []),
+      },
     };
 
     this.onChange = this.onChange.bind (this);
@@ -22,23 +24,21 @@ class LoginPage extends React.Component {
   }
 
   onChange (field, value) {
-    const o = Object.assign ({}, this.state[field.name]);
-    o.value = value;
-    this.setState ({ [field.name]: o });
+    this.setState (updateFieldValue (field, value));
   }
 
   onValidateForm () {
-    return ((this.state.username.value.trim () !== '') &&
-      (this.state.password.value.trim () !== ''));
+    return ((this.state.fields.username.value.trim () !== '') &&
+      (this.state.fields.password.value.trim () !== ''));
   }
 
   onSubmit (e) {
     e.preventDefault ();
     if (this.onValidateForm ()) {
-      this.setState ({ message: { status: 'working', text: 'Logging in' } });
-      this.props.dispatch (login (this.state.username.value, this.state.password.value))
+      this.setState (() => { return { message: { status: 'working', text: 'Logging in' } }; });
+      this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value))
       .then (() => {
-        this.setState ({ message: { status: 'ok', text: 'Logged in' } });
+        this.setState (() => { return { message: { status: 'ok', text: 'Logged in' } }; });
         if (this.props.location.state && this.props.location.state.nextPathname) {
           this.props.router.replace (this.props.location.state.nextPathname);
         } else {
@@ -46,10 +46,10 @@ class LoginPage extends React.Component {
         }
       })
       .catch (() => {
-        this.setState ({ message: { status: 'error', text: 'Error logging in, check entries and try again' } });
+        this.setState (() => { return { message: { status: 'error', text: 'Error logging in, check values' } }; });
       });
     } else {
-      this.setState ({ message: { status: 'error', text: 'Complete form and try again' } });
+      this.setState (() => { return { message: { status: 'error', text: 'Complete form and try again' } }; });
     }
   }
 
@@ -57,8 +57,7 @@ class LoginPage extends React.Component {
     return (
       <LoginForm
         message={this.state.message}
-        username={this.state.username}
-        password={this.state.password}
+        fields={this.state.fields}
         onChange={this.onChange}
         onSubmit={this.onSubmit}
       />

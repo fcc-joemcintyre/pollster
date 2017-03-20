@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import FilteredInput from '../ui/FilteredInput.jsx';
 import { fieldPropTypes } from '../util/formHelpers';
 
-const usernameChars = /[A-Za-z0-9]/;
+const nameChars = /[A-Za-z0-9]/;
 const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
 
-const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit }) => {
+const RegisterForm = ({ message, fields: { username, password, verifyPassword }, onChange, onValidate, onSubmit }) => {
   let focusRef;
 
   function resetFocus () {
@@ -16,7 +16,7 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
 
   return (
     <div className='app-page-content'>
-      <h1><center>Login</center></h1>
+      <h1><center>Register</center></h1>
       <div className='app-form-statusArea'>
         <span className={`app-form-status-${message.status}`}>
           {message.text}
@@ -25,7 +25,7 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
       <div className='app-form-layout'>
         <form
           className='app-form-form'
-          style={{ width: '300px' }}
+          style={{ width: '280px' }}
           onSubmit={onSubmit}
         >
           <div className='app-form-field'>
@@ -33,41 +33,71 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
             <FilteredInput
               id='username'
               className='app-form-component'
-              style={{ width: '280px' }}
+              style={{ width: '260px' }}
               type='text'
               ref={(ref) => { focusRef = ref; }}
               autoFocus
               maxLength={20}
               autoCapitalize='none'
               autoCorrect='off'
-              filter={usernameChars}
+              filter={nameChars}
               value={username.value}
               onChange={(e) => { onChange (username, e.target.value); }}
+              onBlur={() => { onValidate (username); }}
             />
+            {
+              username.error ?
+                <div className='app-form-hint' style={{ color: 'red' }}>{username.error}</div> :
+                <div className='app-form-hint'>Up to 20 letters/digits, no spaces</div>
+            }
           </div>
           <div className='app-form-field'>
             <label className='app-form-label' htmlFor='password'>Password</label>
             <FilteredInput
               id='password'
               className='app-form-component'
-              style={{ width: '280px' }}
+              style={{ width: '260px' }}
               type='password'
               maxLength={20}
               filter={passwordChars}
               value={password.value}
               onChange={(e) => { onChange (password, e.target.value); }}
+              onBlur={() => { onValidate (password); onValidate (verifyPassword); }}
             />
+            {
+              password.error ?
+                <div className='app-form-hint' style={{ color: 'red' }}>{password.error}</div> :
+                <div className='app-form-hint'>Your password</div>
+            }
+          </div>
+          <div className='app-form-field'>
+            <label className='app-form-label' htmlFor='verify'>Verify Password</label>
+            <FilteredInput
+              id='verify'
+              className='app-form-component'
+              style={{ width: '260px' }}
+              type='password'
+              maxLength={20}
+              filter={passwordChars}
+              value={verifyPassword.value}
+              onChange={(e) => { onChange (verifyPassword, e.target.value); }}
+              onBlur={() => { onValidate (verifyPassword); onValidate (password); }}
+            />
+            {
+              verifyPassword.error ?
+                <div className='app-form-hint' style={{ color: 'red' }}>{verifyPassword.error}</div> :
+                <div className='app-form-hint'>Verify your password</div>
+            }
           </div>
           <div className='app-form-buttonArea'>
             <button
               className='app-form-button'
-              disabled={(username.value === '') || (password.value === '')}
               onClick={(e) => {
                 resetFocus ();
                 onSubmit (e);
               }}
             >
-              Login
+              Save
             </button>
           </div>
         </form>
@@ -76,9 +106,9 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
 
-LoginForm.propTypes = {
+RegisterForm.propTypes = {
   message: PropTypes.shape ({
     status: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
@@ -86,7 +116,9 @@ LoginForm.propTypes = {
   fields: PropTypes.shape ({
     username: PropTypes.shape (fieldPropTypes).isRequired,
     password: PropTypes.shape (fieldPropTypes).isRequired,
+    verifyPassword: PropTypes.shape (fieldPropTypes).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
+  onValidate: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

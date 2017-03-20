@@ -49,7 +49,7 @@ class PollPage extends React.Component {
       return (
         <form className='messageForm' onSubmit={() => { this.props.router.push ('/'); }}>
           <p>Sorry, could not find that poll for you.</p>
-          <button>Back to Polls</button>
+          <button type='submit'>Back to Polls</button>
         </form>
       );
     }
@@ -106,7 +106,7 @@ class PollPage extends React.Component {
       buttons.push (
         <button
           key='button1'
-          className='dialogGroupButton'
+          className='app-form-button'
           disabled={(this.state.selected === -1)}
           onClick={this.handleVote}
         >
@@ -117,7 +117,7 @@ class PollPage extends React.Component {
     buttons.push (
       <button
         key='button2'
-        className='dialogGroupButton'
+        className='app-form-button'
         onClick={() => { this.props.router.push ('/'); }}
       >
         Back to Polls
@@ -125,15 +125,15 @@ class PollPage extends React.Component {
     );
 
     return (
-      <div className='app-page'>
-        <div className='app-page-title'>{this.state.poll.title}</div>
+      <div className='app-page-content'>
+        <h1><center>{this.state.poll.title}</center></h1>
         <div className='app-poll-items'>
           {rows}
         </div>
         <p className='app-poll-hint'>
           Select your favorite, the poll results will be shown after you vote.
         </p>
-        <div className='dialogGroupButtonArea'>
+        <div className='app-form-buttonArea'>
           {buttons}
         </div>
       </div>

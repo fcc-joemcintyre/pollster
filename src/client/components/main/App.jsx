@@ -75,7 +75,7 @@ export default class App extends React.Component {
       <Provider store={store}>
         <div className='app-page'>
           <Header loggedIn={this.state.authenticated} />
-          <div className='app-page-content'>
+          <div className='app-page-contentArea'>
             {this.props.children}
           </div>
         </div>

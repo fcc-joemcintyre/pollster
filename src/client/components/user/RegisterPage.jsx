@@ -1,101 +1,113 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import RegisterForm from './RegisterForm.jsx';
 import { register, login } from '../../store/userActions';
-import FilteredInput from '../ui/FilteredInput.jsx';
+import { createField, preValidate, updateFieldValue, updateFieldValidation, validateAll } from '../util/formHelpers';
+import { isNotEmpty, isValidPassword } from '../util/validators';
 
-const nameChars = /[A-Za-z0-9]/;
-const pwChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
+const defaultText = 'Enter profile information';
 
 class RegisterPage extends React.Component {
   constructor (props, context) {
     super (props, context);
-    this.state = {
-      username: '',
-      password: '',
-      verify: '',
-      error: false,
+    this.duplicate = false;
+
+    this.isMatching = this.isMatching.bind (this);
+    this.isNotDuplicate = this.isNotDuplicate.bind (this);
+
+    const fields = {
+      username: createField ('username', '', [
+        { fn: isNotEmpty, text: 'Required (Up to 20 letters/digits, no spaces)' },
+        { fn: this.isNotDuplicate, text: 'User name exists, choose another' },
+      ]),
+      password: createField ('password', '', [
+        { fn: isNotEmpty, text: 'Password is required' },
+        { fn: isValidPassword, text: 'Invalid password' },
+        { fn: this.isMatching, text: 'Password and verify password don\'t match' },
+      ]),
+      verifyPassword: createField ('verifyPassword', '', [
+        { fn: isNotEmpty, text: 'Verify password is required' },
+        { fn: isValidPassword, text: 'Invalid password' },
+        { fn: this.isMatching, text: 'Password and verify password don\'t match' },
+      ]),
     };
-    this.register = this.register.bind (this);
+    preValidate (fields);
+
+    this.state = {
+      message: { status: 'info', text: defaultText },
+      fields,
+    };
+
+    this.onChange = this.onChange.bind (this);
+    this.onValidate = this.onValidate.bind (this);
+    this.onValidateForm = this.onValidateForm.bind (this);
+    this.onSubmit = this.onSubmit.bind (this);
   }
 
-  register (event) {
+  onChange (field, value) {
+    this.setState (updateFieldValue (field, value));
+  }
+
+  onValidate (field) {
+    this.setState (updateFieldValidation (field));
+    // reset message to default if ok or error message is displayed
+    if (this.state.message.status !== 'info') {
+      this.setState (() => { return { message: { status: 'info', text: defaultText } }; });
+    }
+  }
+
+  onValidateForm () {
+    const updates = validateAll (this.state.fields);
+    this.setState (() => { return { fields: updates }; });
+    return (! (updates.username.error || updates.password.error || updates.verifyPassword.error));
+  }
+
+  onSubmit (event) {
     event.preventDefault ();
-    if (! ((this.state.username === '') || (this.state.password === ''))) {
-      this.context.store.dispatch (register (this.state.username, this.state.password))
+    if (this.onValidateForm ()) {
+      this.setState (() => { return { message: { status: 'working', text: 'Registering ...' } }; });
+      this.props.dispatch (register (this.state.fields.username.value, this.state.fields.password.value))
       .then (() => {
-        this.context.store.dispatch (login (this.state.username, this.state.password))
+        this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value))
         .then (() => {
-          this.setState ({ error: false });
-          if (this.props.location.state && this.props.location.nextPathname) {
-            this.props.router.replace (this.props.location.nextPathname);
-          } else {
-            this.props.router.replace ('/');
-          }
+          this.props.router.replace ('/');
         })
         .catch (() => {
-          this.setState ({ error: true });
+          this.setState (() => { return { message: { status: 'error', text: 'Registered, but could not login' } }; });
         });
+      })
+      .catch (() => {
+        this.setState (() => { return { message: { status: 'error', text: 'Error registering, try again' } }; });
       });
     }
   }
 
+  isMatching () {
+    return this.state.fields.password.value === this.state.fields.verifyPassword.value;
+  }
+
+  isNotDuplicate () {
+    return (this.duplicate === false);
+  }
+
   render () {
     return (
-      <div className='dialogUser'>
-        <h2>Register</h2>
-        <hr />
-        <form onSubmit={this.register}>
-          <FilteredInput
-            autoFocus
-            type='text'
-            placeholder='user name'
-            maxLength={20}
-            autoCapitalize='none'
-            autoCorrect='off'
-            filter={nameChars}
-            onChange={(e) => {
-              this.setState ({ username: e.target.value });
-            }}
-          />
-          <FilteredInput
-            type='password'
-            placeholder='password'
-            maxLength={20}
-            filter={pwChars}
-            onChange={(e) => {
-              this.setState ({ password: e.target.value });
-            }}
-          />
-          <FilteredInput
-            type='password'
-            placeholder='verify password'
-            maxLength={20}
-            filter={pwChars}
-            onChange={(e) => {
-              this.setState ({ verify: e.target.value });
-            }}
-          />
-          <button
-            className='dialogButton'
-            disabled={(this.state.username === '') || (this.state.password === '')
-              || (this.state.password !== this.state.verify)}
-          >
-            Register
-          </button>
-        </form>
-      </div>
+      <RegisterForm
+        message={this.state.message}
+        fields={this.state.fields}
+        onChange={this.onChange}
+        onValidate={this.onValidate}
+        onSubmit={this.onSubmit}
+      />
     );
   }
 }
 
-export default withRouter (RegisterPage);
+export default connect (null) (withRouter (RegisterPage));
 
 /* eslint react/forbid-prop-types: off */
 RegisterPage.propTypes = {
-  location: React.PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
   router: React.PropTypes.object.isRequired,
-};
-
-RegisterPage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
 };

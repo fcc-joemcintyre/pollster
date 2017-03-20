@@ -58,9 +58,9 @@ class HomePage extends React.Component {
     }
 
     return (
-      <div className='app-page'>
+      <div className='app-page-content'>
         {message}
-        <div className='app-page-title'>Active Polls</div>
+        <h1><center>Active Polls</center></h1>
         <div className='app-home-list'>
           {rows}
         </div>

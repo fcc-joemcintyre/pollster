@@ -1,26 +1,92 @@
-.app-form-status-info {
-  padding: 7px 4px 4px 4px;
+.app-form-layout {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+.app-form-form {
+  display: inline-block;
+  text-align: left;
+}
+
+.app-form-field {
+  margin: 6px 0 16px 0;
+  border: 1px solid darkgray;
+  border-radius: 4px;
+}
+
+.app-form-label {
+  display: block;
+  float: left;
+  margin-top: -12px;
+  margin-left: 4px;
+  height: 16px;
+  padding: 2px 5px 2px 5px;
+  font-size: 14px;
   background-color: white;
-  border: 1px solid white;
+  overflow: hidden;
+}
+
+.app-form-label + * {
+  clear: left;
+}
+
+.app-form-component {
+  display: block;
+  margin: 12px 6px 8px 6px;
+  background-color: aliceblue;
+  border: none;
+}
+
+.app-form-component:focus {
+  background-color: #E6F3FF;
+}
+
+.app-form-hint {
+  background-color: #F0F0F0;
+  font-size: 14px;
+  padding: 3px;
+  text-align: center;
+}
+
+.app-form-buttonArea {
+  text-align: center;
+  margin: 24px 0 24px 0;
+}
+
+.app-form-button {
+  margin: 0px 6px 4px 0px;
+  font-size: 18px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background-color: aliceblue;
+}
+
+.app-form-statusArea {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.app-form-status-info {
+  padding: 4px;
+  border: 2px solid white;
+  border-radius: 4px;
 }
 
 .app-form-status-working {
-  padding: 7px 4px 4px 4px;
-  background-color: lightyellow;
-  border: 1px solid lightgray;
+  padding: 4px;
+  border: 2px solid yellow;
   border-radius: 4px;
 }
 
 .app-form-status-ok {
-  padding: 7px 4px 4px 4px;
-  background-color: #ABEBC6;
-  border: 1px solid lightgray;
+  padding: 4px;
+  border: 2px solid #ABEBC6;
   border-radius: 4px;
 }
 
 .app-form-status-error {
-  padding: 7px 4px 4px 4px;
-  background-color: #FF5733;
-  border: 1px solid lightgray;
+  padding: 4px;
+  border: 2px solid #FF5733;
   border-radius: 4px;
 }

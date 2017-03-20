@@ -1,11 +1,8 @@
-$contentMaxWidth: 760px;
-
 @import 'colors';
 @import 'defaults';
 @import 'header';
 @import 'page';
 @import 'form';
-@import 'dialog';
 @import 'homePage';
 @import 'pollPage';
 @import 'managePage';
@@ -14,8 +11,4 @@ $contentMaxWidth: 760px;
 #app {
   width: 100%;
   height: 100%;
-}
-
-body {
-  background-color: $colorScreenEdge;
 }

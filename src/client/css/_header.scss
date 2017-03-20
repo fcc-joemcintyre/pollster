@@ -11,7 +11,7 @@
 
 .app-h-line1 {
   padding: 0px 8px 12px 8px;
-  max-width: $contentMaxWidth;
+  max-width: 760px;
   margin: 0 auto 0 auto;
   overflow: auto;
 }
@@ -48,7 +48,7 @@
 
 .app-h-line2 {
   width: calc(100% - 16px);
-  max-width: $contentMaxWidth;
+  max-width: 760px;
   margin: 0px auto 0px auto;
   clear: both;
 }
@@ -76,7 +76,7 @@
 
     a.active {
       color: black;
-      border-bottom: 2px solid #ADD8E6;
+      border-bottom: 2px solid darkgray;
     }
   }
 }
