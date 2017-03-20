@@ -1,31 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 class HomePage extends React.Component {
-  constructor (props, context) {
-    super (props, context);
-    const s = context.store.getState ();
-    this.state = {
-      polls: s.polls,
-      loggedIn: s.user.authenticated,
-    };
-  }
-
-  componentWillMount () {
-    this.unsubscribe = this.context.store.subscribe (() => {
-      const s = this.context.store.getState ();
-      if (this.state.polls !== s.polls) {
-        this.setState ({ polls: s.polls, loggedIn: s.user.authenticated });
-      }
-    });
-  }
-
-  componentWillUnmount () {
-    this.unsubscribe ();
-  }
-
   render () {
-    const polls = this.state.polls;
+    const polls = this.props.polls;
     const rows = [];
     if (polls.length === 0) {
       rows.push (<p>{' '}</p>);
@@ -46,7 +25,7 @@ class HomePage extends React.Component {
       }
     }
     let message = null;
-    if (this.state.loggedIn === false) {
+    if (this.props.authenticated === false) {
       message = (
         <div className='app-home-message'>
           <p>Welcome to Pollster, your place to vote and create new polls!</p>
@@ -69,13 +48,25 @@ class HomePage extends React.Component {
   }
 }
 
-export default withRouter (HomePage);
-
-/* eslint react/forbid-prop-types: off */
-HomePage.propTypes = {
-  router: React.PropTypes.object.isRequired,
+const mapStateToProps = (state) => {
+  return ({
+    authenticated: state.user.authenticated,
+    polls: state.polls,
+  });
 };
 
-HomePage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
+export default connect (mapStateToProps) (withRouter (HomePage));
+
+HomePage.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  polls: PropTypes.arrayOf (PropTypes.shape ({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    choices: PropTypes.arrayOf (PropTypes.shape ({
+      votes: PropTypes.number.isRequired,
+    })).isRequired,
+  })).isRequired,
+  router: PropTypes.shape ({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
