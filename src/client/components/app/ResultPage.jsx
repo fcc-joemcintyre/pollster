@@ -19,8 +19,8 @@ export default class ResultPage extends React.Component {
     if (myPolls.length === 0) {
       return (
         <div className='app-page-content'>
-          <h1><center>Poll Results</center></h1>
-          <p><center>You do not have any polls yet</center></p>
+          <h1>Poll Results</h1>
+          <p style={{ textAlign: 'center' }}>You do not have any polls yet</p>
         </div>
       );
     }
@@ -61,9 +61,9 @@ export default class ResultPage extends React.Component {
 
     return (
       <div className='app-page-content'>
-        <h1><center>Poll Results</center></h1>
+        <h1>Poll Results</h1>
         <div className='app-results-selectArea'>
-          <div className='app-results-label1'>My Polls</div>
+          <div className='app-results-label'>My Polls</div>
           <select
             className='app-results-select'
             value={this.state.selected}
@@ -74,11 +74,13 @@ export default class ResultPage extends React.Component {
             {polls}
           </select>
         </div>
-        <div className='app-results-label2'>Poll Results</div>
-        <div className='app-results-display'>
-          <div className='app-results-title'>{(this.state.selected !== -1) ? myPolls[this.state.selected].title : ''}</div>
-          <p className='app-results-totalVotes'>Total Votes: {totalVotes}</p>
-          {choices}
+        <div className='app-results-displayArea'>
+          <div className='app-results-label'>Poll Results</div>
+          <div className='app-results-display'>
+            <div className='app-results-title'>{(this.state.selected !== -1) ? myPolls[this.state.selected].title : ''}</div>
+            <p className='app-results-totalVotes'>Total Votes: {totalVotes}</p>
+            {choices}
+          </div>
         </div>
       </div>
     );

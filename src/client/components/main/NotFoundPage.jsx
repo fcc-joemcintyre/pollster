@@ -4,7 +4,7 @@ import React from 'react';
 const NotFoundPage = () => {
   return (
     <div className='app-page-content'>
-      <center><p>Sorry, could not find that page for you.</p></center>
+      <p style={{ textAlign: 'center' }}>Sorry, could not find that page for you.</p>
     </div>
   );
 };

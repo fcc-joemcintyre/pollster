@@ -16,7 +16,7 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
 
   return (
     <div className='app-page-content'>
-      <h1><center>Login</center></h1>
+      <h1>Login</h1>
       <div className='app-form-statusArea'>
         <span className={`app-form-status-${message.status}`}>
           {message.text}

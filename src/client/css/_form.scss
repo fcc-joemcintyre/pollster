@@ -34,6 +34,7 @@
 .app-form-component {
   display: block;
   margin: 12px 6px 8px 6px;
+  padding: 4px 0;
   background-color: aliceblue;
   border: none;
 }
@@ -76,17 +77,20 @@
 .app-form-status-working {
   padding: 4px;
   border: 2px solid yellow;
+  background-color: lightyellow;
   border-radius: 4px;
 }
 
 .app-form-status-ok {
   padding: 4px;
-  border: 2px solid #ABEBC6;
+  border: 2px solid #A5C3A0;
+  background-color: #C3F3BA;
   border-radius: 4px;
 }
 
 .app-form-status-error {
   padding: 4px;
   border: 2px solid #FF5733;
+  background: #F99B9B;
   border-radius: 4px;
 }

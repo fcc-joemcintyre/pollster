@@ -16,7 +16,7 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
 
   return (
     <div className='app-page-content'>
-      <h1><center>Register</center></h1>
+      <h1>Register</h1>
       <div className='app-form-statusArea'>
         <span className={`app-form-status-${message.status}`}>
           {message.text}

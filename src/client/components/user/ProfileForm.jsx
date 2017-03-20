@@ -15,7 +15,7 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
 
   return (
     <div className='app-page-content'>
-      <h1><center>Profile</center></h1>
+      <h1>Profile</h1>
       <div className='app-form-statusArea'>
         <span className={`app-form-status-${message.status}`}>
           {message.text}
@@ -53,6 +53,7 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
             <input
               id='email'
               className='app-form-component'
+              style={{ width: '260px' }}
               type='text'
               maxLength={60}
               autoCapitalize='none'

@@ -30,7 +30,7 @@ class HomePage extends React.Component {
           <p>Welcome to Pollster, your place to vote and create new polls!</p>
           <p>To create your own polls, <i>Register</i> to create a free account
             and then <i>Login</i> anytime to manage your polls and see the results.</p>
-          <hr />
+          <hr className='app-home-divider' />
         </div>
       );
     }
@@ -38,7 +38,7 @@ class HomePage extends React.Component {
     return (
       <div className='app-page-content'>
         {message}
-        <h1><center>Active Polls</center></h1>
+        <h1>Active Polls</h1>
         <div className='app-home-list'>
           {rows}
         </div>

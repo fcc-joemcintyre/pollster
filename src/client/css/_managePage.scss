@@ -3,45 +3,35 @@
   max-width: 400px;
 }
 
+.app-manage-box {
+  margin-top: 16px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
+
+.app-manage-topLabel {
+  display: block;
+  margin: 4px 0px 8px 4px;
+}
+
 .app-manage-select {
+  display: block;
   width: 100%;
-  max-width: 400px;
-  margin-left: 12px;
+  margin: 8px 4px 8px 8px;
+  max-width: 370px;
 
-  label {
-    display: inline-block;
-    text-align: right;
-    width: 60px;
-  }
-  select {
-    width: 100%;
-    margin-left: 8px;
-    max-width: 270px;
-    font-size: 16px;
-    cursor: pointer;
-
-    option {
-      padding: 4px;
-    }
+  option {
+    padding: 4px;
   }
 }
 
-.app-manage-poll {
-  padding-top: 16px;
-  width: 96%;
-  max-width: 400px;
-  border: 1px solid lightgray;
-  border-radius: 4px;
-  margin: 8px auto 0 auto;
+.app-manage-divider {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
-  h2 {
-    text-align: center;
-  }
-
-  hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+.app-manage-row {
+  margin-bottom: 8px;
 }
 
 .app-manage-label1 {
@@ -51,7 +41,6 @@
 }
 
 .app-manage-input1 {
-  font-size: 16px;
   width: 70%;
   max-width: 240px;
 }
@@ -65,13 +54,11 @@
 }
 
 .app-manage-maxVotes {
-  font-size: 16px;
   width: 100px;
   margin-left: 10px;
 }
 
 .app-manage-date {
-  font-size: 16px;
   width: 100px;
   margin-left: 10px;
 }
@@ -85,30 +72,6 @@
   margin-bottom: 12px;
 }
 
-.buttonArea {
-  margin-top: 12px;
-  text-align: center;
-
-  button {
-    display: inline;
-    margin: 0px 4px 4px 4px;
-    border: 1px solid lightgray;
-    border-radius: 8px;
-    padding: 6px 10px 6px 10px;
-    background-color: white;
-    font-size: 14px;
-  }
-}
-
-.sharePoll {
+.app-manage-sharePoll {
   padding-top: 16px;
-  clear: both;
-  width: 100%;
-
-  h2 {
-    text-align: center;
-  }
-  p {
-    text-align: center;
-  }
 }

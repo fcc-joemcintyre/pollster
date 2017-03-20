@@ -1,15 +1,38 @@
-.app-results-label1,
-.app-results-label2 {
+@media screen and (max-width:500px) {
+  .app-results-selectArea {
+    display: block;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+
+  .app-results-displayArea {
+    display: block;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width:501px) {
+  .app-results-selectArea {
+    display: inline-block;
+    float: left;
+    width: 200px;
+    margin-right: 20px;
+  }
+
+  .app-results-displayArea {
+    display: inline-block;
+    float: right;
+    width: calc(100% - 224px);
+  }
+}
+
+.app-results-label {
   font-size: 24px;
   margin-bottom: 8px;
 }
 
-.app-results-label2 {
-  margin-top: 20px;
-}
-
 .app-results-select {
-  font-size: 16px;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -22,7 +45,7 @@
 }
 
 .app-results-display {
-  width: calc(100% - 16px);
+  width: calc(100% - 4px);
   border: 1px solid lightgray;
   border-radius: 4px;
 }
@@ -34,18 +57,13 @@
 
 .app-results-totalVotes {
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   margin: 0px auto 8px auto;
 }
 
 .app-results-poll {
-  margin: 0px 0px 4px 0px;
+  margin: 0px 4px 4px 4px;
   padding: 8px;
-  cursor: pointer;
-}
-
-.app-results-poll:hover {
-  border: 1px solid $colorItemHoverBorder;
 }
 
 .app-results-name {

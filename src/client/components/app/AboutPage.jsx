@@ -3,7 +3,7 @@ import React from 'react';
 const AboutPage = () => {
   return (
     <div className='app-page-content'>
-      <h1><center>About Pollster</center></h1>
+      <h1>About Pollster</h1>
       <div style={{ maxWidth: '500px', margin: '0 auto 0 auto' }}>
         <p>Written by Joe McIntyre, Pollster is a full stack project defined by
           FreeCodeCamp. (

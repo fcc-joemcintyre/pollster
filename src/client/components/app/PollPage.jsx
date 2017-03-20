@@ -125,13 +125,16 @@ class PollPage extends Component {
 
     return (
       <div className='app-page-content'>
-        <h1><center>{this.state.poll.title}</center></h1>
+        <h1>{this.state.poll.title}</h1>
         <div className='app-poll-items'>
           {rows}
         </div>
-        <p className='app-poll-hint'>
-          Select your favorite, the poll results will be shown after you vote.
-        </p>
+        {
+          this.state.voted ? null :
+          <p className='app-poll-hint'>
+            Select your favorite, the poll results will be shown after you vote.
+          </p>
+        }
         <div className='app-form-buttonArea'>
           {buttons}
         </div>

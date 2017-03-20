@@ -91,7 +91,7 @@ export default class ManagePage extends React.Component {
     });
     polls.unshift (
       <option key={'create'} value={'create'}>
-        {'<Create new poll>'}
+        {'<Add a new poll>'}
       </option>
     );
 
@@ -120,15 +120,15 @@ export default class ManagePage extends React.Component {
     let buttonArea;
     if (newPoll) {
       buttonArea = (
-        <div className='buttonArea'>
-          <button onClick={this.onAddPoll}>Add Poll</button>
+        <div className='app-form-buttonArea'>
+          <button className='app-form-button' onClick={this.onAddPoll}>Add Poll</button>
         </div>
       );
     } else {
       buttonArea = (
-        <div className='buttonArea'>
-          <button onClick={this.onSavePoll}>Save Poll</button>
-          <button onClick={this.onDeletePoll}>Delete Poll</button>
+        <div className='app-form-buttonArea'>
+          <button className='app-form-button' onClick={this.onSavePoll}>Save Poll</button>
+          <button className='app-form-button' onClick={this.onDeletePoll}>Delete Poll</button>
         </div>
       );
     }
@@ -136,11 +136,12 @@ export default class ManagePage extends React.Component {
     return (
       <div className='app-page-content'>
         <div className='app-manage-content'>
-          <h1><center>Manage Polls</center></h1>
-          <div className='app-manage-select'>
-            <label htmlFor='id-mypolls'>My polls</label>
+          <h1>Manage Polls</h1>
+          <div className='app-manage-box'>
+            <label className='app-manage-topLabel' htmlFor='id-mypolls'>My polls</label>
             <select
               id='id-mypolls'
+              className='app-manage-select'
               value={this.state.selected}
               autoFocus
               onChange={(e) => { this.onSelectPoll (e.target.value); }}
@@ -149,7 +150,7 @@ export default class ManagePage extends React.Component {
             </select>
           </div>
 
-          <div className='app-manage-poll'>
+          <div className='app-manage-box'>
             <h2>{newPoll ? 'Add a new poll' : 'Edit poll'}</h2>
             <div className='app-manage-section'>
               <label htmlFor='id-title' className='app-manage-label1'>Title</label>
@@ -165,50 +166,55 @@ export default class ManagePage extends React.Component {
               />
               {choices}
             </div>
-            <hr />
+            <hr className='app-manage-divider' />
             <div className='app-manage-section'>
               <div className='app-manage-subtitle'>Closing Criteria</div>
-              <label id='id-limit1' className='app-manage-label2'>
-                <input
-                  id='id-limit1'
-                  className='app-manage-input2'
-                  type='checkbox'
-                  checked={this.state.voteLimit}
-                  onChange={(e) => { this.setState ({ voteLimit: e.target.checked }); }}
+              <div className='app-manage-row'>
+                <label htmlFor='id-limit1' className='app-manage-label2'>
+                  <input
+                    id='id-limit1'
+                    className='app-manage-input2'
+                    type='checkbox'
+                    checked={this.state.voteLimit}
+                    onChange={(e) => { this.setState ({ voteLimit: e.target.checked }); }}
+                  />
+                  Vote Limit
+                </label>
+                <IntegerInput
+                  className='app-manage-maxVotes'
+                  value={this.state.maxVotes}
+                  onChange={(maxVotes) => { this.setState ({ maxVotes }); }}
                 />
-                Vote Limit
-              </label>
-              <IntegerInput
-                className='app-manage-maxVotes'
-                value={this.state.maxVotes}
-                onChange={(maxVotes) => { this.setState ({ maxVotes }); }}
-              />
-              <br />
-              <label id='id-limit2' className='app-manage-label2'>
+              </div>
+              <div className='app-manage-row'>
+                <label htmlFor='id-limit2' className='app-manage-label2'>
+                  <input
+                    id='id-limit2'
+                    className='app-manage-input2'
+                    type='checkbox'
+                    checked={this.state.dateLimit}
+                    onChange={(e) => { this.setState ({ dateLimit: e.target.checked }); }}
+                  />
+                  End Date
+                </label>
                 <input
-                  id='id-limit2'
-                  className='app-manage-input2'
-                  type='checkbox'
-                  checked={this.state.dateLimit}
-                  onChange={(e) => { this.setState ({ dateLimit: e.target.checked }); }}
+                  className='app-manage-date'
+                  value={this.state.endDate}
+                  onChange={(e) => { this.setState ({ endDate: e.target.value }); }}
                 />
-                End Date
-              </label>
-              <input
-                className='app-manage-date'
-                value={this.state.endDate}
-                onChange={(e) => { this.setState ({ endDate: e.target.value }); }}
-              />
+              </div>
             </div>
-            <hr />
+            <hr className='app-manage-divider' />
             {buttonArea}
           </div>
         </div>
         {
           (newPoll) ? null :
-          <div className='sharePoll'>
+          <div className='app-manage-sharePoll'>
             <h2>Share this Poll</h2>
-            <p>http://pollster-jm.herokuapp.com/polls/{this.state.selected}</p>
+            <p style={{ textAlign: 'center' }}>
+              https://pollster-jm.herokuapp.com/polls/{this.state.selected}
+            </p>
           </div>
         }
       </div>
@@ -239,8 +245,8 @@ ManagePage.contextTypes = {
 
 const Choice = (props) => {
   return (
-    <div>
-      <label htmlFor={props.id} className='app-manage-label1'>Choice</label>
+    <div className='app-manage-row'>
+      <label htmlFor={props.id} className='app-manage-label1'>Choice {props.index + 1}</label>
       <input
         id={props.id}
         className='app-manage-input1'
