@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+import { Link, NavLink } from 'react-router-dom';
 import { logout } from '../../store/userActions';
 
 // Header with application and common navigation
@@ -7,19 +7,19 @@ const Header = ({ loggedIn }, context) => {
   const appLinks = [];
   const titleLinks = [];
 
-  appLinks.push (<li key='a1'><IndexLink to='/' activeClassName='active'>Polls</IndexLink></li>);
+  appLinks.push (<li key='a1'><NavLink to='/' exact activeClassName='active'>Polls</NavLink></li>);
   if (loggedIn) {
-    appLinks.push (<li key='a2'><Link to='/manage' activeClassName='active'>Manage</Link></li>);
-    appLinks.push (<li key='a3'><Link to='/results' activeClassName='active'>Results</Link></li>);
-    appLinks.push (<li key='a4'><Link to='/profile' activeClassName='active'>Profile</Link></li>);
+    appLinks.push (<li key='a2'><NavLink to='/manage' activeClassName='active'>Manage</NavLink></li>);
+    appLinks.push (<li key='a3'><NavLink to='/results' activeClassName='active'>Results</NavLink></li>);
+    appLinks.push (<li key='a4'><NavLink to='/profile' activeClassName='active'>Profile</NavLink></li>);
     titleLinks.push (
       <li key='t1' onClick={() => { context.store.dispatch (logout ()); }}><Link to='/'>Logout</Link></li>
     );
   } else {
-    titleLinks.push (<li key='t2'><Link to='/register'>Register</Link></li>);
-    titleLinks.push (<li key='t3'><Link to='/login'>Login</Link></li>);
+    titleLinks.push (<li key='t2'><NavLink to='/register'>Register</NavLink></li>);
+    titleLinks.push (<li key='t3'><NavLink to='/login'>Login</NavLink></li>);
   }
-  appLinks.push (<li key='a5'><Link to='/about' activeClassName='active'>About</Link></li>);
+  appLinks.push (<li key='a5'><NavLink to='/about' activeClassName='active'>About</NavLink></li>);
 
   return (
     <div className='app-h-area'>

@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 
 class HomePage extends React.Component {
   render () {
@@ -16,7 +15,7 @@ class HomePage extends React.Component {
           <div
             key={polls[i]._id}
             className={(i % 2 === 0) ? 'app-home-poll app-home-even' : 'app-home-poll app-home-odd'}
-            onClick={() => { this.props.router.push (`/polls/${polls[i]._id}`); }}
+            onClick={() => { this.props.history.push (`/polls/${polls[i]._id}`); }}
           >
             <span className='app-home-name'>{polls[i].title}</span>
             <span className='app-home-votes'>{totalVotes} votes</span>
@@ -55,7 +54,7 @@ const mapStateToProps = (state) => {
   });
 };
 
-export default connect (mapStateToProps) (withRouter (HomePage));
+export default connect (mapStateToProps) (HomePage);
 
 HomePage.propTypes = {
   authenticated: PropTypes.bool.isRequired,
@@ -66,7 +65,7 @@ HomePage.propTypes = {
       votes: PropTypes.number.isRequired,
     })).isRequired,
   })).isRequired,
-  router: PropTypes.shape ({
+  history: PropTypes.shape ({
     push: PropTypes.func.isRequired,
   }).isRequired,
 };

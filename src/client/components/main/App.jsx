@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Header from './Header.jsx';
 import configureStore from '../../store/configureStore';
@@ -24,24 +24,7 @@ store.dispatch (verifyLogin ())
 .then (() => {
   store.dispatch (initPolls ())
   .then (() => {
-    // setup router (react-router) with browserHistory
-    /* eslint no-use-before-define: off */
-    render (
-      <Router history={browserHistory}>
-        <Route path='/' component={App}>
-          <IndexRoute component={HomePage} />
-          <Route path='register' component={RegisterPage} />
-          <Route path='login' component={LoginPage} />
-          <Route path='profile' component={ProfilePage} onEnter={requireAuth} />
-          <Route path='polls/:_id' component={PollPage} />
-          <Route path='manage' component={ManagePage} onEnter={requireAuth} />
-          <Route path='results' component={ResultPage} onEnter={requireAuth} />
-          <Route path='about' component={AboutPage} />
-          <Route path='*' component={NotFoundPage} />
-        </Route>
-      </Router>,
-      document.getElementById ('app')
-    );
+    render (<App />, document.getElementById ('app'));
   });
 });
 
@@ -73,20 +56,28 @@ export default class App extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <div className='app-page'>
-          <Header loggedIn={this.state.authenticated} />
-          <div className='app-page-contentArea'>
-            {this.props.children}
+        <BrowserRouter>
+          <div className='app-page'>
+            <Header loggedIn={this.state.authenticated} />
+            <div className='app-page-contentArea'>
+              <Switch>
+                <Route exact path='/' component={HomePage} />
+                <Route path='/register' component={RegisterPage} />
+                <Route path='/login' component={LoginPage} />
+                <Route path='/profile' component={ProfilePage} onEnter={requireAuth} />
+                <Route path='/polls/:_id' component={PollPage} />
+                <Route path='/manage' component={ManagePage} onEnter={requireAuth} />
+                <Route path='/results' component={ResultPage} onEnter={requireAuth} />
+                <Route path='/about' component={AboutPage} />
+                <Route path='*' component={NotFoundPage} />
+              </Switch>
+            </div>
           </div>
-        </div>
+        </BrowserRouter>
       </Provider>
     );
   }
 }
-
-App.propTypes = {
-  children: React.PropTypes.node.isRequired,
-};
 
 // When a route requires an authenticated user, set onEnter to this
 // method. If no authenticated user, change the route to the login

@@ -1,6 +1,5 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import RegisterForm from './RegisterForm.jsx';
 import { register, login } from '../../store/userActions';
 import { createField, preValidate, updateFieldValue, updateFieldValidation, validateAll } from '../util/formHelpers';
@@ -8,7 +7,7 @@ import { isNotEmpty, isValidPassword } from '../util/validators';
 
 const defaultText = 'Enter profile information';
 
-class RegisterPage extends React.Component {
+class RegisterPage extends Component {
   constructor (props, context) {
     super (props, context);
     this.duplicate = false;
@@ -71,7 +70,7 @@ class RegisterPage extends React.Component {
       .then (() => {
         this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value))
         .then (() => {
-          this.props.router.replace ('/');
+          this.props.history.replace ('/');
         })
         .catch (() => {
           this.setState (() => { return { message: { status: 'error', text: 'Registered, but could not login' } }; });
@@ -104,10 +103,11 @@ class RegisterPage extends React.Component {
   }
 }
 
-export default connect (null) (withRouter (RegisterPage));
+export default connect (null) (RegisterPage);
 
-/* eslint react/forbid-prop-types: off */
 RegisterPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  router: React.PropTypes.object.isRequired,
+  history: PropTypes.shape ({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
 };

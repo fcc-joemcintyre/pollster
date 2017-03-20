@@ -1,12 +1,11 @@
-import React from 'react';
-import { withRouter } from 'react-router';
+import React, { Component, PropTypes } from 'react';
 import { getPoll } from '../../store/polls';
 import { vote } from '../../store/pollsActions';
 
-class PollPage extends React.Component {
+class PollPage extends Component {
   constructor (props, context) {
     super (props, context);
-    let _id = this.props.params._id;
+    let _id = this.props.match.params._id;
     const poll = getPoll (context.store.getState (), _id);
     if (poll === null) {
       _id = -1;
@@ -47,7 +46,7 @@ class PollPage extends React.Component {
   render () {
     if (this.state.poll === null) {
       return (
-        <form className='messageForm' onSubmit={() => { this.props.router.push ('/'); }}>
+        <form className='messageForm' onSubmit={() => { this.props.history.push ('/'); }}>
           <p>Sorry, could not find that poll for you.</p>
           <button type='submit'>Back to Polls</button>
         </form>
@@ -118,7 +117,7 @@ class PollPage extends React.Component {
       <button
         key='button2'
         className='app-form-button'
-        onClick={() => { this.props.router.push ('/'); }}
+        onClick={() => { this.props.history.push ('/'); }}
       >
         Back to Polls
       </button>
@@ -141,14 +140,19 @@ class PollPage extends React.Component {
   }
 }
 
-export default withRouter (PollPage);
+export default PollPage;
 
-/* eslint react/forbid-prop-types: off */
 PollPage.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  router: React.PropTypes.object.isRequired,
+  match: PropTypes.shape ({
+    params: PropTypes.shape ({
+      _id: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+  history: PropTypes.shape ({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 PollPage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
+  store: PropTypes.object.isRequired,
 };

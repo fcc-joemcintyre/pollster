@@ -1,5 +1,4 @@
-import React, { PropTypes } from 'react';
-import { withRouter } from 'react-router';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import LoginForm from './LoginForm.jsx';
 import { login } from '../../store/userActions';
@@ -7,7 +6,7 @@ import { createField, updateFieldValue } from '../util/formHelpers';
 
 const defaultText = 'Enter login information';
 
-class LoginPage extends React.Component {
+class LoginPage extends Component {
   constructor (props, context) {
     super (props, context);
     this.state = {
@@ -40,9 +39,9 @@ class LoginPage extends React.Component {
       .then (() => {
         this.setState (() => { return { message: { status: 'ok', text: 'Logged in' } }; });
         if (this.props.location.state && this.props.location.state.nextPathname) {
-          this.props.router.replace (this.props.location.state.nextPathname);
+          this.props.history.replace (this.props.location.state.nextPathname);
         } else {
-          this.props.router.replace ('/');
+          this.props.history.replace ('/');
         }
       })
       .catch (() => {
@@ -65,11 +64,16 @@ class LoginPage extends React.Component {
   }
 }
 
-export default connect (null) (withRouter (LoginPage));
+export default connect (null) (LoginPage);
 
-/* eslint react/forbid-prop-types: off */
 LoginPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  location: React.PropTypes.object.isRequired,
-  router: React.PropTypes.object.isRequired,
+  location: PropTypes.shape ({
+    state: PropTypes.shape ({
+      nextPathname: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape ({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
 };

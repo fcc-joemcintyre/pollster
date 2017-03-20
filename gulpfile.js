@@ -20,6 +20,7 @@ const dependencies = [
   'react-dom',
   'react-redux',
   'react-router',
+  'react-router-dom',
   'redux',
   'redux-thunk',
   'whatwg-fetch',
