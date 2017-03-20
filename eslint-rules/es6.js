@@ -9,6 +9,7 @@ module.exports = {
     'ecmaFeatures': {
       'generators': false,
       'objectLiteralDuplicateProperties': false,
+      'experimentalObjectRestSpread': true,
     },
   },
 

@@ -1,7 +1,7 @@
 import 'babel-polyfill';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Header from './Header.jsx';
 import configureStore from '../../store/configureStore';
@@ -64,10 +64,10 @@ export default class App extends React.Component {
                 <Route exact path='/' component={HomePage} />
                 <Route path='/register' component={RegisterPage} />
                 <Route path='/login' component={LoginPage} />
-                <Route path='/profile' component={ProfilePage} onEnter={requireAuth} />
+                <RouteUser path='/profile' component={ProfilePage} />
                 <Route path='/polls/:_id' component={PollPage} />
-                <Route path='/manage' component={ManagePage} onEnter={requireAuth} />
-                <Route path='/results' component={ResultPage} onEnter={requireAuth} />
+                <RouteUser path='/manage' component={ManagePage} />
+                <RouteUser path='/results' component={ResultPage} />
                 <Route path='/about' component={AboutPage} />
                 <Route path='*' component={NotFoundPage} />
               </Switch>
@@ -79,16 +79,24 @@ export default class App extends React.Component {
   }
 }
 
-// When a route requires an authenticated user, set onEnter to this
-// method. If no authenticated user, change the route to the login
-// route, then continue to the original route.
-function requireAuth (nextState, replace) {
-  if (store.getState ().user.authenticated === false) {
-    replace ({
-      pathname: '/login',
-      state: {
-        nextPathname: nextState.location.pathname,
-      },
-    });
-  }
-}
+const RouteUser = ({ component, ...rest }) => {
+  return (<Route
+    {...rest} render={(props) => {
+      if (store.getState ().user.authenticated) {
+        return React.createElement (component, props);
+      } else {
+        return (<Redirect
+          to={{
+            pathname: '/login',
+            state: { from: props.location },
+          }}
+        />);
+      }
+    }}
+  />);
+};
+
+RouteUser.propTypes = {
+  component: PropTypes.func.isRequired,
+  location: PropTypes.shape ({}),
+};

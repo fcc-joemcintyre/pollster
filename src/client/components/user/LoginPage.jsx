@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import LoginForm from './LoginForm.jsx';
 import { login } from '../../store/userActions';
 import { createField, updateFieldValue } from '../util/formHelpers';
@@ -15,6 +16,7 @@ class LoginPage extends Component {
         username: createField ('username', '', []),
         password: createField ('password', '', []),
       },
+      redirectToReferrer: false,
     };
 
     this.onChange = this.onChange.bind (this);
@@ -37,12 +39,7 @@ class LoginPage extends Component {
       this.setState (() => { return { message: { status: 'working', text: 'Logging in' } }; });
       this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value))
       .then (() => {
-        this.setState (() => { return { message: { status: 'ok', text: 'Logged in' } }; });
-        if (this.props.location.state && this.props.location.state.nextPathname) {
-          this.props.history.replace (this.props.location.state.nextPathname);
-        } else {
-          this.props.history.replace ('/');
-        }
+        this.setState (() => { return { message: { status: 'ok', text: 'Logged in' }, redirectToReferrer: true }; });
       })
       .catch (() => {
         this.setState (() => { return { message: { status: 'error', text: 'Error logging in, check values' } }; });
@@ -53,6 +50,11 @@ class LoginPage extends Component {
   }
 
   render () {
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    if (this.state.redirectToReferrer) {
+      return <Redirect to={from} />;
+    }
+
     return (
       <LoginForm
         message={this.state.message}
@@ -70,10 +72,7 @@ LoginPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   location: PropTypes.shape ({
     state: PropTypes.shape ({
-      nextPathname: PropTypes.string,
+      from: PropTypes.string,
     }),
-  }).isRequired,
-  history: PropTypes.shape ({
-    replace: PropTypes.func.isRequired,
   }).isRequired,
 };
