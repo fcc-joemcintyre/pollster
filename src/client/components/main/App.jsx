@@ -7,6 +7,7 @@ import Header from './Header.jsx';
 import configureStore from '../../store/configureStore';
 import { verifyLogin } from '../../store/userActions';
 import { initPolls } from '../../store/pollsActions';
+import ScrollToTop from '../ui/ScrollToTop.jsx';
 
 import HomePage from '../app/HomePage.jsx';
 import RegisterPage from '../user/RegisterPage.jsx';
@@ -57,22 +58,24 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <div className='app-page'>
-            <Header loggedIn={this.state.authenticated} />
-            <div className='app-page-contentArea'>
-              <Switch>
-                <Route exact path='/' component={HomePage} />
-                <Route path='/register' component={RegisterPage} />
-                <Route path='/login' component={LoginPage} />
-                <RouteUser path='/profile' component={ProfilePage} />
-                <Route path='/polls/:_id' component={PollPage} />
-                <RouteUser path='/manage' component={ManagePage} />
-                <RouteUser path='/results' component={ResultPage} />
-                <Route path='/about' component={AboutPage} />
-                <Route path='*' component={NotFoundPage} />
-              </Switch>
+          <ScrollToTop>
+            <div className='app-page'>
+              <Header loggedIn={this.state.authenticated} />
+              <div className='app-page-contentArea'>
+                <Switch>
+                  <Route exact path='/' component={HomePage} />
+                  <Route path='/register' component={RegisterPage} />
+                  <Route path='/login' component={LoginPage} />
+                  <RouteUser path='/profile' component={ProfilePage} />
+                  <Route path='/polls/:_id' component={PollPage} />
+                  <RouteUser path='/manage' component={ManagePage} />
+                  <RouteUser path='/results' component={ResultPage} />
+                  <Route path='/about' component={AboutPage} />
+                  <Route path='*' component={NotFoundPage} />
+                </Switch>
+              </div>
             </div>
-          </div>
+          </ScrollToTop>
         </BrowserRouter>
       </Provider>
     );
