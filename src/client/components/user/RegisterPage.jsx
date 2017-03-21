@@ -79,6 +79,8 @@ class RegisterPage extends Component {
       .catch (() => {
         this.setState (() => { return { message: { status: 'error', text: 'Error registering, try again' } }; });
       });
+    } else {
+      this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }
   }
 
