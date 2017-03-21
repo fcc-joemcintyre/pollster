@@ -43,7 +43,7 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
               onBlur={() => { onValidate (name); }}
             />
             {
-              name.error ?
+              name.touched && name.error ?
                 <div className='app-form-hint' style={{ color: 'red' }}>Max length is 40 characters</div> :
                 <div className='app-form-hint'>Your full name</div>
             }
@@ -63,7 +63,7 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
               onBlur={() => { onValidate (email); }}
             />
             {
-              email.error ?
+              email.touched && email.error ?
                 <div className='app-form-hint' style={{ color: 'red' }}>Invalid email address</div> :
                 <div className='app-form-hint'>Your email address</div>
             }

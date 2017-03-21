@@ -57,8 +57,10 @@ class ProfilePage extends React.Component {
         this.setState ({ message: { status: 'ok', text: 'Profile updated' } });
       })
       .catch (() => {
-        this.setState ({ message: { color: 'red', text: 'Error saving profile information' } });
+        this.setState ({ message: { status: 'error', text: 'Error saving profile information' } });
       });
+    } else {
+      this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }
   }
 

@@ -6,6 +6,7 @@ export function createField (name, initialValue, validators) {
     name,
     initialValue,
     value: initialValue,
+    touched: false,
     validators,
     error: null,
   };
@@ -34,7 +35,10 @@ export function updateFieldValidation (field) {
   return function updateError (prev) {
     return ({
       fields: Object.assign (prev.fields, {
-        [field.name]: Object.assign ({}, prev.fields[field.name], { error: validateField (field) }),
+        [field.name]: Object.assign ({}, prev.fields[field.name], {
+          touched: true,
+          error: validateField (field),
+        }),
       }),
     });
   };
@@ -47,6 +51,7 @@ export function getResetObject (field) {
       fields: Object.assign (prev.fields, {
         [field.name]: Object.assign ({}, prev.fields[field.name], {
           value: prev.fields[field.name].initialValue,
+          touched: false,
           error: validateField (field) }),
       }),
     });
@@ -87,6 +92,7 @@ export function resetAll (prevState) {
   Object.keys (prevState.fields).forEach ((field) => {
     updates = Object.assign (updates, { [field]: {
       value: prevState.fields[field].initialValue,
+      touched: false,
       error: validate (prevState.fields[field].validators, prevState.fields[field].initialValue),
     } });
   });
@@ -98,6 +104,7 @@ export const fieldPropTypes = {
   name: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  touched: PropTypes.bool.isRequired,
   validators: PropTypes.arrayOf (PropTypes.shape ({ fn: PropTypes.func, text: PropTypes.string })).isRequired,
   error: PropTypes.string,
 };

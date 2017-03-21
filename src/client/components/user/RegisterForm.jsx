@@ -46,7 +46,7 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
               onBlur={() => { onValidate (username); }}
             />
             {
-              username.error ?
+              username.touched && username.error ?
                 <div className='app-form-hint' style={{ color: 'red' }}>{username.error}</div> :
                 <div className='app-form-hint'>Up to 20 letters/digits, no spaces</div>
             }
@@ -65,7 +65,7 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
               onBlur={() => { onValidate (password); onValidate (verifyPassword); }}
             />
             {
-              password.error ?
+              password.touched && password.error ?
                 <div className='app-form-hint' style={{ color: 'red' }}>{password.error}</div> :
                 <div className='app-form-hint'>Your password</div>
             }
@@ -84,7 +84,7 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
               onBlur={() => { onValidate (verifyPassword); onValidate (password); }}
             />
             {
-              verifyPassword.error ?
+              verifyPassword.touched && verifyPassword.error ?
                 <div className='app-form-hint' style={{ color: 'red' }}>{verifyPassword.error}</div> :
                 <div className='app-form-hint'>Verify your password</div>
             }
