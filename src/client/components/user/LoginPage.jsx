@@ -72,7 +72,7 @@ LoginPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   location: PropTypes.shape ({
     state: PropTypes.shape ({
-      from: PropTypes.string,
+      from: PropTypes.shape ({}),
     }),
   }).isRequired,
 };
