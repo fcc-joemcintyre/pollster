@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { getPoll } from '../../store/polls';
+import { connect } from 'react-redux';
 import { vote } from '../../store/pollsActions';
 
 class PollPage extends Component {
-  constructor (props, context) {
-    super (props, context);
-    let _id = this.props.match.params._id;
-    const poll = getPoll (context.store.getState (), _id);
-    if (poll === null) {
-      _id = -1;
-    }
+  constructor (props) {
+    super (props);
+    const _id = this.props.match.params._id;
+    const poll = props.polls.find ((p) => { return (p._id === _id); });
     this.state = {
       _id,
       poll,
@@ -20,35 +17,32 @@ class PollPage extends Component {
     this.handleVote = this.handleVote.bind (this);
   }
 
-  componentWillMount () {
-    this.unsubscribe = this.context.store.subscribe (() => {
-      const poll = getPoll (this.context.store.getState (), this.state._id);
-      if (this.state.poll !== poll) {
-        this.setState ({ poll });
-      }
-    });
-  }
-
-  componentWillUnmount () {
-    this.unsubscribe ();
-  }
-
   handleVote () {
     if (this.state.selected !== -1) {
       const poll = Object.assign ({}, this.state.poll);
       const choice = poll.choices[this.state.selected];
       choice.votes += 1;
-      this.setState ({ voted: true, poll });
-      this.context.store.dispatch (vote (this.state.poll._id, choice.text));
+      this.setState (() => { return { voted: true, poll }; });
+      this.props.dispatch (vote (this.state.poll._id, choice.text));
     }
   }
 
   render () {
-    if (this.state.poll === null) {
+    if (! this.state.poll) {
       return (
-        <form className='messageForm' onSubmit={() => { this.props.history.push ('/'); }}>
-          <p>Sorry, could not find that poll for you.</p>
-          <button type='submit'>Back to Polls</button>
+        <form
+          className='app-page-content'
+          onSubmit={(e) => {
+            e.preventDefault ();
+            this.props.history.push ('/');
+          }}
+        >
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <p>Sorry, could not find that poll for you.</p>
+            <button className='app-form-button' autoFocus>
+              Back to Polls
+            </button>
+          </div>
         </form>
       );
     }
@@ -67,9 +61,7 @@ class PollPage extends Component {
           <div key={key} className='app-poll-votedItemArea'>
             <div
               className='app-poll-votedItemBar'
-              style={{
-                width: `${this.state.transition ? percent : 0}%`,
-              }}
+              style={{ width: `${this.state.transition ? percent : 0}%` }}
             />
             <span className='app-poll-votedItemName'>{text}</span>
             <span className='app-poll-votedItemPercent'>{percent}%</span>
@@ -143,9 +135,16 @@ class PollPage extends Component {
   }
 }
 
-export default PollPage;
+const mapStateToProps = (state) => {
+  return ({
+    polls: state.polls,
+  });
+};
+
+export default connect (mapStateToProps) (PollPage);
 
 PollPage.propTypes = {
+  polls: PropTypes.arrayOf (PropTypes.shape ()).isRequired,
   match: PropTypes.shape ({
     params: PropTypes.shape ({
       _id: PropTypes.string.isRequired,
@@ -154,8 +153,5 @@ PollPage.propTypes = {
   history: PropTypes.shape ({
     push: PropTypes.func.isRequired,
   }).isRequired,
-};
-
-PollPage.contextTypes = {
-  store: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
