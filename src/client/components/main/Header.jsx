@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { logout } from '../../store/userActions';
 
 // Header with application and common navigation
-const Header = ({ loggedIn }, context) => {
+const Header = (props) => {
   const appLinks = [];
   const titleLinks = [];
 
   appLinks.push (<li key='a1'><NavLink to='/' exact activeClassName='active'>Polls</NavLink></li>);
-  if (loggedIn) {
+  if (props.authenticated) {
     appLinks.push (<li key='a2'><NavLink to='/manage' activeClassName='active'>Manage</NavLink></li>);
     appLinks.push (<li key='a3'><NavLink to='/results' activeClassName='active'>Results</NavLink></li>);
     appLinks.push (<li key='a4'><NavLink to='/profile' activeClassName='active'>Profile</NavLink></li>);
     titleLinks.push (
-      <li key='t1' onClick={() => { context.store.dispatch (logout ()); }}><Link to='/'>Logout</Link></li>
+      <li key='t1' onClick={() => { props.dispatch (logout ()); }}><Link to='/'>Logout</Link></li>
     );
   } else {
     titleLinks.push (<li key='t2'><NavLink to='/register'>Register</NavLink></li>);
@@ -38,12 +39,15 @@ const Header = ({ loggedIn }, context) => {
   );
 };
 
-export default Header;
-
-Header.propTypes = {
-  loggedIn: React.PropTypes.bool.isRequired,
+const mapStateToProps = ({ user }) => {
+  return ({
+    authenticated: user.authenticated,
+  });
 };
 
-Header.contextTypes = {
-  store: React.PropTypes.object.isRequired,
+export default connect (mapStateToProps) (Header);
+
+Header.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };

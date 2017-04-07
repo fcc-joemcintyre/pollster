@@ -50,7 +50,7 @@ class App extends Component {
       <BrowserRouter>
         <ScrollToTop>
           <div className='app-page'>
-            <Header loggedIn={this.props.authenticated} />
+            <Header />
             <div className='app-page-contentArea'>
               <Switch>
                 <Route exact path='/' component={HomePage} />
