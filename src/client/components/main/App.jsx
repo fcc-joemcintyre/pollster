@@ -1,14 +1,14 @@
 import 'babel-polyfill';
-import React, { PropTypes } from 'react';
-import { render } from 'react-dom';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import AuthRoute from './AuthRoute.jsx';
 import Header from './Header.jsx';
-import configureStore from '../../store/configureStore';
 import { verifyLogin } from '../../store/userActions';
 import { initPolls } from '../../store/pollsActions';
 import ScrollToTop from '../ui/ScrollToTop.jsx';
 
+import LoadingPage from './LoadingPage.jsx';
 import HomePage from '../app/HomePage.jsx';
 import RegisterPage from '../user/RegisterPage.jsx';
 import LoginPage from '../user/LoginPage.jsx';
@@ -19,87 +19,67 @@ import ManagePage from '../app/ManagePage.jsx';
 import ResultPage from '../app/ResultPage.jsx';
 import AboutPage from '../app/AboutPage.jsx';
 
-// initialize store
-const store = configureStore ();
-store.dispatch (verifyLogin ())
-.then (() => {
-  store.dispatch (initPolls ())
-  .then (() => {
-    render (<App />, document.getElementById ('app'));
-  });
-});
-
 // main class for application
-export default class App extends React.Component {
+class App extends Component {
   constructor (props) {
     super (props);
     this.state = {
-      authenticated: store.getState ().user.authenticated,
+      loading: true,
+      message: 'Loading ...',
     };
   }
 
-  // on mount, subscribe to listen for authentication status changes
-  componentWillMount () {
-    this.unsubscribe = store.subscribe (() => {
-      const authenticated = store.getState ().user.authenticated;
-      if (this.state.authenticated !== authenticated) {
-        this.setState ({ authenticated });
-      }
+  componentDidMount () {
+    Promise.resolve ().then (() => {
+      return this.props.dispatch (verifyLogin ());
+    }).then (() => {
+      return this.props.dispatch (initPolls ());
+    }).then (() => {
+      this.setState (() => { return { loading: false, message: '' }; });
+    }).catch (() => {
+      this.setState (() => { return { loading: false, message: 'Network error, try again.' }; });
     });
   }
 
-  // before unmount, remove store listener
-  componentWillUnmount () {
-    this.unsubscribe ();
-  }
-
-  // set up store top level element and header for all pages
   render () {
+    if (this.state.loading) {
+      return <LoadingPage message={this.state.message} />;
+    }
+
     return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <ScrollToTop>
-            <div className='app-page'>
-              <Header loggedIn={this.state.authenticated} />
-              <div className='app-page-contentArea'>
-                <Switch>
-                  <Route exact path='/' component={HomePage} />
-                  <Route path='/register' component={RegisterPage} />
-                  <Route path='/login' component={LoginPage} />
-                  <RouteUser path='/profile' component={ProfilePage} />
-                  <Route path='/polls/:_id' component={PollPage} />
-                  <RouteUser path='/manage' component={ManagePage} />
-                  <RouteUser path='/results' component={ResultPage} />
-                  <Route path='/about' component={AboutPage} />
-                  <Route path='*' component={NotFoundPage} />
-                </Switch>
-              </div>
+      <BrowserRouter>
+        <ScrollToTop>
+          <div className='app-page'>
+            <Header loggedIn={this.props.authenticated} />
+            <div className='app-page-contentArea'>
+              <Switch>
+                <Route exact path='/' component={HomePage} />
+                <Route path='/register' component={RegisterPage} />
+                <Route path='/login' component={LoginPage} />
+                <AuthRoute path='/profile' authenticated={this.props.authenticated} component={ProfilePage} />
+                <Route path='/polls/:_id' component={PollPage} />
+                <AuthRoute path='/manage' authenticated={this.props.authenticated} component={ManagePage} />
+                <AuthRoute path='/results' authenticated={this.props.authenticated} component={ResultPage} />
+                <Route path='/about' component={AboutPage} />
+                <Route path='*' component={NotFoundPage} />
+              </Switch>
             </div>
-          </ScrollToTop>
-        </BrowserRouter>
-      </Provider>
+          </div>
+        </ScrollToTop>
+      </BrowserRouter>
     );
   }
 }
 
-const RouteUser = ({ component, ...rest }) => {
-  return (<Route
-    {...rest} render={(props) => {
-      if (store.getState ().user.authenticated) {
-        return React.createElement (component, props);
-      } else {
-        return (<Redirect
-          to={{
-            pathname: '/login',
-            state: { from: props.location },
-          }}
-        />);
-      }
-    }}
-  />);
+const mapStateToProps = ({ user }) => {
+  return ({
+    authenticated: user.authenticated,
+  });
 };
 
-RouteUser.propTypes = {
-  component: PropTypes.func.isRequired,
-  location: PropTypes.shape ({}),
+export default connect (mapStateToProps) (App);
+
+App.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
