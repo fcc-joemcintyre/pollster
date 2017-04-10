@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export default class IntegerInput extends React.Component {
+export default class IntegerInput extends Component {
   constructor (props) {
     super (props);
     this.format = this.format.bind (this);
@@ -89,9 +90,9 @@ function extract (value) {
 }
 
 IntegerInput.propTypes = {
-  separator: React.PropTypes.string,
-  value: React.PropTypes.number.isRequired,
-  onChange: React.PropTypes.func.isRequired,
+  separator: PropTypes.string,
+  value: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 IntegerInput.defaultProps = {

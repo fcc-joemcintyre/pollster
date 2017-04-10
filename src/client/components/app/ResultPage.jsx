@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-class ResultPage extends React.Component {
+class ResultPage extends Component {
   constructor (props) {
     super (props);
     this.polls = props.polls.filter ((poll) => { return poll.creator === props.username; });

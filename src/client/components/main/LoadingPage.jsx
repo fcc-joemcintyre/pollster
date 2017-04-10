@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const LoadingPage = ({ message }) => {
   return (
@@ -20,5 +21,5 @@ const LoadingPage = ({ message }) => {
 export default LoadingPage;
 
 LoadingPage.propTypes = {
-  message: React.PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
 };

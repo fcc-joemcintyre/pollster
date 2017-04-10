@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 // constructor function to create a new field
 export function createField (name, initialValue, validators) {

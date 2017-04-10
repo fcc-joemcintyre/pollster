@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-class HomePage extends React.Component {
+class HomePage extends Component {
   render () {
     const polls = this.props.polls;
     let rows;

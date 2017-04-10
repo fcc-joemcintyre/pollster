@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProfileForm from './ProfileForm.jsx';
 import { updateProfile } from '../../store/userActions';
@@ -7,7 +8,7 @@ import { isLengthValid, isEmptyOrValidEmail } from '../util/validators';
 
 const defaultText = 'Enter profile information';
 
-class ProfilePage extends React.Component {
+class ProfilePage extends Component {
   constructor (props, context) {
     super (props, context);
     const fields = {

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
 import IntegerInput from '../ui/IntegerInput.jsx';
@@ -15,7 +16,7 @@ function getDefaults () {
   };
 }
 
-class ManagePage extends React.Component {
+class ManagePage extends Component {
   constructor (props) {
     super (props);
     const polls = props.polls.filter ((poll) => { return poll.creator === props.username; });

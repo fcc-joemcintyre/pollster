@@ -3,8 +3,9 @@
 Internet polls done easy. Create an account, create some polls, manage your polls,
 vote on other people's polls, see your poll results !
 
-This application is built using *React (15.x)*, *Redux* and *react-router* on
-the client. The server uses *Node (6.x)* and *Express (4.14.x)*.
+This application is built using *React (15.x)*, *React-Redux (5.x)* and
+*React-Router (4.x)* on the client. The server uses *Node (6.x)* and
+*Express (4.15.x)*.
 
 ## Live instance
 
@@ -12,12 +13,23 @@ The application can be used at https://pollster-jm.herokuapp.com
 
 ## Development setup
 
-Clone the *Github* repo, then install the dependencies using *npm*.
+Clone the *Github* repo, and switch to the project directory.
 
 ```
 git clone https://github.com/fcc-joemcintyre/pollster.git
 cd pollster
+```
+
+Then install the dependencies using *npm* or *yarn*.
+
+```
 npm install
+```
+
+or
+
+```
+yarn
 ```
 
 The database supported is *MongoDB*. This can be a local or hosted instance (you

@@ -16,6 +16,7 @@ const sourcemaps = require ('gulp-sourcemaps');
 
 const dependencies = [
   'babel-polyfill',
+  'prop-types',
   'react',
   'react-dom',
   'react-redux',
@@ -82,7 +83,6 @@ gulp.task ('vendor-dev', function () {
     .bundle ()
     .pipe (source ('vendor.bundle.js'))
     .pipe (buffer ())
-    .pipe (uglify ({ mangle: false }))
     .pipe (gulp.dest (`${base}/public/js`));
 });
 
