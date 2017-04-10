@@ -17,8 +17,8 @@ const Header = (props) => {
       <li key='t1' onClick={() => { props.dispatch (logout ()); }}><Link to='/'>Logout</Link></li>
     );
   } else {
-    titleLinks.push (<li key='t2'><NavLink to='/register'>Register</NavLink></li>);
-    titleLinks.push (<li key='t3'><NavLink to='/login'>Login</NavLink></li>);
+    titleLinks.push (<li key='t2'><NavLink to='/register' activeClassName='active'>Register</NavLink></li>);
+    titleLinks.push (<li key='t3'><NavLink to='/login' activeClassName='active'>Login</NavLink></li>);
   }
   appLinks.push (<li key='a5'><NavLink to='/about' activeClassName='active'>About</NavLink></li>);
 
@@ -45,7 +45,7 @@ const mapStateToProps = ({ user }) => {
   });
 };
 
-export default connect (mapStateToProps) (Header);
+export default connect (mapStateToProps, null, null, { pure: false }) (Header);
 
 Header.propTypes = {
   authenticated: PropTypes.bool.isRequired,

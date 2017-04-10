@@ -39,10 +39,15 @@
 
   li a {
     display: block;
-    color: black;
+    color: #555555;
     text-align: center;
-    padding: 4px 6px 4px 6px;
+    padding: 4px 6px 0px 6px;
     text-decoration: none;
+  }
+
+  li a.active {
+    color: black;
+    border-bottom: 2px solid darkgray;
   }
 }
 
@@ -65,18 +70,18 @@
 
   li {
     float: left;
+  }
 
-    a {
-      display: block;
-      color: #555555;
-      text-align: center;
-      padding: 0px 6px 0px 6px;
-      text-decoration: none;
-    }
+  li a {
+    display: block;
+    color: #555555;
+    text-align: center;
+    padding: 0px 6px 0px 6px;
+    text-decoration: none;
+  }
 
-    a.active {
-      color: black;
-      border-bottom: 2px solid darkgray;
-    }
+  li a.active {
+    color: black;
+    border-bottom: 2px solid darkgray;
   }
 }
