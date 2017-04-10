@@ -1,22 +1,26 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-export default class ResultPage extends React.Component {
-  constructor (props, context) {
-    super (props, context);
-    const polls = context.store.getState ().polls;
+class ResultPage extends React.Component {
+  constructor (props) {
+    super (props);
+    this.polls = props.polls.filter ((poll) => { return poll.creator === props.username; });
+    this.options = this.polls.map ((poll) => {
+      return (
+        <option className='app-results-option' key={poll._id} value={poll._id}>
+          {poll.title}
+        </option>
+      );
+    });
+
     this.state = {
-      selected: (polls.length > 0) ? 0 : -1,
+      selected: (this.polls.length === 0) ? 0 : this.polls[0]._id,
     };
   }
 
   render () {
-    const store = this.context.store.getState ();
-    const myPolls = store.polls.filter ((poll) => {
-      return (poll.creator === store.user.username);
-    });
-
-    // if no active polls for user, display message
-    if (myPolls.length === 0) {
+    // if no polls for user, display message
+    if (this.polls.length === 0) {
       return (
         <div className='app-page-content'>
           <h1>Poll Results</h1>
@@ -25,39 +29,25 @@ export default class ResultPage extends React.Component {
       );
     }
 
-    const polls = [];
-    for (let i = 0; i < myPolls.length; i ++) {
-      polls.push (
-        <option className='app-results-option' key={i} value={i}>
-          {myPolls[i].title}
-        </option>
+    const currentPoll = this.polls.find ((poll) => { return poll._id === this.state.selected; });
+    const totalVotes = currentPoll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
+    const choices = currentPoll.choices.map ((choice) => {
+      const text = <span className='app-results-name'>{choice.text}</span>;
+      const percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);
+      const percentText = <span className='app-results-votes'>{percent}%</span>;
+      const color = 'lightsteelblue';
+      const c = '-webkit-linear-gradient';
+      const grad = `${c}(left, ${color} 0%, ${color} ${percent}%, #F0F8FF ${percent}%, #F0F8FF)`;
+      return (
+        <div
+          key={choice.text}
+          className={'app-results-poll'}
+          style={{ background: grad, border: '1px solid #EEEEEE' }}
+        >
+          {text}{percentText}
+        </div>
       );
-    }
-
-    const choices = [];
-    let totalVotes = 0;
-    if (this.state.selected >= 0) {
-      const currentPoll = myPolls[this.state.selected];
-      totalVotes = currentPoll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
-      for (let i = 0; i < currentPoll.choices.length; i ++) {
-        const choice = currentPoll.choices[i];
-        const text = <span className='app-results-name'>{choice.text}</span>;
-        const percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);
-        const percentText = <span className='app-results-votes'>{percent}%</span>;
-        const color = 'lightsteelblue';
-        const c = '-webkit-linear-gradient';
-        const grad = `${c}(left, ${color} 0%, ${color} ${percent}%, #F0F8FF ${percent}%, #F0F8FF)`;
-        choices.push (
-          <div
-            key={i}
-            className={'app-results-poll'}
-            style={{ background: grad, border: '1px solid #EEEEEE' }}
-          >
-            {text}{percentText}
-          </div>
-        );
-      }
-    }
+    });
 
     return (
       <div className='app-page-content'>
@@ -66,18 +56,18 @@ export default class ResultPage extends React.Component {
           <div className='app-results-label'>My Polls</div>
           <select
             className='app-results-select'
-            value={this.state.selected}
             size={5}
             autoFocus
+            value={this.state.selected}
             onChange={(e) => { this.setState ({ selected: e.target.value }); }}
           >
-            {polls}
+            {this.options}
           </select>
         </div>
         <div className='app-results-displayArea'>
           <div className='app-results-label'>Poll Results</div>
           <div className='app-results-display'>
-            <div className='app-results-title'>{(this.state.selected !== -1) ? myPolls[this.state.selected].title : ''}</div>
+            <div className='app-results-title'>{currentPoll.title}</div>
             <p className='app-results-totalVotes'>Total Votes: {totalVotes}</p>
             {choices}
           </div>
@@ -87,6 +77,22 @@ export default class ResultPage extends React.Component {
   }
 }
 
-ResultPage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
+const mapStateToProps = (state) => {
+  return ({
+    username: state.user.username,
+    polls: state.polls,
+  });
+};
+
+export default connect (mapStateToProps) (ResultPage);
+
+ResultPage.propTypes = {
+  username: PropTypes.string.isRequired,
+  polls: PropTypes.arrayOf (PropTypes.shape ({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    choices: PropTypes.arrayOf (PropTypes.shape ({
+      votes: PropTypes.number.isRequired,
+    })).isRequired,
+  })).isRequired,
 };
