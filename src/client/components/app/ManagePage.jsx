@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
 import IntegerInput from '../ui/IntegerInput.jsx';
 
@@ -14,14 +15,11 @@ function getDefaults () {
   };
 }
 
-export default class ManagePage extends React.Component {
-  constructor (props, context) {
-    super (props, context);
-    const allPolls = context.store.getState ().polls;
-    const creator = context.store.getState ().user.username;
-    const polls = allPolls.filter ((poll) => {
-      return (poll.creator === creator);
-    });
+class ManagePage extends React.Component {
+  constructor (props) {
+    super (props);
+    const polls = props.polls.filter ((poll) => { return poll.creator === props.username; });
+    const creator = props.username;
     this.state = Object.assign ({ polls, creator }, getDefaults ());
 
     this.onSelectPoll = this.onSelectPoll.bind (this);
@@ -30,20 +28,10 @@ export default class ManagePage extends React.Component {
     this.onDeletePoll = this.onDeletePoll.bind (this);
   }
 
-  componentWillMount () {
-    this.unsubscribe = this.context.store.subscribe (() => {
-      const allPolls = this.context.store.getState ().polls;
-      const creator = this.context.store.getState ().user.username;
-      const polls = allPolls.filter ((poll) => {
-        return (poll.creator === creator);
-      });
-      const newState = Object.assign ({ polls, creator }, getDefaults ());
-      this.setState (newState);
-    });
-  }
-
-  componentWillUnmount () {
-    this.unsubscribe ();
+  componentWillReceiveProps (nextProps) {
+    const polls = nextProps.polls.filter ((poll) => { return poll.creator === nextProps.username; });
+    const creator = nextProps.username;
+    this.setState (Object.assign ({ polls, creator }, getDefaults ()));
   }
 
   onSelectPoll (_id) {
@@ -65,19 +53,19 @@ export default class ManagePage extends React.Component {
 
   onAddPoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.context.store.dispatch (addPoll (this.state.title, choices, this.state.voteLimit,
+    this.props.dispatch (addPoll (this.state.title, choices, this.state.voteLimit,
       this.state.maxVotes, this.state.dateLimit, this.state.endDate));
     this.setState (getDefaults ());
   }
 
   onSavePoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.context.store.dispatch (updatePoll (this.state.selected, this.state.title, choices,
+    this.props.dispatch (updatePoll (this.state.selected, this.state.title, choices,
       this.state.voteLimit, this.state.maxVotes, this.state.dateLimit, this.state.endDate));
   }
 
   onDeletePoll () {
-    this.context.store.dispatch (deletePoll (this.state.selected));
+    this.props.dispatch (deletePoll (this.state.selected));
   }
 
   render () {
@@ -239,8 +227,25 @@ function generateChoices (list) {
   return result;
 }
 
-ManagePage.contextTypes = {
-  store: React.PropTypes.object.isRequired,
+const mapStateToProps = (state) => {
+  return ({
+    username: state.user.username,
+    polls: state.polls,
+  });
+};
+
+export default connect (mapStateToProps) (ManagePage);
+
+ManagePage.propTypes = {
+  username: PropTypes.string.isRequired,
+  polls: PropTypes.arrayOf (PropTypes.shape ({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    choices: PropTypes.arrayOf (PropTypes.shape ({
+      votes: PropTypes.number.isRequired,
+    })).isRequired,
+  })).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const Choice = (props) => {
@@ -262,8 +267,8 @@ const Choice = (props) => {
 };
 
 Choice.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  index: React.PropTypes.number.isRequired,
-  choice: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
+  choice: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
