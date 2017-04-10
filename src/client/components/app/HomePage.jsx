@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 class HomePage extends React.Component {
   render () {
     const polls = this.props.polls;
-    const rows = [];
+    let rows;
     if (polls.length === 0) {
-      rows.push (<p>{' '}</p>);
-      rows.push (<p>There are no active polls - be the first to add a new one!</p>);
+      rows = <p>There are no active polls - be the first to add a new one!</p>;
     } else {
+      rows = [];
       for (let i = 0; i < polls.length; i ++) {
         const totalVotes = polls[i].choices.reduce ((a, b) => { return a + b.votes; }, 0);
         rows.push (
