@@ -1,44 +1,109 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
 import { logout } from '../../store/userActions';
+import { Menu, MenuLink, MenuNavLink, MenuSeparator, MenuSubmenu } from '../ui/menu/index';
 
 // Header with application and common navigation
-const Header = (props) => {
-  const appLinks = [];
-  const titleLinks = [];
+class Header extends Component {
+  constructor (props) {
+    super (props);
 
-  appLinks.push (<li key='a1'><NavLink to='/' exact activeClassName='active'>Polls</NavLink></li>);
-  if (props.authenticated) {
-    appLinks.push (<li key='a2'><NavLink to='/manage' activeClassName='active'>Manage</NavLink></li>);
-    appLinks.push (<li key='a3'><NavLink to='/results' activeClassName='active'>Results</NavLink></li>);
-    appLinks.push (<li key='a4'><NavLink to='/profile' activeClassName='active'>Profile</NavLink></li>);
-    titleLinks.push (
-      <li key='t1' onClick={() => { props.dispatch (logout ()); }}><Link to='/'>Logout</Link></li>
+    this.menuDropdownUnauthenticated = (
+      <Menu className='app-menu-dropdown' dropDown>
+        <MenuNavLink to='/' exact>Home</MenuNavLink>
+        <MenuNavLink to='/about'>About</MenuNavLink>
+        <MenuSeparator spacing='4px' />
+        <MenuNavLink to='/register'>Register</MenuNavLink>
+        <MenuNavLink to='/login'>Login</MenuNavLink>
+      </Menu>
     );
-  } else {
-    titleLinks.push (<li key='t2'><NavLink to='/register' activeClassName='active'>Register</NavLink></li>);
-    titleLinks.push (<li key='t3'><NavLink to='/login' activeClassName='active'>Login</NavLink></li>);
-  }
-  appLinks.push (<li key='a5'><NavLink to='/about' activeClassName='active'>About</NavLink></li>);
+    this.menuDropdownAuthenticated = (
+      <Menu className='app-menu-dropdown' dropDown>
+        <MenuNavLink to='/' exact>Home</MenuNavLink>
+        <MenuNavLink to='/manage'>Manage</MenuNavLink>
+        <MenuNavLink to='/results'>Results</MenuNavLink>
+        <MenuNavLink to='/about'>About</MenuNavLink>
+        <MenuNavLink to='/profile'>Profile</MenuNavLink>
+        <MenuSeparator spacing='4px' />
+        <MenuLink to='/' func={() => { props.dispatch (logout ()); }}>Logout</MenuLink>
+      </Menu>
+    );
 
-  return (
-    <div className='app-h-area'>
-      <div className='app-h-line1'>
-        <div className='app-h-title'>Pollster</div>
-        <ul className='app-h-menuRight'>
-          {titleLinks}
-        </ul>
-      </div>
-      <div className='app-h-line2'>
-        <ul className='app-h-menuLeft'>
-          {appLinks}
-        </ul>
-      </div>
-    </div>
-  );
-};
+    this.menuRightUnauthenticated = (
+      <Menu className='app-menu-bar app-menu-right'>
+        <MenuNavLink to='/register'>Register</MenuNavLink>
+        <MenuNavLink to='/login'>Login</MenuNavLink>
+      </Menu>
+    );
+    this.menuRightAuthenticated = (
+      <Menu className='app-menu-bar app-menu-right'>
+        <MenuSubmenu text='User'>
+          <MenuNavLink to='/profile'>Profile</MenuNavLink>
+          <MenuLink to='/' func={() => { props.dispatch (logout ()); }}>Logout</MenuLink>
+        </MenuSubmenu>
+      </Menu>
+    );
+
+    this.menuLeftUnauthenticated = (
+      <Menu className='app-menu-bar app-menu-left'>
+        <MenuNavLink to='/' exact>Home</MenuNavLink>
+        <MenuNavLink to='/about'>About</MenuNavLink>
+      </Menu>
+    );
+    this.menuLeftAuthenticated = (
+      <Menu className='app-menu-bar app-menu-left'>
+        <MenuNavLink to='/' exact>Home</MenuNavLink>
+        <MenuNavLink to='/manage'>Manage</MenuNavLink>
+        <MenuNavLink to='/results'>Results</MenuNavLink>
+        <MenuNavLink to='/about'>About</MenuNavLink>
+      </Menu>
+    );
+
+    this.state = {
+      innerWidth: window.innerWidth,
+    };
+
+    this.handleResize = this.handleResize.bind (this);
+  }
+
+  componentDidMount () {
+    window.addEventListener ('resize', this.handleResize);
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener ('resize', this.handleResize);
+  }
+
+  handleResize () {
+    this.setState (() => { return { innerWidth: window.innerWidth }; });
+  }
+
+  render () {
+    if (this.state.innerWidth < 768) {
+      return (
+        <div className='app-h-area'>
+          <div className='app-h-small'>
+            {this.props.authenticated ? this.menuDropdownAuthenticated : this.menuDropdownUnauthenticated}
+            <div className='app-h-smallTitle'>Pollster</div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className='app-h-area'>
+          <div className='app-h-line1'>
+            {this.props.authenticated ? this.menuRightAuthenticated : this.menuRightUnauthenticated}
+            <div className='app-h-title'>Pollster</div>
+          </div>
+          <div className='app-h-line2'>
+            {this.props.authenticated ? this.menuLeftAuthenticated : this.menuLeftUnauthenticated}
+          </div>
+        </div>
+      );
+    }
+  }
+}
 
 const mapStateToProps = ({ user }) => {
   return ({

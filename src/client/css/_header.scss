@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 4px 0 12px 0;
+  padding: 4px 0 4px 0;
   margin: 0;
   background-color: $colorHeaderBG;
   border-bottom: 1px solid darkgray;
@@ -13,7 +13,6 @@
   padding: 0px 8px 12px 8px;
   max-width: 760px;
   margin: 0 auto 0 auto;
-  overflow: auto;
 }
 
 .app-h-title {
@@ -24,33 +23,6 @@
   font-style: italic;
 }
 
-.app-h-menuRight {
-  float: right;
-  list-style-type: none;
-  margin: 0;
-  margin-top: 12px;
-  padding: 0;
-  font-family: sans-serif;
-  font-size: 16px;
-
-  li {
-    float: left;
-  }
-
-  li a {
-    display: block;
-    color: #555555;
-    text-align: center;
-    padding: 4px 6px 0px 6px;
-    text-decoration: none;
-  }
-
-  li a.active {
-    color: black;
-    border-bottom: 2px solid darkgray;
-  }
-}
-
 .app-h-line2 {
   width: calc(100% - 16px);
   max-width: 760px;
@@ -58,30 +30,16 @@
   clear: both;
 }
 
-.app-h-menuLeft
-{
-  display: inline-block;
-  list-style-type: none;
-  margin: 0 0 0 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: sans-serif;
-  font-size: 16px;
+.app-h-small {
+  padding: 4px 8px 0px 8px;
+  max-width: 760px;
+  margin: 0 auto 0 auto;
+}
 
-  li {
-    float: left;
-  }
-
-  li a {
-    display: block;
-    color: #555555;
-    text-align: center;
-    padding: 0px 6px 0px 6px;
-    text-decoration: none;
-  }
-
-  li a.active {
-    color: black;
-    border-bottom: 2px solid darkgray;
-  }
+.app-h-smallTitle {
+  text-align: center;
+  font-family: 'Jura', sans-serif;
+  text-shadow: 2px 2px 2px #CCCCCC;
+  font-size: 24px;
+  font-style: italic;
 }
