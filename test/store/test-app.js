@@ -7,9 +7,6 @@ import * as actions from '../../src/client/store/pollsActions';
 import pollsReducer from '../../src/client/store/polls';
 import freeze from '../freeze';
 
-// set location global to mimic browser object
-global.location = { origin: 'http://localhost:3999' };
-
 const middleware = [thunk];
 const mockStore = configureMockStore (middleware);
 

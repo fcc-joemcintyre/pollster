@@ -1,5 +1,9 @@
-import 'whatwg-fetch';
+/*
+  Poll action creators
+*/
+/* eslint no-useless-return: off */
 import { SET_POLLS } from './pollsConstants';
+import API from './API';
 
 export function setPolls (polls) {
   return { type: SET_POLLS, polls };
@@ -7,132 +11,51 @@ export function setPolls (polls) {
 
 export function initPolls () {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/polls`, {
-        method: 'get',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-      }).then ((res) => {
-        if (! res.ok) {
-          return reject (res.statusText);
-        } else {
-          return res.json ();
-        }
-      }).then ((polls) => {
-        dispatch (setPolls (polls));
-        return resolve ();
-      }).catch ((err) => {
-        return reject (err);
-      });
+    return API.getPolls ().then ((polls) => {
+      dispatch (setPolls (polls));
+      return;
+    }).catch ((err) => {
+      throw err;
     });
   };
 }
 
 export function addPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate) {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/polls`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify ({ title, choices, voteLimit, maxVotes, dateLimit, endDate }),
-      }).then ((res) => {
-        if (! res.ok) {
-          reject (res.statusText);
-        } else {
-          dispatch (initPolls ())
-          .then (() => {
-            return resolve ();
-          });
-        }
-      }).catch ((err) => {
-        reject (err);
-      });
+    return API.createPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate).then (() => {
+      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
+    }).catch ((err) => {
+      throw err;
     });
   };
 }
 
 export function updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate) {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/polls/${_id}`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify ({ title, choices, voteLimit, maxVotes, dateLimit, endDate }),
-      }).then ((res) => {
-        if (! res.ok) {
-          reject (res.statusText);
-        } else {
-          dispatch (initPolls ())
-          .then (() => {
-            resolve ();
-          });
-        }
-      }).catch ((err) => {
-        reject (err);
-      });
+    return API.updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate).then (() => {
+      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
+    }).catch ((err) => {
+      throw err;
     });
   };
 }
 
 export function deletePoll (_id) {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/polls/${_id}`, {
-        method: 'delete',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-      }).then ((res) => {
-        if (! res.ok) {
-          reject (res.statusText);
-        } else {
-          dispatch (initPolls ())
-          .then (() => {
-            resolve ();
-          });
-        }
-      }).catch ((err) => {
-        reject (err);
-      });
+    return API.deletePoll (_id).then (() => {
+      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
+    }).catch ((err) => {
+      throw err;
     });
   };
 }
 
 export function vote (_id, choice) {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/polls/${_id}/votes/${choice}`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-      }).then ((res) => {
-        if (! res.ok) {
-          reject (res.statusCode);
-        } else {
-          dispatch (initPolls ())
-          .then (() => {
-            resolve ();
-          });
-        }
-      }).catch ((err) => {
-        reject (err);
-      });
+    return API.vote (_id, choice).then (() => {
+      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
+    }).catch ((err) => {
+      throw err;
     });
   };
 }

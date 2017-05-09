@@ -1,111 +1,53 @@
-import 'whatwg-fetch';
+/*
+  User action creators
+*/
+/* eslint no-useless-return: off */
 import { SET_AUTHENTICATED, SET_PROFILE } from './userConstants';
+import API from './API';
 
 export function register (username, password) {
   return () => {
-    return new Promise ((resolve, reject) => {
-      const data = { username, password };
-      fetch (`${location.origin}/api/register`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify (data),
-      }).then ((res) => {
-        if (! res.ok) {
-          reject (res.statusText);
-        } else {
-          resolve ();
-        }
-      })
-      .catch ((err) => {
-        reject (err);
-      });
-    });
+    return API.register (username, password);
   };
 }
 
 export function login (username, password) {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      const data = { username, password };
-      fetch (`${location.origin}/api/login`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify (data),
-      }).then ((res) => {
-        if (! res.ok) {
-          return reject (res.statusText);
-        } else {
-          return res.json ();
-        }
-      }).then ((user) => {
-        dispatch (setAuthenticated (true, user.username));
-        dispatch (setProfile (user.name, user.email));
-        return resolve ();
-      }).catch ((err) => {
-        return reject (err);
-      });
+    return API.login (username, password).then ((user) => {
+      dispatch (setAuthenticated (true, user.username));
+      dispatch (setProfile (user.name, user.email));
+      return;
+    }).catch ((err) => {
+      throw err;
     });
   };
 }
 
 export function logout () {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/logout`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-      }).then (() => {
-        dispatch (setAuthenticated (false, ''));
-        return resolve ();
-      }).catch ((err) => {
-        dispatch (setAuthenticated (false, ''));
-        return reject (err);
-      });
+    dispatch (setAuthenticated (false, ''));
+    return API.logout ().then (() => {
+      return;
+    }).catch (() => {
+      return;
     });
   };
 }
 
 export function verifyLogin () {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      fetch (`${location.origin}/api/verifylogin`, {
-        method: 'get',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-      }).then ((res) => {
-        if (! res.ok) {
-          return reject (res.statusText);
-        } else {
-          return res.json ();
-        }
-      }).then ((data) => {
-        if (data.authenticated) {
-          dispatch (setAuthenticated (true, data.user.username));
-          dispatch (setProfile (data.user.name, data.user.email));
-          return resolve (true);
-        } else {
-          dispatch (setAuthenticated (false, ''));
-          dispatch (setProfile ('', ''));
-          return resolve (false);
-        }
-      }).catch ((err) => {
-        return reject (err);
-      });
+    return API.verifyLogin ().then ((data) => {
+      if (data.authenticated) {
+        dispatch (setAuthenticated (true, data.user.username));
+        dispatch (setProfile (data.user.name, data.user.email));
+        return true;
+      } else {
+        dispatch (setAuthenticated (false, ''));
+        dispatch (setProfile ('', ''));
+        return false;
+      }
+    }).catch ((err) => {
+      throw err;
     });
   };
 }
@@ -116,26 +58,11 @@ export function setAuthenticated (authenticated, username) {
 
 export function updateProfile (name, email) {
   return (dispatch) => {
-    return new Promise ((resolve, reject) => {
-      const data = { name, email };
-      fetch (`${location.origin}/api/profile`, {
-        method: 'post',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify (data),
-      }).then ((res) => {
-        if (! res.ok) {
-          return reject (res.statusCode);
-        } else {
-          dispatch (setProfile (name, email));
-          return resolve ();
-        }
-      }).catch ((err) => {
-        return reject (err);
-      });
+    return API.updateProfile (name, email).then (() => {
+      dispatch (setProfile (name, email));
+      return;
+    }).catch ((err) => {
+      throw err;
     });
   };
 }

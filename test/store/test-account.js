@@ -6,9 +6,6 @@ import * as types from '../../src/client/store/userConstants';
 import * as actions from '../../src/client/store/userActions';
 import userReducer from '../../src/client/store/user';
 
-// set location global to mimic browser object
-global.location = { origin: 'http://localhost:3999' };
-
 const middleware = [thunk];
 const mockStore = configureMockStore (middleware);
 
