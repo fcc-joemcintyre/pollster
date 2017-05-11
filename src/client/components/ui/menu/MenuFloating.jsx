@@ -1,28 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class MenuFloating extends Component {
-  constructor (props) {
-    super (props);
-  }
-
-  render () {
-    return (
-      <div
-        className='app-menu-sub-wrapper'
-        onMouseLeave={this.props.onClose}
-        onClick={this.props.onClose}
-      >
-        <div className={`app-menu-sub ${this.props.show ? 'app-menu-sub-show' : 'app-menu-sub-hide'}`}>
-          { this.props.children }
-        </div>
+const MenuFloating = ({ show, children, onClose }) => {
+  return (
+    <div
+      className='app-menu-sub-wrapper'
+      onMouseLeave={onClose}
+      onClick={onClose}
+    >
+      <div className={`app-menu-sub ${show ? 'app-menu-sub-show' : 'app-menu-sub-hide'}`}>
+        { children }
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 MenuFloating.propTypes = {
   show: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
+export default MenuFloating;
