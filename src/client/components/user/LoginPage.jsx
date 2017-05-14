@@ -34,17 +34,16 @@ class LoginPage extends Component {
       (this.state.fields.password.value.trim () !== ''));
   }
 
-  onSubmit (e) {
+  async onSubmit (e) {
     e.preventDefault ();
     if (this.onValidateForm ()) {
       this.setState (() => { return { message: { status: 'working', text: 'Logging in' } }; });
-      this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value))
-      .then (() => {
+      try {
+        await this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value));
         this.setState (() => { return { message: { status: 'ok', text: 'Logged in' }, redirectToReferrer: true }; });
-      })
-      .catch (() => {
+      } catch (err) {
         this.setState (() => { return { message: { status: 'error', text: 'Error logging in, check values' } }; });
-      });
+      }
     } else {
       this.setState (() => { return { message: { status: 'error', text: 'Complete form and try again' } }; });
     }

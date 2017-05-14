@@ -30,16 +30,14 @@ class App extends Component {
     };
   }
 
-  componentDidMount () {
-    Promise.resolve ().then (() => {
-      return this.props.dispatch (verifyLogin ());
-    }).then (() => {
-      return this.props.dispatch (initPolls ());
-    }).then (() => {
+  async componentDidMount () {
+    try {
+      await this.props.dispatch (verifyLogin ());
+      await this.props.dispatch (initPolls ());
       this.setState (() => { return { loading: false, message: '' }; });
-    }).catch (() => {
+    } catch (err) {
       this.setState (() => { return { loading: false, message: 'Network error, try again.' }; });
-    });
+    }
   }
 
   render () {

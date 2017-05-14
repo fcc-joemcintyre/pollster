@@ -1,7 +1,6 @@
 /*
   User action creators
 */
-/* eslint no-useless-return: off */
 import { SET_AUTHENTICATED, SET_PROFILE } from './userConstants';
 import API from './API';
 
@@ -12,31 +11,32 @@ export function register (username, password) {
 }
 
 export function login (username, password) {
-  return (dispatch) => {
-    return API.login (username, password).then ((user) => {
+  return async (dispatch) => {
+    try {
+      const user = await API.login (username, password);
       dispatch (setAuthenticated (true, user.username));
       dispatch (setProfile (user.name, user.email));
-      return;
-    }).catch ((err) => {
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 
 export function logout () {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch (setAuthenticated (false, ''));
-    return API.logout ().then (() => {
-      return;
-    }).catch (() => {
-      return;
-    });
+    try {
+      await API.logout ();
+    } catch (err) {
+      // ignore error
+    }
   };
 }
 
 export function verifyLogin () {
-  return (dispatch) => {
-    return API.verifyLogin ().then ((data) => {
+  return async (dispatch) => {
+    try {
+      const data = await API.verifyLogin ();
       if (data.authenticated) {
         dispatch (setAuthenticated (true, data.user.username));
         dispatch (setProfile (data.user.name, data.user.email));
@@ -46,9 +46,9 @@ export function verifyLogin () {
         dispatch (setProfile ('', ''));
         return false;
       }
-    }).catch ((err) => {
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 
@@ -57,13 +57,13 @@ export function setAuthenticated (authenticated, username) {
 }
 
 export function updateProfile (name, email) {
-  return (dispatch) => {
-    return API.updateProfile (name, email).then (() => {
+  return async (dispatch) => {
+    try {
+      await API.updateProfile (name, email);
       dispatch (setProfile (name, email));
-      return;
-    }).catch ((err) => {
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 

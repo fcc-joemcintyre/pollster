@@ -2,6 +2,7 @@
 
 // establish global fetch objects to mimic browser variables
 import 'isomorphic-fetch';
+import 'regenerator-runtime/runtime';  // eslint-disable-line
 
 global.window = { location: { origin: 'http://localhost:3999' } };
 

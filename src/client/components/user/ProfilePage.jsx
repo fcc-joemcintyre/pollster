@@ -49,17 +49,16 @@ class ProfilePage extends Component {
     return (! (updates.name.error || updates.email.error));
   }
 
-  onSubmit (event) {
+  async onSubmit (event) {
     event.preventDefault ();
     if (this.onValidateForm ()) {
       this.setState ({ message: { status: 'working', text: 'Updating profile ...' } });
-      this.props.dispatch (updateProfile (this.state.fields.name.value, this.state.fields.email.value))
-      .then (() => {
+      try {
+        await this.props.dispatch (updateProfile (this.state.fields.name.value, this.state.fields.email.value));
         this.setState ({ message: { status: 'ok', text: 'Profile updated' } });
-      })
-      .catch (() => {
+      } catch (err) {
         this.setState ({ message: { status: 'error', text: 'Error saving profile information' } });
-      });
+      }
     } else {
       this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }

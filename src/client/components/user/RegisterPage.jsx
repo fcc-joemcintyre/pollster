@@ -63,23 +63,21 @@ class RegisterPage extends Component {
     return (! (updates.username.error || updates.password.error || updates.verifyPassword.error));
   }
 
-  onSubmit (event) {
+  async onSubmit (event) {
     event.preventDefault ();
     if (this.onValidateForm ()) {
       this.setState (() => { return { message: { status: 'working', text: 'Registering ...' } }; });
-      this.props.dispatch (register (this.state.fields.username.value, this.state.fields.password.value))
-      .then (() => {
-        this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value))
-        .then (() => {
+      try {
+        await this.props.dispatch (register (this.state.fields.username.value, this.state.fields.password.value));
+        try {
+          await this.props.dispatch (login (this.state.fields.username.value, this.state.fields.password.value));
           this.props.history.replace ('/');
-        })
-        .catch (() => {
+        } catch (err) {
           this.setState (() => { return { message: { status: 'error', text: 'Registered, but could not login' } }; });
-        });
-      })
-      .catch (() => {
+        }
+      } catch (err) {
         this.setState (() => { return { message: { status: 'error', text: 'Error registering, try again' } }; });
-      });
+      }
     } else {
       this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }
