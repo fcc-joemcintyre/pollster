@@ -52,21 +52,32 @@ class ManagePage extends Component {
     }
   }
 
-  onAddPoll () {
+  async onAddPoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.props.dispatch (addPoll (this.state.title, choices, this.state.voteLimit,
-      this.state.maxVotes, this.state.dateLimit, this.state.endDate));
-    this.setState (getDefaults ());
+    try {
+      await this.props.dispatch (addPoll (this.state.title, choices, this.state.voteLimit,
+        this.state.maxVotes, this.state.dateLimit, this.state.endDate));
+    } finally {
+      this.setState (getDefaults ());
+    }
   }
 
-  onSavePoll () {
+  async onSavePoll () {
     const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    this.props.dispatch (updatePoll (this.state.selected, this.state.title, choices,
-      this.state.voteLimit, this.state.maxVotes, this.state.dateLimit, this.state.endDate));
+    try {
+      await this.props.dispatch (updatePoll (this.state.selected, this.state.title, choices,
+        this.state.voteLimit, this.state.maxVotes, this.state.dateLimit, this.state.endDate));
+    } catch (err) {
+      // no op
+    }
   }
 
-  onDeletePoll () {
-    this.props.dispatch (deletePoll (this.state.selected));
+  async onDeletePoll () {
+    try {
+      await this.props.dispatch (deletePoll (this.state.selected));
+    } catch (err) {
+      // no op
+    }
   }
 
   render () {

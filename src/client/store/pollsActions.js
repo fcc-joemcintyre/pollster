@@ -1,7 +1,6 @@
 /*
   Poll action creators
 */
-/* eslint no-useless-return: off */
 import { SET_POLLS } from './pollsConstants';
 import API from './API';
 
@@ -10,52 +9,56 @@ export function setPolls (polls) {
 }
 
 export function initPolls () {
-  return (dispatch) => {
-    return API.getPolls ().then ((polls) => {
+  return async (dispatch) => {
+    try {
+      const polls = await API.getPolls ();
       dispatch (setPolls (polls));
-      return;
-    }).catch ((err) => {
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 
 export function addPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate) {
-  return (dispatch) => {
-    return API.createPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate).then (() => {
-      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
-    }).catch ((err) => {
+  return async (dispatch) => {
+    try {
+      await API.createPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate);
+      await dispatch (initPolls ());
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 
 export function updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate) {
-  return (dispatch) => {
-    return API.updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate).then (() => {
-      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
-    }).catch ((err) => {
+  return async (dispatch) => {
+    try {
+      await API.updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate);
+      await dispatch (initPolls ());
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 
 export function deletePoll (_id) {
-  return (dispatch) => {
-    return API.deletePoll (_id).then (() => {
-      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
-    }).catch ((err) => {
+  return async (dispatch) => {
+    try {
+      await API.deletePoll (_id);
+      await dispatch (initPolls ());
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }
 
 export function vote (_id, choice) {
-  return (dispatch) => {
-    return API.vote (_id, choice).then (() => {
-      return dispatch (initPolls ()).then (() => { return; }).catch (() => { return; });
-    }).catch ((err) => {
+  return async (dispatch) => {
+    try {
+      await API.vote (_id, choice);
+      await dispatch (initPolls ());
+    } catch (err) {
       throw err;
-    });
+    }
   };
 }

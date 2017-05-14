@@ -18,13 +18,17 @@ class PollPage extends Component {
     this.handleVote = this.handleVote.bind (this);
   }
 
-  handleVote () {
+  async handleVote () {
     if (this.state.selected !== -1) {
       const poll = Object.assign ({}, this.state.poll);
       const choice = poll.choices[this.state.selected];
       choice.votes += 1;
       this.setState (() => { return { voted: true, poll }; });
-      this.props.dispatch (vote (this.state.poll._id, choice.text));
+      try {
+        await this.props.dispatch (vote (this.state.poll._id, choice.text));
+      } catch (err) {
+        // no op
+      }
     }
   }
 
