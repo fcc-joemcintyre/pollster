@@ -83,6 +83,8 @@ gulp.task ('vendor-dev', function () {
     .bundle ()
     .pipe (source ('vendor.bundle.js'))
     .pipe (buffer ())
+    .pipe (sourcemaps.init ({ loadMaps: true }))
+    .pipe (sourcemaps.write ('.'))
     .pipe (gulp.dest (`${base}/public/js`));
 });
 
@@ -91,7 +93,7 @@ gulp.task ('browserify-dev', function () {
   const config = { entries: 'src/client/components/main/index.jsx', debug: true };
   const bundler = watchify (browserify (config, watchify.args));
   bundler.external (dependencies);
-  bundler.transform (babelify, { presets: ['es2015', 'react'] });
+  bundler.transform (babelify, { presets: ['es2015', 'es2017', 'react'] });
   bundler.on ('update', rebundle);
   return rebundle ();
 
@@ -130,7 +132,7 @@ gulp.task ('browserify-stage', function () {
   process.env.NODE_ENV = 'production';
   const bundler = browserify ({ entries: 'src/client/components/main/index.jsx', debug: false });
   bundler.external (dependencies);
-  bundler.transform (babelify, { presets: ['es2015', 'react'] });
+  bundler.transform (babelify, { presets: ['es2015', 'es2017', 'react'] });
   bundler.on ('update', rebundle);
   return rebundle ();
 
