@@ -2,8 +2,9 @@
   "extends": [
     "./eslint-rules/best-practices.js",
     "./eslint-rules/errors.js",
-    "./eslint-rules/es6.js",
+    "./eslint-rules/es.js",
     "./eslint-rules/import.js",
+    "./eslint-rules/node.js",
     "./eslint-rules/react.js",
     "./eslint-rules/strict.js",
     "./eslint-rules/style.js",
