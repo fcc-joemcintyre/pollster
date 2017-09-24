@@ -79,21 +79,20 @@ function verifyLogin (req, res) {
 }
 
 // register new user. If already existing user, return 403 (Forbidden)
-function register (req, res) {
+async function register (req, res) {
   console.log ('register');
   if (validator.register (req.body) === false) {
     console.log ('register', '(400) invalid body', validator.register.errors);
     res.status (400).json ({});
   } else {
-    db.insertUser (req.body.username, req.body.password)
-    .then (() => {
+    try {
+      await db.insertUser (req.body.username, req.body.password);
       console.log ('  registered', req.body.username);
       res.status (200).json ({});
-    })
-    .catch ((err) => {
+    } catch (err) {
       console.log ('  error', err);
       res.status (403).json ({});
-    });
+    }
   }
 }
 
@@ -105,21 +104,20 @@ function getProfile (req, res) {
   });
 }
 
-function updateProfile (req, res) {
+async function updateProfile (req, res) {
   console.log ('updateProfile', req.user.username);
   if (validator.updateProfile (req.body) === false) {
     console.log ('updateProfile', '(400) invalid body', validator.updateProfile.errors);
     res.status (400).json ({});
   } else {
-    db.updateUser (req.user.username, req.body.name, req.body.email)
-    .then (() => {
+    try {
+      await db.updateUser (req.user.username, req.body.name, req.body.email);
       console.log ('  update successful');
       res.status (200).json ({});
-    })
-    .catch ((err) => {
+    } catch (err) {
       console.log ('  error (500)', err);
       res.status (500).json ({});
-    });
+    }
   }
 }
 

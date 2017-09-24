@@ -11,35 +11,33 @@ function init () {
   validator.poll = validator.ajv.compile (schemaPoll);
 }
 
-function getPolls (req, res) {
+async function getPolls (req, res) {
   console.log ('getPolls');
-  Promise.resolve ().then (() => {
-    return db.getPolls ();
-  }).then ((polls) => {
+  try {
+    const polls = await db.getPolls ();
     res.status (200).json (polls);
-  }).catch ((err) => {
+  } catch (err) {
     console.log ('  getPolls error', err);
     res.status (500).json ({});
-  });
+  }
 }
 
-function getPoll (req, res) {
+async function getPoll (req, res) {
   console.log ('getPoll', req.params._id);
-  Promise.resolve ().then (() => {
-    return db.getPoll (req.params._id);
-  }).then ((poll) => {
+  try {
+    const poll = await db.getPoll (req.params._id);
     if (poll) {
       res.status (200).json (poll);
     } else {
       res.status (404).json ({});
     }
-  }).catch ((err) => {
+  } catch (err) {
     console.log ('  getPoll error', err);
     res.status (500).json ({});
-  });
+  }
 }
 
-function addPoll (req, res) {
+async function addPoll (req, res) {
   console.log ('addPoll', req.body);
   if (validator.poll (req.body) === false) {
     console.log ('addPoll', '(400) invalid body', validator.poll.errors);
@@ -58,19 +56,18 @@ function addPoll (req, res) {
       dateLimit: req.body.dateLimit,
       endDate: req.body.endDate,
     };
-    Promise.resolve ().then (() => {
-      return db.insertPoll (poll);
-    }).then ((result) => {
-      console.log ('  addPoll added', result.ops[0]._id);
-      res.status (200).json ({ _id: result.ops[0]._id });
-    }).catch ((err) => {
+    try {
+      const data = await db.insertPoll (poll);
+      console.log ('  addPoll added', data.ops[0]._id);
+      res.status (200).json ({ _id: data.ops[0]._id });
+    } catch (err) {
       console.log ('  addPoll error', err);
       res.status (500).json ({});
-    });
+    }
   }
 }
 
-function updatePoll (req, res) {
+async function updatePoll (req, res) {
   console.log ('updatePoll', req.body);
   if (validator.poll (req.body) === false) {
     console.log ('updatePoll', '(400) invalid body', validator.poll.errors);
@@ -89,39 +86,36 @@ function updatePoll (req, res) {
       dateLimit: req.body.dateLimit,
       endDate: req.body.endDate,
     };
-    Promise.resolve ().then (() => {
-      return db.updatePoll (req.params._id, poll);
-    }).then (() => {
+    try {
+      await db.updatePoll (req.params._id, poll);
       res.status (200).json ({});
-    }).catch ((err) => {
+    } catch (err) {
       console.log ('updatePoll error', err);
       res.status (500).json ({});
-    });
+    }
   }
 }
 
-function deletePoll (req, res) {
+async function deletePoll (req, res) {
   console.log ('deletePoll', req.params._id);
-  Promise.resolve ().then (() => {
-    return db.removePoll (req.params._id);
-  }).then (() => {
+  try {
+    await db.removePoll (req.params._id);
     res.status (200).json ({});
-  }).catch ((err) => {
+  } catch (err) {
     console.log ('  deletePoll error', err);
     res.status (500).json ({});
-  });
+  }
 }
 
-function vote (req, res) {
+async function vote (req, res) {
   console.log ('vote', req.params._id, req.params.choice);
-  Promise.resolve ().then (() => {
-    return db.vote (req.params._id, req.params.choice);
-  }).then (() => {
+  try {
+    await db.vote (req.params._id, req.params.choice);
     res.status (200).json ({});
-  }).catch ((err) => {
+  } catch (err) {
     console.log ('  vote error', err);
     res.status (500).json ({});
-  });
+  }
 }
 
 exports.init = init;
