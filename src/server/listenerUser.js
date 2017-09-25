@@ -18,9 +18,9 @@ function init () {
 
 // Login, authenticating user and creating a session
 function login (req, res, next) {
-  console.log ('login');
+  console.log ('INFO login');
   if (validator.login (req.body) === false) {
-    console.log ('login', '(400) invalid body', validator.login.errors);
+    console.log ('ERROR login (400) invalid body', validator.login.errors);
     res.status (400).json ({});
   } else {
     passport.authenticate ('local', (err, user) => {
@@ -29,14 +29,14 @@ function login (req, res, next) {
       }
       // if not a valid user, return 401 auth error
       if (! user) {
-        console.log ('  login', '(401) unauthenticated');
+        console.log ('ERROR login (401) unauthenticated');
         return res.status (401).json ({});
       }
       return req.login (user, (err2) => {
         if (err2) {
           return next (err2);
         }
-        console.log ('  login', user.username);
+        console.log ('INFO login ok', user.username);
         const result = {
           username: user.username,
           name: req.user.name,
@@ -50,9 +50,7 @@ function login (req, res, next) {
 
 // logout, closing session
 function logout (req, res) {
-  if (req.user) {
-    console.log ('logout', req.user.username);
-  }
+  console.log ('INFO logout', (req.user) ? req.user.username : '');
   req.logout ();
   res.status (200).json ({});
 }
@@ -60,7 +58,7 @@ function logout (req, res) {
 // if already logged in, return user information
 // allows continuation of session
 function verifyLogin (req, res) {
-  console.log ('verifyLogin');
+  console.log ('INFO verifyLogin');
   let message = { authenticated: false, user: null };
   if (req.isAuthenticated ()) {
     message = {
@@ -71,33 +69,33 @@ function verifyLogin (req, res) {
         email: req.user.email,
       },
     };
-    console.log ('  verified', req.user.username);
+    console.log ('INFO verified', req.user.username);
   } else {
-    console.log ('  not verified (no username)');
+    console.log ('INFO not verified (no username)');
   }
   res.status (200).json (message);
 }
 
 // register new user. If already existing user, return 403 (Forbidden)
 async function register (req, res) {
-  console.log ('register');
+  console.log ('INFO register');
   if (validator.register (req.body) === false) {
-    console.log ('register', '(400) invalid body', validator.register.errors);
+    console.log ('ERROR register (400) invalid body', validator.register.errors);
     res.status (400).json ({});
   } else {
     try {
       await db.insertUser (req.body.username, req.body.password);
-      console.log ('  registered', req.body.username);
+      console.log ('INFO register ok', req.body.username);
       res.status (200).json ({});
     } catch (err) {
-      console.log ('  error', err);
+      console.log ('ERROR register', err);
       res.status (403).json ({});
     }
   }
 }
 
 function getProfile (req, res) {
-  console.log ('getProfile', req.user.username);
+  console.log ('INFO getProfile', req.user.username);
   res.status (200).json ({
     name: req.user.name,
     email: req.user.email,
@@ -105,17 +103,17 @@ function getProfile (req, res) {
 }
 
 async function updateProfile (req, res) {
-  console.log ('updateProfile', req.user.username);
+  console.log ('INFO updateProfile', req.user.username);
   if (validator.updateProfile (req.body) === false) {
-    console.log ('updateProfile', '(400) invalid body', validator.updateProfile.errors);
+    console.log ('ERROR updateProfile (400) invalid body', validator.updateProfile.errors);
     res.status (400).json ({});
   } else {
     try {
       await db.updateUser (req.user.username, req.body.name, req.body.email);
-      console.log ('  update successful');
+      console.log ('INFO updateProfile ok');
       res.status (200).json ({});
     } catch (err) {
-      console.log ('  error (500)', err);
+      console.log ('ERROR updateProfile (500)', err);
       res.status (500).json ({});
     }
   }

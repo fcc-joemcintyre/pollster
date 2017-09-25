@@ -12,18 +12,18 @@ function init () {
 }
 
 async function getPolls (req, res) {
-  console.log ('getPolls');
+  console.log ('INFO getPolls');
   try {
     const polls = await db.getPolls ();
     res.status (200).json (polls);
   } catch (err) {
-    console.log ('  getPolls error', err);
+    console.log ('ERROR getPolls', err);
     res.status (500).json ({});
   }
 }
 
 async function getPoll (req, res) {
-  console.log ('getPoll', req.params._id);
+  console.log ('INFO getPoll', req.params._id);
   try {
     const poll = await db.getPoll (req.params._id);
     if (poll) {
@@ -32,15 +32,15 @@ async function getPoll (req, res) {
       res.status (404).json ({});
     }
   } catch (err) {
-    console.log ('  getPoll error', err);
+    console.log ('ERROR getPoll', err);
     res.status (500).json ({});
   }
 }
 
 async function addPoll (req, res) {
-  console.log ('addPoll', req.body);
+  console.log ('INFO addPoll', req.body);
   if (validator.poll (req.body) === false) {
-    console.log ('addPoll', '(400) invalid body', validator.poll.errors);
+    console.log ('ERROR addPoll (400) invalid body', validator.poll.errors);
     res.status (400).json ({});
   } else {
     const choices = [];
@@ -58,19 +58,19 @@ async function addPoll (req, res) {
     };
     try {
       const data = await db.insertPoll (poll);
-      console.log ('  addPoll added', data.ops[0]._id);
+      console.log ('INFO addPoll ok', data.ops[0]._id);
       res.status (200).json ({ _id: data.ops[0]._id });
     } catch (err) {
-      console.log ('  addPoll error', err);
+      console.log ('ERROR addPoll', err);
       res.status (500).json ({});
     }
   }
 }
 
 async function updatePoll (req, res) {
-  console.log ('updatePoll', req.body);
+  console.log ('INFO updatePoll', req.body);
   if (validator.poll (req.body) === false) {
-    console.log ('updatePoll', '(400) invalid body', validator.poll.errors);
+    console.log ('ERROR updatePoll (400) invalid body', validator.poll.errors);
     res.status (400).json ({});
   } else {
     const choices = [];
@@ -90,30 +90,30 @@ async function updatePoll (req, res) {
       await db.updatePoll (req.params._id, poll);
       res.status (200).json ({});
     } catch (err) {
-      console.log ('updatePoll error', err);
+      console.log ('ERROR updatePoll', err);
       res.status (500).json ({});
     }
   }
 }
 
 async function deletePoll (req, res) {
-  console.log ('deletePoll', req.params._id);
+  console.log ('INFO deletePoll', req.params._id);
   try {
     await db.removePoll (req.params._id);
     res.status (200).json ({});
   } catch (err) {
-    console.log ('  deletePoll error', err);
+    console.log ('ERROR deletePoll', err);
     res.status (500).json ({});
   }
 }
 
 async function vote (req, res) {
-  console.log ('vote', req.params._id, req.params.choice);
+  console.log ('INFO vote', req.params._id, req.params.choice);
   try {
     await db.vote (req.params._id, req.params.choice);
     res.status (200).json ({});
   } catch (err) {
-    console.log ('  vote error', err);
+    console.log ('ERROR vote', err);
     res.status (500).json ({});
   }
 }

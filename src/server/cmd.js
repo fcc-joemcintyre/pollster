@@ -64,7 +64,7 @@ function processCommand (args) {
 
   // if help argument or errors, output usage message
   if ((showHelp === true) || (errors.length > 0)) {
-    console.log (
+    console.log ( // eslint-disable-next-line indent
 `Usage: pollster [-p=port] [-h]
   -p or --port      Port number to listen on. Default: ${defaults.port}
   -h or --help      This message.`);

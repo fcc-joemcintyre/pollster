@@ -26,7 +26,7 @@ const httpsOnly = (req, res, next) => {
 // Start the server.
 async function start (port, dbLocation) {
   try {
-    console.log ('Starting server');
+    console.log ('INFO Starting server');
     await db.init (dbLocation);
 
     // set up static HTML serving
@@ -85,10 +85,10 @@ async function start (port, dbLocation) {
     });
 
     app.listen (port, () => {
-      console.log (`Server listening on port ${port}`);
+      console.log (`INFO Server listening on port ${port}`);
     });
   } catch (err) {
-    console.log ('Server startup err', err);
+    console.log ('ERROR Server startup', err);
     process.exit (1);
   }
 }

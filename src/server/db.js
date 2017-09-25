@@ -8,7 +8,7 @@ let polls = null;
 
 // connect to database and set up collections
 async function init (uri) {
-  console.log ('db.init');
+  console.log ('INFO db.init');
   if (db) { return; }
 
   try {
@@ -17,7 +17,7 @@ async function init (uri) {
     polls = db.collection ('polls');
     await users.ensureIndex ({ username: 1 }, { unique: true });
   } catch (err) {
-    console.log ('db.init connect error', err);
+    console.log ('ERROR db.init', err);
     throw err;
   }
 }
