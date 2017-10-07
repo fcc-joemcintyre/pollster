@@ -3,9 +3,9 @@
 Internet polls done easy. Create an account, create some polls, manage your polls,
 vote on other people's polls, see your poll results !
 
-This application is built using *React (15.x)*, *React-Redux (5.x)* and
-*React-Router (4.x)* on the client. The server uses *Node (6.x)* and
-*Express (4.15.x)*.
+This application is built using *React (16.x)*, *React-Redux (5.x)* and
+*React-Router (4.x)* on the client. The server uses *Node (8.x)* and
+*Express (4.16.x)*.
 
 ## Live instance
 
@@ -43,6 +43,8 @@ In a terminal, build can be activated with
 
 ```
 npm run [build | build-stage]
+
+yarn [build | build-stage]
 ```
 
 The build uses *gulp* to run the set of tasks defined in *gulpfile.js*. The
@@ -61,6 +63,8 @@ Testing can be done for all components,
 
 ```
 npm test
+
+yarn test
 ```
 
 Or components individually,
@@ -68,6 +72,9 @@ Or components individually,
 ```
 npm run test-db
 npm run test-server
+
+yarn test-db
+yarn test-server
 ```
 
 ### Coverage
@@ -76,6 +83,8 @@ Coverage reports are generated using,
 
 ```
 npm run coverage
+
+yarn coverage
 ```
 
 Multiple coverage runs are performed, and then a final coverage run combines
@@ -92,6 +101,8 @@ can be activated with
 
 ```
 npm start
+
+yarn start
 ```
 
 The *nodemon* utility provides restart on update.

@@ -15,7 +15,6 @@ const gzip = require ('gulp-gzip');
 const sourcemaps = require ('gulp-sourcemaps');
 
 const dependencies = [
-  'babel-polyfill',
   'prop-types',
   'react',
   'react-dom',
