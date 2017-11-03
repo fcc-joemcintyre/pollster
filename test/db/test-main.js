@@ -3,12 +3,6 @@ const mongoClient = require ('mongodb').MongoClient;
 const db = require ('../../dist/db');
 
 const uri = 'mongodb://localhost:27017/pollsterTest';
-const testdb = {
-  db: null,
-  users: null,
-  polls: null,
-};
-exports.testdb = testdb;
 
 // test db calls with no database connection for error paths
 describe ('test no connection', function () {
@@ -22,37 +16,25 @@ describe ('test init/close', function () {
 
 // test application functions
 describe ('test-main', function () {
-  before (function (done) {
-    Promise.resolve ().then (() => {
-      return mongoClient.connect (uri);
-    }).then ((dbInstance) => {
-      testdb.db = dbInstance;
-      testdb.users = testdb.db.collection ('users');
-      return testdb.users.ensureIndex ({ username: 1 }, { unique: true });
-    }).then (() => {
-      return testdb.users.remove ({});
-    }).then (() => {
-      testdb.polls = testdb.db.collection ('polls');
-      return testdb.polls.remove ({});
-    }).then (() => {
-      return db.init (uri);
-    }).then (() => {
-      done ();
-    }).catch ((err) => {
-      done (err);
-    });
+  before (async function () {
+    try {
+      // reset database
+      const dbReset = await mongoClient.connect (uri);
+      const users = dbReset.collection ('users');
+      await users.remove ({});
+      const polls = dbReset.collection ('polls');
+      await polls.remove ({});
+      await dbReset.close ();
+
+      // initialize database for test cases
+      await db.init (uri);
+    } catch (err) {
+      throw err;
+    }
   });
 
-  after (function (done) {
-    Promise.resolve ().then (() => {
-      return db.close ();
-    }).then (() => {
-      return testdb.db.close ();
-    }).then (() => {
-      done ();
-    }).catch ((err) => {
-      done (err);
-    });
+  after (async function () {
+    await db.close ();
   });
 
   describe ('test-user', function () {
