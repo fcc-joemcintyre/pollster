@@ -30,7 +30,7 @@ describe ('Test account async actions', function () {
   });
 
   describe ('init polls (no polls)', function () {
-    it ('should generate set polls action', function () {
+    it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
         .get ('/api/polls')
         .reply (200, []);
@@ -39,10 +39,8 @@ describe ('Test account async actions', function () {
         { type: types.SET_POLLS, polls: [] },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.initPolls ())
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.initPolls ());
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
@@ -63,7 +61,7 @@ describe ('Test account async actions', function () {
         title: 'Poll b1',
         choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }] },
     ];
-    it ('should generate set polls action', function () {
+    it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
         .get ('/api/polls')
         .reply (200, [polls[0], polls[1], polls[2]]);
@@ -72,15 +70,13 @@ describe ('Test account async actions', function () {
         { type: types.SET_POLLS, polls: [polls[0], polls[1], polls[2]] },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.initPolls ())
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.initPolls ());
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('add poll', function () {
-    it ('should generate set polls action', function () {
+    it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/polls')
         .reply (200, { _id: '0001' });
@@ -105,15 +101,14 @@ describe ('Test account async actions', function () {
         },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.addPoll ('Treat', [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }]))
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.addPoll ('Treat',
+        [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }]));
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('update poll', function () {
-    it ('should generate set polls action', function () {
+    it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/polls/0001')
         .reply (200, {});
@@ -145,16 +140,14 @@ describe ('Test account async actions', function () {
           choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
         },
       ]);
-      return store.dispatch (actions.updatePoll ('0001', 'Treat',
-        [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }]))
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.updatePoll ('0001', 'Treat',
+        [{ text: 'Popsicle', votes: 0 }, { text: 'Blizzard', votes: 0 }]));
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('delete poll', function () {
-    it ('should generate set polls action', function () {
+    it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
         .delete ('/api/polls/0001')
         .reply (200, {});
@@ -173,10 +166,8 @@ describe ('Test account async actions', function () {
           choices: [{ text: 'Popsicle', votes: 0 }, { text: 'Ice Cream', votes: 0 }],
         },
       ]);
-      return store.dispatch (actions.deletePoll ('0001'))
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.deletePoll ('0001'));
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
@@ -222,7 +213,7 @@ describe ('Test account async actions', function () {
       },
     ];
 
-    it ('should generate set polls action', function () {
+    it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/polls/1001/votes/No')
         .reply (200, {});
@@ -234,10 +225,8 @@ describe ('Test account async actions', function () {
         { type: types.SET_POLLS, polls: endPolls },
       ];
       const store = mockStore (startPolls);
-      return store.dispatch (actions.vote ('1001', 'No'))
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.vote ('1001', 'No'));
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 });

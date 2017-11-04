@@ -45,7 +45,7 @@ describe ('Test account async actions', function () {
   });
 
   describe ('login', function () {
-    it ('should generate login actions', function () {
+    it ('should generate login actions', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/login', { username: 'amy', password: 'test' })
         .reply (200, { username: 'amy', name: '', email: '' });
@@ -55,15 +55,13 @@ describe ('Test account async actions', function () {
         { type: types.SET_PROFILE, name: '', email: '' },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.login ('amy', 'test'))
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.login ('amy', 'test'));
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('logout', function () {
-    it ('should generate logout actions', function () {
+    it ('should generate logout actions', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/logout')
         .reply (200, {});
@@ -72,15 +70,13 @@ describe ('Test account async actions', function () {
         { type: types.SET_AUTHENTICATED, authenticated: false, username: '' },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.logout ())
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.logout ());
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('verify login (logged in)', function () {
-    it ('should generate logged in actions', function () {
+    it ('should generate logged in actions', async function () {
       nock ('http://localhost:3999/')
         .get ('/api/verifylogin')
         .reply (200, {
@@ -93,15 +89,13 @@ describe ('Test account async actions', function () {
         { type: types.SET_PROFILE, name: 'Amy Tester', email: 'amy@example.com' },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.verifyLogin ())
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.verifyLogin ());
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('verify login (not logged in)', function () {
-    it ('should generate not logged in actions', function () {
+    it ('should generate not logged in actions', async function () {
       nock ('http://localhost:3999/')
         .get ('/api/verifylogin')
         .reply (200, { authenticated: false, user: null });
@@ -111,15 +105,13 @@ describe ('Test account async actions', function () {
         { type: types.SET_PROFILE, name: '', email: '' },
       ];
       const store = mockStore ({});
-      return store.dispatch (actions.verifyLogin ())
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.verifyLogin ());
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 
   describe ('update user profile', function () {
-    it ('should generate update actions', function () {
+    it ('should generate update actions', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/profile', {
           name: 'New name',
@@ -138,10 +130,8 @@ describe ('Test account async actions', function () {
           email: 'amy@example.com',
         },
       });
-      return store.dispatch (actions.updateProfile ('New name', 'new@example.com'))
-      .then (function () {
-        assert.deepStrictEqual (store.getActions (), expectedActions);
-      });
+      await store.dispatch (actions.updateProfile ('New name', 'new@example.com'));
+      assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
 });
