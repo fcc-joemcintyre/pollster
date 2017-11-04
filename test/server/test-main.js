@@ -3,49 +3,31 @@ const mongoClient = require ('mongodb').MongoClient;
 const server = require ('../../dist/server');
 const db = require ('../../dist/db');
 
+// set up browser variables and fetch implementation
 const port = 3999;
-const url = `http://localhost:${port}/`;
-exports.url = url;
+global.window = {
+  location: {
+    origin: `http://localhost:${port}`,
+  },
+};
+global.fetch = require ('fetch-cookie') (require ('node-fetch'));
 
 const dbURI = 'mongodb://localhost:27017/pollsterTest';
 
-before (function (done) {
-  Promise.resolve ().then (() => {
-    return resetDatabase ();
-  }).then (() => {
-    return db.init (dbURI);
-  }).then (() => {
-    return db.insertUser ('amy', 'test');
-  }).then (() => {
-    return db.close ();
-  }).then (() => {
-    return server.start (port, dbURI);
-  }).then (() => {
-    done ();
-  }).catch ((err) => {
-    done (err);
-  });
+before (async function () {
+  await resetDatabase ();
+  await db.init (dbURI);
+  await db.insertUser ('amy', 'test');
+  await db.close ();
+  await server.start (port, dbURI);
 });
 
-function resetDatabase () {
-  return new Promise ((resolve, reject) => {
-    Promise.resolve ().then (() => {
-      return mongoClient.connect (dbURI);
-    }).then ((instance) => {
-      const users = instance.collection ('users');
-      users.ensureIndex ({ username: 1 }, { unique: true })
-      .then (() => {
-        return users.remove ({});
-      }).then (() => {
-        const polls = instance.collection ('polls');
-        return polls.remove ({});
-      }).then (() => {
-        resolve ();
-      });
-    }).catch ((err) => {
-      reject (err);
-    });
-  });
+async function resetDatabase () {
+  const instance = await mongoClient.connect (dbURI);
+  const users = instance.collection ('users');
+  await users.remove ({});
+  const polls = instance.collection ('polls');
+  await polls.remove ({});
 }
 
 describe ('server', function () {

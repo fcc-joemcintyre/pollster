@@ -5,7 +5,7 @@ import nock from 'nock';
 import * as types from '../../src/client/store/pollsConstants';
 import * as actions from '../../src/client/store/pollsActions';
 import pollsReducer from '../../src/client/store/polls';
-import freeze from '../freeze';
+import freeze from '../util/freeze';
 
 const middleware = [thunk];
 const mockStore = configureMockStore (middleware);

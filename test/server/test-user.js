@@ -1,363 +1,152 @@
-const requestBase = require ('request');
-const url = require ('./test-main').url;
-
-const request = requestBase.defaults ({ jar: true });
+const jsonFetch = require ('../util/jsonFetch');
+const JsonFetchError = require ('../util/JsonFetchError');
 
 describe ('login/logout/register', function () {
-  describe ('valid login request', function () {
-    it ('should return valid login', function (done) {
-      const form = { form: { username: 'amy', password: 'test' } };
-      request.post (`${url}api/login`, form, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          return done ();
-        }
-        return done (new Error (`Invalid status code ${res.statusCode}`));
-      });
+  describe ('valid login await jsonFetch', function () {
+    it ('should return valid login', async function () {
+      const input = { username: 'amy', password: 'test' };
+      await jsonFetch.post ('/api/login', input);
     });
   });
 
-  describe ('invalid login request', function () {
-    it ('should return 401 error', function (done) {
-      const form = { form: { username: 'notauser', password: 'test' } };
-      request.post (`${url}api/login`, form, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 401) {
-          return done ();
+  describe ('invalid login await jsonFetch', function () {
+    it ('should return 401 error', async function () {
+      const input = { username: 'notauser', password: 'test' };
+      try {
+        await jsonFetch.post ('/api/login', input);
+        throw new JsonFetchError (200, 'Invalid status');
+      } catch (err) {
+        if (err.status !== 401) {
+          throw new Error ('Invalid status');
         }
-        return done (new Error (`Invalid status code ${res.statusCode}`));
-      });
+      }
     });
   });
 
-  describe ('valid login and logout request', function () {
-    it ('should have no errors', function (done) {
-      const form = { form: { username: 'amy', password: 'test' } };
-      request.post (`${url}api/login`, form, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          return request.post (`${url}api/logout`, function (err2, res2) {
-            if (res2.statusCode === 200) {
-              return done ();
-            } else {
-              return done (new Error (`Invalid logout status code ${res2.statusCode}`));
-            }
-          });
-        } else {
-          return done (new Error (`Invalid login status code ${res.statusCode}`));
-        }
-      });
+  describe ('valid login and logout await jsonFetch', function () {
+    it ('should have no errors', async function () {
+      const input = { username: 'amy', password: 'test' };
+      await jsonFetch.post ('/api/login', input);
+      await jsonFetch.post ('/api/logout');
     });
   });
 
   describe ('check authentication for logged in user', function () {
-    before (function (done) {
-      const form = { form: { username: 'amy', password: 'test' } };
-      request.post (`${url}api/login`, form, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          return done ();
-        } else {
-          return done (new Error (`Invalid status code ${res.statusCode}`));
-        }
-      });
+    before (async function () {
+      const input = { username: 'amy', password: 'test' };
+      await jsonFetch.post ('/api/login', input);
     });
 
-    after (function (done) {
-      request.post (`${url}api/logout`, () => {
-        done ();
-      });
+    after (async function () {
+      await jsonFetch.post ('/api/logout');
     });
 
-    it ('should have no errors', function (done) {
-      request.get ({ url: `${url}api/verifylogin` }, (err, res, body) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          const data = JSON.parse (body);
-          if (data.authenticated === true) {
-            return done ();
-          } else {
-            return done (new Error (`Invalid data ${JSON.stringify (data)}`));
-          }
-        } else {
-          return done (new Error (`Invalid status code ${res.statusCode}`));
-        }
-      });
+    it ('should have no errors', async function () {
+      const data = await jsonFetch.get ('/api/verifylogin');
+      if (data.authenticated !== true) {
+        throw new Error ('Invalid login data');
+      }
     });
   });
 
   describe ('check authentication for no logged in user', function () {
-    it ('should return false with no errors', function (done) {
-      request.get (`${url}api/verifylogin`, (err, res, body) => {
-        if (res.statusCode === 200) {
-          const data = JSON.parse (body);
-          if (data.authenticated === false) {
-            return done ();
-          } else {
-            return done (new Error (`Invalid response ${JSON.stringify (data)}`));
-          }
-        } else {
-          return done (new Error (`Invalid authenticated status code ${res.statusCode}`));
-        }
-      });
+    it ('should return false with no errors', async function () {
+      const data = await jsonFetch.get ('/api/verifylogin');
+      if (data.authenticated !== false) {
+        throw new Error ('Invalid login data');
+      }
     });
   });
 
   describe ('register, login and logout', function () {
-    it ('should have no errors', function (done) {
-      const form = { form: { username: 'newuser', password: 'test' } };
-      request.post (`${url}api/register`, form, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          const form2 = { form: { username: 'newuser', password: 'test' } };
-          return request.post (`${url}api/login`, form2, (err2, res2) => {
-            if (err2) { return done (err2); }
-            if (res2.statusCode === 200) {
-              return request.post (`${url}api/logout`, (err3, res3) => {
-                if (res3.statusCode === 200) {
-                  return done ();
-                } else {
-                  return done (new Error (`Invalid response logout ${res3.statusCode}`));
-                }
-              });
-            } else {
-              return done (new Error (`Invalid login status code ${res2.statusCode}`));
-            }
-          });
-        } else {
-          return done (new Error (`Invalid register status code ${res.statusCode}`));
-        }
-      });
+    it ('should have no errors', async function () {
+      const input = { username: 'newuser', password: 'test' };
+      await jsonFetch.post ('/api/register', input);
+      await jsonFetch.post ('/api/login', input);
+      await jsonFetch.post ('/api/logout');
     });
   });
 
   describe ('register same user twice', function () {
-    it ('should fail on second register call', function (done) {
-      const form = { form: { username: 'newuser2', password: 'test' } };
-      request.post (`${url}api/register`, form, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          return request.post (`${url}api/register`, form, (err2, res2) => {
-            if (err2) { return done (err2); }
-            if (res2.statusCode === 403) {
-              return done ();
-            }
-            return done (new Error (`Invalid response logout 2 ${res2.statusCode}`));
-          });
-        } else {
-          return done (new Error (`Invalid response logout 1 ${res.statusCode}`));
+    it ('should fail on second register call', async function () {
+      const input = { username: 'newuser2', password: 'test' };
+      await jsonFetch.post ('/api/register', input);
+      try {
+        await jsonFetch.post ('/api/register', input);
+        throw new JsonFetchError (200, 'invalid status');
+      } catch (err) {
+        if (err.status !== 403) {
+          throw new Error ('invalid status');
         }
-      });
+      }
     });
   });
 });
 
 describe ('profile', function () {
-  beforeEach (function (done) {
-    const form = { form: { username: 'amy', password: 'test' } };
-    request.post (`${url}api/login`, form, (err, res) => {
-      if (err) { return done (err); }
-      if (res.statusCode === 200) {
-        return done ();
-      } else {
-        return done (new Error (`Invalid status code ${res.statusCode}`));
+  beforeEach (async function () {
+    const input = { username: 'amy', password: 'test' };
+    await jsonFetch.post ('/api/login', input);
+  });
+
+  afterEach (async function () {
+    await jsonFetch.post ('/api/logout');
+  });
+
+  describe ('get initial profile', function () {
+    it ('should have no errors', async function () {
+      const data = await jsonFetch.get ('/api/profile');
+      if ((data.name !== '') || (data.email !== '')) {
+        throw new Error (`Invalid data ${JSON.stringify (data)}`);
       }
     });
   });
 
-  afterEach (function (done) {
-    request.post (`${url}api/logout`, () => {
-      done ();
-    });
-  });
-
-  describe ('get initial profile', function () {
-    it ('should have no errors', function (done) {
-      request.get ({ url: `${url}api/profile` }, (err, res, body) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          const data = JSON.parse (body);
-          if ((data.name === '') && (data.email === '')) {
-            return done ();
-          } else {
-            return done (new Error (`Invalid data ${JSON.stringify (data)}`));
-          }
-        } else {
-          return done (new Error (`Invalid status code ${res.statusCode}`));
-        }
-      });
-    });
-  });
-
   describe ('update profile', function () {
-    it ('should have no errors', function (done) {
-      const form = { name: 'Test', email: 'test@example.com' };
-      request.post ({ url: `${url}api/profile`, form }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 200) {
-          return request.get ({ url: `${url}api/profile` }, (err2, res2, body2) => {
-            if (err2) { return done (err2); }
-            if (res2.statusCode === 200) {
-              const data = JSON.parse (body2);
-              if ((data.name === 'Test') && (data.email === 'test@example.com')) {
-                return done ();
-              } else {
-                return done (new Error (`Invalid data ${JSON.stringify (data)}`));
-              }
-            } else {
-              return done (new Error (`Invalid register status code ${res2.statusCode}`));
-            }
-          });
-        } else {
-          return done (new Error (`Invalid status code ${res.statusCode}`));
-        }
-      });
+    it ('should have no errors', async function () {
+      const input = { name: 'Test', email: 'test@example.com' };
+      await jsonFetch.post ('/api/profile', input);
+      const data = await jsonFetch.get ('/api/profile');
+      if ((data.name !== 'Test') || (data.email !== 'test@example.com')) {
+        throw new Error (`Invalid data ${JSON.stringify (data)}`);
+      }
     });
   });
 });
 
 describe ('REST call validation', function () {
-  describe ('login: missing body', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, { form: {} }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
+  /* eslint object-property-newline: off */
+  const tests = [
+    { name: 'login empty', uri: '/api/login', data: {}, status: 400 },
+    { name: 'login username', uri: '/api/login', data: { username: 'username' }, status: 400 },
+    { name: 'login password', uri: '/api/login', data: { password: 'password' }, status: 400 },
+    { name: 'login extra', uri: '/api/login', data: { username: 'username', password: 'password', extra: 'extra' },
+      status: 400 },
+    { name: 'login username length', uri: '/api/login',
+      data: { username: 'usernameistoolongtpplomg', password: 'password' }, status: 400 },
+    { name: 'login password length', uri: '/api/login',
+      data: { username: 'username', password: 'passwordistoolongtoolong' }, status: 400 },
+    { name: 'register empty', uri: '/api/register', data: {}, status: 400 },
+    { name: 'register username', uri: '/api/register', data: { username: 'username' }, status: 400 },
+    { name: 'register password', uri: '/api/register', data: { password: 'password' }, status: 400 },
+    { name: 'register extra', uri: '/api/register', data: { username: 'username', password: 'password', extra: 'extra' },
+      status: 400 },
+    { name: 'register username length', uri: '/api/register',
+      data: { username: 'usernameistoolongtpplomg', password: 'password' }, status: 400 },
+    { name: 'register password length', uri: '/api/register',
+      data: { username: 'username', password: 'passwordistoolongtoolong' }, status: 400 },
+  ];
 
-  describe ('Login: missing username', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, { form: { password: 'password' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
+  tests.forEach (function (test) {
+    it (`${test.name} status should be ${test.status}`, async function () {
+      try {
+        await jsonFetch.post ('/api/login', {});
+        throw new JsonFetchError (0);
+      } catch (err) {
+        if (err.status !== test.status) {
+          throw new Error ('invalid status');
         }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('login: missing password', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, { form: { username: 'username' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('login: extraneous data', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, { form: { username: 'username', password: 'password', extra: 'extra' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('login: invalid username length', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, { form: { username: 'usernameIsOver20Length', password: 'password' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('login: invalid password length', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/login`, { form: { username: 'username', password: 'passwordIsOver20Length' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('register: missing body', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('register: missing username', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, { form: { password: 'password' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('register: missing password', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, { form: { username: 'username' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('register: extraneous data', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, { form: { username: 'username', password: 'password', extra: 'extra' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('register: invalid username length', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, { form: { username: 'usernameIsOver20Length', password: 'password' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
-    });
-  });
-
-  describe ('register: invalid password length', function () {
-    it ('should fail with 400', function (done) {
-      request.post (`${url}api/register`, { form: { username: 'username', password: 'passwordIsOver20Length' } }, (err, res) => {
-        if (err) { return done (err); }
-        if (res.statusCode === 400) {
-          return done ();
-        }
-        return done (new Error (`Invalid statusCode ${res.statusCode}`));
-      });
+      }
     });
   });
 });
