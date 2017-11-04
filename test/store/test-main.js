@@ -1,8 +1,7 @@
 /* eslint global-require: off */
 
 // establish global fetch objects to mimic browser variables
-import 'isomorphic-fetch';
-import 'regenerator-runtime/runtime';  // eslint-disable-line
+global.fetch = require ('fetch-cookie') (require ('node-fetch'));
 
 global.window = { location: { origin: 'http://localhost:3999' } };
 

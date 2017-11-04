@@ -92,7 +92,21 @@ gulp.task ('browserify-dev', function () {
   const config = { entries: 'src/client/components/main/index.jsx', debug: true };
   const bundler = watchify (browserify (config, watchify.args));
   bundler.external (dependencies);
-  bundler.transform (babelify, { presets: ['es2015', 'es2017', 'react'] });
+  bundler.transform (babelify, { presets: [
+    ['env', {
+      targets: {
+        browsers: [
+          'chrome >= 61',
+          'firefox >= 55',
+          'opera >= 49',
+          'ios >= 10.3',
+          'safari >= 10.1',
+          'edge >= 15',
+        ],
+      },
+    }],
+    'react',
+  ] });
   bundler.on ('update', rebundle);
   return rebundle ();
 
@@ -131,7 +145,21 @@ gulp.task ('browserify-stage', function () {
   process.env.NODE_ENV = 'production';
   const bundler = browserify ({ entries: 'src/client/components/main/index.jsx', debug: false });
   bundler.external (dependencies);
-  bundler.transform (babelify, { presets: ['es2015', 'es2017', 'react'] });
+  bundler.transform (babelify, { presets: [
+    ['env', {
+      targets: {
+        browsers: [
+          'chrome >= 61',
+          'firefox >= 55',
+          'opera >= 49',
+          'ios >= 10.3',
+          'safari >= 10.1',
+          'edge >= 15',
+        ],
+      },
+    }],
+    'react',
+  ] });
   bundler.on ('update', rebundle);
   return rebundle ();
 
