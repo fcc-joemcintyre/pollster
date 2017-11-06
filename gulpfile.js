@@ -10,7 +10,7 @@ const source = require ('vinyl-source-stream');
 const babelify = require ('babelify');
 const browserify = require ('browserify');
 const watchify = require ('watchify');
-const uglify = require ('gulp-uglify');
+const minify = require ('gulp-babel-minify');
 const gzip = require ('gulp-gzip');
 const sourcemaps = require ('gulp-sourcemaps');
 
@@ -135,7 +135,7 @@ gulp.task ('vendor-stage', function () {
     .bundle ()
     .pipe (source ('vendor.bundle.js'))
     .pipe (buffer ())
-    .pipe (uglify ({ mangle: false }))
+    .pipe (minify ({ mangle: false }))
     .pipe (gulp.dest (`${base}/public/js`))
     .pipe (gzip ({ append: true }))
     .pipe (gulp.dest (`${base}/public/js`));
@@ -174,7 +174,7 @@ gulp.task ('browserify-stage', function () {
       })
       .pipe (source ('bundle.js'))
       .pipe (buffer ())
-      .pipe (uglify ({ mangle: false }))
+      .pipe (minify ({ mangle: false }))
       .pipe (gulp.dest (`${base}/public/js`))
       .pipe (gzip ({ append: true }))
       .pipe (gulp.dest (`${base}/public/js`));
