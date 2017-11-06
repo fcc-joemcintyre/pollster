@@ -28,10 +28,10 @@ const AboutPage = () => {
         </p>
         <p>Technologies used include:</p>
         <ul>
-          <li>Client: React (15.x), React-Redux and React-Router</li>
-          <li>Server: Node (6.x) using Express and Passport</li>
-          <li>Database: Mongo (3.x)</li>
-          <li>Languages: Javascript (ES2015), CSS (SCSS using Sass)</li>
+          <li>Client: React (16.x), React-Redux and React-Router</li>
+          <li>Server: Node (8.x) using Express and Passport</li>
+          <li>Database: Mongo (3.4.x)</li>
+          <li>Languages: Javascript (ES2015-2017), CSS (SCSS using Sass)</li>
         </ul>
         <p>Thanks to:</p>
         <ul>
