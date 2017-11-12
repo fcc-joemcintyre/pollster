@@ -67,7 +67,8 @@ function processCommand (args) {
     console.log ( // eslint-disable-next-line indent
 `Usage: pollster [-p=port] [-h]
   -p or --port      Port number to listen on. Default: ${defaults.port}
-  -h or --help      This message.`);
+  -h or --help      This message.`
+    );
     result.code = (showHelp) ? 0 : 1;
     result.exit = true;
   }

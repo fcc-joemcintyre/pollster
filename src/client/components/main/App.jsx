@@ -44,6 +44,7 @@ class App extends Component {
       return <LoadingPage message={this.state.message} />;
     }
 
+    const { authenticated } = this.props;
     return (
       <BrowserRouter>
         <ScrollToTop>
@@ -54,10 +55,10 @@ class App extends Component {
                 <Route exact path='/' component={HomePage} />
                 <Route path='/register' component={RegisterPage} />
                 <Route path='/login' component={LoginPage} />
-                <AuthRoute path='/profile' authenticated={this.props.authenticated} component={ProfilePage} />
+                <AuthRoute path='/profile' authenticated={authenticated} component={ProfilePage} />
                 <Route path='/polls/:_id' component={PollPage} />
-                <AuthRoute path='/manage' authenticated={this.props.authenticated} component={ManagePage} />
-                <AuthRoute path='/results' authenticated={this.props.authenticated} component={ResultPage} />
+                <AuthRoute path='/manage' authenticated={authenticated} component={ManagePage} />
+                <AuthRoute path='/results' authenticated={authenticated} component={ResultPage} />
                 <Route path='/about' component={AboutPage} />
                 <Route path='*' component={NotFoundPage} />
               </Switch>

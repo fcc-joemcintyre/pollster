@@ -1,5 +1,5 @@
 module.exports = {
-  'rules': {
+  rules: {
     // enforce or disallow variable initializations at definition
     'init-declarations': 'off',
 
@@ -10,10 +10,11 @@ module.exports = {
     'no-delete-var': 'error',
 
     // disallow labels that share a name with a variable
+    // https://eslint.org/docs/rules/no-label-var
     'no-label-var': 'error',
 
-    // disallow specific global variables
-    'no-restricted-globals': 'off',
+    // disallow specific globals
+    'no-restricted-globals': ['error', 'isFinite', 'isNaN'],
 
     // disallow declaration of variables already declared in the outer scope
     'no-shadow': 'error',
@@ -28,12 +29,13 @@ module.exports = {
     'no-undef-init': 'error',
 
     // disallow use of undefined variable
+    // https://eslint.org/docs/rules/no-undefined
     'no-undefined': 'error',
 
     // disallow declaration of variables that are not used in the code
-    'no-unused-vars': ['error', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
+    'no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: true }],
 
     // disallow use of variables before they are defined
-    'no-use-before-define': ['error', { 'functions': false, 'classes': true, 'variables': true }],
+    'no-use-before-define': ['error', { functions: false, classes: true, variables: true }],
   },
 };

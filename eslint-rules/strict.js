@@ -1,6 +1,6 @@
 module.exports = {
-  'rules': {
-    // require or disallow strict mode directives
-    'strict': ['error', 'never'],
+  rules: {
+    // babel inserts `'use strict';` for us
+    strict: ['error', 'never'],
   },
 };

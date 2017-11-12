@@ -1,18 +1,19 @@
 module.exports = {
-  'rules': {
-    // require trailing commas in multiline object literals
-    'comma-dangle': ['error', {
-      arrays: 'always-multiline',
-      objects: 'always-multiline',
-      imports: 'always-multiline',
-      exports: 'always-multiline',
-      functions: 'never',
-    }],
+  rules: {
+    // Enforce “for” loop update clause moving the counter in the right direction
+    // https://eslint.org/docs/rules/for-direction
+    'for-direction': 'error',
 
-    // disallow await inside of loops
+    // Enforces that a return statement is present in property getters
+    // https://eslint.org/docs/rules/getter-return
+    'getter-return': ['error', { allowImplicit: true }],
+
+    // Disallow await inside of loops
+    // https://eslint.org/docs/rules/no-await-in-loop
     'no-await-in-loop': 'error',
 
-    // The rule should warn against code that tries to compare against -0
+    // Disallow comparisons to negative zero
+    // https://eslint.org/docs/rules/no-compare-neg-zero
     'no-compare-neg-zero': 'error',
 
     // disallow assignment in conditional expressions
@@ -22,7 +23,7 @@ module.exports = {
     'no-console': 'warn',
 
     // disallow use of constant expressions in conditions
-    'no-constant-condition': 'error',
+    'no-constant-condition': 'warn',
 
     // disallow control characters in regular expressions
     'no-control-regex': 'error',
@@ -49,14 +50,17 @@ module.exports = {
     'no-ex-assign': 'error',
 
     // disallow double-negation boolean casts in a boolean context
+    // https://eslint.org/docs/rules/no-extra-boolean-cast
     'no-extra-boolean-cast': 'error',
 
     // disallow unnecessary parentheses
+    // https://eslint.org/docs/rules/no-extra-parens
     'no-extra-parens': ['off', 'all', {
       conditionalAssign: true,
       nestedBinaryExpressions: false,
       returnAssign: false,
-      ignoreJSX: 'none',
+      ignoreJSX: 'all', // delegate to eslint-plugin-react
+      enforceForArrowConditionals: false,
     }],
 
     // disallow unnecessary semicolons
@@ -78,6 +82,7 @@ module.exports = {
     'no-obj-calls': 'error',
 
     // disallow use of Object.prototypes builtins directly
+    // https://eslint.org/docs/rules/no-prototype-builtins
     'no-prototype-builtins': 'error',
 
     // disallow multiple spaces in a regular expression literal
@@ -87,27 +92,36 @@ module.exports = {
     'no-sparse-arrays': 'error',
 
     // Disallow template literal placeholder syntax in regular strings
+    // https://eslint.org/docs/rules/no-template-curly-in-string
     'no-template-curly-in-string': 'error',
 
     // Avoid code that looks like two expressions but is actually one
+    // https://eslint.org/docs/rules/no-unexpected-multiline
     'no-unexpected-multiline': 'error',
 
     // disallow unreachable statements after a return, throw, continue, or break statement
     'no-unreachable': 'error',
 
-    // disallow control flow statements in finally blocks
+    // disallow return/throw/break/continue inside finally blocks
+    // https://eslint.org/docs/rules/no-unsafe-finally
     'no-unsafe-finally': 'error',
 
-    // disallow negating the left operand in in expressions
+    // disallow negating the left operand of relational operators
+    // https://eslint.org/docs/rules/no-unsafe-negation
     'no-unsafe-negation': 'error',
+    // disallow negation of the left operand of an in expression
+    // deprecated in favor of no-unsafe-negation
+    'no-negated-in-lhs': 'off',
 
     // disallow comparisons with the value NaN
     'use-isnan': 'error',
 
     // ensure JSDoc comments are valid
-    'valid-jsdoc': 'error',
+    // https://eslint.org/docs/rules/valid-jsdoc
+    'valid-jsdoc': 'warn',
 
     // ensure that the results of typeof are compared against a valid string
+    // https://eslint.org/docs/rules/valid-typeof
     'valid-typeof': ['error', { requireStringLiterals: true }],
   },
 };

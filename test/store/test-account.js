@@ -152,6 +152,7 @@ describe ('Test user reducers', function () {
         name: '',
         email: '',
       };
+      // eslint-disable-next-line no-undefined
       assert.deepStrictEqual (userReducer (undefined, {}), expectedObject);
     });
   });

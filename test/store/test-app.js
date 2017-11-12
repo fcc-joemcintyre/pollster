@@ -50,16 +50,20 @@ describe ('Test account async actions', function () {
         _id: '1000',
         creator: 'amy',
         title: 'Poll a1',
-        choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }] },
+        choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
+      },
       {
         _id: '1001',
         creator: 'amy',
         title: 'Poll a2',
-        choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }] },
-      { _id: '1002',
+        choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
+      },
+      {
+        _id: '1002',
         creator: 'bob',
         title: 'Poll b1',
-        choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }] },
+        choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
+      },
     ];
     it ('should generate set polls action', async function () {
       nock ('http://localhost:3999/')
@@ -276,6 +280,7 @@ describe ('Test poll reducers', function () {
   describe ('Reducer: default initialization', function () {
     it ('should return initial state', function () {
       const expectedObject = [];
+      // eslint-disable-next-line no-undefined
       assert.deepStrictEqual (pollsReducer (undefined, {}), expectedObject);
     });
   });
@@ -283,6 +288,7 @@ describe ('Test poll reducers', function () {
   describe ('Reducer: SET_POLLS to initialState', function () {
     it ('should end in initialState', function () {
       const expectedObject = initialState;
+      // eslint-disable-next-line no-undefined
       const actualObject = pollsReducer (undefined, {
         type: types.SET_POLLS,
         polls: initialState,

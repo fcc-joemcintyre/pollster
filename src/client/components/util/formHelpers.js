@@ -15,6 +15,7 @@ export function createField (name, initialValue, validators) {
 // constructor function to run initial validation to populate fields
 export function preValidate (fields) {
   Object.keys (fields).forEach ((field) => {
+    // eslint-disable-next-line no-param-reassign
     fields[field].error = validateField (fields[field]);
   });
 }
@@ -52,7 +53,8 @@ export function getResetObject (field) {
         [field.name]: Object.assign ({}, prev.fields[field.name], {
           value: prev.fields[field.name].initialValue,
           touched: false,
-          error: validateField (field) }),
+          error: validateField (field),
+        }),
       }),
     });
   };
@@ -105,6 +107,9 @@ export const fieldPropTypes = {
   initialValue: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   touched: PropTypes.bool.isRequired,
-  validators: PropTypes.arrayOf (PropTypes.shape ({ fn: PropTypes.func, text: PropTypes.string })).isRequired,
+  validators: PropTypes.arrayOf (PropTypes.shape ({
+    fn: PropTypes.func,
+    text: PropTypes.string,
+  })).isRequired,
   error: PropTypes.string,
 };

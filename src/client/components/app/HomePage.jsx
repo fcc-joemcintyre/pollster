@@ -29,8 +29,10 @@ class HomePage extends Component {
       message = (
         <div className='app-home-message'>
           <p>Welcome to Pollster, your place to vote and create new polls!</p>
-          <p>To create your own polls, <i>Register</i> to create a free account
-            and then <i>Login</i> anytime to manage your polls and see the results.</p>
+          <p>
+            To create your own polls, <i>Register</i> to create a free account
+            and then <i>Login</i> anytime to manage your polls and see the results.
+          </p>
           <hr className='app-home-divider' />
         </div>
       );

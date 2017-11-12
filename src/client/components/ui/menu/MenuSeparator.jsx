@@ -11,7 +11,7 @@ const MenuSeparator = ({ spacing, ...rest }) => {
 export default MenuSeparator;
 
 MenuSeparator.propTypes = {
-  spacing: PropTypes.string.isRequired,
+  spacing: PropTypes.string,
 };
 
 MenuSeparator.defaultProps = {

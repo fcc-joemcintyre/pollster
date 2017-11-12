@@ -9,7 +9,6 @@ class PollPage extends Component {
     const _id = this.props.match.params._id;
     const poll = props.polls.find ((p) => { return (p._id === _id); });
     this.state = {
-      _id,
       poll,
       selected: -1,
       voted: false,
@@ -54,13 +53,14 @@ class PollPage extends Component {
     const totalVotes = this.state.poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
     const rows = [];
     for (let i = 0; i < this.state.poll.choices.length; i ++) {
+      const choice = this.state.poll.choices[i];
       const key = `p-r-${i}`;
       if (this.state.voted) {
         let text = (i === this.state.selected) ? '\u2713 ' : '';
-        text += this.state.poll.choices[i].text;
+        text += choice.text;
         let percent = 0;
         if (totalVotes > 0) {
-          percent = Math.floor ((this.state.poll.choices[i].votes / totalVotes) * 100);
+          percent = Math.floor ((choice.votes / totalVotes) * 100);
         }
         rows.push (
           <div key={key} className='app-poll-votedItemArea'>
@@ -77,14 +77,14 @@ class PollPage extends Component {
           'app-poll-pollItem app-poll-pollItemSelected' : 'app-poll-pollItem';
         const check = (i === this.state.selected) ?
           <span className='app-poll-pollItemName'>&#10003; </span> : null;
-        const choice = <span className='app-poll-pollItemName'>{this.state.poll.choices[i].text}</span>;
+        const text = <span className='app-poll-pollItemName'>{choice.text}</span>;
         rows.push (
           <div
             key={key}
             className={`${pollClassName} ${(i % 2 === 0) ? 'app-poll-pollItemEven' : 'app-poll-pollItemOdd'}`}
             onClick={() => { this.setState ({ selected: i }); }}
           >
-            {check}{choice}
+            {check}{text}
           </div>
         );
       }

@@ -42,7 +42,7 @@ class ResultPage extends Component {
       return (
         <div
           key={choice.text}
-          className={'app-results-poll'}
+          className='app-results-poll'
           style={{ background: grad, border: '1px solid #EEEEEE' }}
         >
           {text}{percentText}

@@ -30,7 +30,9 @@ class ManagePage extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const polls = nextProps.polls.filter ((poll) => { return poll.creator === nextProps.username; });
+    const polls = nextProps.polls.filter ((poll) => {
+      return poll.creator === nextProps.username;
+    });
     const creator = nextProps.username;
     this.setState (Object.assign ({ polls, creator }, getDefaults ()));
   }
@@ -90,7 +92,7 @@ class ManagePage extends Component {
       );
     });
     polls.unshift (
-      <option key={'create'} value={'create'}>
+      <option key='create' value='create'>
         {'<Add a new poll>'}
       </option>
     );

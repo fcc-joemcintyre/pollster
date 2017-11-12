@@ -9,7 +9,7 @@ class Header extends Component {
   constructor (props) {
     super (props);
 
-    this.menuDropdownUnauthenticated = (
+    this.menuDropUnauthenticated = (
       <Menu className='app-menu-dropdown' dropDown>
         <MenuNavLink to='/' exact>Home</MenuNavLink>
         <MenuNavLink to='/about'>About</MenuNavLink>
@@ -18,7 +18,7 @@ class Header extends Component {
         <MenuNavLink to='/login'>Login</MenuNavLink>
       </Menu>
     );
-    this.menuDropdownAuthenticated = (
+    this.menuDropAuthenticated = (
       <Menu className='app-menu-dropdown' dropDown>
         <MenuNavLink to='/' exact>Home</MenuNavLink>
         <MenuNavLink to='/manage'>Manage</MenuNavLink>
@@ -84,7 +84,7 @@ class Header extends Component {
       return (
         <div className='app-h-area'>
           <div className='app-h-small'>
-            {this.props.authenticated ? this.menuDropdownAuthenticated : this.menuDropdownUnauthenticated}
+            {this.props.authenticated ? this.menuDropAuthenticated : this.menuDropUnauthenticated}
             <div className='app-h-smallTitle'>Pollster</div>
           </div>
         </div>

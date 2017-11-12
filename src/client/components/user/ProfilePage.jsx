@@ -54,7 +54,8 @@ class ProfilePage extends Component {
     if (this.onValidateForm ()) {
       this.setState ({ message: { status: 'working', text: 'Updating profile ...' } });
       try {
-        await this.props.dispatch (updateProfile (this.state.fields.name.value, this.state.fields.email.value));
+        const { name, email } = this.state.fields;
+        await this.props.dispatch (updateProfile (name.value, email.value));
         this.setState ({ message: { status: 'ok', text: 'Profile updated' } });
       } catch (err) {
         this.setState ({ message: { status: 'error', text: 'Error saving profile information' } });

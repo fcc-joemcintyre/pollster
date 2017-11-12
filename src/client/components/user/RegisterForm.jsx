@@ -6,7 +6,8 @@ import { fieldPropTypes } from '../util/formHelpers';
 const nameChars = /[A-Za-z0-9]/;
 const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
 
-const RegisterForm = ({ message, fields: { username, password, verifyPassword }, onChange, onValidate, onSubmit }) => {
+const RegisterForm = ({ message, fields: { username, password, verifyPassword },
+  onChange, onValidate, onSubmit }) => {
   let focusRef;
 
   function resetFocus () {

@@ -1,16 +1,11 @@
 {
-  "extends": [
-    "../eslint-rules/node.js"
-  ],
-
   "env": {
     "mocha": true
   },
 
   "rules": {
-    "max-nested-callbacks": "off",
+    "func-names": "off",
     "no-console": "off",
-    "no-undefined": "off",
     "prefer-arrow-callback": "off",
 
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
