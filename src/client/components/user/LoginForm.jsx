@@ -2,6 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
 import { fieldPropTypes } from '../util/formHelpers';
+import { PageContent } from '../style/Page';
+import { Form, Field, Row } from '../style/Layout';
+import { Heading } from '../style/Text';
+import { Button } from '../style/Button';
+import { MessageText } from '../style/MessageText';
 
 const usernameChars = /[A-Za-z0-9]/;
 const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
@@ -16,64 +21,53 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
   }
 
   return (
-    <div className='app-page-content'>
-      <h1>Login</h1>
-      <div className='app-form-statusArea'>
-        <span className={`app-form-status-${message.status}`}>
+    <PageContent>
+      <Heading center>Login</Heading>
+      <Row center mb='24px'>
+        <MessageText status={message.status}>
           {message.text}
-        </span>
-      </div>
-      <div className='app-form-layout'>
-        <form
-          className='app-form-form'
-          style={{ width: '300px' }}
-          onSubmit={onSubmit}
-        >
-          <div className='app-form-field'>
-            <label className='app-form-label' htmlFor='username'>User name</label>
-            <FilteredInput
-              id='username'
-              className='app-form-component'
-              style={{ width: '280px' }}
-              type='text'
-              ref={(ref) => { focusRef = ref; }}
-              autoFocus
-              maxLength={20}
-              autoCapitalize='none'
-              autoCorrect='off'
-              filter={usernameChars}
-              value={username.value}
-              onChange={(e) => { onChange (username, e.target.value); }}
-            />
-          </div>
-          <div className='app-form-field'>
-            <label className='app-form-label' htmlFor='password'>Password</label>
-            <FilteredInput
-              id='password'
-              className='app-form-component'
-              style={{ width: '280px' }}
-              type='password'
-              maxLength={20}
-              filter={passwordChars}
-              value={password.value}
-              onChange={(e) => { onChange (password, e.target.value); }}
-            />
-          </div>
-          <div className='app-form-buttonArea'>
-            <button
-              className='app-form-button'
-              disabled={(username.value === '') || (password.value === '')}
-              onClick={(e) => {
-                resetFocus ();
-                onSubmit (e);
-              }}
-            >
-              Login
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </MessageText>
+      </Row>
+      <Form center w='300px' onSubmit={onSubmit}>
+        <Field>
+          <label htmlFor='username'>User name</label>
+          <FilteredInput
+            id='username'
+            type='text'
+            ref={(ref) => { focusRef = ref; }}
+            autoFocus
+            maxLength={20}
+            autoCapitalize='none'
+            autoCorrect='off'
+            filter={usernameChars}
+            value={username.value}
+            onChange={(e) => { onChange (username, e.target.value); }}
+          />
+        </Field>
+        <Field>
+          <label htmlFor='password'>Password</label>
+          <FilteredInput
+            id='password'
+            type='password'
+            maxLength={20}
+            filter={passwordChars}
+            value={password.value}
+            onChange={(e) => { onChange (password, e.target.value); }}
+          />
+        </Field>
+        <Row center>
+          <Button
+            disabled={username.value === ''}
+            onClick={(e) => {
+              resetFocus ();
+              onSubmit (e);
+            }}
+          >
+            Login
+          </Button>
+        </Row>
+      </Form>
+    </PageContent>
   );
 };
 

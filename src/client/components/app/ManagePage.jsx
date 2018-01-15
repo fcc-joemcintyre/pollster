@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
+import { PageContent } from '../style/Page';
+import { Form, Field, Row, Box, Divider } from '../style/Layout';
+import { Heading, SubHeading, P } from '../style/Text';
+import { Button } from '../style/Button';
 import IntegerInput from '../ui/IntegerInput.jsx';
+import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
 
 function getDefaults () {
   return {
@@ -119,46 +123,29 @@ class ManagePage extends Component {
         />
       );
     });
-    let buttonArea;
-    if (newPoll) {
-      buttonArea = (
-        <div className='app-form-buttonArea'>
-          <button className='app-form-button' onClick={this.onAddPoll}>Add Poll</button>
-        </div>
-      );
-    } else {
-      buttonArea = (
-        <div className='app-form-buttonArea'>
-          <button className='app-form-button' onClick={this.onSavePoll}>Save Poll</button>
-          <button className='app-form-button' onClick={this.onDeletePoll}>Delete Poll</button>
-        </div>
-      );
-    }
 
     return (
-      <div className='app-page-content'>
-        <div className='app-manage-content'>
-          <h1>Manage Polls</h1>
-          <div className='app-manage-box'>
-            <label className='app-manage-topLabel' htmlFor='id-mypolls'>My polls</label>
+      <PageContent>
+        <Heading center>Manage Polls</Heading>
+        <Form center w='400px'>
+          <Field>
+            <label htmlFor='id-mypolls'>My polls</label>
             <select
               id='id-mypolls'
-              className='app-manage-select'
               value={this.state.selected}
               autoFocus
               onChange={(e) => { this.onSelectPoll (e.target.value); }}
             >
               {polls}
             </select>
-          </div>
+          </Field>
 
-          <div className='app-manage-box'>
-            <h2>{newPoll ? 'Add a new poll' : 'Edit poll'}</h2>
-            <div className='app-manage-section'>
-              <label htmlFor='id-title' className='app-manage-label1'>Title</label>
+          <Box mt='20px' pl='8px' pr='8px'>
+            <SubHeading>{newPoll ? 'Add a new poll' : 'Edit poll'}</SubHeading>
+            <Field>
+              <label htmlFor='id-title'>Title</label>
               <input
                 id='id-title'
-                className='app-manage-input1 app-manage-vspacing'
                 type='text'
                 value={this.state.title}
                 maxLength={30}
@@ -166,16 +153,15 @@ class ManagePage extends Component {
                   this.setState ({ title: e.target.value });
                 }}
               />
-              {choices}
-            </div>
-            <hr className='app-manage-divider' />
-            <div className='app-manage-section'>
-              <div className='app-manage-subtitle'>Closing Criteria</div>
-              <div className='app-manage-row'>
-                <label htmlFor='id-limit1' className='app-manage-label2'>
+            </Field>
+            {choices}
+            <Divider extend='8px' />
+            <Row>
+              <SubHeading>Closing Criteria</SubHeading>
+              <Field>
+                <label htmlFor='id-limit1'>
                   <input
                     id='id-limit1'
-                    className='app-manage-input2'
                     type='checkbox'
                     checked={this.state.voteLimit}
                     onChange={(e) => { this.setState ({ voteLimit: e.target.checked }); }}
@@ -183,16 +169,14 @@ class ManagePage extends Component {
                   Vote Limit
                 </label>
                 <IntegerInput
-                  className='app-manage-maxVotes'
                   value={this.state.maxVotes}
                   onChange={(maxVotes) => { this.setState ({ maxVotes }); }}
                 />
-              </div>
-              <div className='app-manage-row'>
-                <label htmlFor='id-limit2' className='app-manage-label2'>
+              </Field>
+              <Field>
+                <label htmlFor='id-limit2'>
                   <input
                     id='id-limit2'
-                    className='app-manage-input2'
                     type='checkbox'
                     checked={this.state.dateLimit}
                     onChange={(e) => { this.setState ({ dateLimit: e.target.checked }); }}
@@ -200,26 +184,33 @@ class ManagePage extends Component {
                   End Date
                 </label>
                 <input
-                  className='app-manage-date'
                   value={this.state.endDate}
                   onChange={(e) => { this.setState ({ endDate: e.target.value }); }}
                 />
-              </div>
-            </div>
-            <hr className='app-manage-divider' />
-            {buttonArea}
-          </div>
-        </div>
+              </Field>
+            </Row>
+            <Divider extend='8px' />
+            <Row center>
+              { newPoll ?
+                <Button mt='16px' mb='16px' onClick={this.onAddPoll}>Add Poll</Button> :
+                <Fragment>
+                  <Button mt='16px' mb='16px' onClick={this.onSavePoll}>Save Poll</Button>
+                  <Button mt='16px' mb='16px' onClick={this.onDeletePoll}>Delete Poll</Button>
+                </Fragment>
+              }
+            </Row>
+          </Box>
+        </Form>
         {
           (newPoll) ? null :
-          <div className='app-manage-sharePoll'>
-            <h2>Share this Poll</h2>
-            <p style={{ textAlign: 'center' }}>
+          <Row>
+            <SubHeading center>Share this Poll</SubHeading>
+            <P center>
               https://pollster-jm.herokuapp.com/polls/{this.state.selected}
-            </p>
-          </div>
+            </P>
+          </Row>
         }
-      </div>
+      </PageContent>
     );
   }
 }
@@ -264,11 +255,10 @@ ManagePage.propTypes = {
 
 const Choice = (props) => {
   return (
-    <div className='app-manage-row'>
-      <label htmlFor={props.id} className='app-manage-label1'>Choice {props.index + 1}</label>
+    <Field>
+      <label htmlFor={props.id}>Choice {props.index + 1}</label>
       <input
         id={props.id}
-        className='app-manage-input1'
         type='text'
         value={props.choice}
         maxLength={30}
@@ -276,7 +266,7 @@ const Choice = (props) => {
           props.onChange (props.index, e.target.value.trim ());
         }}
       />
-    </div>
+    </Field>
   );
 };
 

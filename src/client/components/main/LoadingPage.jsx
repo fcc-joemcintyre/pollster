@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { PageContent } from '../style/Page';
+import { P } from '../style/Text';
+import { Box } from '../style/Layout';
+import { FixedFullWidth, RelativeCenteredBox, Title } from '../style/Header';
 
 const LoadingPage = ({ message }) => {
   return (
-    <div className='app-page'>
-      <div className='app-h-area'>
-        <div className='app-h-line1'>
-          <div className='app-h-title'>Pollster</div>
-        </div>
-      </div>
-      <div className='app-page-contentArea'>
-        <div className='app-page-content' style={{ textAlign: 'center' }}>
+    <PageContent>
+      <FixedFullWidth>
+        <RelativeCenteredBox>
+          <Title>Pollster</Title>
+        </RelativeCenteredBox>
+      </FixedFullWidth>
+      <Box center noborder w='500px'>
+        <P center mt='40px'>
           {message}
-        </div>
-      </div>
-    </div>
+        </P>
+      </Box>
+    </PageContent>
   );
 };
 

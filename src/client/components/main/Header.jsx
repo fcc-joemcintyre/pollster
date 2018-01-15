@@ -1,65 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { logout } from '../../store/userActions';
-import { Menu, MenuLink, MenuNavLink, MenuSeparator, MenuSubmenu } from '../ui/menu/index';
+import { Flex } from '../style/Layout';
+import { AppMenu, MenuBar, MenuNavLink, MenuSeparator, SubMenu } from '../style/Menu';
+import { FixedFullWidth, RelativeCenteredBox, Title } from '../style/Header';
 
-// Header with application and common navigation
 class Header extends Component {
   constructor (props) {
     super (props);
-
-    this.menuDropUnauthenticated = (
-      <Menu className='app-menu-dropdown' dropDown>
-        <MenuNavLink to='/' exact>Home</MenuNavLink>
-        <MenuNavLink to='/about'>About</MenuNavLink>
-        <MenuSeparator spacing='4px' />
-        <MenuNavLink to='/register'>Register</MenuNavLink>
-        <MenuNavLink to='/login'>Login</MenuNavLink>
-      </Menu>
-    );
-    this.menuDropAuthenticated = (
-      <Menu className='app-menu-dropdown' dropDown>
-        <MenuNavLink to='/' exact>Home</MenuNavLink>
-        <MenuNavLink to='/manage'>Manage</MenuNavLink>
-        <MenuNavLink to='/results'>Results</MenuNavLink>
-        <MenuNavLink to='/about'>About</MenuNavLink>
-        <MenuNavLink to='/profile'>Profile</MenuNavLink>
-        <MenuSeparator spacing='4px' />
-        <MenuLink to='/' func={() => { props.dispatch (logout ()); }}>Logout</MenuLink>
-      </Menu>
-    );
-
-    this.menuRightUnauthenticated = (
-      <Menu className='app-menu-bar app-menu-right'>
-        <MenuNavLink to='/register'>Register</MenuNavLink>
-        <MenuNavLink to='/login'>Login</MenuNavLink>
-      </Menu>
-    );
-    this.menuRightAuthenticated = (
-      <Menu className='app-menu-bar app-menu-right'>
-        <MenuSubmenu text='User'>
-          <MenuNavLink to='/profile'>Profile</MenuNavLink>
-          <MenuLink to='/' func={() => { props.dispatch (logout ()); }}>Logout</MenuLink>
-        </MenuSubmenu>
-      </Menu>
-    );
-
-    this.menuLeftUnauthenticated = (
-      <Menu className='app-menu-bar app-menu-left'>
-        <MenuNavLink to='/' exact>Home</MenuNavLink>
-        <MenuNavLink to='/about'>About</MenuNavLink>
-      </Menu>
-    );
-    this.menuLeftAuthenticated = (
-      <Menu className='app-menu-bar app-menu-left'>
-        <MenuNavLink to='/' exact>Home</MenuNavLink>
-        <MenuNavLink to='/manage'>Manage</MenuNavLink>
-        <MenuNavLink to='/results'>Results</MenuNavLink>
-        <MenuNavLink to='/about'>About</MenuNavLink>
-      </Menu>
-    );
-
     this.state = {
       innerWidth: window.innerWidth,
     };
@@ -80,26 +28,67 @@ class Header extends Component {
   }
 
   render () {
-    if (this.state.innerWidth < 768) {
+    if (this.state.innerWidth < 320) {
       return (
-        <div className='app-h-area'>
-          <div className='app-h-small'>
-            {this.props.authenticated ? this.menuDropAuthenticated : this.menuDropUnauthenticated}
-            <div className='app-h-smallTitle'>Pollster</div>
-          </div>
-        </div>
+        <FixedFullWidth>
+          <RelativeCenteredBox>
+            <Flex>
+              {this.props.authenticated ?
+                <AppMenu>
+                  <MenuNavLink to='/' exact>Home</MenuNavLink>
+                  <MenuNavLink to='/manage'>Manage</MenuNavLink>
+                  <MenuNavLink to='/results'>Results</MenuNavLink>
+                  <MenuNavLink to='/about'>About</MenuNavLink>
+                  <MenuNavLink to='/profile'>Profile</MenuNavLink>
+                  <MenuSeparator spacing='4px' />
+                  <MenuNavLink to='/logout'>Logout</MenuNavLink>
+                </AppMenu> :
+                <AppMenu>
+                  <MenuNavLink to='/' exact>Home</MenuNavLink>
+                  <MenuNavLink to='/about'>About</MenuNavLink>
+                  <MenuSeparator spacing='4px' />
+                  <MenuNavLink to='/register'>Register</MenuNavLink>
+                  <MenuNavLink to='/login'>Login</MenuNavLink>
+                </AppMenu>
+              }
+              <Title ml='60px'>Pollster</Title>
+            </Flex>
+          </RelativeCenteredBox>
+        </FixedFullWidth>
       );
     } else {
       return (
-        <div className='app-h-area'>
-          <div className='app-h-line1'>
-            {this.props.authenticated ? this.menuRightAuthenticated : this.menuRightUnauthenticated}
-            <div className='app-h-title'>Pollster</div>
-          </div>
-          <div className='app-h-line2'>
-            {this.props.authenticated ? this.menuLeftAuthenticated : this.menuLeftUnauthenticated}
-          </div>
-        </div>
+        <FixedFullWidth>
+          <RelativeCenteredBox>
+            <Title>Pollster</Title>
+            <Flex>
+              {this.props.authenticated ?
+                <MenuBar mt='8px'>
+                  <MenuNavLink to='/' exact>Home</MenuNavLink>
+                  <MenuNavLink to='/manage'>Manage</MenuNavLink>
+                  <MenuNavLink to='/results'>Results</MenuNavLink>
+                  <MenuNavLink to='/about'>About</MenuNavLink>
+                </MenuBar> :
+                <MenuBar mt='8px'>
+                  <MenuNavLink to='/' exact>Home</MenuNavLink>
+                  <MenuNavLink to='/about'>About</MenuNavLink>
+                </MenuBar>
+              }
+              {this.props.authenticated ?
+                <MenuBar right mt='8px'>
+                  <SubMenu text='User' right>
+                    <MenuNavLink to='/profile'>Profile</MenuNavLink>
+                    <MenuNavLink to='/logout'>Logout</MenuNavLink>
+                  </SubMenu>
+                </MenuBar> :
+                <MenuBar right mt='8px'>
+                  <MenuNavLink to='/register'>Register</MenuNavLink>
+                  <MenuNavLink to='/login'>Login</MenuNavLink>
+                </MenuBar>
+              }
+            </Flex>
+          </RelativeCenteredBox>
+        </FixedFullWidth>
       );
     }
   }
@@ -115,5 +104,4 @@ export default connect (mapStateToProps, null, null, { pure: false }) (Header);
 
 Header.propTypes = {
   authenticated: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };

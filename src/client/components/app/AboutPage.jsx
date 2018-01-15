@@ -1,47 +1,47 @@
 import React from 'react';
+import { PageContent } from '../style/Page';
+import { Heading, P, TextLink, UL, LI } from '../style/Text';
+import { Box } from '../style/Layout';
 
 const AboutPage = () => {
   return (
-    <div className='app-page-content'>
-      <h1>About Pollster</h1>
-      <div style={{ maxWidth: '500px', margin: '0 auto 0 auto' }}>
-        <p>Written by Joe McIntyre, Pollster is a full stack project defined by
-          FreeCodeCamp. (
-          <a
-            href='https://www.freecodecamp.com/challenges/build-a-voting-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
+    <PageContent>
+      <Heading center >About Pollster</Heading>
+      <Box center noborder w='500px'>
+        <P>
+          Written by Joe McIntyre, Pollster is a full stack project defined by FreeCodeCamp. (
+          <TextLink href='https://www.freecodecamp.com/challenges/build-a-voting-app'>
             Link
-          </a>
+          </TextLink>
           )
-        </p>
-        <p>The source code is published on GitHub under a MIT license. (
-          <a
-            href='https://github.com/fcc-joemcintyre/pollster'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
+        </P>
+        <P>
+          The source code is pubLIshed on GitHub under a MIT LIcense. (
+          <TextLink href='https://github.com/fcc-joemcintyre/pollster'>
             Link
-          </a>
+          </TextLink>
           )
-        </p>
-        <p>Technologies used include:</p>
-        <ul>
-          <li>Client: React (16.x), React-Redux and React-Router</li>
-          <li>Server: Node (8.x) using Express and Passport</li>
-          <li>Database: Mongo (3.4.x)</li>
-          <li>Languages: Javascript (ES2015-2017), CSS (SCSS using Sass)</li>
-        </ul>
-        <p>Thanks to:</p>
-        <ul>
-          <li>GitHub (source hosting)</li>
-          <li>Heroku (app hosting)</li>
-          <li>mlab (database hosting)</li>
-          <li>TravisCI (continuous integration testing)</li>
-        </ul>
-      </div>
-    </div>
+        </P>
+        <P>
+          Technologies used include:
+        </P>
+        <UL>
+          <LI>Client: React (16.x), Styled Components, React Redux, and React Router</LI>
+          <LI>Server: Node (8.x) using Express and Passport</LI>
+          <LI>Database: Mongo (3.4.x)</LI>
+          <LI>Languages: Javascript (ES2017), CSS</LI>
+        </UL>
+        <P>
+          Thanks to:
+        </P>
+        <UL>
+          <LI>GitHub (source hosting)</LI>
+          <LI>Heroku (app hosting)</LI>
+          <LI>mlab (database hosting)</LI>
+          <LI>TravisCI (continuous integration testing)</LI>
+        </UL>
+      </Box>
+    </PageContent>
   );
 };
 

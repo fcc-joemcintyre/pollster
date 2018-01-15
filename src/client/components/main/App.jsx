@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { baseTheme, grayTheme } from '../style/theme';
 import AuthRoute from './AuthRoute.jsx';
 import Header from './Header.jsx';
 import { verifyLogin } from '../../store/userActions';
 import { initPolls } from '../../store/pollsActions';
+import '../style/Global';
+import { Page } from '../style/Page';
 import ScrollToTop from '../ui/ScrollToTop.jsx';
 
 import LoadingPage from './LoadingPage.jsx';
@@ -18,6 +22,7 @@ import PollPage from '../app/PollPage.jsx';
 import ManagePage from '../app/ManagePage.jsx';
 import ResultPage from '../app/ResultPage.jsx';
 import AboutPage from '../app/AboutPage.jsx';
+import LogoutPage from '../app/LogoutPage.jsx';
 
 // main class for application
 class App extends Component {
@@ -41,16 +46,20 @@ class App extends Component {
 
   render () {
     if (this.state.loading) {
-      return <LoadingPage message={this.state.message} />;
+      return (
+        <Page>
+          <LoadingPage message={this.state.message} />
+        </Page>
+      );
     }
-
+    const theme = (this.props.theme === 'gray') ? grayTheme : baseTheme;
     const { authenticated } = this.props;
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <div className='app-page'>
-            <Header />
-            <div className='app-page-contentArea'>
+          <ThemeProvider theme={theme}>
+            <Page>
+              <Header />
               <Switch>
                 <Route exact path='/' component={HomePage} />
                 <Route path='/register' component={RegisterPage} />
@@ -60,10 +69,11 @@ class App extends Component {
                 <AuthRoute path='/manage' authenticated={authenticated} component={ManagePage} />
                 <AuthRoute path='/results' authenticated={authenticated} component={ResultPage} />
                 <Route path='/about' component={AboutPage} />
+                <Route path='/logout' component={LogoutPage} />
                 <Route path='*' component={NotFoundPage} />
               </Switch>
-            </div>
-          </div>
+            </Page>
+          </ThemeProvider>
         </ScrollToTop>
       </BrowserRouter>
     );
@@ -73,6 +83,7 @@ class App extends Component {
 const mapStateToProps = ({ user }) => {
   return ({
     authenticated: user.authenticated,
+    theme: user.theme || 'base',
   });
 };
 
@@ -80,5 +91,6 @@ export default connect (mapStateToProps) (App);
 
 App.propTypes = {
   authenticated: PropTypes.bool.isRequired,
+  theme: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };

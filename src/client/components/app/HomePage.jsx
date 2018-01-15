@@ -1,54 +1,36 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { PageContent } from '../style/Page';
+import { Box, Divider } from '../style/Layout';
+import { Heading, P } from '../style/Text';
+import PollList from './PollList.jsx';
 
-class HomePage extends Component {
-  render () {
-    const polls = this.props.polls;
-    let rows;
-    if (polls.length === 0) {
-      rows = <p>There are no active polls - be the first to add a new one!</p>;
-    } else {
-      rows = [];
-      for (let i = 0; i < polls.length; i ++) {
-        const totalVotes = polls[i].choices.reduce ((a, b) => { return a + b.votes; }, 0);
-        rows.push (
-          <div
-            key={polls[i]._id}
-            className={(i % 2 === 0) ? 'app-home-poll app-home-even' : 'app-home-poll app-home-odd'}
-            onClick={() => { this.props.history.push (`/polls/${polls[i]._id}`); }}
-          >
-            <span className='app-home-name'>{polls[i].title}</span>
-            <span className='app-home-votes'>{totalVotes} votes</span>
-          </div>
-        );
+const HomePage = ({ authenticated, polls }) => {
+  return (
+    <PageContent>
+      {
+        (authenticated === false) &&
+        <Fragment>
+          <Box center noborder>
+            <P>Welcome to Pollster, your place to vote and create new polls!</P>
+            <P>
+              To create your own polls, <i>Register</i> to create a free account
+              and then <i>Login</i> anytime to manage your polls and see the results.
+            </P>
+          </Box>
+          <Divider mt='16px' />
+        </Fragment>
       }
-    }
-    let message = null;
-    if (this.props.authenticated === false) {
-      message = (
-        <div className='app-home-message'>
-          <p>Welcome to Pollster, your place to vote and create new polls!</p>
-          <p>
-            To create your own polls, <i>Register</i> to create a free account
-            and then <i>Login</i> anytime to manage your polls and see the results.
-          </p>
-          <hr className='app-home-divider' />
-        </div>
-      );
-    }
-
-    return (
-      <div className='app-page-content'>
-        {message}
-        <h1>Active Polls</h1>
-        <div className='app-home-list'>
-          {rows}
-        </div>
-      </div>
-    );
-  }
-}
+      <Heading center>Active Polls</Heading>
+      {
+        (polls.length === 0) ?
+          <P>There are no active polls - be the first to add a new one!</P> :
+          <PollList polls={polls} />
+      }
+    </PageContent>
+  );
+};
 
 const mapStateToProps = (state) => {
   return ({
@@ -68,7 +50,4 @@ HomePage.propTypes = {
       votes: PropTypes.number.isRequired,
     })).isRequired,
   })).isRequired,
-  history: PropTypes.shape ({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };

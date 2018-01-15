@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { vote } from '../../store/pollsActions';
+import { PageContent } from '../style/Page';
+import { Row } from '../style/Layout';
+import { Heading, P } from '../style/Text';
+import { Button } from '../style/Button';
+import PollItem from './PollItem.jsx';
 
 class PollPage extends Component {
   constructor (props) {
@@ -12,7 +17,6 @@ class PollPage extends Component {
       poll,
       selected: -1,
       voted: false,
-      transition: false,
     };
     this.handleVote = this.handleVote.bind (this);
   }
@@ -34,108 +38,69 @@ class PollPage extends Component {
   render () {
     if (! this.state.poll) {
       return (
-        <form
-          className='app-page-content'
-          onSubmit={(e) => {
-            e.preventDefault ();
-            this.props.history.push ('/');
-          }}
-        >
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <p>Sorry, could not find that poll for you.</p>
-            <button className='app-form-button' autoFocus>
-              Back to Polls
-            </button>
-          </div>
-        </form>
+        <PageContent>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault ();
+              this.props.history.push ('/');
+            }}
+          >
+            <P center mt='40px'>Sorry, could not find that poll for you.</P>
+            <Row center>
+              <Button center mt='16px' autoFocus>Back to Polls</Button>
+            </Row>
+          </form>
+        </PageContent>
       );
     }
     const totalVotes = this.state.poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
-    const rows = [];
-    for (let i = 0; i < this.state.poll.choices.length; i ++) {
-      const choice = this.state.poll.choices[i];
-      const key = `p-r-${i}`;
+    const rows = this.state.poll.choices.map ((choice, index) => {
+      const text = (index === this.state.selected) ? `\u2713 ${choice.text}` : choice.text;
+      let percent = 0;
       if (this.state.voted) {
-        let text = (i === this.state.selected) ? '\u2713 ' : '';
-        text += choice.text;
-        let percent = 0;
         if (totalVotes > 0) {
           percent = Math.floor ((choice.votes / totalVotes) * 100);
         }
-        rows.push (
-          <div key={key} className='app-poll-votedItemArea'>
-            <div
-              className='app-poll-votedItemBar'
-              style={{ width: `${this.state.transition ? percent : 0}%` }}
-            />
-            <span className='app-poll-votedItemName'>{text}</span>
-            <span className='app-poll-votedItemPercent'>{percent}%</span>
-          </div>
-        );
+        return <PollItem key={text} text={text} percent={percent} selected={false} />;
       } else {
-        const pollClassName = (i === this.state.selected) ?
-          'app-poll-pollItem app-poll-pollItemSelected' : 'app-poll-pollItem';
-        const check = (i === this.state.selected) ?
-          <span className='app-poll-pollItemName'>&#10003; </span> : null;
-        const text = <span className='app-poll-pollItemName'>{choice.text}</span>;
-        rows.push (
-          <div
-            key={key}
-            className={`${pollClassName} ${(i % 2 === 0) ? 'app-poll-pollItemEven' : 'app-poll-pollItemOdd'}`}
-            onClick={() => { this.setState ({ selected: i }); }}
-          >
-            {check}{text}
-          </div>
+        return (
+          <PollItem
+            key={text}
+            text={text}
+            percent={percent}
+            selected={this.state.selected !== -1}
+            onClick={() => { this.setState ({ selected: index }); }}
+          />
         );
       }
-    }
-
-    // on initial display of results, initiate CSS transition
-    if (this.state.voted && (this.state.transition === false)) {
-      setTimeout (() => {
-        this.setState ({ transition: true });
-      }, 100);
-    }
-
-    const buttons = [];
-    if (this.state.voted === false) {
-      buttons.push (
-        <button
-          key='button1'
-          className='app-form-button'
-          disabled={(this.state.selected === -1)}
-          onClick={this.handleVote}
-        >
-          Vote
-        </button>
-      );
-    }
-    buttons.push (
-      <button
-        key='button2'
-        className='app-form-button'
-        onClick={() => { this.props.history.push ('/'); }}
-      >
-        Back to Polls
-      </button>
-    );
+    });
 
     return (
-      <div className='app-page-content'>
-        <h1>{this.state.poll.title}</h1>
-        <div className='app-poll-items'>
+      <PageContent>
+        <Heading center>{this.state.poll.title}</Heading>
+        <Row mt='20px'>
           {rows}
-        </div>
+        </Row>
         {
           this.state.voted ? null :
-          <p className='app-poll-hint'>
+          <P center mt='20px'>
             Select your favorite, the poll results will be shown after you vote.
-          </p>
+          </P>
         }
-        <div className='app-form-buttonArea'>
-          {buttons}
-        </div>
-      </div>
+        <Row center mt='20px'>
+          {(this.state.voted === false) &&
+            <Button
+              disabled={(this.state.selected === -1)}
+              onClick={this.handleVote}
+            >
+              Vote
+            </Button>
+          }
+          <Button onClick={() => { this.props.history.push ('/'); }}>
+            Back to Polls
+          </Button>
+        </Row>
+      </PageContent>
     );
   }
 }

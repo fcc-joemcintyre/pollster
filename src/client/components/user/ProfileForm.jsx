@@ -2,6 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
 import { fieldPropTypes } from '../util/formHelpers';
+import { PageContent } from '../style/Page';
+import { Form, Field, FieldInfo, FieldError, Row } from '../style/Layout';
+import { Heading } from '../style/Text';
+import { Button } from '../style/Button';
+import { MessageText } from '../style/MessageText';
 
 const nameChars = /[A-Za-z -.,]/;
 
@@ -15,74 +20,63 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
   }
 
   return (
-    <div className='app-page-content'>
-      <h1>Profile</h1>
-      <div className='app-form-statusArea'>
-        <span className={`app-form-status-${message.status}`}>
+    <PageContent>
+      <Heading center>Profile</Heading>
+      <Row center mb='24px'>
+        <MessageText status={message.status}>
           {message.text}
-        </span>
-      </div>
-      <div className='app-form-layout'>
-        <form
-          className='app-form-form'
-          style={{ width: '280px' }}
-          onSubmit={onSubmit}
-        >
-          <div className='app-form-field'>
-            <label className='app-form-label' htmlFor='name'>Name</label>
-            <FilteredInput
-              id='name'
-              className='app-form-component'
-              style={{ width: '260px' }}
-              type='text'
-              ref={(ref) => { focusRef = ref; }}
-              autoFocus
-              maxLength={40}
-              filter={nameChars}
-              value={name.value}
-              onChange={(e) => { onChange (name, e.target.value); }}
-              onBlur={() => { onValidate (name); }}
-            />
-            {
-              name.touched && name.error ?
-                <div className='app-form-hint' style={{ color: 'red' }}>Max length is 40 characters</div> :
-                <div className='app-form-hint'>Your full name</div>
-            }
-          </div>
-          <div className='app-form-field'>
-            <label className='app-form-label' htmlFor='email'>email</label>
-            <input
-              id='email'
-              className='app-form-component'
-              style={{ width: '260px' }}
-              type='text'
-              maxLength={60}
-              autoCapitalize='none'
-              autoCorrect='off'
-              value={email.value}
-              onChange={(e) => { onChange (email, e.target.value); }}
-              onBlur={() => { onValidate (email); }}
-            />
-            {
-              email.touched && email.error ?
-                <div className='app-form-hint' style={{ color: 'red' }}>Invalid email address</div> :
-                <div className='app-form-hint'>Your email address</div>
-            }
-          </div>
-          <div className='app-form-buttonArea'>
-            <button
-              className='app-form-button'
-              onClick={(e) => {
-                resetFocus ();
-                onSubmit (e);
-              }}
-            >
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </MessageText>
+      </Row>
+      <Form center w='280px' onSubmit={onSubmit}>
+        <Field>
+          <label htmlFor='name'>Name</label>
+          <FilteredInput
+            id='name'
+            type='text'
+            ref={(ref) => { focusRef = ref; }}
+            autoFocus
+            maxLength={40}
+            filter={nameChars}
+            value={name.value}
+            onChange={(e) => { onChange (name, e.target.value); }}
+            onBlur={() => { onValidate (name); }}
+          />
+          {
+            name.touched && name.error ?
+              <FieldError>Max length is 40 characters</FieldError> :
+              <FieldInfo>Your full name</FieldInfo>
+          }
+        </Field>
+        <Field>
+          <label htmlFor='email'>email</label>
+          <input
+            id='email'
+            type='text'
+            maxLength={60}
+            autoCapitalize='none'
+            autoCorrect='off'
+            value={email.value}
+            onChange={(e) => { onChange (email, e.target.value); }}
+            onBlur={() => { onValidate (email); }}
+          />
+          {
+            email.touched && email.error ?
+              <FieldError>Invalid email address</FieldError> :
+              <FieldInfo>Your email address</FieldInfo>
+          }
+        </Field>
+        <Row center>
+          <Button
+            onClick={(e) => {
+              resetFocus ();
+              onSubmit (e);
+            }}
+          >
+            Save
+          </Button>
+        </Row>
+      </Form>
+    </PageContent>
   );
 };
 

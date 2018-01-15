@@ -1,10 +1,9 @@
 /* eslint-env node */
 /* eslint prefer-arrow-callback: off */
+/* eslint func-names: off */
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 const gulp = require ('gulp');
 const gutil = require ('gulp-util');
-const cssmin = require ('gulp-cssmin');
-const sass = require ('gulp-sass');
 const buffer = require ('vinyl-buffer');
 const source = require ('vinyl-source-stream');
 const babelify = require ('babelify');
@@ -23,14 +22,16 @@ const dependencies = [
   'react-router-dom',
   'redux',
   'redux-thunk',
+  'regenerator-runtime',
+  'styled-components',
   'whatwg-fetch',
 ];
 const stageDir = '../pollster-stage';
 let base = 'dist';
 
-gulp.task ('default', ['html', 'images', 'server', 'styles', 'vendor-dev',
+gulp.task ('default', ['html', 'images', 'server', 'vendor-dev',
   'browserify-dev', 'watch']);
-gulp.task ('stage', ['set-stage', 'html', 'images', 'server', 'styles',
+gulp.task ('stage', ['set-stage', 'html', 'images', 'server',
   'vendor-stage', 'browserify-stage']);
 
 // set the destination for staging output and copy stage root files
@@ -45,7 +46,6 @@ gulp.task ('watch', function () {
   gulp.watch ('src/client/index.html', ['html']);
   gulp.watch ('src/client/images/*', ['images']);
   gulp.watch ('src/server/**/*.js*', ['server']);
-  gulp.watch ('src/client/css/**/*.scss', ['styles']);
   gulp.watch (dependencies, ['vendor']);
 });
 
@@ -65,14 +65,6 @@ gulp.task ('images', function () {
 gulp.task ('server', function () {
   return gulp.src ('src/server/**/*.js*')
     .pipe (gulp.dest (base));
-});
-
-// compile stylesheets
-gulp.task ('styles', function () {
-  return gulp.src ('src/client/css/main.scss')
-    .pipe (sass ().on ('error', sass.logError))
-    .pipe (cssmin ())
-    .pipe (gulp.dest (`${base}/public/css`));
 });
 
 // compile third-party dependencies
