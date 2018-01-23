@@ -32,13 +32,22 @@ module.exports = {
       ],
     }],
 
+    // Prevent usage of button elements without an explicit type attribute
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/button-has-type.md
+    'react/button-has-type': 'error',
+
+    // Enforce consistent usage of destructuring assignment of props, state, and context
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/destructuring-assignment.md
+    'react/destructuring-assignment': ['off', 'always'],
+
     // Prevent missing displayName in a React component definition
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/display-name.md
     'react/display-name': ['off', { ignoreTranspilerName: false }],
 
     // Forbid certain propTypes (any, array, object)
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/forbid-prop-types.md
-    'react/forbid-prop-types': ['error', { forbid: ['any', 'array', 'object'] }],
+    'react/forbid-prop-types': ['error', { forbid: ['any', 'array', 'object'],
+      checkContextTypes: false, checkChildContextTypes: false }],
 
     // Enforce boolean attributes notation in JSX
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
@@ -75,6 +84,10 @@ module.exports = {
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-max-props-per-line.md
     'react/jsx-max-props-per-line': ['error', { maximum: 1, when: 'multiline' }],
 
+    // Prevent using this.state within a this.setState
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-access-state-in-setstate.md
+    'react/no-access-state-in-setstate': 'error',
+
     // Prevent usage of .bind() in JSX props
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md
     'react/jsx-no-bind': ['error', {
@@ -95,6 +108,10 @@ module.exports = {
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-undef.md
     'react/jsx-no-undef': 'error',
 
+    // One JSX Element Per Line
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-one-expression-per-line.md
+    'react/jsx-one-expression-per-line': 'off',
+
     // Enforce PascalCase for user-defined JSX components
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md
     'react/jsx-pascal-case': ['error', {
@@ -108,6 +125,7 @@ module.exports = {
       ignoreCase: true,
       callbacksLast: false,
       requiredFirst: false,
+      sortShapeProp: false,
     }],
 
     // Deprecated in favor of react/jsx-sort-props
@@ -138,7 +156,7 @@ module.exports = {
 
     // Prevent usage of deprecated methods
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-deprecated.md
-    'react/no-deprecated': ['error'],
+    'react/no-deprecated': 'error',
 
     // Prevent usage of setState in componentDidMount
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-did-mount-set-state.md
@@ -223,10 +241,13 @@ module.exports = {
     // Prevent missing parentheses around multilines JSX
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-wrap-multilines.md
     'react/jsx-wrap-multilines': ['error', {
-      declaration: true,
-      assignment: true,
-      return: true,
-      arrow: true,
+      declaration: 'parens',
+      assignment: 'parens',
+      return: 'parens',
+      arrow: 'parens',
+      condition: 'ignore',
+      logical: 'ignore',
+      prop: 'ignore',
     }],
 
     // Require that the first prop in a JSX element be on a new line when the element is multiline
@@ -316,7 +337,7 @@ module.exports = {
 
     // Enforce a defaultProps definition for every prop that is not a required prop
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/require-default-props.md
-    'react/require-default-props': 'error',
+    'react/require-default-props': ['error', { forbidDefaultForRequired: true }],
 
     // Forbids using non-exported propTypes
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/forbid-foreign-prop-types.md

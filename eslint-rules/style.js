@@ -49,7 +49,21 @@ module.exports = {
     'comma-spacing': ['error', { before: false, after: true }],
 
     // enforce one true comma style
-    'comma-style': ['error', 'last'],
+    'comma-style': ['error', 'last', {
+      exceptions: {
+        ArrayExpression: false,
+        ArrayPattern: false,
+        ArrowFunctionExpression: false,
+        CallExpression: false,
+        FunctionDeclaration: false,
+        FunctionExpression: false,
+        ImportDeclaration: false,
+        ObjectExpression: false,
+        ObjectPattern: false,
+        VariableDeclaration: false,
+        NewExpression: false,
+      },
+    }],
 
     // disallow padding inside computed properties
     'computed-property-spacing': ['error', 'never'],
@@ -94,6 +108,10 @@ module.exports = {
     // require identifiers to match the provided regular expression
     'id-match': 'off',
 
+    // Enforce the location of arrow function bodies with implicit returns
+    // https://eslint.org/docs/rules/implicit-arrow-linebreak
+    'implicit-arrow-linebreak': ['error', 'beside'],
+
     // this option sets a specific tab width for your code
     // https://eslint.org/docs/rules/indent
     indent: ['error', 2, {
@@ -117,6 +135,7 @@ module.exports = {
       ImportDeclaration: 1,
       flatTernaryExpressions: false,
       ignoredNodes: ['JSXElement', 'JSXElement *'],
+      ignoreComments: false,
     }],
 
     // specify whether double or single quotes should be used in JSX attributes
@@ -164,7 +183,7 @@ module.exports = {
 
     // specify the maximum length of a line in your program
     // https://eslint.org/docs/rules/max-len
-    'max-len': ['error', 100, 2, {
+    'max-len': ['error', 120, 2, {
       ignoreUrls: true,
       ignoreComments: false,
       ignoreRegExpLiterals: true,
@@ -356,7 +375,7 @@ module.exports = {
     // enforce "same line" or "multiple line" on object properties.
     // https://eslint.org/docs/rules/object-property-newline
     'object-property-newline': ['error', {
-      allowMultiplePropertiesPerLine: true,
+      allowAllPropertiesOnSameLine: true,
     }],
 
     // allow just one var statement per function
