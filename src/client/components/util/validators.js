@@ -1,5 +1,5 @@
 export function isNotEmpty (value) {
-  return (value.trim ().length > 0);
+  return (value.trim ().length !== 0) ? null : 'format';
 }
 
 export function isLengthValid (min, max) {
@@ -9,14 +9,14 @@ export function isLengthValid (min, max) {
   };
 }
 
-export function isValidEmail (value) {
-  return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test (value);
+export function isEmail (value) {
+  return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test (value) ? null : 'format';
 }
 
-export function isEmptyOrValidEmail (value) {
-  return (value === '') || isValidEmail (value);
-}
-
-export function isValidPassword (value) {
-  return (value.length > 3) && /([A-Za-z0-9!@#$%^&*-+_=])+/.test (value);
+export function isPassword (value) {
+  if (value.length < 4) {
+    return 'length';
+  } else {
+    return /([A-Za-z0-9!@#$%^&*-+_=])+/.test (value) ? null : 'format';
+  }
 }

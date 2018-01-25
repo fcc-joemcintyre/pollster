@@ -3,40 +3,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import RegisterForm from './RegisterForm.jsx';
 import { register, login } from '../../store/userActions';
-import { createField, preValidate, updateFieldValue, updateFieldValidation, validateAll } from '../util/formHelpers';
-import { isNotEmpty, isValidPassword } from '../util/validators';
+import { createField, validateField, getFieldValues, inString, outString } from '../util/formHelpers';
+import { isPassword } from '../util/validators';
 
 const defaultText = 'Enter profile information';
 
 class RegisterPage extends Component {
   constructor (props, context) {
     super (props, context);
-    this.duplicate = false;
-
     this.isMatching = this.isMatching.bind (this);
-    this.isNotDuplicate = this.isNotDuplicate.bind (this);
-
-    const fields = {
-      username: createField ('username', '', [
-        { fn: isNotEmpty, text: 'Required (Up to 20 letters/digits, no spaces)' },
-        { fn: this.isNotDuplicate, text: 'User name exists, choose another' },
-      ]),
-      password: createField ('password', '', [
-        { fn: isNotEmpty, text: 'Password is required' },
-        { fn: isValidPassword, text: 'Invalid password' },
-        { fn: this.isMatching, text: 'Password and verify password don\'t match' },
-      ]),
-      verifyPassword: createField ('verifyPassword', '', [
-        { fn: isNotEmpty, text: 'Verify password is required' },
-        { fn: isValidPassword, text: 'Invalid password' },
-        { fn: this.isMatching, text: 'Password and verify password don\'t match' },
-      ]),
-    };
-    preValidate (fields);
-
     this.state = {
+      fields: {
+        username: createField ('username', '', true, [], inString, outString),
+        password: createField ('password', '', true, [isPassword, this.isMatching], inString, outString),
+        verifyPassword: createField ('verifyPassword', '', true, [isPassword, this.isMatching], inString, outString),
+      },
       message: { status: 'info', text: defaultText },
-      fields,
     };
 
     this.onChange = this.onChange.bind (this);
@@ -46,21 +28,25 @@ class RegisterPage extends Component {
   }
 
   onChange (field, value) {
-    this.setState (updateFieldValue (field, value));
+    const f = { [field.name]: { ...this.state.fields[field.name], value } };
+    this.setState (({ fields }) => { return { fields: { ...fields, ...f } }; });
   }
 
   onValidate (field) {
-    this.setState (updateFieldValidation (field));
-    // reset message to default if ok or error message is displayed
-    if (this.state.message.status !== 'info') {
-      this.setState (() => { return { message: { status: 'info', text: defaultText } }; });
+    const f = this.state.fields[field.name];
+    const error = validateField (f);
+    if (error !== f.error) {
+      this.setState (({ fields }) => { return { fields: { ...fields, [field.name]: { ...f, error } } }; });
     }
+    return error;
   }
 
   onValidateForm () {
-    const updates = validateAll (this.state.fields);
-    this.setState (() => { return { fields: updates }; });
-    return (! (updates.username.error || updates.password.error || updates.verifyPassword.error));
+    let result = true;
+    for (const key of Object.keys (this.state.fields)) {
+      result = (this.onValidate (this.state.fields[key]) === null) && result;
+    }
+    return result;
   }
 
   async onSubmit (event) {
@@ -68,10 +54,10 @@ class RegisterPage extends Component {
     if (this.onValidateForm ()) {
       this.setState ({ message: { status: 'working', text: 'Registering ...' } });
       try {
-        const { username, password } = this.state.fields;
-        await this.props.dispatch (register (username.value, password.value));
+        const { username, password } = getFieldValues (this.state.fields);
+        await this.props.dispatch (register (username, password));
         try {
-          await this.props.dispatch (login (username.value, password.value));
+          await this.props.dispatch (login (username, password));
           this.props.history.replace ('/');
         } catch (err) {
           this.setState ({ message: { status: 'error', text: 'Registered, but could not login' } });
@@ -85,11 +71,7 @@ class RegisterPage extends Component {
   }
 
   isMatching () {
-    return this.state.fields.password.value === this.state.fields.verifyPassword.value;
-  }
-
-  isNotDuplicate () {
-    return (this.duplicate === false);
+    return this.state.fields.password.value === this.state.fields.verifyPassword.value ? null : 'matching';
   }
 
   render () {

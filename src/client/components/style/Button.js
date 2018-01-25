@@ -4,9 +4,8 @@ import { darker } from './adjustColor';
 
 export const Button = styled.button`
   ${common}
-  type: button;
   font-size: 18px;
-  padding: 6px 8px;
+  padding: 4px 8px;
   border-radius: 4px;
   background-color: #F0F8FF;
 

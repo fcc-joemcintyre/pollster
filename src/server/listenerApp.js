@@ -51,10 +51,6 @@ async function addPoll (req, res) {
       creator: req.user.username,
       title: req.body.title,
       choices,
-      voteLimit: req.body.voteLimit,
-      maxVotes: req.body.maxVotes,
-      dateLimit: req.body.dateLimit,
-      endDate: req.body.endDate,
     };
     try {
       const data = await db.insertPoll (poll);
@@ -81,10 +77,6 @@ async function updatePoll (req, res) {
       creator: req.user.username,
       title: req.body.title,
       choices,
-      voteLimit: req.body.voteLimit,
-      maxVotes: req.body.maxVotes,
-      dateLimit: req.body.dateLimit,
-      endDate: req.body.endDate,
     };
     try {
       await db.updatePoll (req.params._id, poll);

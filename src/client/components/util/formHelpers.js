@@ -1,115 +1,139 @@
 import PropTypes from 'prop-types';
 
-// constructor function to create a new field
-export function createField (name, initialValue, validators) {
-  return {
+export function createField (name, initialValue = '', required = false, validators = [],
+  formatIn = null, formatOut = null) {
+  const field = {
     name,
     initialValue,
     value: initialValue,
-    touched: false,
+    required,
     validators,
     error: null,
+    formatIn,
+    formatOut,
   };
+  return field;
 }
 
-// constructor function to run initial validation to populate fields
-export function preValidate (fields) {
-  Object.keys (fields).forEach ((field) => {
-    // eslint-disable-next-line no-param-reassign
-    fields[field].error = validateField (fields[field]);
-  });
-}
-
-// setState function to update a field
-export function updateFieldValue (field, value) {
-  return function updateValue (prev) {
-    return ({
-      fields: Object.assign (prev.fields, {
-        [field.name]: Object.assign ({}, prev.fields[field.name], { value }),
-      }),
-    });
-  };
-}
-
-// setState function to update validation for a field
-export function updateFieldValidation (field) {
-  return function updateError (prev) {
-    return ({
-      fields: Object.assign (prev.fields, {
-        [field.name]: Object.assign ({}, prev.fields[field.name], {
-          touched: true,
-          error: validateField (field),
-        }),
-      }),
-    });
-  };
-}
-
-// setState function, reset a field
-export function getResetObject (field) {
-  return function update (prev) {
-    return ({
-      fields: Object.assign (prev.fields, {
-        [field.name]: Object.assign ({}, prev.fields[field.name], {
-          value: prev.fields[field.name].initialValue,
-          touched: false,
-          error: validateField (field),
-        }),
-      }),
-    });
-  };
-}
-
-// validate all fields (returning object that can be passed to setState)
-export function validateAll (fields) {
-  const updates = Object.assign ({}, fields);
-  Object.keys (fields).forEach ((field) => {
-    updates[field] = Object.assign ({}, updates[field], { error: validateField (fields[field]) });
-  });
-  return updates;
-}
-
-// validate a field, returning error text (or null if no error)
 export function validateField (field) {
-  return validate (field.validators, field.value);
-}
+  const hasContent = (((typeof field.value === 'string') && (field.value.trim () !== '')) ||
+    ((Array.isArray (field.value)) && (field.value.length !== 0)));
+  if ((field.required === false) && (hasContent === false)) {
+    return null;
+  }
+  if (field.required && (hasContent === false)) {
+    return 'required';
+  }
 
-// private function to run validators in static or updating context
-function validate (validators, value) {
   let error = null;
-  if (validators && (validators.length > 0)) {
-    for (let c = 0; c < validators.length; c ++) {
-      if (validators[c].fn (value) === false) {
-        error = validators[c].text;
-        break;
-      }
+  if (field.validators && (field.validators.length > 0)) {
+    for (let c = 0; c < field.validators.length; c ++) {
+      error = field.validators[c] (field.value);
+      if (error) { break; }
     }
   }
   return error;
 }
 
-// setState function to reset all fields (pass to setState)
-export function resetAll (prevState) {
-  let updates = prevState.fields;
-  Object.keys (prevState.fields).forEach ((field) => {
-    updates = Object.assign (updates, { [field]: {
-      value: prevState.fields[field].initialValue,
-      touched: false,
-      error: validate (prevState.fields[field].validators, prevState.fields[field].initialValue),
-    } });
-  });
-  return Object.assign ({}, prevState, { fields: updates });
+export function getFieldValues (fields) {
+  const result = {};
+  for (const key of Object.keys (fields)) {
+    if (Array.isArray (fields[key])) {
+      for (const a of [fields[key]]) {
+        result[a.name] = a.formatOut ? a.formatOut (a.value) : a.value;
+      }
+    } else {
+      const a = fields[key];
+      result[key] = a.formatOut ? a.formatOut (a.value) : a.value;
+    }
+  }
+  return result;
 }
 
-// PropTypes to provide for field elements in form components
+export function inString (value = '') {
+  return value.trim ();
+}
+
+export function outString (value = '') {
+  return value.trim ();
+}
+
+export function inDate (value = '') {
+  let date;
+  if (value && ((value instanceof Date) || (Object.prototype.toString.call (value) === '[object Date]'))) {
+    if (! Number.isNaN (value.getTime ())) {
+      date = value;
+    }
+  } else if (value && (typeof (value) === 'string')) {
+    const temp = new Date (value);
+    if (! Number.isNaN (temp.getTime ())) {
+      date = temp;
+    }
+  }
+  return (date) ? `${date.getUTCMonth () + 1}/${date.getUTCDate ()}/${date.getUTCFullYear ()}` : '';
+}
+
+export function outDate (value = '') {
+  return (value === '') ? '' : new Date (value);
+}
+
+export function inInteger (value = 0) {
+  return value.toString ();
+}
+
+export function outInteger (value = 0) {
+  if (value === '') {
+    return 0;
+  }
+  let n = Number (value);
+  if (Number.isNaN (n)) {
+    n = 0;
+  } else {
+    n = Math.floor (n);
+  }
+  return n;
+}
+
+export function inIntegerArray (value = []) {
+  return value.map (inInteger);
+}
+
+export function outIntegerArray (value = []) {
+  return value.map ((a) => {
+    return outInteger (a);
+  });
+}
+
+export function inCurrency (value = 0) {
+  return value.toString ();
+}
+
+export function outCurrency (value) {
+  return (value === '') ? 0 : parseInt (value.replace (/[$,]/g, ''), 10);
+}
+
+export function inBoolean (value = false) {
+  return (typeof (value) === 'boolean') ? 'true' : 'false';
+}
+
+export function outBoolean (value = 'true') {
+  return value === 'true';
+}
+
 export const fieldPropTypes = {
   name: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  touched: PropTypes.bool.isRequired,
-  validators: PropTypes.arrayOf (PropTypes.shape ({
-    fn: PropTypes.func,
-    text: PropTypes.string,
-  })).isRequired,
-  error: PropTypes.string,
+  required: PropTypes.bool.isRequired,
+  validators: PropTypes.arrayOf (PropTypes.func).isRequired,
+  errors: PropTypes.string,
+};
+
+export const fieldArrayPropTypes = {
+  name: PropTypes.string.isRequired,
+  initialValue: PropTypes.arrayOf (PropTypes.string).isRequired,
+  value: PropTypes.arrayOf (PropTypes.string).isRequired,
+  required: PropTypes.bool.isRequired,
+  validators: PropTypes.arrayOf (PropTypes.func).isRequired,
+  errors: PropTypes.string,
 };

@@ -4,34 +4,48 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import LoginForm from './LoginForm.jsx';
 import { login } from '../../store/userActions';
-import { createField, updateFieldValue } from '../util/formHelpers';
+import { createField, validateField, getFieldValues, inString, outString } from '../util/formHelpers';
 
 const defaultText = 'Enter login information';
 
 class LoginPage extends Component {
-  constructor (props, context) {
-    super (props, context);
+  constructor (props) {
+    super (props);
     this.state = {
-      message: { status: 'info', text: defaultText },
       fields: {
-        username: createField ('username', '', []),
-        password: createField ('password', '', []),
+        username: createField ('username', '', true, [], inString, outString),
+        password: createField ('password', '', true, [], inString, outString),
       },
+      message: { status: 'info', text: defaultText },
       redirectToReferrer: false,
     };
 
     this.onChange = this.onChange.bind (this);
+    this.onValidate = this.onValidate.bind (this);
     this.onValidateForm = this.onValidateForm.bind (this);
     this.onSubmit = this.onSubmit.bind (this);
   }
 
   onChange (field, value) {
-    this.setState (updateFieldValue (field, value));
+    const f = { [field.name]: { ...this.state.fields[field.name], value } };
+    this.setState (({ fields }) => { return { fields: { ...fields, ...f } }; });
+  }
+
+  onValidate (field) {
+    const f = this.state.fields[field.name];
+    const error = validateField (f);
+    if (error !== f.error) {
+      this.setState (({ fields }) => { return { fields: { ...fields, [field.name]: { ...f, error } } }; });
+    }
+    return error;
   }
 
   onValidateForm () {
-    return ((this.state.fields.username.value.trim () !== '') &&
-      (this.state.fields.password.value.trim () !== ''));
+    let result = true;
+    for (const key of Object.keys (this.state.fields)) {
+      result = (this.onValidate (this.state.fields[key]) === null) && result;
+    }
+    return result;
   }
 
   async onSubmit (e) {
@@ -39,8 +53,8 @@ class LoginPage extends Component {
     if (this.onValidateForm ()) {
       this.setState ({ message: { status: 'working', text: 'Logging in' } });
       try {
-        const { username, password } = this.state.fields;
-        await this.props.dispatch (login (username.value, password.value));
+        const { username, password } = getFieldValues (this.state.fields);
+        await this.props.dispatch (login (username, password));
         this.setState ({ message: { status: 'ok', text: 'Logged in' }, redirectToReferrer: true });
       } catch (err) {
         this.setState ({ message: { status: 'error', text: 'Error logging in, check values' } });
@@ -61,6 +75,7 @@ class LoginPage extends Component {
         message={this.state.message}
         fields={this.state.fields}
         onChange={this.onChange}
+        onValidate={this.onValidate}
         onSubmit={this.onSubmit}
       />
     );

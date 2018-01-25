@@ -3,21 +3,29 @@ import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
 import { fieldPropTypes } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
-import { Form, Field, FieldInfo, FieldError, Row } from '../style/Layout';
+import { Form, Field, FieldInfo, FieldError } from '../style/Form';
+import { Row } from '../style/Layout';
 import { Heading } from '../style/Text';
 import { Button } from '../style/Button';
 import { MessageText } from '../style/MessageText';
 
 const nameChars = /[A-Za-z0-9]/;
 const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
+const errors = {
+  required: 'Is required',
+  format: 'Invalid password',
+  length: 'Must be 4+ characters long',
+  matching: 'Password and verify password don\'t match',
+};
 
 const RegisterForm = ({ message, fields: { username, password, verifyPassword },
   onChange, onValidate, onSubmit }) => {
-  let focusRef;
-
   function resetFocus () {
-    if (focusRef) {
-      focusRef.focus ();
+    const id = username.error ? 'username' : password.error ? 'password' :
+      verifyPassword ? 'verifyPassword' : 'username';
+    const el = document.getElementById (id);
+    if (el) {
+      el.focus ();
     }
   }
 
@@ -35,7 +43,6 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
           <FilteredInput
             id='username'
             type='text'
-            ref={(ref) => { focusRef = ref; }}
             autoFocus
             maxLength={20}
             autoCapitalize='none'
@@ -45,10 +52,9 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
             onChange={(e) => { onChange (username, e.target.value); }}
             onBlur={() => { onValidate (username); }}
           />
-          {
-            username.touched && username.error ?
-              <FieldError>{username.error}</FieldError> :
-              <FieldInfo>Up to 20 letters/digits, no spaces</FieldInfo>
+          { username.error ?
+            <FieldError>Is required</FieldError> :
+            <FieldInfo>Up to 20 letters/digits, no spaces</FieldInfo>
           }
         </Field>
         <Field>
@@ -62,10 +68,9 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
             onChange={(e) => { onChange (password, e.target.value); }}
             onBlur={() => { onValidate (password); onValidate (verifyPassword); }}
           />
-          {
-            password.touched && password.error ?
-              <FieldError>{password.error}</FieldError> :
-              <FieldInfo>Your password</FieldInfo>
+          { password.error ?
+            <FieldError>{errors[password.error] || 'Error'}</FieldError> :
+            <FieldInfo>Your password</FieldInfo>
           }
         </Field>
         <Field>
@@ -79,19 +84,13 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
             onChange={(e) => { onChange (verifyPassword, e.target.value); }}
             onBlur={() => { onValidate (verifyPassword); onValidate (password); }}
           />
-          {
-            verifyPassword.touched && verifyPassword.error ?
-              <FieldError>{verifyPassword.error}</FieldError> :
-              <FieldInfo>Verify your password</FieldInfo>
+          { verifyPassword.error ?
+            <FieldError>{errors[verifyPassword.error] || 'Error'}</FieldError> :
+            <FieldInfo>Verify your password</FieldInfo>
           }
         </Field>
         <Row center>
-          <Button
-            onClick={(e) => {
-              resetFocus ();
-              onSubmit (e);
-            }}
-          >
+          <Button onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
             Save
           </Button>
         </Row>

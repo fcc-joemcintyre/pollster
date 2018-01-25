@@ -25,12 +25,12 @@ export default class API {
     return get ('/api/polls');
   }
 
-  static createPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate) {
-    return post ('/api/polls', { title, choices, voteLimit, maxVotes, dateLimit, endDate });
+  static createPoll (title, choices) {
+    return post ('/api/polls', { title, choices });
   }
 
-  static updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate) {
-    return post (`/api/polls/${_id}`, { title, choices, voteLimit, maxVotes, dateLimit, endDate });
+  static updatePoll (_id, title, choices) {
+    return post (`/api/polls/${_id}`, { title, choices });
   }
 
   static deletePoll (_id) {

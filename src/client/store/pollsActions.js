@@ -19,10 +19,10 @@ export function initPolls () {
   };
 }
 
-export function addPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate) {
+export function addPoll (title, choices) {
   return async (dispatch) => {
     try {
-      await API.createPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate);
+      await API.createPoll (title, choices);
       await dispatch (initPolls ());
     } catch (err) {
       throw err;
@@ -30,10 +30,10 @@ export function addPoll (title, choices, voteLimit, maxVotes, dateLimit, endDate
   };
 }
 
-export function updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate) {
+export function updatePoll (_id, title, choices) {
   return async (dispatch) => {
     try {
-      await API.updatePoll (_id, title, choices, voteLimit, maxVotes, dateLimit, endDate);
+      await API.updatePoll (_id, title, choices);
       await dispatch (initPolls ());
     } catch (err) {
       throw err;

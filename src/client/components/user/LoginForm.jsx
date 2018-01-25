@@ -3,20 +3,26 @@ import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
 import { fieldPropTypes } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
-import { Form, Field, Row } from '../style/Layout';
+import { Form, Field, Label, FieldInfo, FieldError } from '../style/Form';
+import { Row } from '../style/Layout';
 import { Heading } from '../style/Text';
 import { Button } from '../style/Button';
 import { MessageText } from '../style/MessageText';
 
 const usernameChars = /[A-Za-z0-9]/;
 const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
+const passwordErrors = {
+  required: 'Is required',
+  length: 'Must be 4+ characters',
+  format: 'Invalid characters',
+};
 
-const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit }) => {
-  let focusRef;
-
+const LoginForm = ({ message, fields: { username, password }, onChange, onValidate, onSubmit }) => {
   function resetFocus () {
-    if (focusRef) {
-      focusRef.focus ();
+    const id = username.error ? 'username' : password.error ? 'password' : 'username';
+    const el = document.getElementById (id);
+    if (el) {
+      el.focus ();
     }
   }
 
@@ -30,11 +36,10 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
       </Row>
       <Form center w='300px' onSubmit={onSubmit}>
         <Field>
-          <label htmlFor='username'>User name</label>
+          <Label htmlFor='username' required={username.required}>User name</Label>
           <FilteredInput
             id='username'
             type='text'
-            ref={(ref) => { focusRef = ref; }}
             autoFocus
             maxLength={20}
             autoCapitalize='none'
@@ -42,10 +47,15 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
             filter={usernameChars}
             value={username.value}
             onChange={(e) => { onChange (username, e.target.value); }}
+            onBlur={() => { onValidate (username); }}
           />
+          {username.error ?
+            <FieldError>Is required</FieldError> :
+            <FieldInfo>Your user name</FieldInfo>
+          }
         </Field>
         <Field>
-          <label htmlFor='password'>Password</label>
+          <Label htmlFor='password' required={password.required}>Password</Label>
           <FilteredInput
             id='password'
             type='password'
@@ -53,15 +63,17 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onSubmit
             filter={passwordChars}
             value={password.value}
             onChange={(e) => { onChange (password, e.target.value); }}
+            onBlur={() => { onValidate (password); }}
           />
+          {password.error ?
+            <FieldError>{passwordErrors[password.error] || 'Error'}</FieldError> :
+            <FieldInfo>Your password</FieldInfo>
+          }
         </Field>
         <Row center>
           <Button
             disabled={username.value === ''}
-            onClick={(e) => {
-              resetFocus ();
-              onSubmit (e);
-            }}
+            onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}
           >
             Login
           </Button>
@@ -83,5 +95,6 @@ LoginForm.propTypes = {
     password: PropTypes.shape (fieldPropTypes).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
+  onValidate: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

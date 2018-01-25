@@ -3,27 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProfileForm from './ProfileForm.jsx';
 import { updateProfile } from '../../store/userActions';
-import { createField, preValidate, updateFieldValue, updateFieldValidation, validateAll } from '../util/formHelpers';
-import { isLengthValid, isEmptyOrValidEmail } from '../util/validators';
+import { createField, validateField, getFieldValues, inString, outString } from '../util/formHelpers';
+import { isEmail } from '../util/validators';
 
 const defaultText = 'Enter profile information';
 
 class ProfilePage extends Component {
-  constructor (props, context) {
-    super (props, context);
-    const fields = {
-      name: createField ('name', props.name, [
-        { fn: isLengthValid (0, 40), text: 'Must be less than 40 letters' },
-      ]),
-      email: createField ('email', props.email, [
-        { fn: isEmptyOrValidEmail, text: 'Invalid email address' },
-      ]),
-    };
-    preValidate (fields);
-
+  constructor (props) {
+    super (props);
     this.state = {
+      fields: {
+        name: createField ('name', props.name, true, [], inString, outString),
+        email: createField ('email', props.email, false, [isEmail], inString, outString),
+      },
       message: { status: 'info', text: defaultText },
-      fields,
     };
 
     this.onChange = this.onChange.bind (this);
@@ -33,20 +26,25 @@ class ProfilePage extends Component {
   }
 
   onChange (field, value) {
-    this.setState (updateFieldValue (field, value));
+    const f = { [field.name]: { ...this.state.fields[field.name], value } };
+    this.setState (({ fields }) => { return { fields: { ...fields, ...f } }; });
   }
 
   onValidate (field) {
-    this.setState (updateFieldValidation (field));
-    if (this.state.message.status !== 'info') {
-      this.setState (() => { return { message: { status: 'info', text: defaultText } }; });
+    const f = this.state.fields[field.name];
+    const error = validateField (f);
+    if (error !== f.error) {
+      this.setState (({ fields }) => { return { fields: { ...fields, [field.name]: { ...f, error } } }; });
     }
+    return error;
   }
 
   onValidateForm () {
-    const updates = validateAll (this.state.fields);
-    this.setState (() => { return { fields: updates }; });
-    return (! (updates.name.error || updates.email.error));
+    let result = true;
+    for (const key of Object.keys (this.state.fields)) {
+      result = (this.onValidate (this.state.fields[key]) === null) && result;
+    }
+    return result;
   }
 
   async onSubmit (event) {
@@ -54,8 +52,8 @@ class ProfilePage extends Component {
     if (this.onValidateForm ()) {
       this.setState ({ message: { status: 'working', text: 'Updating profile ...' } });
       try {
-        const { name, email } = this.state.fields;
-        await this.props.dispatch (updateProfile (name.value, email.value));
+        const { name, email } = getFieldValues (this.state.fields);
+        await this.props.dispatch (updateProfile (name, email));
         this.setState ({ message: { status: 'ok', text: 'Profile updated' } });
       } catch (err) {
         this.setState ({ message: { status: 'error', text: 'Error saving profile information' } });

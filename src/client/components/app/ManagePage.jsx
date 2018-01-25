@@ -1,248 +1,194 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { createField, validateField, getFieldValues, inString, outString } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
-import { Form, Field, Row, Box, Divider } from '../style/Layout';
-import { Heading, SubHeading, P } from '../style/Text';
-import { Button } from '../style/Button';
-import IntegerInput from '../ui/IntegerInput.jsx';
+import { Row } from '../style/Layout';
+import { Heading } from '../style/Text';
+import Modal from '../ui/Modal.jsx';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
-
-function getDefaults () {
-  return {
-    selected: 'create',
-    title: '',
-    choices: ['', ''],
-    voteLimit: false,
-    maxVotes: 0,
-    dateLimit: false,
-    endDate: '',
-  };
-}
+import ManagePollSelect from './ManagePollSelect.jsx';
+import ManageForm from './ManageForm.jsx';
 
 class ManagePage extends Component {
   constructor (props) {
     super (props);
-    const polls = props.polls.filter ((poll) => { return poll.creator === props.username; });
-    const creator = props.username;
-    this.state = Object.assign ({ polls, creator }, getDefaults ());
+    this.state = {
+      fields: {
+        title: createField ('title', '', true, [], inString, outString),
+        choice0: createField ('choice0', '', true, [], inString, outString),
+        choice1: createField ('choice1', '', true, [], inString, outString),
+      },
+      selected: '',
+      modal: null,
+    };
 
+    this.onChange = this.onChange.bind (this);
+    this.onValidate = this.onValidate.bind (this);
+    this.onValidateForm = this.onValidateForm.bind (this);
+    this.onResetPoll = this.onResetPoll.bind (this);
     this.onSelectPoll = this.onSelectPoll.bind (this);
-    this.onAddPoll = this.onAddPoll.bind (this);
-    this.onSavePoll = this.onSavePoll.bind (this);
+    this.onSubmitPoll = this.onSubmitPoll.bind (this);
     this.onDeletePoll = this.onDeletePoll.bind (this);
+    this.onCloseModal = this.onCloseModal.bind (this);
   }
 
-  componentWillReceiveProps (nextProps) {
-    const polls = nextProps.polls.filter ((poll) => {
-      return poll.creator === nextProps.username;
+  onChange (field, value) {
+    const f = { [field.name]: { ...this.state.fields[field.name], value } };
+    this.setState (({ fields }) => { return { fields: { ...fields, ...f } }; }, () => {
+      // after update, determine if all choice fields have content
+      const full = Object.keys (this.state.fields).reduce ((a, b) => {
+        if (b.startsWith ('choice')) {
+          return a || (this.state.fields[b].value.trim () === '');
+        } else {
+          return a;
+        }
+      }, false);
+      // if all choice fields have content, add another choice field
+      if (! full) {
+        const next = `choice${Object.keys (this.state.fields).length - 1}`;
+        const choice = { [next]: createField (next, '', false, [], inString, outString) };
+        this.setState (({ fields }) => { return { fields: { ...fields, ...choice } }; });
+      }
     });
-    const creator = nextProps.username;
-    this.setState (Object.assign ({ polls, creator }, getDefaults ()));
+  }
+
+  onValidate (field) {
+    const f = this.state.fields[field.name];
+    const error = validateField (f);
+    if (error !== f.error) {
+      this.setState (({ fields }) => { return { fields: { ...fields, [field.name]: { ...f, error } } }; });
+    }
+    return error;
+  }
+
+  onValidateForm () {
+    let result = true;
+    for (const key of Object.keys (this.state.fields)) {
+      result = (this.onValidate (this.state.fields[key]) === null) && result;
+    }
+    return result;
+  }
+
+  onResetPoll () {
+    this.setState ({
+      fields: {
+        title: createField ('title', '', true, [], inString, outString),
+        choice0: createField ('choice0', '', true, [], inString, outString),
+        choice1: createField ('choice1', '', true, [], inString, outString),
+      },
+      selected: '',
+    });
   }
 
   onSelectPoll (_id) {
-    if (_id === 'create') {
-      this.setState (getDefaults ());
+    if (_id === '') {
+      this.onResetPoll ();
     } else {
-      const selected = this.state.polls.find ((poll) => { return poll._id === _id; });
+      const poll = this.props.polls.find ((a) => { return a._id === _id; });
+      const choices = {};
+      const length = poll.choices.length;
+      for (let i = 0; i < length; i ++) {
+        const required = i < 2;
+        choices[`choice${i}`] = createField (`choice${i}`, poll.choices[i].text, required, [], inString, outString);
+      }
+      choices[`choice${length}`] = createField (`choice${length}`, '', false, [], inString, outString);
+
       this.setState ({
+        fields: {
+          title: createField ('title', poll.title, true, [], inString, outString),
+          ...choices,
+        },
         selected: _id,
-        title: selected.title,
-        choices: generateChoices (selected.choices),
-        voteLimit: selected.voteLimit,
-        maxVotes: selected.maxVotes,
-        dateLimit: selected.dateLimit,
-        endDate: selected.endDate,
       });
     }
   }
 
-  async onAddPoll () {
-    const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    try {
-      await this.props.dispatch (addPoll (this.state.title, choices, this.state.voteLimit,
-        this.state.maxVotes, this.state.dateLimit, this.state.endDate));
-    } finally {
-      this.setState (getDefaults ());
-    }
-  }
-
-  async onSavePoll () {
-    const choices = this.state.choices.slice (0, this.state.choices.length - 1);
-    try {
-      await this.props.dispatch (updatePoll (this.state.selected, this.state.title, choices,
-        this.state.voteLimit, this.state.maxVotes, this.state.dateLimit, this.state.endDate));
-    } catch (err) {
-      // no op
+  async onSubmitPoll (e) {
+    e.preventDefault ();
+    if (this.onValidateForm ()) {
+      try {
+        this.setState ({ modal: { content: 'Submitting poll...' } });
+        const { title, ...rest } = getFieldValues (this.state.fields);
+        const choices = Object.values (rest).filter ((a) => { return a !== ''; });
+        if (this.state.selected === '') {
+          await this.props.dispatch (addPoll (title, choices));
+          const content = 'New poll has been added.';
+          this.setState ({ modal: { content, actions: ['OK'], closeAction: 'OK', tag: 'ok' } });
+        } else {
+          await this.props.dispatch (updatePoll (this.state.selected, title, choices));
+          const content = 'Poll has been updated.';
+          this.setState ({ modal: { content, actions: ['OK'], closeAction: 'OK', tag: 'ok' } });
+        }
+      } catch (err) {
+        const content = 'Error submitting poll, try again.';
+        this.setState ({ modal: { title: 'Error', content, actions: ['OK'], closeAction: 'OK', tag: 'error' } });
+      }
     }
   }
 
   async onDeletePoll () {
     try {
+      this.setState ({ modal: { content: 'Deleting poll...' } });
       await this.props.dispatch (deletePoll (this.state.selected));
+      this.setState ({ modal: { content: 'Poll deleted', actions: ['OK'], closeAction: 'OK', tag: 'ok' } });
     } catch (err) {
-      // no op
+      const content = 'Error deleting poll, refresh and try again.';
+      this.setState ({ modal: { title: 'Error', content, actions: ['OK'], closeAction: 'OK', tag: 'error' } });
+    }
+  }
+
+  onCloseModal (action, tag) {
+    this.setState ({ modal: null });
+    if (tag === 'ok') {
+      this.onResetPoll ();
     }
   }
 
   render () {
-    const newPoll = (this.state.selected === 'create');
-    const polls = this.state.polls.map ((poll) => {
-      return (
-        <option key={poll._id} value={poll._id}>
-          {poll.title}
-        </option>
-      );
-    });
-    polls.unshift (
-      <option key='create' value='create'>
-        {'<Add a new poll>'}
-      </option>
-    );
-
-    /* eslint react/no-array-index-key: off */
-    // Poll edit area
-    const choices = this.state.choices.map ((choice, index) => {
-      return (
-        <Choice
-          key={`choice${index}`}
-          id={`id-choice-${index}`}
-          choice={choice}
-          index={index}
-          onChange={(i, text) => {
-            const temp = this.state.choices.slice (0);
-            temp[i] = text;
-            const list = temp.filter ((a) => { return (a.length > 0); });
-            list.push ('');
-            if (list.length === 1) {
-              list.push ('');
-            }
-            this.setState ({ choices: list });
-          }}
-        />
-      );
-    });
-
     return (
       <PageContent>
         <Heading center>Manage Polls</Heading>
-        <Form center w='400px'>
-          <Field>
-            <label htmlFor='id-mypolls'>My polls</label>
-            <select
-              id='id-mypolls'
-              value={this.state.selected}
-              autoFocus
-              onChange={(e) => { this.onSelectPoll (e.target.value); }}
-            >
-              {polls}
-            </select>
-          </Field>
-
-          <Box mt='20px' pl='8px' pr='8px'>
-            <SubHeading>{newPoll ? 'Add a new poll' : 'Edit poll'}</SubHeading>
-            <Field>
-              <label htmlFor='id-title'>Title</label>
-              <input
-                id='id-title'
-                type='text'
-                value={this.state.title}
-                maxLength={30}
-                onChange={(e) => {
-                  this.setState ({ title: e.target.value });
-                }}
-              />
-            </Field>
-            {choices}
-            <Divider extend='8px' />
-            <Row>
-              <SubHeading>Closing Criteria</SubHeading>
-              <Field>
-                <label htmlFor='id-limit1'>
-                  <input
-                    id='id-limit1'
-                    type='checkbox'
-                    checked={this.state.voteLimit}
-                    onChange={(e) => { this.setState ({ voteLimit: e.target.checked }); }}
-                  />
-                  Vote Limit
-                </label>
-                <IntegerInput
-                  value={this.state.maxVotes}
-                  onChange={(maxVotes) => { this.setState ({ maxVotes }); }}
-                />
-              </Field>
-              <Field>
-                <label htmlFor='id-limit2'>
-                  <input
-                    id='id-limit2'
-                    type='checkbox'
-                    checked={this.state.dateLimit}
-                    onChange={(e) => { this.setState ({ dateLimit: e.target.checked }); }}
-                  />
-                  End Date
-                </label>
-                <input
-                  value={this.state.endDate}
-                  onChange={(e) => { this.setState ({ endDate: e.target.value }); }}
-                />
-              </Field>
-            </Row>
-            <Divider extend='8px' />
-            <Row center>
-              { newPoll ?
-                <Button mt='16px' mb='16px' onClick={this.onAddPoll}>Add Poll</Button> :
-                <Fragment>
-                  <Button mt='16px' mb='16px' onClick={this.onSavePoll}>Save Poll</Button>
-                  <Button mt='16px' mb='16px' onClick={this.onDeletePoll}>Delete Poll</Button>
-                </Fragment>
-              }
-            </Row>
-          </Box>
-        </Form>
-        {
-          (newPoll) ? null :
-          <Row>
-            <SubHeading center>Share this Poll</SubHeading>
-            <P center>
-              https://pollster-jm.herokuapp.com/polls/{this.state.selected}
-            </P>
-          </Row>
+        <Row center>
+          <ManagePollSelect
+            polls={this.props.polls}
+            selected={this.state.selected}
+            onSelect={this.onSelectPoll}
+          />
+        </Row>
+        <Row center>
+          <ManageForm
+            action={this.state.selected === '' ? 'add' : 'edit'}
+            fields={this.state.fields}
+            onChange={this.onChange}
+            onValidate={this.onValidate}
+            onSubmit={this.onSubmitPoll}
+            onDelete={this.onDeletePoll}
+          />
+        </Row>
+        { this.state.modal &&
+          <Modal
+            title={this.state.modal.title}
+            actions={this.state.modal.actions}
+            closeAction={this.state.modal.closeAction}
+            content={this.state.modal.content}
+            onClose={this.onCloseModal}
+          />
         }
       </PageContent>
     );
   }
 }
 
-function generateChoices (list) {
-  let result;
-  switch (list.length) {
-    case 0:
-      result = ['', ''];
-      break;
-    case 1:
-      result = [list[0].text, ''];
-      break;
-    default:
-      result = list.map ((item) => { return item.text; });
-      result.push ('');
-      break;
-  }
-  return result;
-}
-
 const mapStateToProps = (state) => {
   return ({
-    username: state.user.username,
-    polls: state.polls,
+    polls: state.polls.filter ((poll) => { return poll.creator === state.user.username; }),
   });
 };
 
 export default connect (mapStateToProps) (ManagePage);
 
 ManagePage.propTypes = {
-  username: PropTypes.string.isRequired,
   polls: PropTypes.arrayOf (PropTypes.shape ({
     _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -251,28 +197,4 @@ ManagePage.propTypes = {
     })).isRequired,
   })).isRequired,
   dispatch: PropTypes.func.isRequired,
-};
-
-const Choice = (props) => {
-  return (
-    <Field>
-      <label htmlFor={props.id}>Choice {props.index + 1}</label>
-      <input
-        id={props.id}
-        type='text'
-        value={props.choice}
-        maxLength={30}
-        onChange={(e) => {
-          props.onChange (props.index, e.target.value.trim ());
-        }}
-      />
-    </Field>
-  );
-};
-
-Choice.propTypes = {
-  id: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  choice: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };

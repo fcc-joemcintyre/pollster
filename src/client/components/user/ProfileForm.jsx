@@ -3,19 +3,24 @@ import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
 import { fieldPropTypes } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
-import { Form, Field, FieldInfo, FieldError, Row } from '../style/Layout';
+import { Form, Field, Label, FieldInfo, FieldError } from '../style/Form';
+import { Row } from '../style/Layout';
 import { Heading } from '../style/Text';
 import { Button } from '../style/Button';
 import { MessageText } from '../style/MessageText';
 
 const nameChars = /[A-Za-z -.,]/;
+const emailErrors = {
+  required: 'Is required',
+  format: 'Invalid email address',
+};
 
 const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, onSubmit }) => {
-  let focusRef;
-
   function resetFocus () {
-    if (focusRef) {
-      focusRef.focus ();
+    const id = name.error ? 'name' : email.error ? 'email' : 'name';
+    const el = document.getElementById (id);
+    if (el) {
+      el.focus ();
     }
   }
 
@@ -29,11 +34,10 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
       </Row>
       <Form center w='280px' onSubmit={onSubmit}>
         <Field>
-          <label htmlFor='name'>Name</label>
+          <Label htmlFor='name' required={name.required}>Name</Label>
           <FilteredInput
             id='name'
             type='text'
-            ref={(ref) => { focusRef = ref; }}
             autoFocus
             maxLength={40}
             filter={nameChars}
@@ -42,13 +46,13 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
             onBlur={() => { onValidate (name); }}
           />
           {
-            name.touched && name.error ?
-              <FieldError>Max length is 40 characters</FieldError> :
+            name.error ?
+              <FieldError>Is required</FieldError> :
               <FieldInfo>Your full name</FieldInfo>
           }
         </Field>
         <Field>
-          <label htmlFor='email'>email</label>
+          <Label htmlFor='email' required={email.required}>email</Label>
           <input
             id='email'
             type='text'
@@ -60,18 +64,13 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
             onBlur={() => { onValidate (email); }}
           />
           {
-            email.touched && email.error ?
-              <FieldError>Invalid email address</FieldError> :
+            email.error ?
+              <FieldError>{emailErrors[email.error] || 'Error'}</FieldError> :
               <FieldInfo>Your email address</FieldInfo>
           }
         </Field>
         <Row center>
-          <Button
-            onClick={(e) => {
-              resetFocus ();
-              onSubmit (e);
-            }}
-          >
+          <Button onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
             Save
           </Button>
         </Row>

@@ -10,13 +10,8 @@
       },
       "minItems": 1,
       "uniqueItems": true
-    },
-    "voteLimit": { "type": "boolean" },
-    "maxVotes": { "type": "integer" },
-    "dateLimit": { "type": "boolean" },
-    "endDate": { "type": "string" }
-
+    }
   },
-  "required": ["title", "choices", "voteLimit", "maxVotes", "dateLimit", "endDate"],
+  "required": ["title", "choices"],
   "additionalProperties": false
 }

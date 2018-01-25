@@ -10,28 +10,16 @@ describe ('polls (unauthenticated)', function () {
         creator: 'amy',
         title: 'Poll a1',
         choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       },
       {
         creator: 'amy',
         title: 'Poll a2',
         choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       },
       {
         creator: 'bob',
         title: 'Poll b1',
         choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       },
     ];
     await db.insertPoll (polls);
@@ -60,28 +48,16 @@ describe ('polls (authenticated)', function () {
         creator: 'amy',
         title: 'Poll a1',
         choices: [{ text: 'Tigers', votes: 0 }, { text: 'Bears', votes: 0 }],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       },
       {
         creator: 'amy',
         title: 'Poll a2',
         choices: [{ text: 'Yes', votes: 0 }, { text: 'No', votes: 0 }],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       },
       {
         creator: 'bob',
         title: 'Poll b1',
         choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       },
     ];
     const result = await db.insertPoll (polls);
@@ -134,10 +110,6 @@ describe ('polls (authenticated)', function () {
       const poll = {
         title: 'Poll anew',
         choices: ['Cake', 'Pie'],
-        voteLimit: false,
-        maxVotes: 0,
-        dateLimit: false,
-        endDate: '',
       };
       await jsonFetch.post ('/api/polls', poll);
       const data = await jsonFetch.get ('/api/polls');
@@ -152,20 +124,12 @@ describe ('polls (authenticated)', function () {
       const json = {
         title: 'UTitle',
         choices: ['U1', 'U2'],
-        voteLimit: true,
-        maxVotes: 1000,
-        dateLimit: true,
-        endDate: '12/31/2017',
       };
       await jsonFetch.post (`/api/polls/${pollIds[1]}`, json);
       const data = await jsonFetch.get (`/api/polls/${pollIds[1]}`);
       if ((data.title !== 'UTitle') ||
           (data.choices[0].text !== 'U1') ||
-          (data.choices[1].text !== 'U2') ||
-          (data.voteLimit !== true) ||
-          (data.maxVotes !== 1000) ||
-          (data.dateLimit !== true) ||
-          (data.endDate !== '12/31/2017')) {
+          (data.choices[1].text !== 'U2')) {
         throw new Error (`Invalid field content: ${JSON.stringify (data)}`);
       }
     });
