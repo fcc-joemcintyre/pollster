@@ -29,14 +29,14 @@ class RegisterPage extends Component {
 
   onChange (field, value) {
     const f = { [field.name]: { ...this.state.fields[field.name], value } };
-    this.setState (({ fields }) => { return { fields: { ...fields, ...f } }; });
+    this.setState (({ fields }) => ({ fields: { ...fields, ...f } }));
   }
 
   onValidate (field) {
     const f = this.state.fields[field.name];
     const error = validateField (f);
     if (error !== f.error) {
-      this.setState (({ fields }) => { return { fields: { ...fields, [field.name]: { ...f, error } } }; });
+      this.setState (({ fields }) => ({ fields: { ...fields, [field.name]: { ...f, error } } }));
     }
     return error;
   }

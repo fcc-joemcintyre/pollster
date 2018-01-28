@@ -5,7 +5,7 @@ const Page = styled.div`
 `;
 
 const PageContent = styled.div`
-  max-width: ${(props) => { return props.maxWidth || '768px'; }};
+  max-width: ${props => props.maxWidth || '768px'};
   margin: 0 auto;
   padding: 100px 0px 16px 0px;
   overflow: auto;

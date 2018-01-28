@@ -4,8 +4,8 @@ import { common } from './common';
 export const Form = styled.form`
   ${common}
   max-width: 100%;
-  margin-left: ${(props) => { return props.center && 'auto'; }};
-  margin-right: ${(props) => { return props.center && 'auto'; }};
+  margin-left: ${props => props.center && 'auto'};
+  margin-right: ${props => props.center && 'auto'};
 `;
 
 export const Field = styled.div`
@@ -59,6 +59,6 @@ export const FieldError = FieldInfo.extend`
 export const Label = styled.label`
   ${common}
   &:after {
-    content: ${(props) => { return (props.required) && '" *"'; }};
+    content: ${props => (props.required) && '" *"'};
   }
 `;

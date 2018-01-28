@@ -3,22 +3,20 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 
-const PollList = ({ polls, history }) => {
-  return (
-    polls.map ((poll) => {
-      const totalVotes = poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
-      return (
-        <PollItem
-          key={poll._id}
-          onClick={() => { history.push (`/polls/${poll._id}`); }}
-        >
-          <Title>{poll.title}</Title>
-          <Votes>{totalVotes} votes</Votes>
-        </PollItem>
-      );
-    })
-  );
-};
+const PollList = ({ polls, history }) => (
+  polls.map ((poll) => {
+    const totalVotes = poll.choices.reduce ((a, b) => a + b.votes, 0);
+    return (
+      <PollItem
+        key={poll._id}
+        onClick={() => { history.push (`/polls/${poll._id}`); }}
+      >
+        <Title>{poll.title}</Title>
+        <Votes>{totalVotes} votes</Votes>
+      </PollItem>
+    );
+  })
+);
 
 export default withRouter (PollList);
 
@@ -43,13 +41,13 @@ const PollItem = styled.div`
   border: 1px solid $colorItemBorder;
 
   &:nth-child(even) {
-    background-color: ${(props) => { return props.theme.colorRowBgEven || '#F0F8FF'; }};
+    background-color: ${props => props.theme.colorRowBgEven || '#F0F8FF'};
   }
   &:nth-child(odd) {
-    background-color: ${(props) => { return props.theme.colorRowBgOdd || '#FFFFF0'; }};
+    background-color: ${props => props.theme.colorRowBgOdd || '#FFFFF0'};
   }
   &:hover {
-    border: 1px solid ${(props) => { return props.theme.colorRowHoverBorder || '#0000F8'; }};
+    border: 1px solid ${props => props.theme.colorRowHoverBorder || '#0000F8'};
   }
 `;
 

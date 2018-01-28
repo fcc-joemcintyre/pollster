@@ -6,8 +6,8 @@ import { darker } from './adjustColor';
 
 export const MenuBar = styled.div`
   display: flex;
-  margin-top: ${(props) => { return props.mt || 0; }};
-  margin-left: ${(props) => { return props.right ? 'auto' : 0; }};
+  margin-top: ${props => props.mt || 0};
+  margin-left: ${props => (props.right ? 'auto' : 0)};
 `;
 
 const item = css`
@@ -49,15 +49,15 @@ export const MenuNavLink = styled (NavLink)`
 `;
 
 export const MenuSeparator = styled.hr`
-  margin-top: ${(props) => { return props.spacing || '4px'; }};
-  margin-bottom: ${(props) => { return props.spacing || '4px'; }};
+  margin-top: ${props => props.spacing || '4px'};
+  margin-bottom: ${props => props.spacing || '4px'};
 `;
 
 export const MenuSpacer = styled.div`
   position: absolute;
   top: 100%;
-  left: ${(props) => { return props.right ? null : 0; }};
-  right: ${(props) => { return props.right ? 0 : null; }};
+  left: ${props => (props.right ? null : 0)};
+  right: ${props => (props.right ? 0 : null)};
   width: 100%;
   min-width: 100px;
   height: 16px;
@@ -71,8 +71,8 @@ export const MenuFloating = styled.div`
   position: absolute;
   zIndex: 20;
   top: calc(100% + 16px);
-  left: ${(props) => { return props.right ? null : 0; }};
-  right: ${(props) => { return props.right ? 0 : null; }};
+  left: ${props => (props.right ? null : 0)};
+  right: ${props => (props.right ? 0 : null)};
   border: 1px solid #333333;
   background-color: #7AC1C1;
 

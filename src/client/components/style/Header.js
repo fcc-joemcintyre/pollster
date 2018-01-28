@@ -6,7 +6,7 @@ export const FixedFullWidth = styled.div`
   left: 0;
   width: 100%;
   margin: 0;
-  background-color: ${(props) => { return props.theme.colorPrimary || '#7AC1C1'; }};
+  background-color: ${props => props.theme.colorPrimary || '#7AC1C1'};
   border-bottom: 1px solid darkgray;
 `;
 

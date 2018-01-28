@@ -7,10 +7,10 @@ export const Flex = styled.div`
 `;
 
 export const Box = styled.div`
-  margin-left: ${(props) => { return props.center && 'auto'; }};
-  margin-right: ${(props) => { return props.center && 'auto'; }};
-  border: ${(props) => { return (! props.noborder) && '1px solid darkgray'; }};
-  width: ${(props) => { return props.w; }};
+  margin-left: ${props => props.center && 'auto'};
+  margin-right: ${props => props.center && 'auto'};
+  border: ${props => (! props.noborder) && '1px solid darkgray'};
+  width: ${props => props.w};
   max-width: 100%;
   ${common}
 `;
@@ -27,11 +27,11 @@ export const Column = styled.div`
 
 export const Row = styled.div`
   ${common}
-  text-align: ${(props) => { return props.center ? 'center' : props.right ? 'right' : 'left'; }};
+  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')};
 `;
 
 export const Divider = styled.hr`
   ${common}
-  margin-left: ${(props) => { return props.extend && `-${props.extend}`; }};
-  margin-right: ${(props) => { return props.extend && `-${props.extend}`; }};
+  margin-left: ${props => props.extend && `-${props.extend}`};
+  margin-right: ${props => props.extend && `-${props.extend}`};
 `;

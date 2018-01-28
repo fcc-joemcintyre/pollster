@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router';
 
-const AuthRoute = ({ component, authenticated, ...rest }) => {
-  return (<Route
+const AuthRoute = ({ component, authenticated, ...rest }) => (
+  <Route
     {...rest}
     render={(routeProps) => {
       if (authenticated) {
@@ -17,8 +17,8 @@ const AuthRoute = ({ component, authenticated, ...rest }) => {
         />);
       }
     }}
-  />);
-};
+  />
+);
 
 export default AuthRoute;
 

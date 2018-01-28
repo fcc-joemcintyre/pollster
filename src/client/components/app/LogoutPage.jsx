@@ -38,11 +38,9 @@ class LogoutPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return ({
-    authenticated: state.user.authenticated,
-  });
-};
+const mapStateToProps = state => ({
+  authenticated: state.user.authenticated,
+});
 
 export default connect (mapStateToProps) (LogoutPage);
 

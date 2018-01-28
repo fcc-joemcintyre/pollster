@@ -99,9 +99,7 @@ export function inIntegerArray (value = []) {
 }
 
 export function outIntegerArray (value = []) {
-  return value.map ((a) => {
-    return outInteger (a);
-  });
+  return value.map (a => outInteger (a));
 }
 
 export function inCurrency (value = 0) {

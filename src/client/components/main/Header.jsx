@@ -24,7 +24,7 @@ class Header extends Component {
   }
 
   handleResize () {
-    this.setState (() => { return { innerWidth: window.innerWidth }; });
+    this.setState (() => ({ innerWidth: window.innerWidth }));
   }
 
   render () {
@@ -94,11 +94,9 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  return ({
-    authenticated: user.authenticated,
-  });
-};
+const mapStateToProps = ({ user }) => ({
+  authenticated: user.authenticated,
+});
 
 export default connect (mapStateToProps, null, null, { pure: false }) (Header);
 

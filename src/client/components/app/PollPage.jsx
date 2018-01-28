@@ -12,7 +12,7 @@ class PollPage extends Component {
   constructor (props) {
     super (props);
     const _id = this.props.match.params._id;
-    const poll = props.polls.find ((p) => { return (p._id === _id); });
+    const poll = props.polls.find (p => (p._id === _id));
     this.state = {
       poll,
       selected: -1,
@@ -26,7 +26,7 @@ class PollPage extends Component {
       const poll = Object.assign ({}, this.state.poll);
       const choice = poll.choices[this.state.selected];
       choice.votes += 1;
-      this.setState (() => { return { voted: true, poll }; });
+      this.setState (() => ({ voted: true, poll }));
       try {
         await this.props.dispatch (vote (this.state.poll._id, choice.text));
       } catch (err) {
@@ -53,7 +53,7 @@ class PollPage extends Component {
         </PageContent>
       );
     }
-    const totalVotes = this.state.poll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
+    const totalVotes = this.state.poll.choices.reduce ((a, b) => a + b.votes, 0);
     const rows = this.state.poll.choices.map ((choice, index) => {
       const text = (index === this.state.selected) ? `\u2713 ${choice.text}` : choice.text;
       let percent = 0;
@@ -105,11 +105,9 @@ class PollPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return ({
-    polls: state.polls,
-  });
-};
+const mapStateToProps = state => ({
+  polls: state.polls,
+});
 
 export default connect (mapStateToProps) (PollPage);
 

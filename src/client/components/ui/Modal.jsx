@@ -53,14 +53,11 @@ class Modal extends Component {
           </Row>
           { (this.props.actions.length > 0) &&
             <Row center pb='16px'>
-              { this.props.actions.map ((action) => {
-                  return (
-                    <Button key={action} onClick={() => { this.props.onClose (action, this.props.tag); }}>
-                      {action}
-                    </Button>
-                  );
-                })
-              }
+              { this.props.actions.map (action => (
+                <Button key={action} onClick={() => { this.props.onClose (action, this.props.tag); }}>
+                  {action}
+                </Button>
+              ))}
             </Row>
           }
         </Panel>

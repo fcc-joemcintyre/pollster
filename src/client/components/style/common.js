@@ -1,18 +1,18 @@
 import { css } from 'styled-components';
 
 export const common = css`
-  margin-top: ${(props) => { return props.mt; }};
-  margin-bottom: ${(props) => { return props.mb; }};
-  margin-left: ${(props) => { return props.ml; }};
-  margin-right: ${(props) => { return props.mr; }};
-  padding-top: ${(props) => { return props.pt; }};
-  padding-bottom: ${(props) => { return props.pb; }};
-  padding-left: ${(props) => { return props.pl; }};
-  padding-right: ${(props) => { return props.pr; }};
-  font-size: ${(props) => { return props.fs; }};
-  font-weight: ${(props) => { return props.bold && 700; }};
-  width:  ${(props) => { return props.w; }};
-  max-width:  ${(props) => { return props.mw; }};
+  margin-top: ${props => props.mt};
+  margin-bottom: ${props => props.mb};
+  margin-left: ${props => props.ml};
+  margin-right: ${props => props.mr};
+  padding-top: ${props => props.pt};
+  padding-bottom: ${props => props.pb};
+  padding-left: ${props => props.pl};
+  padding-right: ${props => props.pr};
+  font-size: ${props => props.fs};
+  font-weight: ${props => props.bold && 700};
+  width:  ${props => props.w};
+  max-width:  ${props => props.mw};
 `;
 
 export default { common };

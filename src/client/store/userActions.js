@@ -5,9 +5,7 @@ import { SET_AUTHENTICATED, SET_PROFILE } from './userConstants';
 import API from './API';
 
 export function register (username, password) {
-  return () => {
-    return API.register (username, password);
-  };
+  return () => API.register (username, password);
 }
 
 export function login (username, password) {

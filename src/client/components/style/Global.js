@@ -1,8 +1,11 @@
 import { injectGlobal } from 'styled-components';
 
 injectGlobal`
-  body {
+  * {
     box-sizing: border-box;
+  }
+
+  body {
     font-family: 'Lato', sans-serif;
     font-size: 16px;
     line-height: 1.2;

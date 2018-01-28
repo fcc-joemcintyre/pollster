@@ -38,9 +38,9 @@ class App extends Component {
     try {
       await this.props.dispatch (verifyLogin ());
       await this.props.dispatch (initPolls ());
-      this.setState (() => { return { loading: false, message: '' }; });
+      this.setState ({ loading: false, message: '' });
     } catch (err) {
-      this.setState (() => { return { loading: false, message: 'Network error, try again.' }; });
+      this.setState ({ loading: false, message: 'Network error, try again.' });
     }
   }
 
@@ -80,12 +80,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  return ({
-    authenticated: user.authenticated,
-    theme: user.theme || 'base',
-  });
-};
+const mapStateToProps = ({ user }) => ({
+  authenticated: user.authenticated,
+  theme: user.theme || 'base',
+});
 
 export default connect (mapStateToProps) (App);
 

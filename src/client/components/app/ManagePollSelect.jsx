@@ -4,24 +4,20 @@ import { Box } from '../style/Layout';
 import { SubHeading } from '../style/Text';
 import { Select } from '../style/Select';
 
-const ManagePollSelect = ({ polls, selected, onSelect }) => {
-  return (
-    <Box center w='400px' pb='16px'>
-      <SubHeading center>My Polls</SubHeading>
-      <Select
-        w='380px'
-        autoFocus
-        value={selected}
-        onChange={(e) => { onSelect (e.target.value); }}
-      >
-        <option key='add' value=''>- Add a new poll -</option>
-        {polls.map ((poll) => {
-          return <option key={poll._id} value={poll._id}>{poll.title}</option>;
-        })}
-      </Select>
-    </Box>
-  );
-};
+const ManagePollSelect = ({ polls, selected, onSelect }) => (
+  <Box center w='400px' pb='16px'>
+    <SubHeading center>My Polls</SubHeading>
+    <Select
+      w='380px'
+      autoFocus
+      value={selected}
+      onChange={(e) => { onSelect (e.target.value); }}
+    >
+      <option key='add' value=''>- Add a new poll -</option>
+      {polls.map (poll => <option key={poll._id} value={poll._id}>{poll.title}</option>)}
+    </Select>
+  </Box>
+);
 
 export default ManagePollSelect;
 

@@ -20,9 +20,7 @@ function init () {
   }));
 
   // set function to set username as key for serialization
-  passport.serializeUser ((user, callback) => {
-    return callback (null, user.username);
-  });
+  passport.serializeUser ((user, callback) => callback (null, user.username));
 
   // set function to get user from username
   passport.deserializeUser (async (username, callback) => {

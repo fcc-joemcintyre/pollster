@@ -13,7 +13,7 @@ class SubMenuImpl extends Component {
   }
 
   onToggle () {
-    this.setState ((prev) => { return { show: ! prev.show }; });
+    this.setState (prev => ({ show: ! prev.show }));
   }
 
   onHide () {

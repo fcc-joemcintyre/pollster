@@ -5,14 +5,14 @@ export const Heading = styled.h1`
   ${common}
   font-family: 'Merriweather', sans-serif;
   font-size: 28px;
-  text-align: ${(props) => { return props.center ? 'center' : props.right ? 'right' : 'left'; }}
+  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')}
 `;
 
 export const SubHeading = styled.h2`
   ${common}
   font-family: 'Merriweather', sans-serif;
   font-size: 24px;
-  text-align: ${(props) => { return props.center ? 'center' : props.right ? 'right' : 'left'; }}
+  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')}
 `;
 
 export const MinorHeading = styled.h2`
@@ -24,7 +24,7 @@ export const MinorHeading = styled.h2`
 
 export const P = styled.p`
   ${common}
-  text-align: ${(props) => { return props.center ? 'center' : props.right ? 'right' : 'left'; }};
+  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')};
 `;
 
 export const Span = styled.span`
@@ -41,7 +41,7 @@ export const LI = styled.li`
 
 export const TextLink = styled.a`
   ${common}
-  href=${(props) => { return props.href || '#'; }}
+  href=${props => props.href || '#'}
   target='_blank'
   rel='noopener noreferrer'
 `;

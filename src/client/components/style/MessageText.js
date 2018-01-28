@@ -18,8 +18,8 @@ const statusBG = {
 export const MessageText = styled.span`
   ${common}
   padding: 4px;
-  border: 2px solid ${(props) => { return statusBorder[props.status] || 'white'; }};
-  background-color: ${(props) => { return statusBG[props.status] || 'white'; }};
+  border: 2px solid ${props => statusBorder[props.status] || 'white'};
+  background-color: ${props => statusBG[props.status] || 'white'};
   border-radius: 4px;
 `;
 

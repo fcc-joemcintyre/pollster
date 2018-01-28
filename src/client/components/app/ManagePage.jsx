@@ -35,7 +35,7 @@ class ManagePage extends Component {
 
   onChange (field, value) {
     const f = { [field.name]: { ...this.state.fields[field.name], value } };
-    this.setState (({ fields }) => { return { fields: { ...fields, ...f } }; }, () => {
+    this.setState (({ fields }) => ({ fields: { ...fields, ...f } }), () => {
       // after update, determine if all choice fields have content
       const full = Object.keys (this.state.fields).reduce ((a, b) => {
         if (b.startsWith ('choice')) {
@@ -48,7 +48,7 @@ class ManagePage extends Component {
       if (! full) {
         const next = `choice${Object.keys (this.state.fields).length - 1}`;
         const choice = { [next]: createField (next, '', false, [], inString, outString) };
-        this.setState (({ fields }) => { return { fields: { ...fields, ...choice } }; });
+        this.setState (({ fields }) => ({ fields: { ...fields, ...choice } }));
       }
     });
   }
@@ -57,7 +57,7 @@ class ManagePage extends Component {
     const f = this.state.fields[field.name];
     const error = validateField (f);
     if (error !== f.error) {
-      this.setState (({ fields }) => { return { fields: { ...fields, [field.name]: { ...f, error } } }; });
+      this.setState (({ fields }) => ({ fields: { ...fields, [field.name]: { ...f, error } } }));
     }
     return error;
   }
@@ -85,7 +85,7 @@ class ManagePage extends Component {
     if (_id === '') {
       this.onResetPoll ();
     } else {
-      const poll = this.props.polls.find ((a) => { return a._id === _id; });
+      const poll = this.props.polls.find (a => (a._id === _id));
       const choices = {};
       const length = poll.choices.length;
       for (let i = 0; i < length; i ++) {
@@ -110,7 +110,7 @@ class ManagePage extends Component {
       try {
         this.setState ({ modal: { content: 'Submitting poll...' } });
         const { title, ...rest } = getFieldValues (this.state.fields);
-        const choices = Object.values (rest).filter ((a) => { return a !== ''; });
+        const choices = Object.values (rest).filter (a => (a !== ''));
         if (this.state.selected === '') {
           await this.props.dispatch (addPoll (title, choices));
           const content = 'New poll has been added.';
@@ -180,11 +180,9 @@ class ManagePage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return ({
-    polls: state.polls.filter ((poll) => { return poll.creator === state.user.username; }),
-  });
-};
+const mapStateToProps = state => ({
+  polls: state.polls.filter (poll => (poll.creator === state.user.username)),
+});
 
 export default connect (mapStateToProps) (ManagePage);
 

@@ -10,14 +10,12 @@ import PollItem from './PollItem.jsx';
 class ResultPage extends Component {
   constructor (props) {
     super (props);
-    this.polls = props.polls.filter ((poll) => { return poll.creator === props.username; });
-    this.options = this.polls.map ((poll) => {
-      return (
-        <option key={poll._id} value={poll._id}>
-          {poll.title}
-        </option>
-      );
-    });
+    this.polls = props.polls.filter (poll => (poll.creator === props.username));
+    this.options = this.polls.map (poll => (
+      <option key={poll._id} value={poll._id}>
+        {poll.title}
+      </option>
+    ));
 
     this.state = {
       selected: (this.polls.length === 0) ? '' : this.polls[0]._id,
@@ -35,8 +33,8 @@ class ResultPage extends Component {
       );
     }
 
-    const currentPoll = this.polls.find ((poll) => { return poll._id === this.state.selected; });
-    const totalVotes = currentPoll.choices.reduce ((a, b) => { return a + b.votes; }, 0);
+    const currentPoll = this.polls.find (poll => (poll._id === this.state.selected));
+    const totalVotes = currentPoll.choices.reduce ((a, b) => a + b.votes, 0);
     const choices = currentPoll.choices.map ((choice) => {
       const percent = (totalVotes === 0) ? 0 : Math.floor ((choice.votes / totalVotes) * 100);
       return (
@@ -70,12 +68,10 @@ class ResultPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return ({
-    username: state.user.username,
-    polls: state.polls,
-  });
-};
+const mapStateToProps = state => ({
+  username: state.user.username,
+  polls: state.polls,
+});
 
 export default connect (mapStateToProps) (ResultPage);
 

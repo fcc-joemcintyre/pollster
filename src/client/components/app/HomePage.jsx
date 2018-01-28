@@ -6,38 +6,34 @@ import { Box, Divider } from '../style/Layout';
 import { Heading, P } from '../style/Text';
 import PollList from './PollList.jsx';
 
-const HomePage = ({ authenticated, polls }) => {
-  return (
-    <PageContent>
-      {
-        (authenticated === false) &&
-        <Fragment>
-          <Box center noborder>
-            <P>Welcome to Pollster, your place to vote and create new polls!</P>
-            <P>
-              To create your own polls, <i>Register</i> to create a free account
-              and then <i>Login</i> anytime to manage your polls and see the results.
-            </P>
-          </Box>
-          <Divider mt='16px' />
-        </Fragment>
-      }
-      <Heading center>Active Polls</Heading>
-      {
-        (polls.length === 0) ?
-          <P>There are no active polls - be the first to add a new one!</P> :
-          <PollList polls={polls} />
-      }
-    </PageContent>
-  );
-};
+const HomePage = ({ authenticated, polls }) => (
+  <PageContent>
+    {
+      (authenticated === false) &&
+      <Fragment>
+        <Box center noborder>
+          <P>Welcome to Pollster, your place to vote and create new polls!</P>
+          <P>
+            To create your own polls, <i>Register</i> to create a free account
+            and then <i>Login</i> anytime to manage your polls and see the results.
+          </P>
+        </Box>
+        <Divider mt='16px' />
+      </Fragment>
+    }
+    <Heading center>Active Polls</Heading>
+    {
+      (polls.length === 0) ?
+        <P>There are no active polls - be the first to add a new one!</P> :
+        <PollList polls={polls} />
+    }
+  </PageContent>
+);
 
-const mapStateToProps = (state) => {
-  return ({
-    authenticated: state.user.authenticated,
-    polls: state.polls,
-  });
-};
+const mapStateToProps = state => ({
+  authenticated: state.user.authenticated,
+  polls: state.polls,
+});
 
 export default connect (mapStateToProps) (HomePage);
 
