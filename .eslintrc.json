@@ -1,13 +1,3 @@
 {
-  "extends": [
-    "./eslint-rules/best-practices.js",
-    "./eslint-rules/errors.js",
-    "./eslint-rules/es6.js",
-    "./eslint-rules/imports.js",
-    "./eslint-rules/node.js",
-    "./eslint-rules/react.js",
-    "./eslint-rules/strict.js",
-    "./eslint-rules/style.js",
-    "./eslint-rules/variables.js"
-  ]
+  "extends": "@cygns"
 }
