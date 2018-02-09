@@ -37,7 +37,7 @@ gulp.task ('stage', ['set-stage', 'html', 'images', 'server',
 // set the destination for staging output and copy stage root files
 gulp.task ('set-stage', function () {
   base = `${stageDir}/dist`;
-  return gulp.src (['stage/*', 'stage/.*'])
+  return gulp.src (['package.json', 'stage/*', 'stage/.*'])
     .pipe (gulp.dest (stageDir));
 });
 

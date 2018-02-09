@@ -37,13 +37,17 @@ can also choose to use a local instance for dev/test and a hosted instance for
 deployment). The database name for the application is *pollster*. The database
 name used by the test runner is *pollsterTest*.
 
+## Scripts
+
+Scripts are provided for build, test and run. Yarn is used in the examples,
+but the NPM client can be used as well. When using the NPM client, include
+*run* before script names (e.g. npm run build).
+
 ### Build
 
 In a terminal, build can be activated with
 
 ```
-npm run [build | build-stage]
-
 yarn [build | build-stage]
 ```
 
@@ -62,17 +66,12 @@ set up watches and rerun build elements as file changes are saved.
 Testing can be done for all components,
 
 ```
-npm test
-
 yarn test
 ```
 
 Or components individually,
 
 ```
-npm run test-db
-npm run test-server
-
 yarn test-db
 yarn test-server
 ```
@@ -82,8 +81,6 @@ yarn test-server
 Coverage reports are generated using,
 
 ```
-npm run coverage
-
 yarn coverage
 ```
 
@@ -94,18 +91,35 @@ the separate results. The final report is available in
 Results for the individual runs are available in the subdirectories under the
 *coverage* directory.
 
-### Server
+### Server (Development mode)
 
 In a terminal, continuous server operation, updating on changes,
 can be activated with
 
 ```
-npm start
-
-yarn start
+yarn start:dev
 ```
 
 The *nodemon* utility provides restart on update.
+
+### Server (Production mode)
+
+To run the server as it will run in production, set the environment variable
+NODE_ENV to PRODUCTION, then use the start script.
+
+MacOS / Linux
+
+```
+export NODE_ENV=PRODUCTION
+yarn start
+```
+
+Windows
+
+```
+SET NODE_ENV=PRODUCTION
+yarn start
+```
 
 ### Client
 
@@ -127,12 +141,6 @@ The application also uses the following environment variables,
 - SESSION_SECRET
 
 HTTP Session secret (any text string).
-
-## Acknowledgements
-
-ESLint rules derived from Airbnb Javascript Style Guide,
-Copyright (c) 2014-2016 Airbnb under The MIT license, at
-https://github.com/airbnb/javascript
 
 ## License
 
