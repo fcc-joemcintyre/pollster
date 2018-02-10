@@ -5,6 +5,7 @@ const initialState = {
   username: '',
   name: '',
   email: '',
+  theme: '',
 };
 
 export default function user (state = initialState, action) {
@@ -19,6 +20,7 @@ export default function user (state = initialState, action) {
       return Object.assign ({}, state, {
         name: action.name,
         email: action.email,
+        theme: action.theme,
       });
 
     default:

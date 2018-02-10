@@ -56,6 +56,7 @@ async function insertUser (username, password) {
       salt: userHash.salt,
       name: '',
       email: '',
+      theme: 'base',
     };
     const result = await users.insert (user, { w: 1 });
     return result;
@@ -65,10 +66,10 @@ async function insertUser (username, password) {
 }
 
 // Update user information (not username or password).
-function updateUser (username, name, email) {
+function updateUser (username, name, email, theme) {
   return users.update (
     { username },
-    { $set: { name, email } }
+    { $set: { name, email, theme } }
   );
 }
 

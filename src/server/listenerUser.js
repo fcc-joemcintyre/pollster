@@ -41,6 +41,7 @@ function login (req, res, next) {
           username: user.username,
           name: req.user.name,
           email: req.user.email,
+          theme: req.user.theme,
         };
         return res.status (200).json (result);
       });
@@ -67,6 +68,7 @@ function verifyLogin (req, res) {
         username: req.user.username,
         name: req.user.name,
         email: req.user.email,
+        theme: req.user.theme,
       },
     };
     console.log ('INFO verified', req.user.username);
@@ -99,6 +101,7 @@ function getProfile (req, res) {
   res.status (200).json ({
     name: req.user.name,
     email: req.user.email,
+    theme: req.user.theme,
   });
 }
 
@@ -109,7 +112,8 @@ async function updateProfile (req, res) {
     res.status (400).json ({});
   } else {
     try {
-      await db.updateUser (req.user.username, req.body.name, req.body.email);
+      const { name, email, theme } = req.body;
+      await db.updateUser (req.user.username, name, email, theme);
       console.log ('INFO updateProfile ok');
       res.status (200).json ({});
     } catch (err) {

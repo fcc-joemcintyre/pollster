@@ -63,25 +63,25 @@ class Header extends Component {
             <Title>Pollster</Title>
             <Flex>
               {this.props.authenticated ?
-                <MenuBar mt='8px'>
+                <MenuBar mt='12px'>
                   <MenuNavLink to='/' exact>Home</MenuNavLink>
                   <MenuNavLink to='/manage'>Manage</MenuNavLink>
                   <MenuNavLink to='/results'>Results</MenuNavLink>
                   <MenuNavLink to='/about'>About</MenuNavLink>
                 </MenuBar> :
-                <MenuBar mt='8px'>
+                <MenuBar mt='12px'>
                   <MenuNavLink to='/' exact>Home</MenuNavLink>
                   <MenuNavLink to='/about'>About</MenuNavLink>
                 </MenuBar>
               }
               {this.props.authenticated ?
-                <MenuBar right mt='8px'>
+                <MenuBar right mt='12px'>
                   <SubMenu text='User' right>
                     <MenuNavLink to='/profile'>Profile</MenuNavLink>
                     <MenuNavLink to='/logout'>Logout</MenuNavLink>
                   </SubMenu>
                 </MenuBar> :
-                <MenuBar right mt='8px'>
+                <MenuBar right mt='12px'>
                   <MenuNavLink to='/register'>Register</MenuNavLink>
                   <MenuNavLink to='/login'>Login</MenuNavLink>
                 </MenuBar>

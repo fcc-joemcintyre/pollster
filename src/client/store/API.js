@@ -17,8 +17,8 @@ export default class API {
     return get ('/api/verifylogin');
   }
 
-  static updateProfile (name, email) {
-    return post ('/api/profile', { name, email });
+  static updateProfile (name, email, theme) {
+    return post ('/api/profile', { name, email, theme });
   }
 
   static getPolls () {

@@ -13,7 +13,7 @@ export function login (username, password) {
     try {
       const user = await API.login (username, password);
       dispatch (setAuthenticated (true, user.username));
-      dispatch (setProfile (user.name, user.email));
+      dispatch (setProfile (user.name, user.email, user.theme));
     } catch (err) {
       throw err;
     }
@@ -37,11 +37,11 @@ export function verifyLogin () {
       const data = await API.verifyLogin ();
       if (data.authenticated) {
         dispatch (setAuthenticated (true, data.user.username));
-        dispatch (setProfile (data.user.name, data.user.email));
+        dispatch (setProfile (data.user.name, data.user.email, data.user.theme));
         return true;
       } else {
         dispatch (setAuthenticated (false, ''));
-        dispatch (setProfile ('', ''));
+        dispatch (setProfile ('', '', 'base'));
         return false;
       }
     } catch (err) {
@@ -54,17 +54,17 @@ export function setAuthenticated (authenticated, username) {
   return { type: SET_AUTHENTICATED, authenticated, username };
 }
 
-export function updateProfile (name, email) {
+export function updateProfile (name, email, theme) {
   return async (dispatch) => {
     try {
-      await API.updateProfile (name, email);
-      dispatch (setProfile (name, email));
+      await API.updateProfile (name, email, theme);
+      dispatch (setProfile (name, email, theme));
     } catch (err) {
       throw err;
     }
   };
 }
 
-export function setProfile (name, email) {
-  return { type: SET_PROFILE, name, email };
+export function setProfile (name, email, theme) {
+  return { type: SET_PROFILE, name, email, theme };
 }

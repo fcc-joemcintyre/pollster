@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { baseTheme, grayTheme } from '../style/theme';
+import { getTheme } from './theme';
+import './Global';
 import AuthRoute from './AuthRoute.jsx';
 import Header from './Header.jsx';
 import { verifyLogin } from '../../store/userActions';
 import { initPolls } from '../../store/pollsActions';
-import '../style/Global';
 import { Page } from '../style/Page';
 import ScrollToTop from '../ui/ScrollToTop.jsx';
 
@@ -45,14 +45,16 @@ class App extends Component {
   }
 
   render () {
+    const theme = getTheme (this.props.theme);
     if (this.state.loading) {
       return (
-        <Page>
-          <LoadingPage message={this.state.message} />
-        </Page>
+        <ThemeProvider theme={theme}>
+          <Page>
+            <LoadingPage message={this.state.message} />
+          </Page>
+        </ThemeProvider>
       );
     }
-    const theme = (this.props.theme === 'gray') ? grayTheme : baseTheme;
     const { authenticated } = this.props;
     return (
       <BrowserRouter>

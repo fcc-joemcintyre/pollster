@@ -69,20 +69,22 @@ export const AppMenuSpacer = MenuSpacer.extend`
 
 export const MenuFloating = styled.div`
   position: absolute;
-  zIndex: 20;
-  top: calc(100% + 16px);
+  z-index: 20;
+  top: calc(100% + 12px);
   left: ${props => (props.right ? null : 0)};
   right: ${props => (props.right ? 0 : null)};
   border: 1px solid #333333;
-  background-color: #7AC1C1;
+  border-top: transparent;
+  background-color: ${props => props.theme.colorPrimary || '#7AC1C1'};
 
   > a {
     display: block;
-    width: calc(100% - 20px);
+    margin: 0;
+    width: 100%;
     overflow: hidden;
-    padding: 6px 10px;
+    padding: 6px 20px;
     &:hover {
-      background-color: ${darker ('#7AC1C1')};
+      background-color: ${props => (props.theme.colorPrimary ? darker (props.theme.colorPrimary) : darker ('#7AC1C1'))};
     }
   }
 `;

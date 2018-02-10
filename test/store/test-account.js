@@ -28,12 +28,14 @@ describe ('Test account action creators', function () {
     it ('should create action to set profile', function () {
       const name = 'Test';
       const email = 'test@example.com';
+      const theme = 'gray';
       const expectedAction = {
         type: types.SET_PROFILE,
         name,
         email,
+        theme,
       };
-      const action = actions.setProfile (name, email);
+      const action = actions.setProfile (name, email, theme);
       assert.deepStrictEqual (expectedAction, action);
     });
   });
@@ -48,11 +50,11 @@ describe ('Test account async actions', function () {
     it ('should generate login actions', async function () {
       nock ('http://localhost:3999/')
         .post ('/api/login', { username: 'amy', password: 'test' })
-        .reply (200, { username: 'amy', name: '', email: '' });
+        .reply (200, { username: 'amy', name: 'Amy Tester', email: 'amy@example.com', theme: 'base' });
 
       const expectedActions = [
         { type: types.SET_AUTHENTICATED, authenticated: true, username: 'amy' },
-        { type: types.SET_PROFILE, name: '', email: '' },
+        { type: types.SET_PROFILE, name: 'Amy Tester', email: 'amy@example.com', theme: 'base' },
       ];
       const store = mockStore ({});
       await store.dispatch (actions.login ('amy', 'test'));
@@ -81,12 +83,12 @@ describe ('Test account async actions', function () {
         .get ('/api/verifylogin')
         .reply (200, {
           authenticated: true,
-          user: { username: 'amy', name: 'Amy Tester', email: 'amy@example.com' },
+          user: { username: 'amy', name: 'Amy Tester', email: 'amy@example.com', theme: 'base' },
         });
 
       const expectedActions = [
         { type: types.SET_AUTHENTICATED, authenticated: true, username: 'amy' },
-        { type: types.SET_PROFILE, name: 'Amy Tester', email: 'amy@example.com' },
+        { type: types.SET_PROFILE, name: 'Amy Tester', email: 'amy@example.com', theme: 'base' },
       ];
       const store = mockStore ({});
       await store.dispatch (actions.verifyLogin ());
@@ -102,7 +104,7 @@ describe ('Test account async actions', function () {
 
       const expectedActions = [
         { type: types.SET_AUTHENTICATED, authenticated: false, username: '' },
-        { type: types.SET_PROFILE, name: '', email: '' },
+        { type: types.SET_PROFILE, name: '', email: '', theme: 'base' },
       ];
       const store = mockStore ({});
       await store.dispatch (actions.verifyLogin ());
@@ -116,11 +118,12 @@ describe ('Test account async actions', function () {
         .post ('/api/profile', {
           name: 'New name',
           email: 'new@example.com',
+          theme: 'gray',
         })
         .reply (200, {});
 
       const expectedActions = [
-        { type: types.SET_PROFILE, name: 'New name', email: 'new@example.com' },
+        { type: types.SET_PROFILE, name: 'New name', email: 'new@example.com', theme: 'gray' },
       ];
       const store = mockStore ({
         user: {
@@ -128,9 +131,10 @@ describe ('Test account async actions', function () {
           username: 'amy',
           name: 'Amy Tester',
           email: 'amy@example.com',
+          theme: 'gray',
         },
       });
-      await store.dispatch (actions.updateProfile ('New name', 'new@example.com'));
+      await store.dispatch (actions.updateProfile ('New name', 'new@example.com', 'gray'));
       assert.deepStrictEqual (store.getActions (), expectedActions);
     });
   });
@@ -142,6 +146,7 @@ describe ('Test user reducers', function () {
     username: '',
     name: '',
     email: '',
+    theme: '',
   });
 
   describe ('Reducer: default initialization', function () {
@@ -151,6 +156,7 @@ describe ('Test user reducers', function () {
         username: '',
         name: '',
         email: '',
+        theme: '',
       };
       // eslint-disable-next-line no-undefined
       assert.deepStrictEqual (userReducer (undefined, {}), expectedObject);
@@ -164,6 +170,7 @@ describe ('Test user reducers', function () {
         username: 'amy',
         name: '',
         email: '',
+        theme: '',
       };
       const actualObject = userReducer (defaultInitialState, {
         type: types.SET_AUTHENTICATED,
@@ -181,11 +188,13 @@ describe ('Test user reducers', function () {
         username: '',
         name: 'Amy Tester',
         email: 'amy@example.com',
+        theme: 'gray',
       };
       const actualObject = userReducer (defaultInitialState, {
         type: types.SET_PROFILE,
         name: 'Amy Tester',
         email: 'amy@example.com',
+        theme: 'gray',
       });
       assert.deepStrictEqual (actualObject, expectedObject);
     });

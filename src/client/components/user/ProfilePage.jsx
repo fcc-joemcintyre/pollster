@@ -15,6 +15,7 @@ class ProfilePage extends Component {
       fields: {
         name: createField ('name', props.name, true, [], inString, outString),
         email: createField ('email', props.email, false, [isEmail], inString, outString),
+        theme: createField ('theme', props.theme, false, [], inString, outString),
       },
       message: { status: 'info', text: defaultText },
     };
@@ -52,8 +53,8 @@ class ProfilePage extends Component {
     if (this.onValidateForm ()) {
       this.setState ({ message: { status: 'working', text: 'Updating profile ...' } });
       try {
-        const { name, email } = getFieldValues (this.state.fields);
-        await this.props.dispatch (updateProfile (name, email));
+        const { name, email, theme } = getFieldValues (this.state.fields);
+        await this.props.dispatch (updateProfile (name, email, theme));
         this.setState ({ message: { status: 'ok', text: 'Profile updated' } });
       } catch (err) {
         this.setState ({ message: { status: 'error', text: 'Error saving profile information' } });
@@ -79,6 +80,7 @@ class ProfilePage extends Component {
 const mapStateToProps = ({ user }) => ({
   name: user.name,
   email: user.email,
+  theme: user.theme || 'base',
 });
 
 export default connect (mapStateToProps) (ProfilePage);
@@ -86,5 +88,6 @@ export default connect (mapStateToProps) (ProfilePage);
 ProfilePage.propTypes = {
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  theme: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };

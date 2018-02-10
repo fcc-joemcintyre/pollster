@@ -15,7 +15,7 @@ const emailErrors = {
   format: 'Invalid email address',
 };
 
-const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, onSubmit }) => {
+const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onValidate, onSubmit }) => {
   function resetFocus () {
     const id = name.error ? 'name' : email.error ? 'email' : 'name';
     const el = document.getElementById (id);
@@ -68,6 +68,18 @@ const ProfileForm = ({ message, fields: { name, email }, onChange, onValidate, o
               <FieldError>{emailErrors[email.error] || 'Error'}</FieldError> :
               <FieldInfo>Your email address</FieldInfo>
           }
+        </Field>
+        <Field>
+          <Label htmlFor='theme' required={theme.required}>Theme</Label>
+          <select
+            id='theme'
+            value={theme.value}
+            onChange={(e) => { onChange (theme, e.target.value); }}
+          >
+            <option key='base' value='base'>Cyan</option>
+            <option key='gray' value='gray'>Gray</option>
+          </select>
+          <FieldInfo>Select a theme you like</FieldInfo>
         </Field>
         <Row center>
           <Button onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>

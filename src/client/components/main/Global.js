@@ -6,12 +6,12 @@ injectGlobal`
   }
 
   body {
-    font-family: 'Lato', sans-serif;
+    font-family: sans-serif;
     font-size: 16px;
     line-height: 1.2;
-    min-width: 304px;
+    min-width: 300px;
     margin: 0;
-    padding: 0 8px 0 8px;
+    padding: 0;
   }
 
   input, select {

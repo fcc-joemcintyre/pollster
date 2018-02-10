@@ -96,7 +96,7 @@ describe ('profile', function () {
   describe ('get initial profile', function () {
     it ('should have no errors', async function () {
       const data = await jsonFetch.get ('/api/profile');
-      if ((data.name !== '') || (data.email !== '')) {
+      if ((data.name !== '') || (data.email !== '') || data.theme !== 'base') {
         throw new Error (`Invalid data ${JSON.stringify (data)}`);
       }
     });
@@ -104,10 +104,10 @@ describe ('profile', function () {
 
   describe ('update profile', function () {
     it ('should have no errors', async function () {
-      const input = { name: 'Test', email: 'test@example.com' };
+      const input = { name: 'Test', email: 'test@example.com', theme: 'gray' };
       await jsonFetch.post ('/api/profile', input);
       const data = await jsonFetch.get ('/api/profile');
-      if ((data.name !== 'Test') || (data.email !== 'test@example.com')) {
+      if ((data.name !== 'Test') || (data.email !== 'test@example.com') || (data.theme !== 'gray')) {
         throw new Error (`Invalid data ${JSON.stringify (data)}`);
       }
     });
