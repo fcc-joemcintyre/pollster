@@ -16,7 +16,19 @@
     "helmet": "3.9.0",
     "mongodb": "2.2.33",
     "passport": "0.4.0",
-    "passport-local": "1.0.0"
+    "passport-local": "1.0.0",
+    "prop-types": "15.6.0",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-redux": "5.0.6",
+    "react-router": "4.2.0",
+    "react-router-dom": "4.2.2",
+    "redux": "3.7.2",
+    "redux-mock-store": "1.2.3",
+    "redux-thunk": "2.2.0",
+    "regenerator-runtime": "0.11.0",
+    "styled-components": "2.4.0",
+    "whatwg-fetch": "2.0.3"
   },
   "scripts": {
     "start": "node dist/main.js --port=3000",
@@ -57,21 +69,9 @@
     "nock": "9.0.9",
     "node-fetch": "1.7.3",
     "nodemon": "1.11.0",
-    "prop-types": "15.6.0",
-    "react": "16.2.0",
-    "react-dom": "16.2.0",
-    "react-redux": "5.0.6",
-    "react-router": "4.2.0",
-    "react-router-dom": "4.2.2",
-    "redux": "3.7.2",
-    "redux-mock-store": "1.2.3",
-    "redux-thunk": "2.2.0",
-    "regenerator-runtime": "0.11.0",
-    "styled-components": "2.4.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
-    "watchify": "3.9.0",
-    "whatwg-fetch": "2.0.3"
+    "watchify": "3.9.0"
   },
   "engines": {
     "node": "8.9.3"
