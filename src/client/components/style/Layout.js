@@ -1,6 +1,25 @@
 import styled from 'styled-components';
 import { common } from './common';
 
+export const Fixed = styled.div`
+  ${common}
+  position: fixed;
+  top: ${props => props.top};
+  left: ${props => props.left};
+  right: ${props => props.right};
+  bottom: ${props => props.bottom};
+`;
+
+export const Absolute = styled.div`
+  ${common}
+  position: absolute;
+`;
+
+export const Relative = styled.div`
+  ${common}
+  position: relative;
+`;
+
 export const Flex = styled.div`
   ${common}
   display: flex;

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Flex } from '../style/Layout';
-import { AppMenu, MenuBar, MenuNavLink, MenuSeparator, SubMenu } from '../style/Menu';
-import { FixedFullWidth, RelativeCenteredBox, Title } from '../style/Header';
+import { DropMenu, MenuBar, MenuNavLink, MenuSeparator, SubMenu } from '../style/Menu';
+import { FixedHeader, Content, Title } from '../style/Header';
 
 class Header extends Component {
   constructor (props) {
@@ -30,36 +30,34 @@ class Header extends Component {
   render () {
     if (this.state.innerWidth < 320) {
       return (
-        <FixedFullWidth>
-          <RelativeCenteredBox>
-            <Flex>
-              {this.props.authenticated ?
-                <AppMenu>
-                  <MenuNavLink to='/' exact>Home</MenuNavLink>
-                  <MenuNavLink to='/manage'>Manage</MenuNavLink>
-                  <MenuNavLink to='/results'>Results</MenuNavLink>
-                  <MenuNavLink to='/about'>About</MenuNavLink>
-                  <MenuNavLink to='/profile'>Profile</MenuNavLink>
-                  <MenuSeparator spacing='4px' />
-                  <MenuNavLink to='/logout'>Logout</MenuNavLink>
-                </AppMenu> :
-                <AppMenu>
-                  <MenuNavLink to='/' exact>Home</MenuNavLink>
-                  <MenuNavLink to='/about'>About</MenuNavLink>
-                  <MenuSeparator spacing='4px' />
-                  <MenuNavLink to='/register'>Register</MenuNavLink>
-                  <MenuNavLink to='/login'>Login</MenuNavLink>
-                </AppMenu>
-              }
-              <Title ml='60px'>Pollster</Title>
-            </Flex>
-          </RelativeCenteredBox>
-        </FixedFullWidth>
+        <FixedHeader>
+          <Content>
+            {this.props.authenticated ?
+              <DropMenu m='10px 8px 0 4px'>
+                <MenuNavLink to='/' exact>Home</MenuNavLink>
+                <MenuNavLink to='/manage'>Manage</MenuNavLink>
+                <MenuNavLink to='/results'>Results</MenuNavLink>
+                <MenuNavLink to='/about'>About</MenuNavLink>
+                <MenuNavLink to='/profile'>Profile</MenuNavLink>
+                <MenuSeparator spacing='4px' />
+                <MenuNavLink to='/logout'>Logout</MenuNavLink>
+              </DropMenu> :
+              <DropMenu m='10px 8px 0 4px'>
+                <MenuNavLink to='/' exact>Home</MenuNavLink>
+                <MenuNavLink to='/about'>About</MenuNavLink>
+                <MenuSeparator spacing='4px' />
+                <MenuNavLink to='/register'>Register</MenuNavLink>
+                <MenuNavLink to='/login'>Login</MenuNavLink>
+              </DropMenu>
+            }
+            <Title>Pollster</Title>
+          </Content>
+        </FixedHeader>
       );
     } else {
       return (
-        <FixedFullWidth>
-          <RelativeCenteredBox>
+        <FixedHeader>
+          <Content>
             <Title>Pollster</Title>
             <Flex>
               {this.props.authenticated ?
@@ -87,8 +85,8 @@ class Header extends Component {
                 </MenuBar>
               }
             </Flex>
-          </RelativeCenteredBox>
-        </FixedFullWidth>
+          </Content>
+        </FixedHeader>
       );
     }
   }

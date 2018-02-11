@@ -1,20 +1,17 @@
 import styled from 'styled-components';
+import { Fixed, Relative } from './Layout';
 
-export const FixedFullWidth = styled.div`
-  position: fixed;
+export const FixedHeader = styled (Fixed)`
   top: 0;
   left: 0;
-  width: 100%;
-  margin: 0;
-  background-color: ${props => props.theme.colorPrimary || '#7AC1C1'};
-  border-bottom: 1px solid darkgray;
+  right: 0;
+  background-color: ${props => props.theme.colorPrimary || '#7AC1C1;'};
 `;
 
-export const RelativeCenteredBox = styled.div`
-  position: relative;
-  height: 80px;
+export const Content = styled (Relative)`
   max-width: 768px;
   margin: 0 auto;
+  height 72px;
 
   @media (max-width: 300px) {
     height: 40px;
@@ -22,13 +19,11 @@ export const RelativeCenteredBox = styled.div`
 `;
 
 export const Title = styled.div`
+  display: inline-block;
+  vertical-align: top;
   margin-top: 8px;
   font-family: 'Merriweather', sans-serif;
   text-shadow: 2px 2px 2px #FFFFFF;
-  font-size: 36px;
+  font-size: 30px;
   line-height: 1.0;
-
-  @media (max-width: 300px) {
-    font-size: 30px;
-  }
 `;

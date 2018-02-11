@@ -1,12 +1,13 @@
 import styled, { css } from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import AppMenuImpl from './AppMenuImpl.jsx';
+import { common } from './common';
+import DropMenuImpl from './DropMenuImpl.jsx';
 import SubMenuImpl from './SubMenuImpl.jsx';
 import { darker } from './adjustColor';
 
 export const MenuBar = styled.div`
+  ${common}
   display: flex;
-  margin-top: ${props => props.mt || 0};
   margin-left: ${props => (props.right ? 'auto' : 0)};
 `;
 
@@ -37,12 +38,6 @@ export const SubMenu = styled (SubMenuImpl)`
   ${item};
 `;
 
-export const AppMenu = styled (AppMenuImpl)`
-  postion: relative;
-  top: 8px;
-  left: 8px;
-`;
-
 export const MenuNavLink = styled (NavLink)`
   ${item};
   text-decoration: none;
@@ -63,14 +58,10 @@ export const MenuSpacer = styled.div`
   height: 16px;
 `;
 
-export const AppMenuSpacer = MenuSpacer.extend`
-  height: 0px;
-`;
-
 export const MenuFloating = styled.div`
   position: absolute;
   z-index: 20;
-  top: calc(100% + 12px);
+  top: calc(100% + 2px);
   left: ${props => (props.right ? null : 0)};
   right: ${props => (props.right ? 0 : null)};
   border: 1px solid #333333;
@@ -89,6 +80,15 @@ export const MenuFloating = styled.div`
   }
 `;
 
-export const AppMenuFloating = MenuFloating.extend`
+export const DropMenu = styled (DropMenuImpl)`
+  ${common}
+  display: inline-block;
+`;
+
+export const DropMenuSpacer = styled (MenuSpacer)`
+  height: 0px;
+`;
+
+export const DropMenuFloating = styled (MenuFloating)`
   top: 100%;
 `;
