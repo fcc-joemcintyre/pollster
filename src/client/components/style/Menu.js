@@ -50,18 +50,19 @@ export const MenuSeparator = styled.hr`
 
 export const MenuSpacer = styled.div`
   position: absolute;
+  z-index: 20;
   top: 100%;
   left: ${props => (props.right ? null : 0)};
   right: ${props => (props.right ? 0 : null)};
   width: 100%;
   min-width: 100px;
-  height: 16px;
+  height: ${props => (props.h || '8px')};
 `;
 
 export const MenuFloating = styled.div`
   position: absolute;
   z-index: 20;
-  top: calc(100% + 2px);
+  top: calc(100% + ${props => props.top || '8px'});
   left: ${props => (props.right ? null : 0)};
   right: ${props => (props.right ? 0 : null)};
   border: 1px solid #333333;

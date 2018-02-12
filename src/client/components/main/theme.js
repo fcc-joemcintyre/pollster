@@ -1,3 +1,4 @@
+const sizes = ['10px', '12px', '14px', '16px', '18px', '24px', '36px'];
 const themes = {
   base: {
     colorPrimary: '#7AC1C1',
@@ -6,7 +7,7 @@ const themes = {
     colorRowHoverBorder: '#0000F8',
     colorBarFill: '#B0C4DE',
     font: ['Lato', 'Merriweather'],
-    fontSize: [[10, 12, 14, 16, 18, 24, 36], [10, 12, 14, 16, 18, 24, 36]],
+    fontSize: [sizes, sizes],
     fontWeight: [[400, 700], [400, 700]],
   },
   gray: {
@@ -16,7 +17,7 @@ const themes = {
     colorRowHoverBorder: '#F7F7F7',
     colorBarFill: '#AAAAAA',
     font: ['Lato', 'Merriweather'],
-    fontSize: [[10, 12, 14, 16, 18, 24, 36], [10, 12, 14, 16, 18, 24, 36]],
+    fontSize: [sizes, sizes],
     fontWeight: [[400, 700], [400, 700]],
   },
 };

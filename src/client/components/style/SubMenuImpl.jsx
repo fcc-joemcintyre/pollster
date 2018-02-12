@@ -21,14 +21,14 @@ class SubMenuImpl extends Component {
   }
 
   render () {
-    const { text, right, children, className, ...rest } = this.props;
+    const { text, right, spacer, children, className, ...rest } = this.props;
     return (
       <div className={className} {...rest} onMouseLeave={this.onHide}>
         <span onClick={this.onToggle}>{text}</span>
         { this.state.show &&
           <Fragment>
-            <MenuSpacer right={right} />
-            <MenuFloating right={right} onClick={this.onHide}>
+            <MenuSpacer right={right} h={spacer} />
+            <MenuFloating right={right} top={spacer} onClick={this.onHide}>
               {children}
             </MenuFloating>
           </Fragment>
@@ -41,6 +41,7 @@ class SubMenuImpl extends Component {
 SubMenuImpl.propTypes = {
   text: PropTypes.string.isRequired,
   right: PropTypes.bool,
+  spacer: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
 };
@@ -48,6 +49,7 @@ SubMenuImpl.propTypes = {
 SubMenuImpl.defaultProps = {
   right: false,
   children: null,
+  spacer: '2px',
   className: '',
 };
 

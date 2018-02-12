@@ -50,6 +50,7 @@ class App extends Component {
       return (
         <ThemeProvider theme={theme}>
           <Page>
+            <Header menu={false} />
             <LoadingPage message={this.state.message} />
           </Page>
         </ThemeProvider>
@@ -61,7 +62,7 @@ class App extends Component {
         <ScrollToTop>
           <ThemeProvider theme={theme}>
             <Page>
-              <Header />
+              <Header menu />
               <Switch>
                 <Route exact path='/' component={HomePage} />
                 <Route path='/register' component={RegisterPage} />
