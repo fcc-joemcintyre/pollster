@@ -100,6 +100,7 @@ const Panel = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
+  min-width: 33%;
   transform: translate(-50%, -50%);
   max-height: calc(100% - 100px);
   max-width: calc(100% - 100px);
@@ -119,6 +120,7 @@ const Header = styled.div`
 const Title = styled.div`
   flex: 1 1;
   font-size: 18px;
+  padding-right: 10px;
 `;
 
 const Close = styled.div`
