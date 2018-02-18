@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
-import { fieldPropTypes } from '../util/formHelpers';
+import { getFirstError, fieldPropTypes } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
 import { Form, Field, Label, FieldInfo, FieldError } from '../style/Form';
 import { Row } from '../style/Layout';
@@ -17,9 +17,9 @@ const passwordErrors = {
   format: 'Invalid characters',
 };
 
-const LoginForm = ({ message, fields: { username, password }, onChange, onValidate, onSubmit }) => {
+const LoginForm = ({ message, fields, fields: { username, password }, onChange, onValidate, onSubmit }) => {
   function resetFocus () {
-    const id = username.error ? 'username' : password.error ? 'password' : 'username';
+    const id = getFirstError (fields) || username.name;
     const el = document.getElementById (id);
     if (el) {
       el.focus ();
@@ -34,11 +34,11 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onValida
           {message.text}
         </MessageText>
       </Row>
-      <Form center w='300px' onSubmit={onSubmit}>
+      <Form center w='300px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
-          <Label htmlFor='username' required={username.required}>User name</Label>
+          <Label htmlFor={username.name} required={username.required}>User name</Label>
           <FilteredInput
-            id='username'
+            id={username.name}
             type='text'
             autoFocus
             maxLength={20}
@@ -55,9 +55,9 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onValida
           }
         </Field>
         <Field>
-          <Label htmlFor='password' required={password.required}>Password</Label>
+          <Label htmlFor={password.name} required={password.required}>Password</Label>
           <FilteredInput
-            id='password'
+            id={password.name}
             type='password'
             maxLength={20}
             filter={passwordChars}
@@ -71,10 +71,7 @@ const LoginForm = ({ message, fields: { username, password }, onChange, onValida
           }
         </Field>
         <Row center>
-          <Button
-            disabled={username.value === ''}
-            onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}
-          >
+          <Button disabled={username.value === ''}>
             Login
           </Button>
         </Row>

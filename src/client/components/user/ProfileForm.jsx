@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
-import { fieldPropTypes } from '../util/formHelpers';
+import { getFirstError, fieldPropTypes } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
 import { Form, Field, Label, FieldInfo, FieldError } from '../style/Form';
 import { Row } from '../style/Layout';
@@ -15,9 +15,9 @@ const emailErrors = {
   format: 'Invalid email address',
 };
 
-const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onValidate, onSubmit }) => {
+const ProfileForm = ({ message, fields, fields: { name, email, theme }, onChange, onValidate, onSubmit }) => {
   function resetFocus () {
-    const id = name.error ? 'name' : email.error ? 'email' : 'name';
+    const id = getFirstError (fields) || name.name;
     const el = document.getElementById (id);
     if (el) {
       el.focus ();
@@ -32,11 +32,11 @@ const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onVali
           {message.text}
         </MessageText>
       </Row>
-      <Form center w='280px' onSubmit={onSubmit}>
+      <Form center w='280px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
-          <Label htmlFor='name' required={name.required}>Name</Label>
+          <Label htmlFor={name.name} required={name.required}>Name</Label>
           <FilteredInput
-            id='name'
+            id={name.name}
             type='text'
             autoFocus
             maxLength={40}
@@ -52,9 +52,9 @@ const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onVali
           }
         </Field>
         <Field>
-          <Label htmlFor='email' required={email.required}>email</Label>
+          <Label htmlFor={email.name} required={email.required}>email</Label>
           <input
-            id='email'
+            id={email.name}
             type='text'
             maxLength={60}
             autoCapitalize='none'
@@ -70,9 +70,9 @@ const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onVali
           }
         </Field>
         <Field>
-          <Label htmlFor='theme' required={theme.required}>Theme</Label>
+          <Label htmlFor={theme.name} required={theme.required}>Theme</Label>
           <select
-            id='theme'
+            id={theme.name}
             value={theme.value}
             onChange={(e) => { onChange (theme, e.target.value); }}
           >
@@ -82,7 +82,7 @@ const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onVali
           <FieldInfo>Select a theme you like</FieldInfo>
         </Field>
         <Row center>
-          <Button onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
+          <Button>
             Save
           </Button>
         </Row>

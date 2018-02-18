@@ -50,6 +50,20 @@ export function getFieldValues (fields) {
   return result;
 }
 
+/**
+ * Return name of first field with an error (or null if no errors).
+ * @param {Object} fields Fields Object
+ * @returns {string} Name of field, or null if no errors
+ */
+export function getFirstError (fields) {
+  for (const value of Object.values (fields)) {
+    if (value.error) {
+      return value.name;
+    }
+  }
+  return null;
+}
+
 export function inString (value = '') {
   return value.trim ();
 }

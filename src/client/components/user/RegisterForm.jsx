@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
-import { fieldPropTypes } from '../util/formHelpers';
+import { getFirstError, fieldPropTypes } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
-import { Form, Field, FieldInfo, FieldError } from '../style/Form';
+import { Form, Field, Label, FieldInfo, FieldError } from '../style/Form';
 import { Row } from '../style/Layout';
 import { Heading } from '../style/Text';
 import { Button } from '../style/Button';
@@ -18,11 +18,10 @@ const errors = {
   matching: 'Password and verify password don\'t match',
 };
 
-const RegisterForm = ({ message, fields: { username, password, verifyPassword },
+const RegisterForm = ({ message, fields, fields: { username, password, verifyPassword },
   onChange, onValidate, onSubmit }) => {
   function resetFocus () {
-    const id = username.error ? 'username' : password.error ? 'password' :
-      verifyPassword ? 'verifyPassword' : 'username';
+    const id = getFirstError (fields) || username.name;
     const el = document.getElementById (id);
     if (el) {
       el.focus ();
@@ -37,11 +36,11 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
           {message.text}
         </MessageText>
       </Row>
-      <Form center w='280px' onSubmit={onSubmit}>
+      <Form center w='280px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
-          <label htmlFor='username'>User name</label>
+          <Label htmlFor={username.name} required={username.required}>User name</Label>
           <FilteredInput
-            id='username'
+            id={username.name}
             type='text'
             autoFocus
             maxLength={20}
@@ -58,9 +57,9 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
           }
         </Field>
         <Field>
-          <label htmlFor='password'>Password</label>
+          <Label htmlFor={password.name} required={password.required}>Password</Label>
           <FilteredInput
-            id='password'
+            id={password.name}
             type='password'
             maxLength={20}
             filter={passwordChars}
@@ -74,9 +73,9 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
           }
         </Field>
         <Field>
-          <label htmlFor='verify'>Verify Password</label>
+          <Label htmlFor={verifyPassword.name} required={verifyPassword.required}>Verify Password</Label>
           <FilteredInput
-            id='verify'
+            id={verifyPassword.name}
             type='password'
             maxLength={20}
             filter={passwordChars}
@@ -90,7 +89,7 @@ const RegisterForm = ({ message, fields: { username, password, verifyPassword },
           }
         </Field>
         <Row center>
-          <Button onClick={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
+          <Button>
             Save
           </Button>
         </Row>
