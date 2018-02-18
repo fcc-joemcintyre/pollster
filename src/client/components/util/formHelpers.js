@@ -27,8 +27,9 @@ export function validateField (field) {
 
   let error = null;
   if (field.validators && (field.validators.length > 0)) {
+    const value = field.formatOut ? field.formatOut (field.value) : field.value;
     for (let c = 0; c < field.validators.length; c ++) {
-      error = field.validators[c] (field.value);
+      error = field.validators[c] (value);
       if (error) { break; }
     }
   }
