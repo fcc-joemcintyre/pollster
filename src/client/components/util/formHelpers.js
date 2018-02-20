@@ -4,8 +4,8 @@ export function createField (name, initialValue = '', required = false, validato
   formatIn = null, formatOut = null) {
   const field = {
     name,
-    initialValue,
-    value: initialValue,
+    initialValue: formatIn ? formatIn (initialValue) : initialValue,
+    value: formatIn ? formatIn (initialValue) : initialValue,
     required,
     validators,
     error: null,
