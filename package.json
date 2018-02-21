@@ -33,10 +33,11 @@
   "scripts": {
     "start": "node dist/main.js --port=3000",
     "start:dev": "nodemon dist/main.js --port=3000",
-    "test": "npm run test-db && npm run test-server && npm run test-store",
+    "test": "npm run test-db && npm run test-server && npm run test-store && npm run test-form",
     "test-server": "mocha test/server/test-main.js",
     "test-db": "mocha test/db/test-main.js",
     "test-store": "mocha --compilers js:babel-register test/store/test-main.js",
+    "test-form": "mocha --compilers js:babel-register test/form/test-form.js",
     "build": "gulp",
     "build-stage": "gulp stage",
     "lint": "eslint --ext .js --ext .jsx src/** && eslint test/**",
