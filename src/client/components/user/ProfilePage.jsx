@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProfileForm from './ProfileForm.jsx';
 import { updateProfile } from '../../store/userActions';
-import { createField, validateField, getFieldValues, inString, outString } from '../util/formHelpers';
+import { createField, getFieldValues, inString, outString,
+  defaultOnChange, defaultOnValidate, defaultOnValidateForm } from '../util/formHelpers';
 import { isEmail } from '../util/validators';
 
 const defaultText = 'Enter profile information';
@@ -20,32 +21,10 @@ class ProfilePage extends Component {
       message: { status: 'info', text: defaultText },
     };
 
-    this.onChange = this.onChange.bind (this);
-    this.onValidate = this.onValidate.bind (this);
-    this.onValidateForm = this.onValidateForm.bind (this);
+    this.onChange = defaultOnChange.bind (this);
+    this.onValidate = defaultOnValidate.bind (this);
+    this.onValidateForm = defaultOnValidateForm.bind (this);
     this.onSubmit = this.onSubmit.bind (this);
-  }
-
-  onChange (field, value) {
-    const f = { [field.name]: { ...this.state.fields[field.name], value } };
-    this.setState (({ fields }) => ({ fields: { ...fields, ...f } }));
-  }
-
-  onValidate (field) {
-    const f = this.state.fields[field.name];
-    const error = validateField (f);
-    if (error !== f.error) {
-      this.setState (({ fields }) => ({ fields: { ...fields, [field.name]: { ...f, error } } }));
-    }
-    return error;
-  }
-
-  onValidateForm () {
-    let result = true;
-    for (const key of Object.keys (this.state.fields)) {
-      result = (this.onValidate (this.state.fields[key]) === null) && result;
-    }
-    return result;
   }
 
   async onSubmit (event) {

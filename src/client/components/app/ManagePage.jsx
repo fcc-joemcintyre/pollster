@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createField, validateField, getFieldValues, inString, outString } from '../util/formHelpers';
+import { createField, getFieldValues, inString, outString,
+  defaultOnValidate, defaultOnValidateForm } from '../util/formHelpers';
 import { PageContent } from '../style/Page';
 import { Row } from '../style/Layout';
 import { Heading } from '../style/Text';
@@ -24,8 +25,8 @@ class ManagePage extends Component {
     };
 
     this.onChange = this.onChange.bind (this);
-    this.onValidate = this.onValidate.bind (this);
-    this.onValidateForm = this.onValidateForm.bind (this);
+    this.onValidate = defaultOnValidate.bind (this);
+    this.onValidateForm = defaultOnValidateForm.bind (this);
     this.onResetPoll = this.onResetPoll.bind (this);
     this.onSelectPoll = this.onSelectPoll.bind (this);
     this.onSubmitPoll = this.onSubmitPoll.bind (this);
@@ -51,23 +52,6 @@ class ManagePage extends Component {
         this.setState (({ fields }) => ({ fields: { ...fields, ...choice } }));
       }
     });
-  }
-
-  onValidate (field) {
-    const f = this.state.fields[field.name];
-    const error = validateField (f);
-    if (error !== f.error) {
-      this.setState (({ fields }) => ({ fields: { ...fields, [field.name]: { ...f, error } } }));
-    }
-    return error;
-  }
-
-  onValidateForm () {
-    let result = true;
-    for (const key of Object.keys (this.state.fields)) {
-      result = (this.onValidate (this.state.fields[key]) === null) && result;
-    }
-    return result;
   }
 
   onResetPoll () {

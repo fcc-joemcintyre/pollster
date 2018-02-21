@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getFirstError, fieldPropTypes } from '../util/formHelpers';
+import { getFirstError } from '../util/formHelpers';
+import { fieldPropTypes } from '../util/formPropTypes';
 import { Form, Field, FieldInfo, FieldError, Label } from '../style/Form';
 import { Box, Row } from '../style/Layout';
 import { SubHeading } from '../style/Text';

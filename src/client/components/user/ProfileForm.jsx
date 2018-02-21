@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FilteredInput from '../ui/FilteredInput.jsx';
-import { getFirstError, fieldPropTypes } from '../util/formHelpers';
+import { getFirstError } from '../util/formHelpers';
+import { fieldPropTypes } from '../util/formPropTypes';
 import { PageContent } from '../style/Page';
 import { Form, Field, Label, FieldInfo, FieldError } from '../style/Form';
 import { Row } from '../style/Layout';
