@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import RegisterForm from './RegisterForm.jsx';
 import { register, login } from '../../store/userActions';
-import { createField, getFieldValues, inString, outString,
-  defaultOnChange, defaultOnValidate, defaultOnValidateForm } from '../util/formHelpers';
+import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
+  from '../util/formHelpers';
 import { isPassword } from '../util/validators';
 
 const defaultText = 'Enter profile information';

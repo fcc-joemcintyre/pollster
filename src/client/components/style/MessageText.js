@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { common } from '../style/common';
+import { common } from './common';
 
 const statusBorder = {
   info: 'white',

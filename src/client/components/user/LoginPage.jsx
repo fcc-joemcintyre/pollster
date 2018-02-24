@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import LoginForm from './LoginForm.jsx';
 import { login } from '../../store/userActions';
-import { createField, getFieldValues, inString, outString,
-  defaultOnChange, defaultOnValidate, defaultOnValidateForm } from '../util/formHelpers';
+import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
+  from '../util/formHelpers';
 
 const defaultText = 'Enter login information';
 

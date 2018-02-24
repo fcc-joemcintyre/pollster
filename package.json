@@ -48,7 +48,7 @@
     "c-combine": "./node_modules/istanbul/lib/cli.js report --dir ./coverage --include **/*coverage.json json lcov"
   },
   "devDependencies": {
-    "@cygns/eslint-config": "1.0.0",
+    "@cygns/eslint-config": "2.0.0",
     "babel-core": "6.26.0",
     "babel-plugin-styled-components": "1.5.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
@@ -57,9 +57,9 @@
     "babelify": "8.0.0",
     "browserify": "14.5.0",
     "chai": "4.1.2",
-    "eslint": "4.16.0",
-    "eslint-plugin-import": "2.8.0",
-    "eslint-plugin-react": "7.5.1",
+    "eslint": "4.18.1",
+    "eslint-plugin-import": "2.9.0",
+    "eslint-plugin-react": "7.7.0",
     "fetch-cookie": "0.7.0",
     "gulp": "3.9.1",
     "gulp-babel-minify": "0.2.0",

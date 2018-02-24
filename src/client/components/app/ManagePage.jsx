@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createField, getFieldValues, inString, outString,
-  defaultOnValidate, defaultOnValidateForm } from '../util/formHelpers';
+import { createField, getFieldValues, inString, outString, defaultOnValidate, defaultOnValidateForm }
+  from '../util/formHelpers';
 import { PageContent } from '../style/Page';
 import { Row } from '../style/Layout';
 import { Heading } from '../style/Text';

@@ -5,7 +5,7 @@ import { Box } from '../style/Layout';
 
 const AboutPage = () => (
   <PageContent>
-    <Heading center >About Pollster</Heading>
+    <Heading center>About Pollster</Heading>
     <Box center noborder w='500px'>
       <P>
         Written by Joe McIntyre, Pollster is a full stack project defined by FreeCodeCamp. (

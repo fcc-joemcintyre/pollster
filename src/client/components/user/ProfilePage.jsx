@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProfileForm from './ProfileForm.jsx';
 import { updateProfile } from '../../store/userActions';
-import { createField, getFieldValues, inString, outString,
-  defaultOnChange, defaultOnValidate, defaultOnValidateForm } from '../util/formHelpers';
+import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
+  from '../util/formHelpers';
 import { isEmail } from '../util/validators';
 
 const defaultText = 'Enter profile information';
