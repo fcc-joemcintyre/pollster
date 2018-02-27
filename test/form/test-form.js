@@ -1,5 +1,5 @@
 const expect = require ('chai').expect;
-const { createField, inString, outString, inInteger, outInteger } = require ('../../src/client/components/util/formHelpers');
+const { createField, inString, outString, inInteger, outInteger } = require ('../../src/client/lib/formkit/formHelpers');
 
 describe ('form createField', function () {
   describe ('string', function () {

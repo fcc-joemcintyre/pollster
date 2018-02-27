@@ -16,9 +16,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@cygns/eslint-config@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@cygns/eslint-config/-/eslint-config-2.0.0.tgz#25025049a255a4dda9466abf85d065453712d599"
+"@cygns/eslint-config@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@cygns/eslint-config/-/eslint-config-2.1.0.tgz#79ca2f5c3df22ab18b9ff6b066f3fc652156cb3f"
 
 "@gulp-sourcemaps/identity-map@1.X":
   version "1.0.1"

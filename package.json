@@ -48,7 +48,7 @@
     "c-combine": "./node_modules/istanbul/lib/cli.js report --dir ./coverage --include **/*coverage.json json lcov"
   },
   "devDependencies": {
-    "@cygns/eslint-config": "2.0.0",
+    "@cygns/eslint-config": "2.1.0",
     "babel-core": "6.26.0",
     "babel-plugin-styled-components": "1.5.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",

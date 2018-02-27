@@ -81,7 +81,7 @@ gulp.task ('vendor-dev', function () {
 
 // compile and package application
 gulp.task ('browserify-dev', function () {
-  const config = { entries: 'src/client/components/main/index.jsx', debug: true };
+  const config = { entries: 'src/client/components/App/index.js', debug: true };
   const bundler = watchify (browserify (config, watchify.args));
   bundler.external (dependencies);
   bundler.transform (babelify, { presets: [
@@ -135,7 +135,7 @@ gulp.task ('vendor-stage', function () {
 
 gulp.task ('browserify-stage', function () {
   process.env.NODE_ENV = 'production';
-  const bundler = browserify ({ entries: 'src/client/components/main/index.jsx', debug: false });
+  const bundler = browserify ({ entries: 'src/client/components/App/index.js', debug: false });
   bundler.external (dependencies);
   bundler.transform (babelify, { presets: [
     ['env', {
