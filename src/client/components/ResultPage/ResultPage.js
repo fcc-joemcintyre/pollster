@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { PageContent, Box } from '../../lib/Layout';
 import { Heading, MinorHeading, P, SubHeading } from '../../lib/Text';
+import { Select } from '../../lib/Select';
 import { PollItem } from '../PollPage';
 
 class ResultPageBase extends Component {
@@ -46,13 +47,13 @@ class ResultPageBase extends Component {
         <Heading center>Poll Results</Heading>
         <SelectSection>
           <SubHeading>My Polls</SubHeading>
-          <select
+          <Select
             autoFocus
             value={this.state.selected}
             onChange={(e) => { this.setState ({ selected: e.target.value }); }}
           >
             {this.options}
-          </select>
+          </Select>
         </SelectSection>
         <ResultsSection>
           <SubHeading>Results</SubHeading>

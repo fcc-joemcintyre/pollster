@@ -1,11 +1,11 @@
 import React from 'react';
 import { PageContent, Box } from '../../lib/Layout';
-import { Heading, P, TextLink, UL, LI } from '../../lib/Text';
+import { Heading, P, TextLink, List, Item } from '../../lib/Text';
 
 export const AboutPage = () => (
   <PageContent>
     <Heading center>About Pollster</Heading>
-    <Box center noborder w='500px'>
+    <Box center noborder mw='500px'>
       <P>
         Written by Joe McIntyre, Pollster is a full stack project defined by FreeCodeCamp. (
         <TextLink href='https://www.freecodecamp.com/challenges/build-a-voting-app'>
@@ -23,21 +23,21 @@ export const AboutPage = () => (
       <P>
         Technologies used include:
       </P>
-      <UL>
-        <LI>Client: React (16.x), Styled Components, React Redux, and React Router</LI>
-        <LI>Server: Node (8.x) using Express and Passport</LI>
-        <LI>Database: Mongo (3.4.x)</LI>
-        <LI>Languages: Javascript (ES2017), CSS</LI>
-      </UL>
+      <List>
+        <Item>Client: React (16.x), Styled Components, React Redux, and React Router</Item>
+        <Item>Server: Node (8.x) using Express and Passport</Item>
+        <Item>Database: Mongo (3.4.x)</Item>
+        <Item>Languages: Javascript (ES2017), CSS</Item>
+      </List>
       <P>
         Thanks to:
       </P>
-      <UL>
-        <LI>GitHub (source hosting)</LI>
-        <LI>Heroku (app hosting)</LI>
-        <LI>mlab (database hosting)</LI>
-        <LI>TravisCI (continuous integration testing)</LI>
-      </UL>
+      <List>
+        <Item>GitHub (source hosting)</Item>
+        <Item>Heroku (app hosting)</Item>
+        <Item>mlab (database hosting)</Item>
+        <Item>TravisCI (continuous integration testing)</Item>
+      </List>
     </Box>
   </PageContent>
 );

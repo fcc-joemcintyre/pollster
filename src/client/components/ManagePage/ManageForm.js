@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
 import { Form, Field, FieldInfo, FieldError, Label } from '../../lib/Form';
-import { Box, Row } from '../../lib/Layout';
+import { Box, FlexGroup } from '../../lib/Layout';
 import { SubHeading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 
@@ -19,7 +19,7 @@ export const ManageForm = (
   }
 
   return (
-    <Box center w='400px' pb='16px'>
+    <Box center mw='400px' p='0 4px 16px 4px'>
       <SubHeading center>
         {action === 'add' ? 'Add a New Poll' : 'Edit Poll'}
       </SubHeading>
@@ -62,7 +62,7 @@ export const ManageForm = (
             );
           })
         }
-        <Row center>
+        <FlexGroup center>
           <Button type='submit'>
             SAVE
           </Button>
@@ -71,7 +71,7 @@ export const ManageForm = (
               DELETE
             </Button>
           }
-        </Row>
+        </FlexGroup>
       </Form>
     </Box>
   );

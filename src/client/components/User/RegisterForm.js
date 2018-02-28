@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilteredInput from '../../lib/FilteredInput';
+import { FilteredInput } from '../../lib/FilteredInput';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
-import { PageContent, Row } from '../../lib/Layout';
+import { PageContent, Row, FlexGroup } from '../../lib/Layout';
 import { Form, Field, Label, FieldInfo, FieldError } from '../../lib/Form';
 import { Heading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
@@ -88,11 +88,11 @@ export const RegisterForm = ({ message, fields, fields: { username, password, ve
             <FieldInfo>Verify your password</FieldInfo>
           }
         </Field>
-        <Row center>
+        <FlexGroup center>
           <Button>
             Save
           </Button>
-        </Row>
+        </FlexGroup>
       </Form>
     </PageContent>
   );

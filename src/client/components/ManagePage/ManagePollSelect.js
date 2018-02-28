@@ -5,10 +5,9 @@ import { SubHeading } from '../../lib/Text';
 import { Select } from '../../lib/Select';
 
 export const ManagePollSelect = ({ polls, selected, onSelect }) => (
-  <Box center w='400px' pb='16px'>
+  <Box center mw='400px' pb='0 4px 16px 4px'>
     <SubHeading center>My Polls</SubHeading>
     <Select
-      w='380px'
       autoFocus
       value={selected}
       onChange={(e) => { onSelect (e.target.value); }}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { vote } from '../../store/pollsActions';
-import { PageContent, Row } from '../../lib/Layout';
+import { PageContent, Row, FlexGroup } from '../../lib/Layout';
 import { Heading, P } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 import { PollItem } from './PollItem';
@@ -45,9 +45,9 @@ class PollPageBase extends Component {
             }}
           >
             <P center mt='40px'>Sorry, could not find that poll for you.</P>
-            <Row center>
+            <FlexGroup center>
               <Button center mt='16px' autoFocus>Back to Polls</Button>
-            </Row>
+            </FlexGroup>
           </form>
         </PageContent>
       );
@@ -86,7 +86,7 @@ class PollPageBase extends Component {
             Select your favorite, the poll results will be shown after you vote.
           </P>
         }
-        <Row center mt='20px'>
+        <FlexGroup center mt='20px'>
           {(this.state.voted === false) &&
             <Button
               disabled={(this.state.selected === -1)}
@@ -98,7 +98,7 @@ class PollPageBase extends Component {
           <Button onClick={() => { this.props.history.push ('/'); }}>
             Back to Polls
           </Button>
-        </Row>
+        </FlexGroup>
       </PageContent>
     );
   }

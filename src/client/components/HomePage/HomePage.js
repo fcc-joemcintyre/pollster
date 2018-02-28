@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { PageContent, Box, Divider } from '../../lib/Layout';
+import { PageContent, Box } from '../../lib/Layout';
+import { Divider } from '../../lib/Divider';
 import { Heading, P } from '../../lib/Text';
 import { PollList } from './PollList';
 

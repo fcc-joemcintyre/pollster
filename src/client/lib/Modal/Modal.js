@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { Row } from '../Layout';
+import { Row, FlexGroup } from '../Layout';
 import { Button } from '../Button';
 
 export class Modal extends Component {
@@ -52,13 +52,13 @@ export class Modal extends Component {
             {this.props.content}
           </Row>
           { (this.props.actions.length > 0) &&
-            <Row center pb='16px'>
+            <FlexGroup center pb='16px'>
               { this.props.actions.map (action => (
                 <Button key={action} onClick={() => { this.props.onClose (action, this.props.tag); }}>
                   {action}
                 </Button>
               ))}
-            </Row>
+            </FlexGroup>
           }
         </Panel>
       </Background>

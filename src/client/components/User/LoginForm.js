@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilteredInput from '../../lib/FilteredInput';
+import { FilteredInput } from '../../lib/FilteredInput';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
-import { PageContent, Row } from '../../lib/Layout';
+import { PageContent, Row, FlexGroup } from '../../lib/Layout';
 import { Form, Field, Label, FieldInfo, FieldError } from '../../lib/Form';
 import { Heading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
@@ -70,11 +70,11 @@ export const LoginForm = ({ message, fields, fields: { username, password }, onC
             <FieldInfo>Your password</FieldInfo>
           }
         </Field>
-        <Row center>
+        <FlexGroup center>
           <Button disabled={username.value === ''}>
             Login
           </Button>
-        </Row>
+        </FlexGroup>
       </Form>
     </PageContent>
   );

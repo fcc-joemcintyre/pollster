@@ -9,6 +9,10 @@ const themes = {
     font: ['Lato', 'Merriweather'],
     fontSize: [sizes, sizes],
     fontWeight: [[400, 700], [400, 700]],
+    buttonPrimaryColor: '#000000',
+    buttonPrimaryBG: '#F0F8FF',
+    buttonColor: '#000000',
+    buttonBG: '#F0F8FF',
   },
   gray: {
     colorPrimary: '#AAAAAA',
@@ -19,6 +23,10 @@ const themes = {
     font: ['Lato', 'Merriweather'],
     fontSize: [sizes, sizes],
     fontWeight: [[400, 700], [400, 700]],
+    buttonPrimaryColor: '#000000',
+    buttonPrimaryBG: '#F0F8FF',
+    buttonColor: '#000000',
+    buttonBG: '#F0F8FF',
   },
 };
 

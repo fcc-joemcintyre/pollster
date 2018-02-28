@@ -7,8 +7,8 @@ import { PageContent, Row } from '../../lib/Layout';
 import { Heading } from '../../lib/Text';
 import { Modal } from '../../lib/Modal';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
-import ManagePollSelect from './ManagePollSelect';
-import ManageForm from './ManageForm';
+import { ManagePollSelect } from './ManagePollSelect';
+import { ManageForm } from './ManageForm';
 
 class ManagePageBase extends Component {
   constructor (props) {
