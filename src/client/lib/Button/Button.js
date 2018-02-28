@@ -7,14 +7,14 @@ import { size } from './size';
 export const Button = styled.button`
   ${size}
   border-radius: 4px;
+  cursor: pointer;
   ${props => (props.primary ? css`
-    color: ${props.color || props.theme.buttonPrimaryColor || '#ffffff'};
+    color: ${props.fg || props.theme.buttonPrimaryColor || '#ffffff'};
     background-color: ${props.bg || props.theme.buttonPrimaryBG || '#0000ff'};
   ` : css`
-    color: ${props.color || props.theme.buttonColor || '#ffffff'};
+    color: ${props.fg || props.theme.buttonColor || '#ffffff'};
     background-color: ${props.bg || props.theme.buttonBG || '#00007f'};
   `)};
-  cursor: pointer;
 
   &:hover {
     background-color: ${(props) => {
@@ -34,14 +34,14 @@ export const Button = styled.button`
 
 Button.propTypes = {
   primary: PropTypes.bool,
-  color: PropTypes.string,
+  fg: PropTypes.string,
   bg: PropTypes.string,
   ...size.propTypes,
 };
 
 Button.defaultProps = {
   primary: false,
-  color: null,
+  fg: null,
   bg: null,
   ...size.defaultProps,
 };

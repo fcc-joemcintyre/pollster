@@ -6,11 +6,11 @@ export const FlexGroup = styled.div`
   ${common}
   display: flex;
   flex-wrap: wrap;
-  margin: ${props => `0 -${props.spacing}px`};
+  margin: ${props => `0 -${props.spacing}`};
   justify-content: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')};
 
   > * {
-    margin: ${props => `${props.spacing}px ${props.spacing}px 0px ${props.spacing}px`};
+    margin: ${props => `${props.spacing} ${props.spacing} 0px ${props.spacing}`};
   }
 `;
 

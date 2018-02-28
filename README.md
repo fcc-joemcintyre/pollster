@@ -63,10 +63,16 @@ set up watches and rerun build elements as file changes are saved.
 
 ## Testing
 
-Testing can be done for all components,
+Unit Testing can be started using,
 
 ```
 yarn test
+```
+
+Integration Testing can be done for all components,
+
+```
+yarn integration-test
 ```
 
 Or components individually,
@@ -78,18 +84,13 @@ yarn test-server
 
 ### Coverage
 
-Coverage reports are generated using,
+Coverage reports for the unit tests are generated using,
 
 ```
 yarn coverage
 ```
 
-Multiple coverage runs are performed, and then a final coverage run combines
-the separate results. The final report is available in
-*coverage/lcov-report/index.html*
-
-Results for the individual runs are available in the subdirectories under the
-*coverage* directory.
+The report is available in *coverage/index.html*
 
 ### Server (Development mode)
 

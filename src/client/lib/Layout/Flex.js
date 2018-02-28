@@ -15,5 +15,5 @@ Flex.propTypes = {
 };
 
 Flex.defaultProps = {
-  wrap: undefined, // eslint-disable-line no-undefined
+  wrap: null,
 };

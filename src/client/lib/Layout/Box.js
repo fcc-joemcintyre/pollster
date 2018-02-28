@@ -4,6 +4,9 @@ import { common } from '../css';
 
 export const Box = styled.div`
   ${common}
+  ${({ inline }) => inline && css`
+    display: inline-block;
+  `};
   ${({ center }) => center && css`
     margin-left: auto;
     margin-right: auto;
@@ -14,11 +17,13 @@ export const Box = styled.div`
 `;
 
 Box.propTypes = {
+  inline: PropTypes.bool,
   center: PropTypes.bool,
-  bg: PropTypes.bool,
+  bg: PropTypes.string,
 };
 
 Box.defaultProps = {
-  center: false,
+  inline: null,
+  center: null,
   bg: null,
 };
