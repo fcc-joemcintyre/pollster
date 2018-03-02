@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { common } from '../css';
+import { SelectBorderedImpl } from './SelectBorderedImpl';
 
-export const Select = styled.select`
+export const selectCss = css`
   padding: 4px;
   ${common}
   padding-right: 20px;
@@ -13,4 +14,12 @@ export const Select = styled.select`
     <svg xmlns='http://www.w3.org/2000/svg' view-box='0 0 16 16' width='16' height='16' fill='%23000000'>
       <polygon points='2,4 14,4 8,12'/>
     </svg>") center right no-repeat;
+`;
+
+export const SelectBordered = styled (SelectBorderedImpl)`
+  ${selectCss}
+`;
+
+export const Select = styled.select`
+  ${selectCss}
 `;

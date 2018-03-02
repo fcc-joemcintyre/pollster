@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
-import { PageContent, Box } from '../../lib/Layout';
+import { PageContent, Box, Flex, FlexItem } from '../../lib/Layout';
 import { Heading, MinorHeading, P, SubHeading } from '../../lib/Text';
 import { Select } from '../../lib/Select';
 import { PollItem } from '../PollPage';
@@ -45,24 +44,26 @@ class ResultPageBase extends Component {
     return (
       <PageContent>
         <Heading center>Poll Results</Heading>
-        <SelectSection>
-          <SubHeading>My Polls</SubHeading>
-          <Select
-            autoFocus
-            value={this.state.selected}
-            onChange={(e) => { this.setState ({ selected: e.target.value }); }}
-          >
-            {this.options}
-          </Select>
-        </SelectSection>
-        <ResultsSection>
-          <SubHeading>Results</SubHeading>
-          <Box pl='8px' pr='8px' pb='8px'>
-            <MinorHeading>{currentPoll.title}</MinorHeading>
-            <P center>Total Votes: {totalVotes}</P>
-            {choices}
-          </Box>
-        </ResultsSection>
+        <Flex wrap p='0 4px 16px 4px'>
+          <FlexItem size='280px' mr='20px'>
+            <SubHeading>My Polls</SubHeading>
+            <Select
+              autoFocus
+              value={this.state.selected}
+              onChange={(e) => { this.setState ({ selected: e.target.value }); }}
+            >
+              {this.options}
+            </Select>
+          </FlexItem>
+          <FlexItem shrink grow style={{ minWidth: '288px' }}>
+            <SubHeading>Results</SubHeading>
+            <Box>
+              <MinorHeading center>{currentPoll.title}</MinorHeading>
+              <P center>Total Votes: {totalVotes}</P>
+              {choices}
+            </Box>
+          </FlexItem>
+        </Flex>
       </PageContent>
     );
   }
@@ -85,36 +86,3 @@ ResultPageBase.propTypes = {
     })).isRequired,
   })).isRequired,
 };
-
-const SelectSection = styled.div`
-  @media (max-width: 500px) {
-    display: block;
-    width: 100%;
-    margin-bottom: 20px;
-
-    > select {
-      max-width: 300px;
-    }
-  }
-  @media (min-width: 501px) {
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px;
-
-    > select {
-      max-width: 280px;
-    }
-  }
-`;
-
-const ResultsSection = styled.div`
-  @media (max-width: 500px) {
-    display: block;
-    width: 100%;
-  }
-  @media (min-width: 501px) {
-    display: inline-block;
-    vertical-align: top;
-    width: calc(100% - 300px);
-  }
-`;

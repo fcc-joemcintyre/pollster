@@ -5,7 +5,7 @@ import { ProfileForm } from './ProfileForm';
 import { updateProfile } from '../../store/userActions';
 import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
-import { isEmail } from '../../lib/formkit/validators';
+import { isEmail } from '../../lib/validators';
 
 const defaultText = 'Enter profile information';
 

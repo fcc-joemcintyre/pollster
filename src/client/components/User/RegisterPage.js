@@ -5,7 +5,7 @@ import { RegisterForm } from './RegisterForm';
 import { register, login } from '../../store/userActions';
 import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
-import { isPassword } from '../../lib/formkit/validators';
+import { isPassword } from '../../lib/validators';
 
 const defaultText = 'Enter profile information';
 
