@@ -3,11 +3,15 @@ const bodyParser = require ('body-parser');
 const cookieSession = require ('cookie-session');
 const helmet = require ('helmet');
 const fs = require ('fs');
+const http = require ('http');
 const path = require ('path');
 const passport = require ('passport');
 const auth = require ('./auth');
 const routes = require ('./routes');
 const db = require ('./db');
+
+// server instance
+let server;
 
 // the secret for the session, should be set in an environment variable
 // some random text used as a placeholder for dev
@@ -84,7 +88,8 @@ async function start (port, dbLocation) {
       res.sendFile (path.join (__dirname, 'public/index.html'));
     });
 
-    app.listen (port, () => {
+    server = http.createServer (app);
+    server.listen (port, () => {
       console.log (`INFO Server listening on port ${port}`);
     });
   } catch (err) {
@@ -93,4 +98,19 @@ async function start (port, dbLocation) {
   }
 }
 
+function stop () {
+  if (server) {
+    return new Promise ((resolve) => {
+      server.close (() => {
+        db.close ()
+          .then (() => { resolve (); })
+          .catch (() => { resolve (); });
+      });
+    });
+  } else {
+    return Promise.resolve ();
+  }
+}
+
 exports.start = start;
+exports.stop = stop;
