@@ -22,7 +22,6 @@ const dependencies = [
   'react-router-dom',
   'redux',
   'redux-thunk',
-  'regenerator-runtime',
   'styled-components',
   'whatwg-fetch',
 ];
