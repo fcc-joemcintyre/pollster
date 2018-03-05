@@ -4,7 +4,7 @@ const { createField, inString, outString, inInteger, outInteger } = require ('..
 describe ('form createField', function () {
   describe ('string', function () {
     it ('valid string initialValue and value', function () {
-      const result = createField ('name', 'test string', false, [], inString, outString);
+      const result = createField ('name', 'test string', false, [], '', inString, outString);
       expect (result).to.be.an ('Object');
       expect (result.initialValue).to.be.a ('string');
       expect (result.value).to.be.a ('string');
@@ -14,7 +14,7 @@ describe ('form createField', function () {
   });
   describe ('integer', function () {
     it ('valid string initialValue and value', function () {
-      const result = createField ('name', 1234, false, [], inInteger, outInteger);
+      const result = createField ('name', 1234, false, [], '', inInteger, outInteger);
       expect (result).to.be.an ('Object');
       expect (result.initialValue).to.be.a ('string');
       expect (result.value).to.be.a ('string');
