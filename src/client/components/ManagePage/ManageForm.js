@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
 import { Form } from '../../lib/Form';
-import { Field, FieldInfo, FieldError } from '../../lib/FieldBordered';
+import { Field, FieldInput } from '../../lib/FieldBordered';
 import { Label } from '../../lib/Label';
 import { Box, FlexGroup } from '../../lib/Layout';
 import { SubHeading } from '../../lib/Text';
@@ -28,41 +28,25 @@ export const ManageForm = (
       <Form center w='380px' mt='30px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
           <Label htmlFor={title.name} required={title.required}>Title</Label>
-          <input
-            id={title.name}
-            type='text'
+          <FieldInput
+            field={title}
             maxLength={40}
-            value={title.value}
-            onChange={(e) => { onChange (title, e.target.value); }}
-            onBlur={() => { onValidate (title); }}
+            onChange={onChange}
+            onValidate={onValidate}
           />
-          { title.error ?
-            <FieldError>Is required</FieldError> :
-            <FieldInfo>Title poll will be shown under</FieldInfo>
-          }
         </Field>
-
         {
-          Object.values (choices).map ((a, index) => {
-            const name = `Choice ${index + 1}`;
-            return (
-              <Field key={a.name}>
-                <Label htmlFor={a.name} required={a.required}>{name}</Label>
-                <input
-                  id={a.name}
-                  type='text'
-                  maxLength={40}
-                  value={a.value}
-                  onChange={(e) => { onChange (a, e.target.value); }}
-                  onBlur={() => { onValidate (a); }}
-                />
-                { a.error ?
-                  <FieldError>Is required</FieldError> :
-                  <FieldInfo>Poll text for this choice</FieldInfo>
-                }
-              </Field>
-            );
-          })
+          Object.values (choices).map ((a, index) => (
+            <Field key={a.name}>
+              <Label htmlFor={a.name} required={a.required}>{`Choice ${index + 1}`}</Label>
+              <FieldInput
+                field={a}
+                maxLength={40}
+                onChange={onChange}
+                onValidate={onValidate}
+              />
+            </Field>
+          ))
         }
         <FlexGroup center>
           <Button type='submit'>

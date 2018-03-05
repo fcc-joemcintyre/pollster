@@ -8,21 +8,23 @@
  * @param {any} initialValue Initial value of field (will have formatIn applied if provided to convert to string)
  * @param {boolean} required Does field require a value (non empty string, non empty array)
  * @param {function[]} validators Array of validation functions to call
+ * @param {string} info Short additional description (e.g. info text, tooltip)
  * @param {function} formatIn Function to convert native value to string for field representation
  * @param {function} formatOut Function to convert field representation to native value
  * @return {Object} Field to be included in *fields* state object
  */
 export function createField (name, initialValue = '', required = false, validators = [],
-  formatIn = null, formatOut = null) {
+  info = null, formatIn = null, formatOut = null) {
   const field = {
     name,
     initialValue: formatIn ? formatIn (initialValue) : initialValue,
     value: formatIn ? formatIn (initialValue) : initialValue,
     required,
     validators,
-    error: null,
+    info,
     formatIn,
     formatOut,
+    error: null,
   };
   return field;
 }

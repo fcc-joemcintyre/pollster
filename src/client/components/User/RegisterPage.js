@@ -15,17 +15,30 @@ export class RegisterPageBase extends Component {
     this.isMatching = this.isMatching.bind (this);
     this.state = {
       fields: {
-        username: createField ('username', '', true, [], inString, outString),
-        password: createField ('password', '', true, [isPassword, this.isMatching], inString, outString),
-        verifyPassword: createField ('verifyPassword', '', true, [isPassword, this.isMatching], inString, outString),
+        username: createField ('username', '', true, [], 'Up to 20 characters, no spaces', inString, outString),
+        password: createField ('password', '', true, [isPassword, this.isMatching], '4 to 20 characters',
+          inString, outString),
+        verifyPassword: createField ('verifyPassword', '', true, [isPassword, this.isMatching],
+          'Re-type your password', inString, outString),
       },
       message: { status: 'info', text: defaultText },
     };
 
     this.onChange = defaultOnChange.bind (this);
-    this.onValidate = defaultOnValidate.bind (this);
+    this.onValidate = this.onValidate.bind (this);
+    this.defaultOnValidate = defaultOnValidate.bind (this);
     this.onValidateForm = defaultOnValidateForm.bind (this);
     this.onSubmit = this.onSubmit.bind (this);
+  }
+
+  onValidate (field) {
+    if ((field.name === 'password') || (field.name === 'verifyPassword')) {
+      const err1 = this.defaultOnValidate (this.state.fields.password);
+      const err2 = this.defaultOnValidate (this.state.fields.verifyPassword);
+      return err1 || err2;
+    } else {
+      return this.defaultOnValidate (field);
+    }
   }
 
   async onSubmit (event) {

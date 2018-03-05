@@ -1,3 +1,3 @@
-import { Select, SelectBordered, selectCss } from './Select';
+import { Select } from './Select';
 
-export { Select, SelectBordered, selectCss };
+export { Select };

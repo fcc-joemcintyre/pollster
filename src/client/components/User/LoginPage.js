@@ -6,6 +6,7 @@ import { LoginForm } from './LoginForm';
 import { login } from '../../store/userActions';
 import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
+import { isPassword } from '../../lib/validators';
 
 const defaultText = 'Enter login information';
 
@@ -14,8 +15,8 @@ class LoginPageBase extends Component {
     super (props);
     this.state = {
       fields: {
-        username: createField ('username', '', true, [], inString, outString),
-        password: createField ('password', '', true, [], inString, outString),
+        username: createField ('username', '', true, [], 'Your user name', inString, outString),
+        password: createField ('password', '', true, [isPassword], 'Your password', inString, outString),
       },
       message: { status: 'info', text: defaultText },
       redirectToReferrer: false,

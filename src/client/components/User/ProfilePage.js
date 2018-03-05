@@ -14,9 +14,9 @@ export class ProfilePageBase extends Component {
     super (props);
     this.state = {
       fields: {
-        name: createField ('name', props.name, true, [], inString, outString),
-        email: createField ('email', props.email, false, [isEmail], inString, outString),
-        theme: createField ('theme', props.theme, false, [], inString, outString),
+        name: createField ('name', props.name, true, [], 'Your name', inString, outString),
+        email: createField ('email', props.email, false, [isEmail], 'Your email address', inString, outString),
+        theme: createField ('theme', props.theme, false, [], 'Pick a theme you like', inString, outString),
       },
       message: { status: 'info', text: defaultText },
     };

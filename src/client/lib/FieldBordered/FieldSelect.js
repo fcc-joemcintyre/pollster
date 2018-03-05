@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { FieldInfo, FieldError } from '../FieldBordered';
+import { Select } from '../Select';
+import { FieldInfo, FieldError } from '.';
 
-export const SelectBorderedImpl = ({ field, errors, onChange, onValidate, ...rest }) => (
+export const FieldSelect = ({ field, errors, onChange, onValidate, ...rest }) => (
   <Fragment>
-    <select
+    <Select
       {...rest}
       id={field.name}
       value={field.value}
@@ -24,7 +25,7 @@ export const SelectBorderedImpl = ({ field, errors, onChange, onValidate, ...res
   </Fragment>
 );
 
-SelectBorderedImpl.propTypes = {
+FieldSelect.propTypes = {
   field: PropTypes.shape ({
     name: PropTypes.string,
     value: PropTypes.string,
@@ -34,7 +35,7 @@ SelectBorderedImpl.propTypes = {
   onValidate: PropTypes.func,
 };
 
-SelectBorderedImpl.defaultProps = {
+FieldSelect.defaultProps = {
   errors: null,
   onValidate: () => { /* no-op */ },
 };

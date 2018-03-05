@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FilteredInput } from '../../lib/FilteredInput';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
 import { PageContent, Row, FlexGroup } from '../../lib/Layout';
 import { Form } from '../../lib/Form';
-import { Field, FieldInfo, FieldError } from '../../lib/FieldBordered';
+import { Field, FieldInput, FieldFilteredInput, FieldSelect } from '../../lib/FieldBordered';
 import { Label } from '../../lib/Label';
 import { Heading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
@@ -13,7 +12,6 @@ import { MessageText } from '../../lib/MessageText';
 
 const nameChars = /[A-Za-z -.,]/;
 const emailErrors = {
-  required: 'Is required',
   format: 'Invalid email address',
 };
 
@@ -37,55 +35,40 @@ export const ProfileForm = ({ message, fields, fields: { name, email, theme }, o
       <Form center w='280px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
           <Label htmlFor={name.name} required={name.required}>Name</Label>
-          <FilteredInput
-            id={name.name}
-            type='text'
+          <FieldFilteredInput
+            field={name}
             autoFocus
             maxLength={40}
             filter={nameChars}
-            value={name.value}
-            onChange={(e) => { onChange (name, e.target.value); }}
-            onBlur={() => { onValidate (name); }}
+            onChange={onChange}
+            onValidate={onValidate}
           />
-          {
-            name.error ?
-              <FieldError>Is required</FieldError> :
-              <FieldInfo>Your full name</FieldInfo>
-          }
         </Field>
         <Field>
           <Label htmlFor={email.name} required={email.required}>email</Label>
-          <input
-            id={email.name}
-            type='text'
+          <FieldInput
+            field={email}
             maxLength={60}
             autoCapitalize='none'
             autoCorrect='off'
-            value={email.value}
-            onChange={(e) => { onChange (email, e.target.value); }}
-            onBlur={() => { onValidate (email); }}
+            errors={emailErrors}
+            onChange={onChange}
+            onValidate={onValidate}
           />
-          {
-            email.error ?
-              <FieldError>{emailErrors[email.error] || 'Error'}</FieldError> :
-              <FieldInfo>Your email address</FieldInfo>
-          }
         </Field>
         <Field>
           <Label htmlFor={theme.name} required={theme.required}>Theme</Label>
-          <select
-            id={theme.name}
-            value={theme.value}
-            onChange={(e) => { onChange (theme, e.target.value); }}
+          <FieldSelect
+            field={theme}
+            onChange={onChange}
           >
             <option key='base' value='base'>Cyan</option>
             <option key='gray' value='gray'>Gray</option>
-          </select>
-          <FieldInfo>Select a theme you like</FieldInfo>
+          </FieldSelect>
         </Field>
         <FlexGroup center>
-          <Button>
-            Save
+          <Button tyoe='submit'>
+            SAVE
           </Button>
         </FlexGroup>
       </Form>

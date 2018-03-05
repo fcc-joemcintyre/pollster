@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FilteredInput } from '../../lib/FilteredInput';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
 import { PageContent, Row, FlexGroup } from '../../lib/Layout';
 import { Form } from '../../lib/Form';
-import { Field, FieldInfo, FieldError } from '../../lib/FieldBordered';
+import { Field, FieldFilteredInput } from '../../lib/FieldBordered';
 import { Label } from '../../lib/Label';
 import { Heading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
@@ -14,7 +13,6 @@ import { MessageText } from '../../lib/MessageText';
 const nameChars = /[A-Za-z0-9]/;
 const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
 const errors = {
-  required: 'Is required',
   format: 'Invalid password',
   length: 'Must be 4+ characters long',
   matching: 'Password and verify password don\'t match',
@@ -41,58 +39,44 @@ export const RegisterForm = ({ message, fields, fields: { username, password, ve
       <Form center w='280px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
           <Label htmlFor={username.name} required={username.required}>User name</Label>
-          <FilteredInput
-            id={username.name}
-            type='text'
+          <FieldFilteredInput
+            field={username}
             autoFocus
             maxLength={20}
             autoCapitalize='none'
             autoCorrect='off'
             filter={nameChars}
-            value={username.value}
-            onChange={(e) => { onChange (username, e.target.value); }}
-            onBlur={() => { onValidate (username); }}
+            onChange={onChange}
+            onValidate={onValidate}
           />
-          { username.error ?
-            <FieldError>Is required</FieldError> :
-            <FieldInfo>Up to 20 letters/digits, no spaces</FieldInfo>
-          }
         </Field>
         <Field>
           <Label htmlFor={password.name} required={password.required}>Password</Label>
-          <FilteredInput
-            id={password.name}
+          <FieldFilteredInput
+            field={password}
             type='password'
             maxLength={20}
             filter={passwordChars}
-            value={password.value}
-            onChange={(e) => { onChange (password, e.target.value); }}
-            onBlur={() => { onValidate (password); onValidate (verifyPassword); }}
+            errors={errors}
+            onChange={onChange}
+            onValidate={onValidate}
           />
-          { password.error ?
-            <FieldError>{errors[password.error] || 'Error'}</FieldError> :
-            <FieldInfo>Your password</FieldInfo>
-          }
         </Field>
         <Field>
           <Label htmlFor={verifyPassword.name} required={verifyPassword.required}>Verify Password</Label>
-          <FilteredInput
-            id={verifyPassword.name}
+          <FieldFilteredInput
+            field={verifyPassword}
             type='password'
             maxLength={20}
             filter={passwordChars}
-            value={verifyPassword.value}
-            onChange={(e) => { onChange (verifyPassword, e.target.value); }}
-            onBlur={() => { onValidate (verifyPassword); onValidate (password); }}
+            errors={errors}
+            onChange={onChange}
+            onValidate={onValidate}
           />
-          { verifyPassword.error ?
-            <FieldError>{errors[verifyPassword.error] || 'Error'}</FieldError> :
-            <FieldInfo>Verify your password</FieldInfo>
-          }
         </Field>
         <FlexGroup center>
-          <Button>
-            Save
+          <Button type='submit'>
+            SAVE
           </Button>
         </FlexGroup>
       </Form>
