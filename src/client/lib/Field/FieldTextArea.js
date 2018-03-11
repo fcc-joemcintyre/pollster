@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Select } from '../Select';
+import { TextArea } from '../TextArea';
 import { FieldInfo, FieldError } from '.';
 
-export const FieldSelect = ({ field, errors, onChange, onValidate, ...rest }) => (
+export const FieldTextArea = ({ field, errors, onChange, onValidate, ...rest }) => (
   <Fragment>
-    <Select
+    <TextArea
       {...rest}
       id={field.name}
       value={field.value}
@@ -19,13 +19,13 @@ export const FieldSelect = ({ field, errors, onChange, onValidate, ...rest }) =>
         }
       </FieldError> :
       <FieldInfo>
-        {field.info || <span>&nbsp;</span>}
+        { (field.info && (field.info !== '')) ? field.info : <span>&nbsp;</span>}
       </FieldInfo>
     }
   </Fragment>
 );
 
-FieldSelect.propTypes = {
+FieldTextArea.propTypes = {
   field: PropTypes.shape ({
     name: PropTypes.string,
     value: PropTypes.string,
@@ -35,7 +35,7 @@ FieldSelect.propTypes = {
   onValidate: PropTypes.func,
 };
 
-FieldSelect.defaultProps = {
+FieldTextArea.defaultProps = {
   errors: null,
   onValidate: () => { /* no-op */ },
 };

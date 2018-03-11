@@ -20,7 +20,7 @@ export const FieldFilteredInput = ({ field, errors, onChange, onValidate, ...res
         }
       </FieldError> :
       <FieldInfo>
-        {field.info || <span>&nbsp;</span>}
+        { (field.info && (field.info !== '')) ? field.info : <span>&nbsp;</span>}
       </FieldInfo>
     }
   </Fragment>

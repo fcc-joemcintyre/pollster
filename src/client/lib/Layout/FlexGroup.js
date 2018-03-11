@@ -7,7 +7,7 @@ export const FlexGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: ${props => `0 -${props.spacing}`};
-  justify-content: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')};
+  justify-content: ${props => (props.center ? 'center' : props.right ? 'flex-end' : 'flex-start')};
 
   > * {
     margin: ${props => `${props.spacing} ${props.spacing} 0px ${props.spacing}`};

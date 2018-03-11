@@ -44,7 +44,7 @@ class ResultPageBase extends Component {
     return (
       <PageContent>
         <Heading center>Poll Results</Heading>
-        <Flex wrap p='0 4px 16px 4px'>
+        <Flex wraps p='0 4px 16px 4px'>
           <FlexItem size='280px' mr='20px'>
             <SubHeading>My Polls</SubHeading>
             <Select

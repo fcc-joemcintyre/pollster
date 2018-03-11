@@ -1,6 +1,7 @@
 import React from 'react';
 import { PageContent, Box } from '../../lib/Layout';
-import { Heading, P, TextLink, List, Item } from '../../lib/Text';
+import { Heading, P, List, Item } from '../../lib/Text';
+import { TextLink } from '../../lib/Link';
 
 export const AboutPage = () => (
   <PageContent>
@@ -14,7 +15,7 @@ export const AboutPage = () => (
         )
       </P>
       <P>
-        The source code is pubLIshed on GitHub under a MIT LIcense. (
+        The source code is published on GitHub under a MIT LIcense. (
         <TextLink href='https://github.com/fcc-joemcintyre/pollster'>
           Link
         </TextLink>
