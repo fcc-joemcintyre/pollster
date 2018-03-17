@@ -6,7 +6,7 @@ import { Form } from '../../lib/Form';
 import { Field } from '../../lib/FieldBordered';
 import { FieldInput } from '../../lib/Field';
 import { Label } from '../../lib/Label';
-import { Box, FlexGroup } from '../../lib/Layout';
+import { Box, FlexColumn, FlexGroup } from '../../lib/Layout';
 import { SubHeading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 
@@ -22,34 +22,37 @@ export const ManageForm = (
   }
 
   return (
-    <Box center mw='400px' p='0 4px 16px 4px'>
+    <Box center maxw='400px' p='0 4px 16px 4px'>
       <SubHeading center>
         {action === 'add' ? 'Add a New Poll' : 'Edit Poll'}
       </SubHeading>
       <Form center w='380px' mt='30px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
-        <Field>
-          <Label htmlFor={title.name} required={title.required}>Title</Label>
-          <FieldInput
-            field={title}
-            maxLength={40}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-        {
-          Object.values (choices).map ((a, index) => (
-            <Field key={a.name}>
-              <Label htmlFor={a.name} required={a.required}>{`Choice ${index + 1}`}</Label>
-              <FieldInput
-                field={a}
-                maxLength={40}
-                onChange={onChange}
-                onValidate={onValidate}
-              />
-            </Field>
-          ))
-        }
-        <FlexGroup center>
+        <FlexColumn>
+          <Field>
+            <Label htmlFor={title.name} required={title.required}>Title</Label>
+            <FieldInput
+              field={title}
+              maxLength={40}
+              onChange={onChange}
+              onValidate={onValidate}
+            />
+          </Field>
+          {
+            Object.values (choices).map ((a, index) => (
+              <Field key={a.name}>
+                <Label htmlFor={a.name} required={a.required}>{`Choice ${index + 1}`}</Label>
+                <FieldInput
+                  field={a}
+                  maxLength={40}
+                  onChange={onChange}
+                  onValidate={onValidate}
+                />
+              </Field>
+            ))
+          }
+        </FlexColumn>
+
+        <FlexGroup center mt='20px'>
           <Button type='submit'>
             SAVE
           </Button>

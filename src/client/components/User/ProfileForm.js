@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
-import { PageContent, Row, FlexGroup } from '../../lib/Layout';
+import { PageContent, Row, FlexColumn, FlexGroup } from '../../lib/Layout';
 import { Form } from '../../lib/Form';
 import { Field } from '../../lib/FieldBordered';
 import { FieldInput, FieldFilteredInput, FieldSelect } from '../../lib/Field';
@@ -34,40 +34,42 @@ export const ProfileForm = ({ message, fields, fields: { name, email, theme }, o
         </MessageText>
       </Row>
       <Form center w='280px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
-        <Field>
-          <Label htmlFor={name.name} required={name.required}>Name</Label>
-          <FieldFilteredInput
-            field={name}
-            autoFocus
-            maxLength={40}
-            filter={nameChars}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor={email.name} required={email.required}>email</Label>
-          <FieldInput
-            field={email}
-            maxLength={60}
-            autoCapitalize='none'
-            autoCorrect='off'
-            errors={emailErrors}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor={theme.name} required={theme.required}>Theme</Label>
-          <FieldSelect
-            field={theme}
-            onChange={onChange}
-          >
-            <option key='base' value='base'>Cyan</option>
-            <option key='gray' value='gray'>Gray</option>
-          </FieldSelect>
-        </Field>
-        <FlexGroup center>
+        <FlexColumn>
+          <Field>
+            <Label htmlFor={name.name} required={name.required}>Name</Label>
+            <FieldFilteredInput
+              field={name}
+              autoFocus
+              maxLength={40}
+              filter={nameChars}
+              onChange={onChange}
+              onValidate={onValidate}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor={email.name} required={email.required}>email</Label>
+            <FieldInput
+              field={email}
+              maxLength={60}
+              autoCapitalize='none'
+              autoCorrect='off'
+              errors={emailErrors}
+              onChange={onChange}
+              onValidate={onValidate}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor={theme.name} required={theme.required}>Theme</Label>
+            <FieldSelect
+              field={theme}
+              onChange={onChange}
+            >
+              <option key='base' value='base'>Cyan</option>
+              <option key='gray' value='gray'>Gray</option>
+            </FieldSelect>
+          </Field>
+        </FlexColumn>
+        <FlexGroup center mt='20px'>
           <Button tyoe='submit'>
             SAVE
           </Button>

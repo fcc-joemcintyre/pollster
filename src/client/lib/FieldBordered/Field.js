@@ -3,7 +3,6 @@ import { common } from '../css';
 import { FieldText, FieldInfo } from '../Field';
 
 export const Field = styled.div`
-  margin: 6px 0 16px 0;
   ${common}
   border: 1px solid darkgray;
   border-radius: 4px;
