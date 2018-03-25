@@ -72,7 +72,7 @@ yarn test
 Integration Testing can be done for all components,
 
 ```
-yarn integration-test
+yarn test-integration
 ```
 
 Or components individually,
@@ -98,7 +98,7 @@ In a terminal, continuous server operation, updating on changes,
 can be activated with
 
 ```
-yarn start:dev
+yarn start
 ```
 
 The *nodemon* utility provides restart on update.
