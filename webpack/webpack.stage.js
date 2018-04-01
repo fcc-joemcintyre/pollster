@@ -51,6 +51,7 @@ module.exports = {
       { context: 'src/client', from: `${baseSrc}/src/client/images/**/*`, to: `${baseDest}/dist/public/` },
       { from: `${baseSrc}/src/client/index.html`, to: `${baseDest}/dist/public/` },
       { from: `${baseSrc}/src/client/favicon.ico`, to: `${baseDest}/dist/public/` },
+      { from: 'yarn.lock', to: `${baseDest}/` },
       { context: 'stage', from: `${baseSrc}/stage/**/*`, to: `${baseDest}/` },
     ]),
   ],
