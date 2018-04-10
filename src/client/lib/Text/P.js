@@ -4,7 +4,7 @@ import { size } from './textSize';
 
 export const P = styled.p`
   ${size}
-  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : 'left')};
+  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : props.left ? 'left' : null)};
 `;
 
 P.propTypes = {

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
-import { Form } from '../../lib/Form';
+import { Form, FormButtonRow } from '../../lib/Form';
 import { Field } from '../../lib/FieldBordered';
 import { FieldInput } from '../../lib/Field';
 import { Label } from '../../lib/Label';
-import { Box, FlexColumn, FlexGroup } from '../../lib/Layout';
+import { Box } from '../../lib/Layout';
 import { SubHeading } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 
@@ -27,32 +27,30 @@ export const ManageForm = (
         {action === 'add' ? 'Add a New Poll' : 'Edit Poll'}
       </SubHeading>
       <Form center w='380px' mt='30px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
-        <FlexColumn>
-          <Field>
-            <Label htmlFor={title.name} required={title.required}>Title</Label>
-            <FieldInput
-              field={title}
-              maxLength={40}
-              onChange={onChange}
-              onValidate={onValidate}
-            />
-          </Field>
-          {
-            Object.values (choices).map ((a, index) => (
-              <Field key={a.name}>
-                <Label htmlFor={a.name} required={a.required}>{`Choice ${index + 1}`}</Label>
-                <FieldInput
-                  field={a}
-                  maxLength={40}
-                  onChange={onChange}
-                  onValidate={onValidate}
-                />
-              </Field>
-            ))
-          }
-        </FlexColumn>
+        <Field>
+          <Label htmlFor={title.name} required={title.required}>Title</Label>
+          <FieldInput
+            field={title}
+            maxLength={40}
+            onChange={onChange}
+            onValidate={onValidate}
+          />
+        </Field>
+        {
+          Object.values (choices).map ((a, index) => (
+            <Field key={a.name}>
+              <Label htmlFor={a.name} required={a.required}>{`Choice ${index + 1}`}</Label>
+              <FieldInput
+                field={a}
+                maxLength={40}
+                onChange={onChange}
+                onValidate={onValidate}
+              />
+            </Field>
+          ))
+        }
 
-        <FlexGroup center mt='20px'>
+        <FormButtonRow>
           <Button type='submit'>
             SAVE
           </Button>
@@ -61,7 +59,7 @@ export const ManageForm = (
               DELETE
             </Button>
           }
-        </FlexGroup>
+        </FormButtonRow>
       </Form>
     </Box>
   );

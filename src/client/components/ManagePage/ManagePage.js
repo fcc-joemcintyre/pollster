@@ -155,6 +155,7 @@ class ManagePageBase extends Component {
             title={this.state.modal.title}
             actions={this.state.modal.actions}
             closeAction={this.state.modal.closeAction}
+            tag={this.state.modal.tag}
             content={this.state.modal.content}
             onClose={this.onCloseModal}
           />
