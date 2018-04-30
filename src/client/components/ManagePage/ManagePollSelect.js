@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '../../lib/Layout';
-import { SubHeading } from '../../lib/Text';
+import { H2 } from '../../lib/Text';
 import { Select } from '../../lib/Select';
 
 export const ManagePollSelect = ({ polls, selected, onSelect }) => (
   <Box center maxw='400px' pb='0 4px 16px 4px'>
-    <SubHeading center>My Polls</SubHeading>
+    <H2 center>My Polls</H2>
     <Select
       autoFocus
       value={selected}

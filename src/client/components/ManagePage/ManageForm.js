@@ -7,7 +7,7 @@ import { Field } from '../../lib/FieldBordered';
 import { FieldInput } from '../../lib/Field';
 import { Label } from '../../lib/Label';
 import { Box } from '../../lib/Layout';
-import { SubHeading } from '../../lib/Text';
+import { H2 } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 
 export const ManageForm = (
@@ -22,10 +22,10 @@ export const ManageForm = (
   }
 
   return (
-    <Box center maxw='400px' p='0 4px 16px 4px'>
-      <SubHeading center>
+    <Box center maxw='400px' p='30px 4px 16px 4px'>
+      <H2 center>
         {action === 'add' ? 'Add a New Poll' : 'Edit Poll'}
-      </SubHeading>
+      </H2>
       <Form center w='380px' mt='30px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
         <Field>
           <Label htmlFor={title.name} required={title.required}>Title</Label>

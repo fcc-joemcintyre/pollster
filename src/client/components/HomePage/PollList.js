@@ -38,7 +38,6 @@ const PollItem = styled.div`
   font-family: 'Lato', sans-serif;
   padding: 8px;
   cursor: pointer;
-  border: 1px solid $colorItemBorder;
 
   &:nth-child(even) {
     background-color: ${props => props.theme.colorRowBgEven || '#F0F8FF'};

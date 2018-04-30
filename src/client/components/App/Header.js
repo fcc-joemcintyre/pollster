@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Fixed, Relative, Flex } from '../../lib/Layout';
-import { Title } from '../../lib/Text';
 import { DropMenu, MenuBar, MenuNavLink, MenuSeparator, SubMenu } from '../../lib/Menu';
 
 class HeaderBase extends Component {
@@ -52,7 +51,7 @@ class HeaderBase extends Component {
               <MenuNavLink to='/login'>Login</MenuNavLink>
             </DropMenu>
           }
-          <TitleBox>Pollster</TitleBox>
+          <Title>Pollster</Title>
           { this.props.menu && this.props.authenticated && (this.state.innerWidth >= 320) &&
             <Flex>
               <MenuBar mt='12px'>
@@ -102,7 +101,7 @@ export const Container = styled (Fixed)`
   top: 0;
   left: 0;
   right: 0;
-  background-color: ${props => props.theme.colorPrimary || '#7AC1C1;'};
+  background-color: ${props => props.theme.brandColor || '#7ac1c1;'};
 `;
 
 export const Content = styled (Relative)`
@@ -115,10 +114,12 @@ export const Content = styled (Relative)`
   }
 `;
 
-export const TitleBox = styled (Title)`
+export const Title = styled.div`
+  font-family: 'Merriweather', sans-serif;
+  font-size: 30px;
   display: inline-block;
   vertical-align: top;
   margin: 8px 0 0 0;
-  text-shadow: 2px 2px 2px #FFFFFF;
+  text-shadow: 2px 2px 2px #ffffff;
   line-height: 1.0;
 `;

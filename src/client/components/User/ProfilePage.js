@@ -34,7 +34,7 @@ export class ProfilePageBase extends Component {
       try {
         const { name, email, theme } = getFieldValues (this.state.fields);
         await this.props.dispatch (updateProfile (name, email, theme));
-        this.setState ({ message: { status: 'ok', text: 'Profile updated' } });
+        this.props.history.replace ('/');
       } catch (err) {
         this.setState ({ message: { status: 'error', text: 'Error saving profile information' } });
       }
@@ -69,4 +69,7 @@ ProfilePageBase.propTypes = {
   email: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape ({
+    replace: PropTypes.func.isRequired,
+  }).isRequired,
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { PageContent, Box, Flex, FlexItem } from '../../lib/Layout';
-import { Heading, MinorHeading, P, SubHeading } from '../../lib/Text';
+import { H1, H6, P, H2 } from '../../lib/Text';
 import { Select } from '../../lib/Select';
 import { PollItem } from '../PollPage';
 
@@ -26,7 +26,7 @@ class ResultPageBase extends Component {
     if (this.polls.length === 0) {
       return (
         <PageContent>
-          <Heading center>Poll Results</Heading>
+          <H1 center>Poll Results</H1>
           <P center>You do not have any polls yet</P>
         </PageContent>
       );
@@ -43,10 +43,10 @@ class ResultPageBase extends Component {
 
     return (
       <PageContent>
-        <Heading center>Poll Results</Heading>
+        <H1 center>Poll Results</H1>
         <Flex wraps p='0 4px 16px 4px'>
           <FlexItem size='280px' mr='20px'>
-            <SubHeading>My Polls</SubHeading>
+            <H2>My Polls</H2>
             <Select
               autoFocus
               value={this.state.selected}
@@ -56,9 +56,9 @@ class ResultPageBase extends Component {
             </Select>
           </FlexItem>
           <FlexItem shrink grow style={{ minWidth: '288px' }}>
-            <SubHeading>Results</SubHeading>
+            <H2>Results</H2>
             <Box>
-              <MinorHeading center>{currentPoll.title}</MinorHeading>
+              <H6 center>{currentPoll.title}</H6>
               <P center>Total Votes: {totalVotes}</P>
               {choices}
             </Box>

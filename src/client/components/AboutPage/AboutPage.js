@@ -1,22 +1,22 @@
 import React from 'react';
 import { PageContent, Box } from '../../lib/Layout';
-import { Heading, P, List, Item } from '../../lib/Text';
+import { H1, P, List, Item } from '../../lib/Text';
 import { TextLink } from '../../lib/Link';
 
 export const AboutPage = () => (
   <PageContent>
-    <Heading center>About Pollster</Heading>
+    <H1 center>About Pollster</H1>
     <Box center noborder maxw='500px'>
       <P>
         Written by Joe McIntyre, Pollster is a full stack project defined by FreeCodeCamp. (
-        <TextLink href='https://www.freecodecamp.com/challenges/build-a-voting-app'>
+        <TextLink to='https://www.freecodecamp.com/challenges/build-a-voting-app'>
           Link
         </TextLink>
         )
       </P>
       <P>
         The source code is published on GitHub under a MIT LIcense. (
-        <TextLink href='https://github.com/fcc-joemcintyre/pollster'>
+        <TextLink to='https://github.com/fcc-joemcintyre/pollster'>
           Link
         </TextLink>
         )

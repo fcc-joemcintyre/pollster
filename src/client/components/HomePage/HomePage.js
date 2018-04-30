@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { PageContent, Box } from '../../lib/Layout';
 import { Divider } from '../../lib/Divider';
-import { Heading, P } from '../../lib/Text';
+import { H1, P } from '../../lib/Text';
 import { PollList } from './PollList';
 
 const HomePageBase = ({ authenticated, polls }) => (
@@ -11,17 +11,17 @@ const HomePageBase = ({ authenticated, polls }) => (
     {
       (authenticated === false) &&
       <Fragment>
-        <Box center noborder>
+        <Box center maxw='600px'>
           <P>Welcome to Pollster, your place to vote and create new polls!</P>
           <P>
             To create your own polls, <i>Register</i> to create a free account
             and then <i>Login</i> anytime to manage your polls and see the results.
           </P>
         </Box>
-        <Divider mt='16px' />
+        <Divider mt='20px' mb='30px' />
       </Fragment>
     }
-    <Heading center>Active Polls</Heading>
+    <H1 center>Active Polls</H1>
     {
       (polls.length === 0) ?
         <P>There are no active polls - be the first to add a new one!</P> :

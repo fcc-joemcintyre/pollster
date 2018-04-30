@@ -11,9 +11,6 @@ export const Box = styled.div`
     margin-left: auto;
     margin-right: auto;
   `}
-  ${({ bg }) => bg && `
-    background-color: ${bg};
-  `}
   ${({ b }) => b && `
     border: ${b};
   `}

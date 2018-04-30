@@ -6,7 +6,7 @@ injectGlobal`
   }
 
   body {
-    font-family: sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 16px;
     line-height: 1.2;
     min-width: 300px;

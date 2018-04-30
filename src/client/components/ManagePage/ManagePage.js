@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createField, getFieldValues, inString, outString, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
 import { PageContent, Row } from '../../lib/Layout';
-import { Heading } from '../../lib/Text';
+import { H1 } from '../../lib/Text';
 import { Modal } from '../../lib/Modal';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
 import { ManagePollSelect } from './ManagePollSelect';
@@ -132,7 +132,7 @@ class ManagePageBase extends Component {
   render () {
     return (
       <PageContent>
-        <Heading center>Manage Polls</Heading>
+        <H1 center>Manage Polls</H1>
         <Row center>
           <ManagePollSelect
             polls={this.props.polls}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { vote } from '../../store/pollsActions';
 import { PageContent, Row, FlexGroup } from '../../lib/Layout';
-import { Heading, P } from '../../lib/Text';
+import { H1, P } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 import { PollItem } from './PollItem';
 
@@ -76,7 +76,7 @@ class PollPageBase extends Component {
 
     return (
       <PageContent>
-        <Heading center>{this.state.poll.title}</Heading>
+        <H1 center>{this.state.poll.title}</H1>
         <Row mt='20px'>
           {rows}
         </Row>

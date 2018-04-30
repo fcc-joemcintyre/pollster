@@ -7,7 +7,7 @@ import { Form, FormButtonRow } from '../../lib/Form';
 import { Field } from '../../lib/FieldBordered';
 import { FieldInput, FieldFilteredInput, FieldSelect } from '../../lib/Field';
 import { Label } from '../../lib/Label';
-import { Heading } from '../../lib/Text';
+import { H1 } from '../../lib/Text';
 import { Button } from '../../lib/Button';
 import { MessageText } from '../../lib/MessageText';
 
@@ -27,7 +27,7 @@ export const ProfileForm = ({ message, fields, fields: { name, email, theme }, o
 
   return (
     <PageContent>
-      <Heading center>Profile</Heading>
+      <H1 center>Profile</H1>
       <Row center mb='24px'>
         <MessageText status={message.status}>
           {message.text}
