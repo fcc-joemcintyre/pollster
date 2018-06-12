@@ -42,7 +42,7 @@
     "coverage": "jest --coverage"
   },
   "devDependencies": {
-    "@cygns/eslint-config": "2.1.0",
+    "@cygns/eslint-config": "3.0.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-plugin-styled-components": "1.5.1",
@@ -54,9 +54,9 @@
     "copy-webpack-plugin": "4.5.1",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
-    "eslint": "4.18.1",
-    "eslint-plugin-import": "2.9.0",
-    "eslint-plugin-react": "7.7.0",
+    "eslint": "4.19.1",
+    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-react": "7.9.1",
     "fetch-cookie": "0.7.0",
     "jest": "22.4.3",
     "jest-styled-components": "5.0.1",
@@ -71,7 +71,7 @@
   },
   "engines": {
     "node": "8.11.1",
-    "yarn": "1.5.1"
+    "yarn": ">=1.7.0"
   },
   "nodemonConfig": {
     "ignore": [
