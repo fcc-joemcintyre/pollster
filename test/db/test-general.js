@@ -8,11 +8,13 @@ describe ('init/close', function () {
     it ('should succeed both times', async function () {
       await db.init (mongoUri);
       await db.init (mongoUri);
+      await db.close ();
     });
   });
 
   describe ('call close twice', function () {
     it ('should succeed both times', async function () {
+      await db.init (mongoUri);
       await db.close ();
       await db.close ();
     });

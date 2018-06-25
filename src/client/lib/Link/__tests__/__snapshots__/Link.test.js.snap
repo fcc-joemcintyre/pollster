@@ -8,7 +8,7 @@ exports[`PlainLink default render 1`] = `
 
 <a
   className="c0"
-  href="#"
+  href="blank"
   onClick={[Function]}
 >
   text

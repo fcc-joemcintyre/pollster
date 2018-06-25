@@ -2,6 +2,7 @@ const MongoClient = require ('mongodb').MongoClient;
 const ObjectId = require ('mongodb').ObjectId;
 const hash = require ('./hash');
 
+let client = null;
 let db = null;
 let users = null;
 let polls = null;
@@ -9,10 +10,11 @@ let polls = null;
 // connect to database and set up collections
 async function init (uri) {
   console.log ('INFO db.init');
-  if (db) { return; }
+  if (client) { return; }
 
   try {
-    db = await MongoClient.connect (uri);
+    client = await MongoClient.connect (uri);
+    db = client.db ();
     users = db.collection ('users');
     polls = db.collection ('polls');
     await users.ensureIndex ({ username: 1 }, { unique: true });
@@ -24,13 +26,15 @@ async function init (uri) {
 
 // Close database and null out references
 async function close () {
-  if (db) {
+  if (client) {
     try {
       users = null;
       polls = null;
-      await db.close ();
+      await client.close ();
+      client = null;
       db = null;
     } catch (err) {
+      client = null;
       db = null;
     }
   }

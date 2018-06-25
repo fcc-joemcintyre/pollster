@@ -27,12 +27,13 @@ after (async function () {
 });
 
 async function resetDatabase () {
-  const instance = await mongoClient.connect (dbURI);
+  const client = await mongoClient.connect (dbURI);
+  const instance = client.db ();
   const users = instance.collection ('users');
   await users.remove ({});
   const polls = instance.collection ('polls');
   await polls.remove ({});
-  await instance.close ();
+  await client.close ();
 }
 
 describe ('server', function () {
