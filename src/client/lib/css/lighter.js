@@ -1,7 +1,7 @@
 /* eslint no-bitwise: off */
 export function lighter (color, percent = 10) {
   const rgb = parseInt ((color[0] === '#') ? color.slice (1) : color, 16);
-  const adjustment = (percent > 0) ? 255 / percent : 0;
+  const adjustment = (percent > 0) ? Math.floor (255 / percent) : 0;
   let red = (rgb >> 16) + adjustment;
   let green = ((rgb & 0x00FF00) >> 8) + adjustment;
   let blue = (rgb & 0x0000FF) + adjustment;
