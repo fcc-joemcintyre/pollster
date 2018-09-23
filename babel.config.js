@@ -1,8 +1,8 @@
-{
-  "presets" : [
-    ["env", {
-      "targets": {
-        "browsers": [
+module.exports = {
+  presets: [
+    ['@babel/preset-env', {
+      targets: {
+        browsers: [
           "chrome >= 61",
           "firefox >= 55",
           "opera >= 49",
@@ -10,13 +10,12 @@
           "safari >= 10.1",
           "edge >= 15"
         ],
-        "node": "8.9.0"
+        node: "8.9.0"
       }
     }],
-    "react"
+    '@babel/preset-react'
   ],
-  "plugins": [
+  plugins: [
     "babel-plugin-styled-components",
-    "transform-object-rest-spread"
   ],
-}
+};
