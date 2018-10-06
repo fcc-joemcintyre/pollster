@@ -12,7 +12,7 @@ test ('PlainLink default render', () => {
   const component = renderer.create (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <PlainLink to='#'>text</PlainLink>
+        <PlainLink to='/test'>text</PlainLink>
       </ThemeProvider>
     </BrowserRouter>
   );
@@ -24,7 +24,7 @@ test ('PlainLink renders with color', () => {
   const component = renderer.create (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <PlainLink to='$' c='#000000'>text</PlainLink>
+        <PlainLink to='/test' c='#000000'>text</PlainLink>
       </ThemeProvider>
     </BrowserRouter>
   );

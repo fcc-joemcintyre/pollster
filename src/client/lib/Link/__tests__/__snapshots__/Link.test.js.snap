@@ -8,7 +8,7 @@ exports[`PlainLink default render 1`] = `
 
 <a
   className="c0"
-  href="blank"
+  href="/test"
   onClick={[Function]}
 >
   text
@@ -29,7 +29,7 @@ exports[`PlainLink renders with color 1`] = `
 <a
   c="#000000"
   className="c0"
-  href="$"
+  href="/test"
   onClick={[Function]}
 >
   text
