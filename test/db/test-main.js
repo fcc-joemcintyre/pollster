@@ -14,12 +14,12 @@ describe ('test-main', function () {
   before (async function () {
     try {
       // reset database
-      const client = await mongoClient.connect (uri);
+      const client = await mongoClient.connect (uri, { useNewUrlParser: true });
       const dbReset = client.db ();
       const users = dbReset.collection ('users');
-      await users.remove ({});
+      await users.deleteMany ();
       const polls = dbReset.collection ('polls');
-      await polls.remove ({});
+      await polls.deleteMany ();
       await client.close ();
 
       // initialize database for test cases

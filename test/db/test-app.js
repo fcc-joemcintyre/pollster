@@ -3,7 +3,7 @@ const expect = require ('chai').expect;
 
 describe ('polls', function () {
   beforeEach (async function () {
-    await db.removePolls ({});
+    await db.removePolls ();
     const polls = [
       {
         creator: 'amy',
@@ -16,7 +16,8 @@ describe ('polls', function () {
         choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
       },
     ];
-    await db.insertPoll (polls);
+    await db.insertPoll (polls[0]);
+    await db.insertPoll (polls[1]);
   });
 
   describe ('find all polls', function () {

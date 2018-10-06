@@ -13,11 +13,11 @@ async function init (uri) {
   if (client) { return; }
 
   try {
-    client = await MongoClient.connect (uri);
+    client = await MongoClient.connect (uri, { useNewUrlParser: true });
     db = client.db ();
     users = db.collection ('users');
     polls = db.collection ('polls');
-    await users.ensureIndex ({ username: 1 }, { unique: true });
+    await users.createIndex ({ username: 1 }, { unique: true });
   } catch (err) {
     console.log ('ERROR db.init', err);
     throw err;
@@ -62,7 +62,7 @@ async function insertUser (username, password) {
       email: '',
       theme: 'base',
     };
-    const result = await users.insert (user, { w: 1 });
+    const result = await users.insertOne (user, { w: 1 });
     return result;
   } catch (err) {
     throw err;
@@ -71,7 +71,7 @@ async function insertUser (username, password) {
 
 // Update user information (not username or password).
 function updateUser (username, name, email, theme) {
-  return users.update (
+  return users.updateOne (
     { username },
     { $set: { name, email, theme } }
   );
@@ -79,7 +79,7 @@ function updateUser (username, name, email, theme) {
 
 // remove user by username
 function removeUser (username) {
-  return users.remove ({ username });
+  return users.deleteOne ({ username });
 }
 
 // get all polls
@@ -94,27 +94,27 @@ function getPoll (_id) {
 
 // add a new poll
 function insertPoll (poll) {
-  return polls.insert (poll, { w: 1 });
+  return polls.insertOne (poll, { w: 1 });
 }
 
 // update a poll by _id
 function updatePoll (_id, poll) {
-  return polls.update ({ _id: new ObjectId (_id) }, poll);
+  return polls.updateOne ({ _id: new ObjectId (_id) }, { $set: poll });
 }
 
 // remove a poll by _id
 function removePoll (_id) {
-  return polls.remove ({ _id: new ObjectId (_id) });
+  return polls.deleteOne ({ _id: new ObjectId (_id) });
 }
 
 // remove all polls
 function removePolls () {
-  return polls.remove ({});
+  return polls.deleteMany ();
 }
 
 // vote in a poll, for a specific choice.
 function vote (_id, choice) {
-  return polls.update (
+  return polls.updateOne (
     { _id: new ObjectId (_id), 'choices.text': choice },
     { $inc: { 'choices.$.votes': 1 } }
   );

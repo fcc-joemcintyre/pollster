@@ -27,12 +27,12 @@ after (async function () {
 });
 
 async function resetDatabase () {
-  const client = await mongoClient.connect (dbURI);
+  const client = await mongoClient.connect (dbURI, { useNewUrlParser: true });
   const instance = client.db ();
   const users = instance.collection ('users');
-  await users.remove ({});
+  await users.deleteMany ();
   const polls = instance.collection ('polls');
-  await polls.remove ({});
+  await polls.deleteMany ();
   await client.close ();
 }
 

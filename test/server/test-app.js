@@ -22,7 +22,9 @@ describe ('polls (unauthenticated)', function () {
         choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
       },
     ];
-    await db.insertPoll (polls);
+    await db.insertPoll (polls[0]);
+    await db.insertPoll (polls[1]);
+    await db.insertPoll (polls[2]);
   });
 
   describe ('get all polls', function () {
@@ -60,8 +62,10 @@ describe ('polls (authenticated)', function () {
         choices: [{ text: 'Red', votes: 0 }, { text: 'Blue', votes: 0 }],
       },
     ];
-    const result = await db.insertPoll (polls);
-    pollIds = result.insertedIds;
+    const result1 = await db.insertPoll (polls[0]);
+    const result2 = await db.insertPoll (polls[1]);
+    const result3 = await db.insertPoll (polls[2]);
+    pollIds = [result1.insertedId, result2.insertedId, result3.insertedId];
     const data = { username: 'amy', password: 'test' };
     try {
       await jsonFetch.post ('/api/login', data);
