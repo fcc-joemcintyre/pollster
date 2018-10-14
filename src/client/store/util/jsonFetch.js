@@ -1,7 +1,6 @@
 /*
   fetch operations for JSON interactions
 */
-import 'whatwg-fetch';
 import JsonFetchError from './JsonFetchError';
 
 export function get (path) {

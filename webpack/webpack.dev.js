@@ -13,7 +13,7 @@ module.exports = {
   entry: {
     app: './src/client/components/App/index.js',
     vendor: ['prop-types', 'react', 'react-dom', 'react-redux', 'react-router', 'react-router-dom', 'redux',
-      'redux-thunk', 'styled-components', 'whatwg-fetch'],
+      'redux-thunk', 'styled-components'],
   },
   output: {
     filename: '[name].bundle.js',
