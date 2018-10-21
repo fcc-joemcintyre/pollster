@@ -15,6 +15,13 @@ module.exports = {
     }],
     '@babel/preset-react',
   ],
+  env: {
+    test2: {
+      plugins: [
+        'istanbul',
+      ],
+    },
+  },
   plugins: [
     'babel-plugin-styled-components',
   ],

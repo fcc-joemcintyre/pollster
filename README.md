@@ -72,25 +72,26 @@ yarn test
 Integration Testing can be done for all components,
 
 ```
-yarn test-integration
-```
-
-Or components individually,
-
-```
-yarn test-db
-yarn test-server
+yarn test-int
 ```
 
 ### Coverage
 
 Coverage reports for the unit tests are generated using,
 
+Unit test coverage is output to the coverage2 directory
+
 ```
 yarn coverage
 ```
 
-The report is available in *coverage/index.html*
+Integration test coverage is output to the coverage directory
+
+```
+yarn coverage-int
+```
+
+The reports are available in *coverage/index.html* and *coverage2/index.html*
 
 ### Server (Development mode)
 
