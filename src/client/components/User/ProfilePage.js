@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ProfileForm } from './ProfileForm';
 import { updateProfile } from '../../store/userActions';
-import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
+import { createField, getFieldValues, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
 import { isEmail } from '../../lib/validators';
 
@@ -14,9 +14,9 @@ export class ProfilePageBase extends Component {
     super (props);
     this.state = {
       fields: {
-        name: createField ('name', props.name, true, [], 'Your name', inString, outString),
-        email: createField ('email', props.email, false, [isEmail], 'Your email address', inString, outString),
-        theme: createField ('theme', props.theme, false, [], 'Pick a theme you like', inString, outString),
+        name: createField ('name', props.name, true, [], 'Your name'),
+        email: createField ('email', props.email, false, [isEmail], 'Your email address'),
+        theme: createField ('theme', props.theme, false, [], 'Pick a theme you like'),
       },
       message: { status: 'info', text: defaultText },
     };
@@ -29,7 +29,8 @@ export class ProfilePageBase extends Component {
 
   async onSubmit (event) {
     event.preventDefault ();
-    if (this.onValidateForm ()) {
+    const errors = this.onValidateForm ();
+    if (! errors) {
       this.setState ({ message: { status: 'working', text: 'Updating profile ...' } });
       try {
         const { name, email, theme } = getFieldValues (this.state.fields);
@@ -41,6 +42,7 @@ export class ProfilePageBase extends Component {
     } else {
       this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }
+    return errors;
   }
 
   render () {

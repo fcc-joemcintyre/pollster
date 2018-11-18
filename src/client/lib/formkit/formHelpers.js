@@ -1,5 +1,6 @@
 /* disable react/no-unused-prop-types due to parsing bug 7.5.1+ */
 /* eslint "react/no-unused-prop-types": "off" */
+/* eslint-disable no-invalid-this */
 
 /**
  * Create a field definition.
@@ -30,6 +31,24 @@ export function createField (name, initialValue = '', required = false, validato
 }
 
 /**
+ * Set required on a set of fields
+ * @param {boolean} required Set to true or false
+ * @param {Object[]} fields Array of fields to apply change to
+ * @return {void}
+ */
+export function setRequired (required, fields) {
+  this.setState ((prev) => {
+    const value = {};
+    for (const key of Object.keys (prev.fields)) {
+      const field = prev.fields[key];
+      const match = fields.find (a => (field.name === a));
+      value[key] = (match) ? { ...field, required } : field;
+    }
+    return ({ fields: value });
+  });
+}
+
+/**
  * Validate field against *required* criteria and provided validators
  *
  * @param {Object} field Field to validate
@@ -38,7 +57,8 @@ export function createField (name, initialValue = '', required = false, validato
 export function validateField (field) {
   const hasContent = (((typeof field.value === 'string') && (field.value.trim () !== '')) ||
     ((Array.isArray (field.value)) && (field.value.length !== 0)));
-  if ((field.required === false) && (hasContent === false)) {
+  if ((field.required === false) &&
+    ((hasContent === false) || (field.formatOut (field.value) === field.initialValue))) {
     return null;
   }
   if (field.required && (hasContent === false)) {
@@ -93,8 +113,6 @@ export function getFirstError (fields) {
   return null;
 }
 
-/* eslint-disable no-invalid-this */
-
 /**
  * Default implementation of onChange, updating field value. For changes with
  * dependencies, this can be replaced or called multiple times from a local
@@ -117,7 +135,7 @@ export function defaultOnChange (field, value) {
  * Default implementation of onValidate, performing validation on the specified
  * field, and updating its error state if it has changed.
  *
- * NOTE: must bind this function to the React component to be the onChange handler.
+ * NOTE: must bind this function to the React component to be the onValidate handler.
  * @example
  * this.onValidate = defaultOnValidate.bind (this);
  *
@@ -137,18 +155,21 @@ export function defaultOnValidate (field) {
  * Default implementation of onValidateForm, performing validation on all fields.
  * This will call validation on each field, updating the error status of each.
  *
- * NOTE: must bind this function to the React component to be the onChange handler.
+ * NOTE: must bind this function to the React component to be the onValidateForm handler.
  * @example
  * this.onValidateForm = defaultOnValidateForm.bind (this);
  *
- * @return {boolean} true if all fields validated, false if any fields are not validated
+ * @return {array} array of fields not validated, null if no errors
  */
 export function defaultOnValidateForm () {
-  let result = true;
+  const errors = [];
   for (const key of Object.keys (this.state.fields)) {
-    result = (this.onValidate (this.state.fields[key]) === null) && result;
+    const error = this.onValidate (this.state.fields[key]);
+    if (error) {
+      errors.push (this.state.fields[key]);
+    }
   }
-  return result;
+  return (errors.length > 0) ? errors : null;
 }
 
 /* eslint-enable no-invalid-this */
@@ -158,8 +179,8 @@ export function defaultOnValidateForm () {
  * @param {string} value Input string
  * @return {string} Trimmed string
  */
-export function inString (value = '') {
-  return value.trim ();
+export function inString (value) {
+  return (value && typeof (value) === 'string') ? value.trim () : '';
 }
 
 /**
@@ -167,7 +188,7 @@ export function inString (value = '') {
  * @param {string} value Input string
  * @return {string} Trimmed string
  */
-export function outString (value = '') {
+export function outString (value) {
   return value.trim ();
 }
 
@@ -176,7 +197,10 @@ export function outString (value = '') {
  * @param {string[]} value Input values
  * @return {string[]} Array of field strings
  */
-export function inStringArray (value = []) {
+export function inStringArray (value) {
+  if ((! value) || (! Array.isArray (value))) {
+    return [];
+  }
   return value.map (inString);
 }
 
@@ -185,7 +209,7 @@ export function inStringArray (value = []) {
  * @param {string[]} value Input values
  * @return {string[]} Array of strings
  */
-export function outStringArray (value = []) {
+export function outStringArray (value) {
   return value.map (outString);
 }
 
@@ -194,7 +218,7 @@ export function outStringArray (value = []) {
  * @param {string | Date} value Input date
  * @return {string} Date in m/d/yyyy format, or '' if no valid date provided
  */
-export function inDate (value = '') {
+export function inDate (value) {
   let date;
   if (value && ((value instanceof Date) || (Object.prototype.toString.call (value) === '[object Date]'))) {
     if (! Number.isNaN (value.getTime ())) {
@@ -206,16 +230,7 @@ export function inDate (value = '') {
       date = temp;
     }
   }
-  return (date) ? `${date.getUTCMonth () + 1}/${date.getUTCDate ()}/${date.getUTCFullYear ()}` : '';
-}
-
-/**
- * Convert field string to Date
- * @param {string} value Date string
- * @return {string | Date} Date object, or '' if field is empty
- */
-export function outDate (value = '') {
-  return (value === '') ? '' : new Date (value);
+  return (date) ? `${date.getMonth () + 1}/${date.getDate ()}/${date.getFullYear ()}` : '';
 }
 
 /**
@@ -224,13 +239,8 @@ export function outDate (value = '') {
  * @return {number} Integer value
  */
 function integer (value) {
-  let n = Number (value);
-  if (Number.isNaN (n)) {
-    n = 0;
-  } else {
-    n = Math.floor (n);
-  }
-  return n;
+  const n = Number (value);
+  return Number.isNaN (Number (n)) ? 0 : Math.floor (n);
 }
 
 /**
@@ -238,8 +248,9 @@ function integer (value) {
  * @param {number} value Input value
  * @return {string} Field string
  */
-export function inInteger (value = 0) {
-  return integer (value).toString ();
+export function inInteger (value) {
+  const n = value ? integer (value) : 0;
+  return n.toString ();
 }
 
 /**
@@ -247,8 +258,9 @@ export function inInteger (value = 0) {
  * @param {string} value Field string
  * @return {number} Integer
  */
-export function outInteger (value = 0) {
-  return integer (value);
+export function outInteger (value) {
+  const digits = value.replace (/[^\d.-]/g, '');
+  return integer (digits);
 }
 
 /**
@@ -256,7 +268,10 @@ export function outInteger (value = 0) {
  * @param {any[]} value Input values
  * @return {string[]} Array of field strings
  */
-export function inIntegerArray (value = []) {
+export function inIntegerArray (value) {
+  if ((! value) || (! Array.isArray (value))) {
+    return [];
+  }
   return value.map (inInteger);
 }
 
@@ -265,26 +280,8 @@ export function inIntegerArray (value = []) {
  * @param {any[]} value Input values
  * @return {number[]} Array of integers
  */
-export function outIntegerArray (value = []) {
+export function outIntegerArray (value) {
   return value.map (outInteger);
-}
-
-/**
- * Convert currency value (integer) to field string
- * @param {any} value Input value
- * @return {string} Currency field string
- */
-export function inCurrency (value = 0) {
-  return integer (value).toString ();
-}
-
-/**
- * Convert currency field value to integer
- * @param {string} value Currency string
- * @return {integer} Integer value
- */
-export function outCurrency (value) {
-  return (value === '') ? 0 : integer (value.replace (/[$,]/g, ''));
 }
 
 /**
@@ -292,8 +289,8 @@ export function outCurrency (value) {
  * @param {boolean} value Input value
  * @return {string} 'true' or 'false'
  */
-export function inBoolean (value = false) {
-  return (typeof (value) === 'boolean') ? 'true' : 'false';
+export function inBoolean (value) {
+  return value && value === true ? 'true' : 'false';
 }
 
 /**
@@ -301,6 +298,6 @@ export function inBoolean (value = false) {
  * @param {string} value Input value
  * @return {boolean} Boolean value
  */
-export function outBoolean (value = 'true') {
+export function outBoolean (value) {
   return value === 'true';
 }

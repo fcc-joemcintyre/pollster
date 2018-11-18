@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createField, getFieldValues, inString, outString, defaultOnValidate, defaultOnValidateForm }
-  from '../../lib/formkit/formHelpers';
+import { createField, getFieldValues, defaultOnValidate, defaultOnValidateForm } from '../../lib/formkit/formHelpers';
 import { PageContent, Row } from '../../lib/Layout';
 import { H1 } from '../../lib/Text';
 import { Modal } from '../../lib/Modal';
@@ -15,9 +14,9 @@ class ManagePageBase extends Component {
     super (props);
     this.state = {
       fields: {
-        title: createField ('title', '', true, [], 'Poll title', inString, outString),
-        choice0: createField ('choice0', '', true, [], 'Poll text', inString, outString),
-        choice1: createField ('choice1', '', true, [], 'Poll text', inString, outString),
+        title: createField ('title', '', true, [], 'Poll title'),
+        choice0: createField ('choice0', '', true, [], 'Poll text'),
+        choice1: createField ('choice1', '', true, [], 'Poll text'),
       },
       selected: '',
       modal: null,
@@ -47,7 +46,7 @@ class ManagePageBase extends Component {
       // if all choice fields have content, add another choice field
       if (! full) {
         const next = `choice${Object.keys (this.state.fields).length - 1}`;
-        const choice = { [next]: createField (next, '', false, [], 'Poll text', inString, outString) };
+        const choice = { [next]: createField (next, '', false, [], 'Poll text') };
         this.setState (({ fields }) => ({ fields: { ...fields, ...choice } }));
       }
     });
@@ -56,9 +55,9 @@ class ManagePageBase extends Component {
   onResetPoll () {
     this.setState ({
       fields: {
-        title: createField ('title', '', true, [], 'Poll title', inString, outString),
-        choice0: createField ('choice0', '', true, [], 'Poll text', inString, outString),
-        choice1: createField ('choice1', '', true, [], 'Poll text', inString, outString),
+        title: createField ('title', '', true, [], 'Poll title'),
+        choice0: createField ('choice0', '', true, [], 'Poll text'),
+        choice1: createField ('choice1', '', true, [], 'Poll text'),
       },
       selected: '',
     });
@@ -73,14 +72,13 @@ class ManagePageBase extends Component {
       const length = poll.choices.length;
       for (let i = 0; i < length; i ++) {
         const required = i < 2;
-        choices[`choice${i}`] = createField (`choice${i}`, poll.choices[i].text, required, [], 'Poll text',
-          inString, outString);
+        choices[`choice${i}`] = createField (`choice${i}`, poll.choices[i].text, required, [], 'Poll text');
       }
-      choices[`choice${length}`] = createField (`choice${length}`, '', false, [], 'Poll text', inString, outString);
+      choices[`choice${length}`] = createField (`choice${length}`, '', false, [], 'Poll text');
 
       this.setState ({
         fields: {
-          title: createField ('title', poll.title, true, [], 'Poll title', inString, outString),
+          title: createField ('title', poll.title, true, [], 'Poll title'),
           ...choices,
         },
         selected: _id,
@@ -90,7 +88,8 @@ class ManagePageBase extends Component {
 
   async onSubmitPoll (e) {
     e.preventDefault ();
-    if (this.onValidateForm ()) {
+    const errors = this.onValidateForm ();
+    if (! errors) {
       try {
         this.setState ({ modal: { content: 'Submitting poll...' } });
         const { title, ...rest } = getFieldValues (this.state.fields);
@@ -109,6 +108,7 @@ class ManagePageBase extends Component {
         this.setState ({ modal: { title: 'Error', content, actions: ['OK'], closeAction: 'OK', tag: 'error' } });
       }
     }
+    return errors;
   }
 
   async onDeletePoll () {

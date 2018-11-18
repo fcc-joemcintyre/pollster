@@ -104,18 +104,6 @@ describe ('form formatIn/formatOut functions', function () {
   });
 
   describe ('outInteger', function () {
-    it ('undefined, should be zero', function () {
-      const result = outInteger ();
-      expect (result).to.be.a ('number');
-      expect (result).to.equal (0);
-    });
-
-    it ('null, should be zero', function () {
-      const result = outInteger (null);
-      expect (result).to.be.a ('number');
-      expect (result).to.equal (0);
-    });
-
     it ('empty string, should be zero', function () {
       const result = outInteger ('');
       expect (result).to.be.a ('number');
@@ -123,7 +111,7 @@ describe ('form formatIn/formatOut functions', function () {
     });
 
     it ('floating number, should be integer', function () {
-      const result = outInteger (12.34);
+      const result = outInteger ('12.34');
       expect (result).to.be.a ('number');
       expect (result).to.equal (12);
     });

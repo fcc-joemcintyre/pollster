@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
 import { PageContent, Row } from '../../lib/Layout';
 import { Form, FormButtonRow } from '../../lib/Form';
@@ -18,59 +17,57 @@ const passwordErrors = {
   format: 'Invalid characters',
 };
 
-export const LoginForm = ({ message, fields, fields: { username, password }, onChange, onValidate, onSubmit }) => {
-  function resetFocus () {
-    const id = getFirstError (fields) || username.name;
-    const el = document.getElementById (id);
-    if (el) {
-      el.focus ();
-    }
-  }
+export const LoginForm = ({ message, fields: { username, password }, onChange, onValidate, onSubmit }) => (
+  <PageContent>
+    <H1 center>Login</H1>
+    <Row center mb='24px'>
+      <MessageText status={message.status}>
+        {message.text}
+      </MessageText>
+    </Row>
+    <Form
+      center
+      w='300px'
+      onSubmit={async (e) => {
+        const errors = await onSubmit (e);
+        const el = document.getElementById (errors ? errors[0].name : username.name);
+        if (el) { el.focus (); }
+      }}
+    >
+      <Field>
+        <Label htmlFor={username.name} required={username.required}>User name</Label>
+        <FieldFilteredInput
+          field={username}
+          autoFocus
+          maxLength={20}
+          autoCapitalize='none'
+          autoCorrect='off'
+          filter={usernameChars}
+          onChange={onChange}
+          onValidate={onValidate}
+        />
+      </Field>
+      <Field>
+        <Label htmlFor={password.name} required={password.required}>Password</Label>
+        <FieldFilteredInput
+          field={password}
+          type='password'
+          maxLength={20}
+          filter={passwordChars}
+          errors={passwordErrors}
+          onChange={onChange}
+          onValidate={onValidate}
+        />
+      </Field>
 
-  return (
-    <PageContent>
-      <H1 center>Login</H1>
-      <Row center mb='24px'>
-        <MessageText status={message.status}>
-          {message.text}
-        </MessageText>
-      </Row>
-      <Form center w='300px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
-        <Field>
-          <Label htmlFor={username.name} required={username.required}>User name</Label>
-          <FieldFilteredInput
-            field={username}
-            autoFocus
-            maxLength={20}
-            autoCapitalize='none'
-            autoCorrect='off'
-            filter={usernameChars}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor={password.name} required={password.required}>Password</Label>
-          <FieldFilteredInput
-            field={password}
-            type='password'
-            maxLength={20}
-            filter={passwordChars}
-            errors={passwordErrors}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-
-        <FormButtonRow>
-          <Button type='submit'>
-            LOGIN
-          </Button>
-        </FormButtonRow>
-      </Form>
-    </PageContent>
-  );
-};
+      <FormButtonRow>
+        <Button type='submit'>
+          LOGIN
+        </Button>
+      </FormButtonRow>
+    </Form>
+  </PageContent>
+);
 
 LoginForm.propTypes = {
   message: PropTypes.shape ({

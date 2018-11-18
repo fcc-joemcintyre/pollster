@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getFirstError } from '../../lib/formkit/formHelpers';
 import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
 import { PageContent, Row } from '../../lib/Layout';
 import { Form, FormButtonRow } from '../../lib/Form';
@@ -16,67 +15,65 @@ const emailErrors = {
   format: 'Invalid email address',
 };
 
-export const ProfileForm = ({ message, fields, fields: { name, email, theme }, onChange, onValidate, onSubmit }) => {
-  function resetFocus () {
-    const id = getFirstError (fields) || name.name;
-    const el = document.getElementById (id);
-    if (el) {
-      el.focus ();
-    }
-  }
+export const ProfileForm = ({ message, fields: { name, email, theme }, onChange, onValidate, onSubmit }) => (
+  <PageContent>
+    <H1 center>Profile</H1>
+    <Row center mb='24px'>
+      <MessageText status={message.status}>
+        {message.text}
+      </MessageText>
+    </Row>
+    <Form
+      center
+      w='280px'
+      onSubmit={async (e) => {
+        const errors = await onSubmit (e);
+        const el = document.getElementById (errors ? errors[0].name : name.name);
+        if (el) { el.focus (); }
+      }}
+    >
+      <Field>
+        <Label htmlFor={name.name} required={name.required}>Name</Label>
+        <FieldFilteredInput
+          field={name}
+          autoFocus
+          maxLength={40}
+          filter={nameChars}
+          onChange={onChange}
+          onValidate={onValidate}
+        />
+      </Field>
+      <Field>
+        <Label htmlFor={email.name} required={email.required}>email</Label>
+        <FieldInput
+          field={email}
+          maxLength={60}
+          autoCapitalize='none'
+          autoCorrect='off'
+          errors={emailErrors}
+          onChange={onChange}
+          onValidate={onValidate}
+        />
+      </Field>
+      <Field>
+        <Label htmlFor={theme.name} required={theme.required}>Theme</Label>
+        <FieldSelect
+          field={theme}
+          onChange={onChange}
+        >
+          <option key='base' value='base'>Cyan</option>
+          <option key='gray' value='gray'>Gray</option>
+        </FieldSelect>
+      </Field>
 
-  return (
-    <PageContent>
-      <H1 center>Profile</H1>
-      <Row center mb='24px'>
-        <MessageText status={message.status}>
-          {message.text}
-        </MessageText>
-      </Row>
-      <Form center w='280px' onSubmit={(e) => { onSubmit (e).then (() => { resetFocus (); }); }}>
-        <Field>
-          <Label htmlFor={name.name} required={name.required}>Name</Label>
-          <FieldFilteredInput
-            field={name}
-            autoFocus
-            maxLength={40}
-            filter={nameChars}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor={email.name} required={email.required}>email</Label>
-          <FieldInput
-            field={email}
-            maxLength={60}
-            autoCapitalize='none'
-            autoCorrect='off'
-            errors={emailErrors}
-            onChange={onChange}
-            onValidate={onValidate}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor={theme.name} required={theme.required}>Theme</Label>
-          <FieldSelect
-            field={theme}
-            onChange={onChange}
-          >
-            <option key='base' value='base'>Cyan</option>
-            <option key='gray' value='gray'>Gray</option>
-          </FieldSelect>
-        </Field>
-
-        <FormButtonRow>
-          <Button tyoe='submit'>
-            SAVE
-          </Button>
-        </FormButtonRow>
-      </Form>
-    </PageContent>
-  );
-};
+      <FormButtonRow>
+        <Button tyoe='submit'>
+          SAVE
+        </Button>
+      </FormButtonRow>
+    </Form>
+  </PageContent>
+);
 
 ProfileForm.propTypes = {
   message: PropTypes.shape ({

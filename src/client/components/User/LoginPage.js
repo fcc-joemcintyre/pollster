@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { LoginForm } from './LoginForm';
 import { login } from '../../store/userActions';
-import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
+import { createField, getFieldValues, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
 import { isPassword } from '../../lib/validators';
 
@@ -15,8 +15,8 @@ class LoginPageBase extends Component {
     super (props);
     this.state = {
       fields: {
-        username: createField ('username', '', true, [], 'Your user name', inString, outString),
-        password: createField ('password', '', true, [isPassword], 'Your password', inString, outString),
+        username: createField ('username', '', true, [], 'Your user name'),
+        password: createField ('password', '', true, [isPassword], 'Your password'),
       },
       message: { status: 'info', text: defaultText },
       redirectToReferrer: false,
@@ -30,7 +30,8 @@ class LoginPageBase extends Component {
 
   async onSubmit (e) {
     e.preventDefault ();
-    if (this.onValidateForm ()) {
+    const errors = this.onValidateForm ();
+    if (! errors) {
       this.setState ({ message: { status: 'working', text: 'Logging in' } });
       try {
         const { username, password } = getFieldValues (this.state.fields);
@@ -42,6 +43,7 @@ class LoginPageBase extends Component {
     } else {
       this.setState ({ message: { status: 'error', text: 'Complete form and try again' } });
     }
+    return errors;
   }
 
   render () {

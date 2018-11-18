@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { RegisterForm } from './RegisterForm';
 import { register, login } from '../../store/userActions';
-import { createField, getFieldValues, inString, outString, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
+import { createField, getFieldValues, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
   from '../../lib/formkit/formHelpers';
 import { isPassword } from '../../lib/validators';
 
@@ -15,11 +15,10 @@ export class RegisterPageBase extends Component {
     this.isMatching = this.isMatching.bind (this);
     this.state = {
       fields: {
-        username: createField ('username', '', true, [], 'Up to 20 characters, no spaces', inString, outString),
-        password: createField ('password', '', true, [isPassword, this.isMatching], '4 to 20 characters',
-          inString, outString),
+        username: createField ('username', '', true, [], 'Up to 20 characters, no spaces'),
+        password: createField ('password', '', true, [isPassword, this.isMatching], '4 to 20 characters'),
         verifyPassword: createField ('verifyPassword', '', true, [isPassword, this.isMatching],
-          'Re-type your password', inString, outString),
+          'Re-type your password'),
       },
       message: { status: 'info', text: defaultText },
     };
@@ -43,7 +42,8 @@ export class RegisterPageBase extends Component {
 
   async onSubmit (event) {
     event.preventDefault ();
-    if (this.onValidateForm ()) {
+    const errors = this.onValidateForm ();
+    if (! errors) {
       this.setState ({ message: { status: 'working', text: 'Registering ...' } });
       try {
         const { username, password } = getFieldValues (this.state.fields);
@@ -60,6 +60,7 @@ export class RegisterPageBase extends Component {
     } else {
       this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }
+    return errors;
   }
 
   isMatching () {
