@@ -26,7 +26,7 @@ export const AboutPage = () => (
       </P>
       <List>
         <Item>Client: React (16.x), Styled Components, React Redux, and React Router</Item>
-        <Item>Server: Node (8.x) using Express and Passport</Item>
+        <Item>Server: Node (10.x) using Express and Passport</Item>
         <Item>Database: Mongo (3.4.x)</Item>
         <Item>Languages: Javascript (ES2017), CSS</Item>
       </List>
