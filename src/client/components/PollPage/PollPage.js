@@ -1,14 +1,16 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Box, Button, Flex, PageContent, Text } from 'uikit';
 import { vote } from '../../store/pollsActions';
 import { Header } from '../Header';
 import { PollItem } from './PollItem';
 
-const PollPageBase = ({ poll, history, dispatch }) => {
+const PollPageBase = ({ poll, dispatch }) => {
   const [selected, setSelected] = useState (-1);
   const [voted, setVoted] = useState (false);
+  const history = useHistory ();
 
   async function handleVote () {
     if (selected !== -1) {
@@ -113,8 +115,5 @@ export const PollPage = connect (mapStateToProps) (PollPageBase);
 
 PollPageBase.propTypes = {
   poll: PropTypes.shape ().isRequired,
-  history: PropTypes.shape ({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };

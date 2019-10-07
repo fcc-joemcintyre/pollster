@@ -1,14 +1,17 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Box, Divider, PageContent, Pagination, Text } from 'uikit';
 import { Header } from '../Header';
 import { LoginPage, RegisterPage } from '../User';
 import { PollList } from './PollList';
 
-const HomePageBase = ({ authenticated, polls, history }) => {
+const HomePageBase = ({ authenticated, polls }) => {
   const [first, setFirst] = useState (0);
   const [current, setCurrent] = useState (0);
+  const history = useHistory ();
+  const location = useLocation ();
 
   return (
     <Fragment>
@@ -80,10 +83,4 @@ HomePageBase.propTypes = {
       votes: PropTypes.number.isRequired,
     })).isRequired,
   })).isRequired,
-  history: PropTypes.shape ({
-    location: PropTypes.shape ({
-      search: PropTypes.string,
-    }),
-    push: PropTypes.func,
-  }).isRequired,
 };

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
-const PollListBase = ({ polls, current, pageItems, history }) => {
+export const PollList = ({ polls, current, pageItems }) => {
+  const history = useHistory ();
   const end = Math.min (polls.length, (current + 1) * pageItems);
   const result = [];
   for (let i = (current * pageItems); i < end; i ++) {
@@ -22,9 +23,7 @@ const PollListBase = ({ polls, current, pageItems, history }) => {
   return result;
 };
 
-export const PollList = withRouter (PollListBase);
-
-PollListBase.propTypes = {
+PollList.propTypes = {
   polls: PropTypes.arrayOf (PropTypes.shape ({
     _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -34,9 +33,6 @@ PollListBase.propTypes = {
   })).isRequired,
   current: PropTypes.number.isRequired,
   pageItems: PropTypes.number.isRequired,
-  history: PropTypes.shape ({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 const PollItem = styled.div`

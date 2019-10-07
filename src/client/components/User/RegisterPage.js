@@ -1,6 +1,7 @@
 import React, { Fragment, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { createField, useFields } from 'use-fields';
 import { MessageBox } from 'uikit';
 import { isPassword } from 'validators';
@@ -27,7 +28,8 @@ function isMatch (value, fields) {
 }
 
 
-const RegisterPageBase = ({ history, dispatch }) => {
+const RegisterPageBase = ({ dispatch }) => {
+  const history = useHistory ();
   const initialFields = useMemo (() => [
     createField ('username', '', true, [isNameChars]),
     createField ('password', '', true, [isPassword, isPasswordChars]),
@@ -86,8 +88,5 @@ const RegisterPageBase = ({ history, dispatch }) => {
 export const RegisterPage = connect (null) (RegisterPageBase);
 
 RegisterPageBase.propTypes = {
-  history: PropTypes.shape ({
-    replace: PropTypes.func.isRequired,
-  }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
