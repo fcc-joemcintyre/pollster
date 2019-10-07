@@ -1,169 +1,136 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createField, getFieldValues, defaultOnValidate, defaultOnValidateForm } from '../../lib/formkit/formHelpers';
-import { PageContent, Row } from '../../lib/Layout';
-import { H1 } from '../../lib/Text';
-import { Modal } from '../../lib/Modal';
+import { createField, useFields } from 'use-fields';
+import { Box, MessageBox, PageContent, Text } from 'uikit';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
 import { ManagePollSelect } from './ManagePollSelect';
+import { Header } from '../Header';
 import { ManageForm } from './ManageForm';
 
-class ManagePageBase extends Component {
-  constructor (props) {
-    super (props);
-    this.state = {
-      fields: {
-        title: createField ('title', '', true, [], 'Poll title'),
-        choice0: createField ('choice0', '', true, [], 'Poll text'),
-        choice1: createField ('choice1', '', true, [], 'Poll text'),
-      },
-      selected: '',
-      modal: null,
-    };
+const initialFields = [
+  createField ('title', '', true),
+  createField ('choice0', '', true),
+  createField ('choice1', '', true),
+];
 
-    this.onChange = this.onChange.bind (this);
-    this.onValidate = defaultOnValidate.bind (this);
-    this.onValidateForm = defaultOnValidateForm.bind (this);
-    this.onResetPoll = this.onResetPoll.bind (this);
-    this.onSelectPoll = this.onSelectPoll.bind (this);
-    this.onSubmitPoll = this.onSubmitPoll.bind (this);
-    this.onDeletePoll = this.onDeletePoll.bind (this);
-    this.onCloseModal = this.onCloseModal.bind (this);
+const ManagePageBase = ({ polls, dispatch }) => {
+  const { fields, onChange, onValidate, setFields, getValues, validateAll, addField } =
+    useFields (initialFields);
+  const [selected, setSelected] = useState ('');
+  const [mb, setMB] = useState (null);
+
+  function onResetPoll () {
+    setSelected ('');
+    setFields (initialFields);
   }
 
-  onChange (field, value) {
-    const f = { [field.name]: { ...this.state.fields[field.name], value } };
-    this.setState (({ fields }) => ({ fields: { ...fields, ...f } }), () => {
-      // after update, determine if all choice fields have content
-      const full = Object.keys (this.state.fields).reduce ((a, b) => {
-        if (b.startsWith ('choice')) {
-          return a || (this.state.fields[b].value.trim () === '');
-        } else {
-          return a;
-        }
-      }, false);
-      // if all choice fields have content, add another choice field
-      if (! full) {
-        const next = `choice${Object.keys (this.state.fields).length - 1}`;
-        const choice = { [next]: createField (next, '', false, [], 'Poll text') };
-        this.setState (({ fields }) => ({ fields: { ...fields, ...choice } }));
-      }
-    });
-  }
-
-  onResetPoll () {
-    this.setState ({
-      fields: {
-        title: createField ('title', '', true, [], 'Poll title'),
-        choice0: createField ('choice0', '', true, [], 'Poll text'),
-        choice1: createField ('choice1', '', true, [], 'Poll text'),
-      },
-      selected: '',
-    });
-  }
-
-  onSelectPoll (_id) {
+  function onSelectPoll (_id) {
     if (_id === '') {
-      this.onResetPoll ();
+      onResetPoll ();
     } else {
-      const poll = this.props.polls.find (a => (a._id === _id));
-      const choices = {};
-      const length = poll.choices.length;
-      for (let i = 0; i < length; i ++) {
-        const required = i < 2;
-        choices[`choice${i}`] = createField (`choice${i}`, poll.choices[i].text, required, [], 'Poll text');
-      }
-      choices[`choice${length}`] = createField (`choice${length}`, '', false, [], 'Poll text');
-
-      this.setState ({
-        fields: {
-          title: createField ('title', poll.title, true, [], 'Poll title'),
-          ...choices,
-        },
-        selected: _id,
-      });
+      const poll = polls.find (a => (a._id === _id));
+      const choices = poll.choices.map ((a, index) => createField (`choice${index}`, a.text, false));
+      setFields ([
+        createField ('title', poll.title, true),
+        ...choices,
+        createField (`choice${poll.choices.length}`, '', false),
+      ]);
+      setSelected (_id);
     }
   }
 
-  async onSubmitPoll (e) {
+  async function onSubmitPoll (e) {
     e.preventDefault ();
-    const errors = this.onValidateForm ();
-    if (! errors) {
+    const errors = validateAll ();
+    if (!errors) {
       try {
-        this.setState ({ modal: { content: 'Submitting poll...' } });
-        const { title, ...rest } = getFieldValues (this.state.fields);
+        setMB ({ content: 'Submitting poll...' });
+        const { title, ...rest } = getValues ();
         const choices = Object.values (rest).filter (a => (a !== ''));
-        if (this.state.selected === '') {
-          await this.props.dispatch (addPoll (title, choices));
+        if (selected === '') {
+          await dispatch (addPoll (title, choices));
           const content = 'New poll has been added.';
-          this.setState ({ modal: { content, actions: ['OK'], closeAction: 'OK', tag: 'ok' } });
+          setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
         } else {
-          await this.props.dispatch (updatePoll (this.state.selected, title, choices));
+          await dispatch (updatePoll (selected, title, choices));
           const content = 'Poll has been updated.';
-          this.setState ({ modal: { content, actions: ['OK'], closeAction: 'OK', tag: 'ok' } });
+          setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
         }
       } catch (err) {
         const content = 'Error submitting poll, try again.';
-        this.setState ({ modal: { title: 'Error', content, actions: ['OK'], closeAction: 'OK', tag: 'error' } });
+        setMB ({ title: 'Error', content, actions: ['Close'], closeAction: 'Close' });
       }
     }
     return errors;
   }
 
-  async onDeletePoll () {
+  async function onDeletePoll () {
     try {
-      this.setState ({ modal: { content: 'Deleting poll...' } });
-      await this.props.dispatch (deletePoll (this.state.selected));
-      this.setState ({ modal: { content: 'Poll deleted', actions: ['OK'], closeAction: 'OK', tag: 'ok' } });
+      setMB ({ content: 'Deleting poll...' });
+      await dispatch (deletePoll (selected));
+      setMB ({ content: 'Poll deleted', actions: ['OK'], closeAction: 'OK', data: 'reset' });
     } catch (err) {
       const content = 'Error deleting poll, refresh and try again.';
-      this.setState ({ modal: { title: 'Error', content, actions: ['OK'], closeAction: 'OK', tag: 'error' } });
+      setMB ({ title: 'Error', content, actions: ['Close'], closeAction: 'Close' });
     }
   }
 
-  onCloseModal (action, tag) {
-    this.setState ({ modal: null });
-    if (tag === 'ok') {
-      this.onResetPoll ();
+  function onCloseModal (action, data) {
+    setMB (null);
+    if (data === 'reset') {
+      onResetPoll ();
     }
   }
 
-  render () {
-    return (
+  // determine if all choice fields have content
+  const { title, ...rest } = getValues ();
+  if (rest) {
+    const values = Object.values (rest);
+    const anyEmpty = values.reduce ((acc, a) => acc || (a === ''), false);
+    // if all choice fields have content, add another choice field
+    if (!anyEmpty) {
+      const next = `choice${values.length}`;
+      addField (createField (next, '', false));
+    }
+  }
+
+  return (
+    <Fragment>
+      <Header />
       <PageContent>
-        <H1 center>Manage Polls</H1>
-        <Row center>
+        <Text as='h1' center>Manage Polls</Text>
+        <Box center>
           <ManagePollSelect
-            polls={this.props.polls}
-            selected={this.state.selected}
-            onSelect={this.onSelectPoll}
+            polls={polls}
+            selected={selected}
+            onSelect={onSelectPoll}
           />
-        </Row>
-        <Row center>
+        </Box>
+        <Box center>
           <ManageForm
-            action={this.state.selected === '' ? 'add' : 'edit'}
-            fields={this.state.fields}
-            onChange={this.onChange}
-            onValidate={this.onValidate}
-            onSubmit={this.onSubmitPoll}
-            onDelete={this.onDeletePoll}
+            action={selected === '' ? 'add' : 'edit'}
+            fields={fields}
+            onChange={onChange}
+            onValidate={onValidate}
+            onSubmit={onSubmitPoll}
+            onDelete={onDeletePoll}
           />
-        </Row>
-        { this.state.modal &&
-          <Modal
-            title={this.state.modal.title}
-            actions={this.state.modal.actions}
-            closeAction={this.state.modal.closeAction}
-            tag={this.state.modal.tag}
-            content={this.state.modal.content}
-            onClose={this.onCloseModal}
+        </Box>
+        { mb &&
+          <MessageBox
+            title={mb.title}
+            actions={mb.actions}
+            closeAction={mb.closeAction}
+            data={mb.data}
+            content={mb.content}
+            onClose={onCloseModal}
           />
         }
       </PageContent>
-    );
-  }
-}
+    </Fragment>
+  );
+};
 
 const mapStateToProps = state => ({
   polls: state.polls.filter (poll => (poll.creator === state.user.username)),

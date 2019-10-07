@@ -26,6 +26,14 @@ module.exports = (env) => {
 
   return {
     mode,
+    resolve: {
+      extensions: ['.js'],
+      alias: {
+        uikit: path.resolve (__dirname, 'libs/uikit'),
+        'use-fields': path.resolve (__dirname, 'libs/use-fields'),
+        validators: path.resolve (__dirname, 'libs/validators'),
+      },
+    },
     entry: {
       app: './src/client/components/App/index.js',
       vendor: ['prop-types', 'react', 'react-dom', 'react-redux', 'react-router', 'react-router-dom', 'redux',
@@ -64,7 +72,6 @@ module.exports = (env) => {
       }),
       new CopyPlugin ([
         { context: 'src/server', from: `${baseSrc}/src/server/**/*`, to: `${baseDest}/dist/` },
-        { context: 'src/client', from: `${baseSrc}/src/client/images/**/*`, to: `${baseDest}/dist/public/` },
         { from: `${baseSrc}/src/client/index.html`, to: `${baseDest}/dist/public/` },
         { from: `${baseSrc}/src/client/favicon.ico`, to: `${baseDest}/dist/public/` },
         ...stageFiles,

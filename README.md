@@ -3,9 +3,9 @@
 Internet polls done easy. Create an account, create some polls, manage your polls,
 vote on other people's polls, see your poll results !
 
-This application is built using *React (16.x)*, *React-Redux (5.x)* and
-*React-Router (4.x)* on the client. The server uses *Node (8.x)* and
-*Express (4.16.x)*.
+This application is built using *React (16.10.x)*, *React-Redux (7.1.x)* and
+*React-Router (5.x)* on the client. The server uses *Node (10.x)* and
+*Express (4.17.x)*.
 
 ## Live instance
 

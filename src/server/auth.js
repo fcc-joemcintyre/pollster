@@ -9,7 +9,7 @@ function init () {
   passport.use (new Strategy (async (username, password, callback) => {
     try {
       const user = await db.findUserByUsername (username);
-      if (! user) {
+      if (!user) {
         return callback (null, false);
       }
       const passwordMatch = hash.compare (password, user.hash, user.salt);

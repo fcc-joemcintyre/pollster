@@ -1,76 +1,68 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { LoginForm } from './LoginForm';
+import { createField, useFields } from 'use-fields';
+import { MessageBox } from 'uikit';
+import { isPassword } from 'validators';
 import { login } from '../../store/userActions';
-import { createField, getFieldValues, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
-  from '../../lib/formkit/formHelpers';
-import { isPassword } from '../../lib/validators';
+import { LoginForm } from './LoginForm';
 
-const defaultText = 'Enter login information';
+const initialFields = [
+  createField ('username', '', true, []),
+  createField ('password', '', true, [isPassword]),
+];
 
-class LoginPageBase extends Component {
-  constructor (props) {
-    super (props);
-    this.state = {
-      fields: {
-        username: createField ('username', '', true, [], 'Your user name'),
-        password: createField ('password', '', true, [isPassword], 'Your password'),
-      },
-      message: { status: 'info', text: defaultText },
-      redirectToReferrer: false,
-    };
+const LoginPageBase = ({ onLogin, onCancel, dispatch }) => {
+  const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields);
+  const [mb, setMB] = useState (null);
 
-    this.onChange = defaultOnChange.bind (this);
-    this.onValidate = defaultOnValidate.bind (this);
-    this.onValidateForm = defaultOnValidateForm.bind (this);
-    this.onSubmit = this.onSubmit.bind (this);
-  }
-
-  async onSubmit (e) {
+  async function onSubmit (e) {
     e.preventDefault ();
-    const errors = this.onValidateForm ();
-    if (! errors) {
-      this.setState ({ message: { status: 'working', text: 'Logging in' } });
+
+    const errors = validateAll ();
+    if (!errors) {
+      setMB ({ content: 'Logging in' });
       try {
-        const { username, password } = getFieldValues (this.state.fields);
-        await this.props.dispatch (login (username, password));
-        this.setState ({ message: { status: 'ok', text: 'Logged in' }, redirectToReferrer: true });
+        const { username, password } = getValues ();
+        await dispatch (login (username, password));
+        onLogin ();
       } catch (err) {
-        this.setState ({ message: { status: 'error', text: 'Error logging in, check values' } });
+        setMB ({ actions: ['Ok'], closeAction: 'Ok', content: 'Error logging in' });
       }
-    } else {
-      this.setState ({ message: { status: 'error', text: 'Complete form and try again' } });
     }
     return errors;
   }
 
-  render () {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    if (this.state.redirectToReferrer) {
-      return <Redirect to={from} />;
-    }
-
-    return (
-      <LoginForm
-        message={this.state.message}
-        fields={this.state.fields}
-        onChange={this.onChange}
-        onValidate={this.onValidate}
-        onSubmit={this.onSubmit}
-      />
-    );
+  function onCloseModal () {
+    setMB (null);
   }
-}
+
+  return (
+    <Fragment>
+      <LoginForm
+        fields={fields}
+        onChange={onChange}
+        onValidate={onValidate}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+      />
+      { mb &&
+        <MessageBox
+          actions={mb.actions}
+          closeAction={mb.closeAction}
+          content={mb.content}
+          onClose={onCloseModal}
+        />
+      }
+    </Fragment>
+  );
+};
+
 
 export const LoginPage = connect (null) (LoginPageBase);
 
 LoginPageBase.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
-  location: PropTypes.shape ({
-    state: PropTypes.shape ({
-      from: PropTypes.shape ({}),
-    }),
-  }).isRequired,
 };

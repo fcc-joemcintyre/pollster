@@ -1,122 +1,118 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Box, Button, Flex, PageContent, Text } from 'uikit';
 import { vote } from '../../store/pollsActions';
-import { PageContent, Row, FlexGroup } from '../../lib/Layout';
-import { H1, P } from '../../lib/Text';
-import { Button } from '../../lib/Button';
+import { Header } from '../Header';
 import { PollItem } from './PollItem';
 
-class PollPageBase extends Component {
-  constructor (props) {
-    super (props);
-    const _id = this.props.match.params._id;
-    const poll = props.polls.find (p => (p._id === _id));
-    this.state = {
-      poll,
-      selected: -1,
-      voted: false,
-    };
-    this.handleVote = this.handleVote.bind (this);
-  }
+const PollPageBase = ({ poll, history, dispatch }) => {
+  const [selected, setSelected] = useState (-1);
+  const [voted, setVoted] = useState (false);
 
-  async handleVote () {
-    if (this.state.selected !== -1) {
-      const poll = Object.assign ({}, this.state.poll);
-      const choice = poll.choices[this.state.selected];
-      choice.votes += 1;
-      this.setState (() => ({ voted: true, poll }));
+  async function handleVote () {
+    if (selected !== -1) {
       try {
-        await this.props.dispatch (vote (this.state.poll._id, choice.text));
+        const choice = poll.choices[selected];
+        await dispatch (vote (poll._id, choice.text));
+        setVoted (true);
       } catch (err) {
         // no op
       }
     }
   }
 
-  render () {
-    if (! this.state.poll) {
-      return (
+  if (!poll) {
+    return (
+      <Fragment>
+        <Header />
         <PageContent>
           <form
             onSubmit={(e) => {
               e.preventDefault ();
-              this.props.history.push ('/');
+              history.push ('/');
             }}
           >
-            <P center mt='40px'>Sorry, could not find that poll for you.</P>
-            <FlexGroup center>
-              <Button center mt='16px' autoFocus>Back to Polls</Button>
-            </FlexGroup>
+            <Text as='p' center>Sorry, could not find that poll for you.</Text>
+            <Flex center mt='16px'>
+              <Button type='submit' center autoFocus>Back to Polls</Button>
+            </Flex>
           </form>
         </PageContent>
+      </Fragment>
+    );
+  }
+
+  const totalVotes = poll.choices.reduce ((a, b) => a + b.votes, 0);
+  const rows = poll.choices.map ((choice, index) => {
+    const text = (index === selected) ? `\u2713 ${choice.text}` : choice.text;
+    let percent = 0;
+    if (voted) {
+      if (totalVotes > 0) {
+        percent = Math.floor ((choice.votes / totalVotes) * 100);
+      }
+      return <PollItem key={text} text={text} percent={percent} selected={false} />;
+    } else {
+      return (
+        <PollItem
+          key={text}
+          text={text}
+          percent={percent}
+          selected={selected !== -1}
+          onClick={() => { setSelected (index); }}
+        />
       );
     }
-    const totalVotes = this.state.poll.choices.reduce ((a, b) => a + b.votes, 0);
-    const rows = this.state.poll.choices.map ((choice, index) => {
-      const text = (index === this.state.selected) ? `\u2713 ${choice.text}` : choice.text;
-      let percent = 0;
-      if (this.state.voted) {
-        if (totalVotes > 0) {
-          percent = Math.floor ((choice.votes / totalVotes) * 100);
-        }
-        return <PollItem key={text} text={text} percent={percent} selected={false} />;
-      } else {
-        return (
-          <PollItem
-            key={text}
-            text={text}
-            percent={percent}
-            selected={this.state.selected !== -1}
-            onClick={() => { this.setState ({ selected: index }); }}
-          />
-        );
-      }
-    });
+  });
 
-    return (
+  return (
+    <Fragment>
+      <Header />
       <PageContent>
-        <H1 center>{this.state.poll.title}</H1>
-        <Row mt='20px'>
+        <Text as='h1' center>{poll.title}</Text>
+        <Box mt='20px'>
           {rows}
-        </Row>
+        </Box>
         {
-          this.state.voted ? null :
-          <P center mt='20px'>
-            Select your favorite, the poll results will be shown after you vote.
-          </P>
+          !voted &&
+          <Box mt='20px'>
+            <Text as='p' center>
+              Select your favorite, the poll results will be shown after you vote.
+            </Text>
+          </Box>
         }
-        <FlexGroup center mt='20px'>
-          {(this.state.voted === false) &&
+        <Flex center mt='20px' gap='6px'>
+          {(voted === false) &&
             <Button
-              disabled={(this.state.selected === -1)}
-              onClick={this.handleVote}
+              type='button'
+              disabled={(selected === -1)}
+              onClick={handleVote}
             >
               Vote
             </Button>
           }
-          <Button onClick={() => { this.props.history.push ('/'); }}>
+          <Button
+            type='button'
+            onClick={() => { history.push ('/'); }}
+          >
             Back to Polls
           </Button>
-        </FlexGroup>
+        </Flex>
       </PageContent>
-    );
-  }
-}
+    </Fragment>
+  );
+};
 
-const mapStateToProps = state => ({
-  polls: state.polls,
-});
+const mapStateToProps = ({ polls }, props) => {
+  const _id = props.match.params._id;
+  const poll = polls.find (p => (p._id === _id));
+  return ({ poll });
+};
 
 export const PollPage = connect (mapStateToProps) (PollPageBase);
 
 PollPageBase.propTypes = {
-  polls: PropTypes.arrayOf (PropTypes.shape ()).isRequired,
-  match: PropTypes.shape ({
-    params: PropTypes.shape ({
-      _id: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
+  poll: PropTypes.shape ().isRequired,
   history: PropTypes.shape ({
     push: PropTypes.func.isRequired,
   }).isRequired,

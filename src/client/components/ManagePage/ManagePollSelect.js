@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box } from '../../lib/Layout';
-import { H2 } from '../../lib/Text';
-import { Select } from '../../lib/Select';
+import { Box, Select, Text } from 'uikit';
 
 export const ManagePollSelect = ({ polls, selected, onSelect }) => (
-  <Box center maxw='400px' pb='0 4px 16px 4px'>
-    <H2 center>My Polls</H2>
+  <Box center w='380px' pb='0 4px 16px 4px'>
+    <Text as='h2' center>My Polls</Text>
     <Select
+      style={{ width: '100%' }}
       autoFocus
       value={selected}
       onChange={(e) => { onSelect (e.target.value); }}

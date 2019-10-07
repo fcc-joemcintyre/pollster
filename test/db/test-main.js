@@ -12,21 +12,17 @@ describe ('test init/close', function () {
 // test application functions
 describe ('test-main', function () {
   before (async function () {
-    try {
-      // reset database
-      const client = await mongoClient.connect (uri, { useNewUrlParser: true });
-      const dbReset = client.db ();
-      const users = dbReset.collection ('users');
-      await users.deleteMany ();
-      const polls = dbReset.collection ('polls');
-      await polls.deleteMany ();
-      await client.close ();
+    // reset database
+    const client = await mongoClient.connect (uri, { useNewUrlParser: true });
+    const dbReset = client.db ();
+    const users = dbReset.collection ('users');
+    await users.deleteMany ();
+    const polls = dbReset.collection ('polls');
+    await polls.deleteMany ();
+    await client.close ();
 
-      // initialize database for test cases
-      await db.init (uri);
-    } catch (err) {
-      throw err;
-    }
+    // initialize database for test cases
+    await db.init (uri);
   });
 
   after (async function () {

@@ -16,7 +16,7 @@ async function get (path) {
     throw new JsonFetchError (500, 'Network error');
   }
 
-  if (! res.ok) {
+  if (!res.ok) {
     throw new JsonFetchError (res.status);
   } else {
     return res.json ();
@@ -39,7 +39,7 @@ async function post (path, body) {
     throw new JsonFetchError (500, 'Network error');
   }
 
-  if (! res.ok) {
+  if (!res.ok) {
     throw new JsonFetchError (res.status);
   } else {
     return res.json ();
@@ -61,7 +61,7 @@ async function postForm (path, body) {
     throw new JsonFetchError (500, 'Network error');
   }
 
-  if (! res.ok) {
+  if (!res.ok) {
     throw new JsonFetchError (res.status);
   } else {
     return res.json ();
@@ -84,7 +84,7 @@ async function put (path, body) {
     throw new JsonFetchError (500, 'Network error');
   }
 
-  if (! res.ok) {
+  if (!res.ok) {
     throw new JsonFetchError (res.status);
   } else {
     return res.json ();
@@ -106,7 +106,7 @@ async function remove (path) {
     throw new JsonFetchError (500, 'Network error');
   }
 
-  if (! res.ok) {
+  if (!res.ok) {
     throw new JsonFetchError (res.status);
   } else {
     return res.json ();

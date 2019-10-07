@@ -10,13 +10,9 @@ export function register (username, password) {
 
 export function login (username, password) {
   return async (dispatch) => {
-    try {
-      const user = await API.login (username, password);
-      dispatch (setAuthenticated (true, user.username));
-      dispatch (setProfile (user.name, user.email, user.theme));
-    } catch (err) {
-      throw err;
-    }
+    const user = await API.login (username, password);
+    dispatch (setAuthenticated (true, user.username));
+    dispatch (setProfile (user.name, user.email, user.theme));
   };
 }
 
@@ -33,19 +29,15 @@ export function logout () {
 
 export function verifyLogin () {
   return async (dispatch) => {
-    try {
-      const data = await API.verifyLogin ();
-      if (data.authenticated) {
-        dispatch (setAuthenticated (true, data.user.username));
-        dispatch (setProfile (data.user.name, data.user.email, data.user.theme));
-        return true;
-      } else {
-        dispatch (setAuthenticated (false, ''));
-        dispatch (setProfile ('', '', 'base'));
-        return false;
-      }
-    } catch (err) {
-      throw err;
+    const data = await API.verifyLogin ();
+    if (data.authenticated) {
+      dispatch (setAuthenticated (true, data.user.username));
+      dispatch (setProfile (data.user.name, data.user.email, data.user.theme));
+      return true;
+    } else {
+      dispatch (setAuthenticated (false, ''));
+      dispatch (setProfile ('', '', 'base'));
+      return false;
     }
   };
 }
@@ -56,12 +48,8 @@ export function setAuthenticated (authenticated, username) {
 
 export function updateProfile (name, email, theme) {
   return async (dispatch) => {
-    try {
-      await API.updateProfile (name, email, theme);
-      dispatch (setProfile (name, email, theme));
-    } catch (err) {
-      throw err;
-    }
+    await API.updateProfile (name, email, theme);
+    dispatch (setProfile (name, email, theme));
   };
 }
 

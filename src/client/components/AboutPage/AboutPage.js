@@ -1,44 +1,46 @@
-import React from 'react';
-import { PageContent, Box } from '../../lib/Layout';
-import { H1, P, List, Item } from '../../lib/Text';
-import { TextLink } from '../../lib/Link';
+import React, { Fragment } from 'react';
+import { Box, LinkExternal, PageContent, Text } from 'uikit';
+import { Header } from '../Header';
 
 export const AboutPage = () => (
-  <PageContent>
-    <H1 center>About Pollster</H1>
-    <Box center noborder maxw='500px'>
-      <P>
-        Written by Joe McIntyre, Pollster is a full stack project defined by FreeCodeCamp. (
-        <TextLink to='https://www.freecodecamp.com/challenges/build-a-voting-app'>
-          Link
-        </TextLink>
-        )
-      </P>
-      <P>
-        The source code is published on GitHub under a MIT LIcense. (
-        <TextLink to='https://github.com/fcc-joemcintyre/pollster'>
-          Link
-        </TextLink>
-        )
-      </P>
-      <P>
-        Technologies used include:
-      </P>
-      <List>
-        <Item>Client: React (16.x), Styled Components, React Redux, and React Router</Item>
-        <Item>Server: Node (10.x) using Express and Passport</Item>
-        <Item>Database: Mongo (3.4.x)</Item>
-        <Item>Languages: Javascript (ES2017), CSS</Item>
-      </List>
-      <P>
-        Thanks to:
-      </P>
-      <List>
-        <Item>GitHub (source hosting)</Item>
-        <Item>Heroku (app hosting)</Item>
-        <Item>mlab (database hosting)</Item>
-        <Item>TravisCI (continuous integration testing)</Item>
-      </List>
-    </Box>
-  </PageContent>
+  <Fragment>
+    <Header />
+    <PageContent>
+      <Text as='h1' center>About Pollster</Text>
+      <Box center noborder maxw='500px'>
+        <Text as='p'>
+          Written by Joe McIntyre, Pollster is a full stack project defined by FreeCodeCamp. (
+          <LinkExternal to='https://www.freecodecamp.com/challenges/build-a-voting-app'>
+            Link
+          </LinkExternal>
+          )
+        </Text>
+        <Text as='p'>
+          The source code is published on GitHub under a MIT LIcense. (
+          <LinkExternal to='https://github.com/fcc-joemcintyre/pollster'>
+            Link
+          </LinkExternal>
+          )
+        </Text>
+        <Text as='p'>
+          Technologies used include:
+        </Text>
+        <Box as='ul'>
+          <Text as='li'>Client: React (16.x), Styled Components, React Redux, and React Router</Text>
+          <Text as='li'>Server: Node (10.x) using Express and Passport</Text>
+          <Text as='li'>Database: Mongo (3.4.x)</Text>
+          <Text as='li'>Languages: Javascript (ES2017), CSS</Text>
+        </Box>
+        <Text as='p'>
+          Thanks to:
+        </Text>
+        <Box as='ul'>
+          <Text as='li'>GitHub (source hosting)</Text>
+          <Text as='li'>Heroku (app hosting)</Text>
+          <Text as='li'>mlab (database hosting)</Text>
+          <Text as='li'>TravisCI (continuous integration testing)</Text>
+        </Box>
+      </Box>
+    </PageContent>
+  </Fragment>
 );

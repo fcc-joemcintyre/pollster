@@ -1,10 +1,10 @@
-import React from 'react';
-import { PageContent } from '../../lib/Layout';
-import { P } from '../../lib/Text';
+import React, { Fragment } from 'react';
+import { Text } from 'uikit';
+import { Header } from '../Header';
 
-// Content displayed for 404
 export const NotFoundPage = () => (
-  <PageContent>
-    <P center>Sorry, could not find that page for you.</P>
-  </PageContent>
+  <Fragment>
+    <Header />
+    <Text center>Sorry, could not find that page for you.</Text>
+  </Fragment>
 );

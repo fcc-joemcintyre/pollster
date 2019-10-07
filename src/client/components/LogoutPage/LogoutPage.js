@@ -1,42 +1,40 @@
-import React, { Component } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { PageContent, Text } from 'uikit';
 import { logout } from '../../store/userActions';
-import { PageContent } from '../../lib/Layout';
-import { P } from '../../lib/Text';
+import { Header } from '../Header';
 
-class LogoutPageBase extends Component {
-  constructor (props) {
-    super (props);
-    this.state = {
-      working: true,
-    };
-  }
+const LogoutPageBase = ({ authenticated, dispatch }) => {
+  const [working, setWorking] = useState (true);
 
-  async componentDidMount () {
-    await this.props.dispatch (logout ());
-    this.setState ({ working: false });
-  }
+  useEffect (() => {
+    (async () => {
+      await dispatch (logout ());
+      setWorking (false);
+    }) ();
+  }, []);
 
-  render () {
-    return (
+  return (
+    <Fragment>
+      <Header />
       <PageContent>
-        {this.state.working ?
-          <P center mt='80px'>
+        {working ?
+          <Text as='p' center>
             Logging out ...
-          </P> :
-          this.props.authenticated ?
-            <P center mt='80px'>
+          </Text> :
+          authenticated ?
+            <Text as='p' center>
               Logging out did not complete, please retry or close your browser.
-            </P> :
-            <P center mt='80px'>
+            </Text> :
+            <Text as='p' center>
               Thank you for using Pollster, we hope to see you back again soon.
-            </P>
+            </Text>
         }
       </PageContent>
-    );
-  }
-}
+    </Fragment>
+  );
+};
 
 const mapStateToProps = state => ({
   authenticated: state.user.authenticated,

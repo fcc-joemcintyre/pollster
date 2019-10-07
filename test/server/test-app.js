@@ -42,7 +42,7 @@ describe ('polls (authenticated)', function () {
   beforeEach (async function () {
     await db.removePolls ();
     const amy = await db.findUserByUsername ('amy');
-    if (! amy) {
+    if (!amy) {
       await db.insertUser ('amy', 'test');
     }
     const polls = [
@@ -90,7 +90,7 @@ describe ('polls (authenticated)', function () {
   describe ('get single poll', function () {
     it ('should return 1 poll', async function () {
       const data = await jsonFetch.get (`/api/polls/${pollIds[1]}`);
-      if (! data) {
+      if (!data) {
         throw new Error ('Invalid poll');
       }
     });

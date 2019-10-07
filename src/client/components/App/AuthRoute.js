@@ -1,26 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router';
+import { Route, withRouter } from 'react-router-dom';
+import { LoginPage } from '../User';
 
-export const AuthRoute = ({ component, authenticated, ...rest }) => (
+export const AuthRouteBase = ({ component, authenticated, history, ...rest }) => (
   <Route
     {...rest}
-    render={(routeProps) => {
-      if (authenticated) {
-        return React.createElement (component, routeProps);
-      } else {
-        return (<Redirect
-          to={{
-            pathname: '/login',
-            state: { from: routeProps.location },
-          }}
-        />);
-      }
-    }}
+    render={routeProps => (
+      authenticated ? (
+        React.createElement (component, routeProps)
+      ) : (
+        <LoginPage
+          onLogin={() => { /* no op */ }}
+          onCancel={() => history.push ('/')}
+        />
+      )
+    )}
   />
 );
 
-AuthRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+export const AuthRoute = withRouter (AuthRouteBase);
+
+AuthRouteBase.propTypes = {
+  component: PropTypes.shape ({}).isRequired,
   authenticated: PropTypes.bool.isRequired,
+  history: PropTypes.shape ({
+    push: PropTypes.func,
+  }).isRequired,
 };

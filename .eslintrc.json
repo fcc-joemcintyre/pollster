@@ -1,3 +1,11 @@
 {
-  "extends": "@cygns"
+  "extends": "@cygns",
+  "settings": {
+    "import/resolver": {
+      "node": {},
+      "webpack": {
+        "config": "./webpack.config.js"
+      }
+    }
+  }
 }

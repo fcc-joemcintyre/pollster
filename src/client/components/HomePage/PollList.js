@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 
-const PollListBase = ({ polls, history }) => (
-  polls.map ((poll) => {
+const PollListBase = ({ polls, current, pageItems, history }) => {
+  const end = Math.min (polls.length, (current + 1) * pageItems);
+  const result = [];
+  for (let i = (current * pageItems); i < end; i ++) {
+    const poll = polls[i];
     const totalVotes = poll.choices.reduce ((a, b) => a + b.votes, 0);
-    return (
+    result.push (
       <PollItem
         key={poll._id}
         onClick={() => { history.push (`/polls/${poll._id}`); }}
@@ -15,8 +18,9 @@ const PollListBase = ({ polls, history }) => (
         <Votes>{totalVotes} votes</Votes>
       </PollItem>
     );
-  })
-);
+  }
+  return result;
+};
 
 export const PollList = withRouter (PollListBase);
 
@@ -28,6 +32,8 @@ PollListBase.propTypes = {
       votes: PropTypes.number.isRequired,
     })).isRequired,
   })).isRequired,
+  current: PropTypes.number.isRequired,
+  pageItems: PropTypes.number.isRequired,
   history: PropTypes.shape ({
     push: PropTypes.func.isRequired,
   }).isRequired,

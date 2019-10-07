@@ -13,7 +13,8 @@ async function init (uri) {
   if (client) { return; }
 
   try {
-    client = await MongoClient.connect (uri, { useNewUrlParser: true });
+    // eslint-disable-next-line require-atomic-updates
+    client = await MongoClient.connect (uri, { useNewUrlParser: true, useUnifiedTopology: true });
     db = client.db ();
     users = db.collection ('users');
     polls = db.collection ('polls');
@@ -31,9 +32,8 @@ async function close () {
       users = null;
       polls = null;
       await client.close ();
-      client = null;
-      db = null;
-    } catch (err) {
+    } finally {
+      // eslint-disable-next-line require-atomic-updates
       client = null;
       db = null;
     }
@@ -48,32 +48,28 @@ function findUserByUsername (username) {
 // Insert single user with username, password only populated. Suitable for
 // register user type functions.
 async function insertUser (username, password) {
-  try {
-    const existing = await findUserByUsername (username);
-    if (existing) {
-      throw new Error ('User already exists');
-    }
-    const userHash = hash.create (password);
-    const user = {
-      username,
-      hash: userHash.hash,
-      salt: userHash.salt,
-      name: '',
-      email: '',
-      theme: 'base',
-    };
-    const result = await users.insertOne (user, { w: 1 });
-    return result;
-  } catch (err) {
-    throw err;
+  const existing = await findUserByUsername (username);
+  if (existing) {
+    throw new Error ('User already exists');
   }
+  const userHash = hash.create (password);
+  const user = {
+    username,
+    hash: userHash.hash,
+    salt: userHash.salt,
+    name: '',
+    email: '',
+    theme: 'base',
+  };
+  const result = await users.insertOne (user, { w: 1 });
+  return result;
 }
 
 // Update user information (not username or password).
 function updateUser (username, name, email, theme) {
   return users.updateOne (
     { username },
-    { $set: { name, email, theme } }
+    { $set: { name, email, theme } },
   );
 }
 
@@ -116,7 +112,7 @@ function removePolls () {
 function vote (_id, choice) {
   return polls.updateOne (
     { _id: new ObjectId (_id), 'choices.text': choice },
-    { $inc: { 'choices.$.votes': 1 } }
+    { $inc: { 'choices.$.votes': 1 } },
   );
 }
 

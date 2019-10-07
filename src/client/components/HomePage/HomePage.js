@@ -1,34 +1,68 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { PageContent, Box } from '../../lib/Layout';
-import { Divider } from '../../lib/Divider';
-import { H1, P } from '../../lib/Text';
+import { Box, Divider, PageContent, Pagination, Text } from 'uikit';
+import { Header } from '../Header';
+import { LoginPage, RegisterPage } from '../User';
 import { PollList } from './PollList';
 
-const HomePageBase = ({ authenticated, polls }) => (
-  <PageContent>
-    {
-      (authenticated === false) &&
-      <Fragment>
-        <Box center maxw='600px'>
-          <P>Welcome to Pollster, your place to vote and create new polls!</P>
-          <P>
-            To create your own polls, <i>Register</i> to create a free account
-            and then <i>Login</i> anytime to manage your polls and see the results.
-          </P>
-        </Box>
-        <Divider mt='20px' mb='30px' />
-      </Fragment>
-    }
-    <H1 center>Active Polls</H1>
-    {
-      (polls.length === 0) ?
-        <P>There are no active polls - be the first to add a new one!</P> :
-        <PollList polls={polls} />
-    }
-  </PageContent>
-);
+const HomePageBase = ({ authenticated, polls, history }) => {
+  const [first, setFirst] = useState (0);
+  const [current, setCurrent] = useState (0);
+
+  return (
+    <Fragment>
+      <Header />
+      <PageContent>
+        {
+          (authenticated === false) &&
+          <Fragment>
+            <Box mt='40px' center maxw='600px'>
+              <Text as='p'>Welcome to Pollster, your place to vote and create new polls!</Text>
+              <Text as='p'>
+                To create your own polls, <i>Register</i> to create a free account
+                and then <i>Login</i> anytime to manage your polls and see the results.
+              </Text>
+            </Box>
+            <Divider mt='20px' mb='30px' />
+          </Fragment>
+        }
+        <Text as='h1' center>Active Polls</Text>
+        {
+          (polls.length === 0) ?
+            <Text as='p'>There are no active polls - be the first to add a new one!</Text> :
+            <Fragment>
+              <PollList polls={polls} current={current} pageItems={10} />
+              <Pagination
+                mt='12px'
+                items={polls.length}
+                pageItems={10}
+                visible={10}
+                first={first}
+                current={current}
+                onChange={(f, c) => {
+                  setFirst (f);
+                  setCurrent (c);
+                }}
+              />
+            </Fragment>
+        }
+        { location.search === '?login2' &&
+          <LoginPage
+            location={history.location}
+            onCancel={() => history.push ('/')}
+          />
+        }
+        { location.search === '?register2' &&
+          <RegisterPage
+            history={history}
+            onCancel={() => history.push ('/')}
+          />
+        }
+      </PageContent>
+    </Fragment>
+  );
+};
 
 const mapStateToProps = state => ({
   authenticated: state.user.authenticated,
@@ -46,4 +80,10 @@ HomePageBase.propTypes = {
       votes: PropTypes.number.isRequired,
     })).isRequired,
   })).isRequired,
+  history: PropTypes.shape ({
+    location: PropTypes.shape ({
+      search: PropTypes.string,
+    }),
+    push: PropTypes.func,
+  }).isRequired,
 };

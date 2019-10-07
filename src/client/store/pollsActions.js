@@ -10,55 +10,35 @@ export function setPolls (polls) {
 
 export function initPolls () {
   return async (dispatch) => {
-    try {
-      const polls = await API.getPolls ();
-      dispatch (setPolls (polls));
-    } catch (err) {
-      throw err;
-    }
+    const polls = await API.getPolls ();
+    dispatch (setPolls (polls));
   };
 }
 
 export function addPoll (title, choices) {
   return async (dispatch) => {
-    try {
-      await API.createPoll (title, choices);
-      await dispatch (initPolls ());
-    } catch (err) {
-      throw err;
-    }
+    await API.createPoll (title, choices);
+    await dispatch (initPolls ());
   };
 }
 
 export function updatePoll (_id, title, choices) {
   return async (dispatch) => {
-    try {
-      await API.updatePoll (_id, title, choices);
-      await dispatch (initPolls ());
-    } catch (err) {
-      throw err;
-    }
+    await API.updatePoll (_id, title, choices);
+    await dispatch (initPolls ());
   };
 }
 
 export function deletePoll (_id) {
   return async (dispatch) => {
-    try {
-      await API.deletePoll (_id);
-      await dispatch (initPolls ());
-    } catch (err) {
-      throw err;
-    }
+    await API.deletePoll (_id);
+    await dispatch (initPolls ());
   };
 }
 
 export function vote (_id, choice) {
   return async (dispatch) => {
-    try {
-      await API.vote (_id, choice);
-      await dispatch (initPolls ());
-    } catch (err) {
-      throw err;
-    }
+    await API.vote (_id, choice);
+    await dispatch (initPolls ());
   };
 }

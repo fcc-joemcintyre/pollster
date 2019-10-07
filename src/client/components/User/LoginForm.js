@@ -1,79 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fieldPropTypes } from '../../lib/formkit/formPropTypes';
-import { PageContent, Row } from '../../lib/Layout';
-import { Form, FormButtonRow } from '../../lib/Form';
-import { Field } from '../../lib/FieldBordered';
-import { FieldFilteredInput } from '../../lib/Field';
-import { Label } from '../../lib/Label';
-import { H1 } from '../../lib/Text';
-import { Button } from '../../lib/Button';
-import { MessageText } from '../../lib/MessageText';
+import { Button, FieldInput, Flex, GridBox, GridBoxElement, Modal, Text } from 'uikit';
+import { fieldPropTypes } from 'use-fields';
 
-const usernameChars = /[A-Za-z0-9]/;
-const passwordChars = /[A-Za-z0-9!@#$%^&*-+_=]/;
 const passwordErrors = {
   length: 'Must be 4+ characters',
   format: 'Invalid characters',
 };
 
-export const LoginForm = ({ message, fields: { username, password }, onChange, onValidate, onSubmit }) => (
-  <PageContent>
-    <H1 center>Login</H1>
-    <Row center mb='24px'>
-      <MessageText status={message.status}>
-        {message.text}
-      </MessageText>
-    </Row>
-    <Form
-      center
-      w='300px'
+export const LoginForm = ({ fields: { username, password }, onChange, onValidate, onSubmit, onCancel }) => (
+  <Modal>
+    <Text as='h1' center>Login</Text>
+    <form
       onSubmit={async (e) => {
         const errors = await onSubmit (e);
         const el = document.getElementById (errors ? errors[0].name : username.name);
         if (el) { el.focus (); }
       }}
     >
-      <Field>
-        <Label htmlFor={username.name} required={username.required}>User name</Label>
-        <FieldFilteredInput
+      <GridBox w='300px' p='10px 10px 20px 10px' center>
+        <FieldInput
           field={username}
+          label='User name'
           autoFocus
           maxLength={20}
           autoCapitalize='none'
           autoCorrect='off'
-          filter={usernameChars}
+          info='Your user name'
           onChange={onChange}
           onValidate={onValidate}
         />
-      </Field>
-      <Field>
-        <Label htmlFor={password.name} required={password.required}>Password</Label>
-        <FieldFilteredInput
-          field={password}
+        <FieldInput
           type='password'
+          field={password}
+          label='Password'
           maxLength={20}
-          filter={passwordChars}
+          info='Your password'
           errors={passwordErrors}
           onChange={onChange}
           onValidate={onValidate}
         />
-      </Field>
-
-      <FormButtonRow>
-        <Button type='submit'>
-          LOGIN
-        </Button>
-      </FormButtonRow>
-    </Form>
-  </PageContent>
+        <GridBoxElement mt='20px' span={12} center>
+          <Flex gap='6px'>
+            <Button type='submit'>
+              LOGIN
+            </Button>
+            <Button type='button' onClick={onCancel}>
+              CANCEL
+            </Button>
+          </Flex>
+        </GridBoxElement>
+      </GridBox>
+    </form>
+  </Modal>
 );
 
 LoginForm.propTypes = {
-  message: PropTypes.shape ({
-    status: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-  }).isRequired,
   fields: PropTypes.shape ({
     username: PropTypes.shape (fieldPropTypes).isRequired,
     password: PropTypes.shape (fieldPropTypes).isRequired,
@@ -81,4 +63,5 @@ LoginForm.propTypes = {
   onChange: PropTypes.func.isRequired,
   onValidate: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };

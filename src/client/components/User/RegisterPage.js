@@ -1,90 +1,93 @@
-import React, { Component } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { RegisterForm } from './RegisterForm';
+import { createField, useFields } from 'use-fields';
+import { MessageBox } from 'uikit';
+import { isPassword } from 'validators';
 import { register, login } from '../../store/userActions';
-import { createField, getFieldValues, defaultOnChange, defaultOnValidate, defaultOnValidateForm }
-  from '../../lib/formkit/formHelpers';
-import { isPassword } from '../../lib/validators';
+import { RegisterForm } from './RegisterForm';
 
-const defaultText = 'Enter profile information';
+function isNameChars (value) {
+  const nameChars = /^[A-Za-z0-9]+$/;
+  return nameChars.test (value) ? null : 'format';
+}
 
-export class RegisterPageBase extends Component {
-  constructor (props, context) {
-    super (props, context);
-    this.isMatching = this.isMatching.bind (this);
-    this.state = {
-      fields: {
-        username: createField ('username', '', true, [], 'Up to 20 characters, no spaces'),
-        password: createField ('password', '', true, [isPassword, this.isMatching], '4 to 20 characters'),
-        verifyPassword: createField ('verifyPassword', '', true, [isPassword, this.isMatching],
-          'Re-type your password'),
-      },
-      message: { status: 'info', text: defaultText },
-    };
+function isPasswordChars (value) {
+  const passwordChars = /^[A-Za-z0-9!@#$%^&*-+_=]+$/;
+  return passwordChars.test (value) ? null : 'format';
+}
 
-    this.onChange = defaultOnChange.bind (this);
-    this.onValidate = this.onValidate.bind (this);
-    this.defaultOnValidate = defaultOnValidate.bind (this);
-    this.onValidateForm = defaultOnValidateForm.bind (this);
-    this.onSubmit = this.onSubmit.bind (this);
-  }
+function isMatch (value, fields) {
+  const error = fields.password.value !== fields.verifyPassword.value ? 'matching' : null;
+  const result = [
+    { name: fields.password.name, error },
+    { name: fields.verifyPassword.name, error },
+  ];
+  return result;
+}
 
-  onValidate (field) {
-    if ((field.name === 'password') || (field.name === 'verifyPassword')) {
-      const err1 = this.defaultOnValidate (this.state.fields.password);
-      const err2 = this.defaultOnValidate (this.state.fields.verifyPassword);
-      return err1 || err2;
-    } else {
-      return this.defaultOnValidate (field);
-    }
-  }
 
-  async onSubmit (event) {
-    event.preventDefault ();
-    const errors = this.onValidateForm ();
-    if (! errors) {
-      this.setState ({ message: { status: 'working', text: 'Registering ...' } });
+const RegisterPageBase = ({ history, dispatch }) => {
+  const initialFields = useMemo (() => [
+    createField ('username', '', true, [isNameChars]),
+    createField ('password', '', true, [isPassword, isPasswordChars]),
+    createField ('verifyPassword', '', true, [isPassword, isPasswordChars]),
+  ], []);
+
+  const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields, [isMatch]);
+  const [mb, setMB] = useState (null);
+
+  async function onSubmit (e) {
+    e.preventDefault ();
+    const errors = validateAll ();
+    if (!errors) {
+      setMB ({ content: 'Registering ...' });
       try {
-        const { username, password } = getFieldValues (this.state.fields);
-        await this.props.dispatch (register (username, password));
+        const { username, password } = getValues ();
+        await dispatch (register (username, password));
         try {
-          await this.props.dispatch (login (username, password));
-          this.props.history.replace ('/');
+          setMB ({ content: 'Registered, logging in ...' });
+          await dispatch (login (username, password));
+          history.replace ('/');
         } catch (err) {
-          this.setState ({ message: { status: 'error', text: 'Registered, but could not login' } });
+          setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error logging in' });
         }
       } catch (err) {
-        this.setState ({ message: { status: 'error', text: 'Error registering, try again' } });
+        setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error registering' });
       }
-    } else {
-      this.setState ({ message: { status: 'error', text: 'Invalid content, check and try again' } });
     }
     return errors;
   }
 
-  isMatching () {
-    return this.state.fields.password.value === this.state.fields.verifyPassword.value ? null : 'matching';
+  function onCloseModal () {
+    setMB (null);
   }
 
-  render () {
-    return (
+  return (
+    <Fragment>
       <RegisterForm
-        message={this.state.message}
-        fields={this.state.fields}
-        onChange={this.onChange}
-        onValidate={this.onValidate}
-        onSubmit={this.onSubmit}
+        fields={fields}
+        onChange={onChange}
+        onValidate={onValidate}
+        onSubmit={onSubmit}
       />
-    );
-  }
-}
+      { mb &&
+        <MessageBox
+          actions={mb.actions}
+          closeAction={mb.closeAction}
+          content={mb.content}
+          onCloseModal={onCloseModal}
+        />
+      }
+    </Fragment>
+  );
+};
 
 export const RegisterPage = connect (null) (RegisterPageBase);
 
 RegisterPageBase.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape ({
     replace: PropTypes.func.isRequired,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };

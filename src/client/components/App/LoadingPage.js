@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { P } from '../../lib/Text';
-import { Box } from '../../lib/Layout';
+import { Text } from 'uikit';
+import { Header } from '../Header';
 
 export const LoadingPage = ({ message }) => (
-  <Box center noborder w='500px'>
-    <P center mt='40px'>
-      {message}
-    </P>
-  </Box>
+  <Fragment>
+    <Header />
+    <Text center>{message}</Text>
+  </Fragment>
 );
 
 LoadingPage.propTypes = {

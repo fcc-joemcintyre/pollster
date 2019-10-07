@@ -1,5 +1,4 @@
 const express = require ('express');
-const bodyParser = require ('body-parser');
 const cookieSession = require ('cookie-session');
 const helmet = require ('helmet');
 const fs = require ('fs');
@@ -45,8 +44,8 @@ async function start (port, dbLocation) {
     app.use (helmet ());
 
     // set up HTTP parsers and session manager
-    app.use (bodyParser.json ());
-    app.use (bodyParser.urlencoded ({ extended: true }));
+    app.use (express.json ());
+    app.use (express.urlencoded ({ extended: true }));
     app.use (cookieSession ({
       name: 'session',
       secret: sessionSecret,

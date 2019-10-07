@@ -12,7 +12,7 @@ export function get (path) {
     },
     credentials: 'same-origin',
   }).then ((res) => {
-    if (! res.ok) {
+    if (!res.ok) {
       throw new JsonFetchError (res.status);
     } else {
       return res.json ();
@@ -32,7 +32,7 @@ export function post (path, body) {
     credentials: 'same-origin',
     body: JSON.stringify (body),
   }).then ((res) => {
-    if (! res.ok) {
+    if (!res.ok) {
       throw new JsonFetchError (res.status);
     } else {
       return res.json ();
@@ -52,7 +52,7 @@ export function put (path, body) {
     credentials: 'same-origin',
     body: JSON.stringify (body),
   }).then ((res) => {
-    if (! res.ok) {
+    if (!res.ok) {
       throw new JsonFetchError (res.status);
     } else {
       return res.json ();

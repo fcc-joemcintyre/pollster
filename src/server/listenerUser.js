@@ -28,7 +28,7 @@ function login (req, res, next) {
         return next (err);
       }
       // if not a valid user, return 401 auth error
-      if (! user) {
+      if (!user) {
         console.log ('ERROR login (401) unauthenticated');
         return res.status (401).json ({});
       }
