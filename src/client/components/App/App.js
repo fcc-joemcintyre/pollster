@@ -59,15 +59,15 @@ const AppBase = ({ themeName, authenticated, dispatch }) => {
             <GlobalStyle />
             <Nav menu />
             <Switch>
-              <Route exact path='/' component={HomePage} />
-              <Route exact path='/register' component={RegisterPage} />
-              <AuthRoute exact path='/profile' authenticated={authenticated} component={ProfilePage} />
-              <Route exact path='/polls/:_id' component={PollPage} />
-              <AuthRoute exact path='/manage' authenticated={authenticated} component={ManagePage} />
-              <AuthRoute exact path='/results' authenticated={authenticated} component={ResultPage} />
-              <Route exact path='/about' component={AboutPage} />
-              <Route exact path='/logout' component={LogoutPage} />
-              <Route path='*' component={NotFoundPage} />
+              <Route exact path='/'><HomePage /></Route>
+              <Route exact path='/register'><RegisterPage /></Route>
+              <AuthRoute exact path='/profile' authenticated={authenticated}><ProfilePage /></AuthRoute>
+              <Route exact path='/polls/:_id'><PollPage /></Route>
+              <AuthRoute exact path='/manage' authenticated={authenticated}><ManagePage /></AuthRoute>
+              <AuthRoute exact path='/results' authenticated={authenticated}><ResultPage /></AuthRoute>
+              <Route exact path='/about'><AboutPage /></Route>
+              <Route exact path='/logout'><LogoutPage /></Route>
+              <Route path='*'><NotFoundPage /></Route>
             </Switch>
           </Fragment>
         </ThemeProvider>

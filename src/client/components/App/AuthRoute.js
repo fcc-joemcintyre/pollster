@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { Route, useHistory } from 'react-router-dom';
 import { LoginPage } from '../User';
 
-export const AuthRoute = ({ component, authenticated, ...rest }) => {
+export const AuthRoute = ({ authenticated, children, ...rest }) => {
   const history = useHistory ();
   return (
     <Route
       {...rest}
-      render={routeProps => (
+      render={() => (
         authenticated ? (
-          React.createElement (component, routeProps)
+          children
         ) : (
           <LoginPage
             onLogin={() => { /* no op */ }}
@@ -23,6 +23,6 @@ export const AuthRoute = ({ component, authenticated, ...rest }) => {
 };
 
 AuthRoute.propTypes = {
-  component: PropTypes.shape ({}).isRequired,
   authenticated: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 };
