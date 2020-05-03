@@ -1,6 +1,15 @@
 /* global fetch window: true */
+import { setupBefore, setupAfter } from './setup.js';
 
 describe ('page loading', function () {
+  before (async function () {
+    await setupBefore ();
+  });
+
+  after (async function () {
+    await setupAfter ();
+  });
+
   describe ('/', function () {
     it ('should return 200 with home page', async function () {
       const res = await fetch (`${window.location.origin}/`);

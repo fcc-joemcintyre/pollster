@@ -1,7 +1,16 @@
-const jsonFetch = require ('../util/jsonFetch');
-const JsonFetchError = require ('../util/JsonFetchError');
+import * as jsonFetch from '../util/jsonFetch.js';
+import { JsonFetchError } from '../util/JsonFetchError.js';
+import { setupBefore, setupAfter } from './setup.js';
 
-describe ('login/logout/register', function () {
+describe ('user', function () {
+  before (async function () {
+    await setupBefore ();
+  });
+
+  after (async function () {
+    await setupAfter ();
+  });
+
   describe ('valid login await jsonFetch', function () {
     it ('should return valid login', async function () {
       const input = { username: 'amy', password: 'test' };
@@ -84,6 +93,14 @@ describe ('login/logout/register', function () {
 });
 
 describe ('profile', function () {
+  before (async function () {
+    await setupBefore ();
+  });
+
+  after (async function () {
+    await setupAfter ();
+  });
+
   beforeEach (async function () {
     const input = { username: 'amy', password: 'test' };
     await jsonFetch.post ('/api/login', input);
@@ -114,7 +131,15 @@ describe ('profile', function () {
   });
 });
 
-describe ('REST call validation', function () {
+describe.only ('REST call validation', function () {
+  before (async function () {
+    await setupBefore ();
+  });
+
+  after (async function () {
+    await setupAfter ();
+  });
+
   /* eslint object-property-newline: off */
   const tests = [
     { name: 'login empty', uri: '/api/login', data: {}, status: 400 },

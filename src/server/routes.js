@@ -1,8 +1,8 @@
-const listenerUser = require ('./listenerUser');
-const listenerApp = require ('./listenerApp');
+import * as listenerUser from './listenerUser.js';
+import * as listenerApp from './listenerApp.js';
 
 // Initialize routes.
-function init (app) {
+export function init (app) {
   listenerUser.init ();
   listenerApp.init ();
 
@@ -22,11 +22,10 @@ function init (app) {
 
 // authenticate, if passing continue, otherwise return 401 (auth failure)
 function isAuthenticated (req, res, next) {
+  console.log ('isAuthenticated', req.path);
   if (req.isAuthenticated ()) {
     return next ();
   } else {
     return res.status (401).json ({});
   }
 }
-
-exports.init = init;

@@ -15,7 +15,7 @@ function getInteger (value) {
  * @returns {Object} code:{Integer}, exit:{Boolean}, port:{Integer}
  */
 /* eslint max-statements: off */
-function processCommand (args) {
+export function processCommand (args) {
   let showHelp = false;
   const errors = [];
   const defaults = {
@@ -74,5 +74,3 @@ function processCommand (args) {
   }
   return result;
 }
-
-exports.processCommand = processCommand;

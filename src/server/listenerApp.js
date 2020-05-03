@@ -1,17 +1,18 @@
-const Ajv = require ('ajv');
-const db = require ('./db');
-const schemaPoll = require ('./schema/poll.json');
+import fs from 'fs';
+import Ajv from 'ajv';
+import * as db from './db.js';
 
 // object holding validator instance and pre-compiled schemas
 const validator = {};
 
 // Initialize listeners
-function init () {
+export function init () {
   validator.ajv = new Ajv ();
+  const schemaPoll = fs.readFileSync ('./dist/schema/poll.json');
   validator.poll = validator.ajv.compile (schemaPoll);
 }
 
-async function getPolls (req, res) {
+export async function getPolls (req, res) {
   console.log ('INFO getPolls');
   try {
     const polls = await db.getPolls ();
@@ -22,7 +23,7 @@ async function getPolls (req, res) {
   }
 }
 
-async function getPoll (req, res) {
+export async function getPoll (req, res) {
   console.log ('INFO getPoll', req.params._id);
   try {
     const poll = await db.getPoll (req.params._id);
@@ -37,7 +38,7 @@ async function getPoll (req, res) {
   }
 }
 
-async function addPoll (req, res) {
+export async function addPoll (req, res) {
   console.log ('INFO addPoll', req.body);
   if (validator.poll (req.body) === false) {
     console.log ('ERROR addPoll (400) invalid body', validator.poll.errors);
@@ -63,7 +64,7 @@ async function addPoll (req, res) {
   }
 }
 
-async function updatePoll (req, res) {
+export async function updatePoll (req, res) {
   console.log ('INFO updatePoll', req.body);
   if (validator.poll (req.body) === false) {
     console.log ('ERROR updatePoll (400) invalid body', validator.poll.errors);
@@ -88,7 +89,7 @@ async function updatePoll (req, res) {
   }
 }
 
-async function deletePoll (req, res) {
+export async function deletePoll (req, res) {
   console.log ('INFO deletePoll', req.params._id);
   try {
     await db.removePoll (req.params._id);
@@ -99,7 +100,7 @@ async function deletePoll (req, res) {
   }
 }
 
-async function vote (req, res) {
+export async function vote (req, res) {
   console.log ('INFO vote', req.params._id, req.params.choice);
   try {
     await db.vote (req.params._id, req.params.choice);
@@ -109,11 +110,3 @@ async function vote (req, res) {
     res.status (500).json ({});
   }
 }
-
-exports.init = init;
-exports.getPolls = getPolls;
-exports.getPoll = getPoll;
-exports.addPoll = addPoll;
-exports.updatePoll = updatePoll;
-exports.deletePoll = deletePoll;
-exports.vote = vote;

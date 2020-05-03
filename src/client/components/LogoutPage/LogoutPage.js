@@ -20,14 +20,14 @@ const LogoutPageBase = ({ authenticated, dispatch }) => {
       <Header />
       <PageContent>
         {working ?
-          <Text as='p' center>
+          <Text as='p' mt='30px' center>
             Logging out ...
           </Text> :
           authenticated ?
-            <Text as='p' center>
+            <Text as='p' mt='30px' center>
               Logging out did not complete, please retry or close your browser.
             </Text> :
-            <Text as='p' center>
+            <Text as='p' mt='30px' center>
               Thank you for using Pollster, we hope to see you back again soon.
             </Text>
         }

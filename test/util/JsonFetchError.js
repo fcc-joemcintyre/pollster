@@ -1,4 +1,4 @@
-class JsonFetchError extends Error {
+export class JsonFetchError extends Error {
   constructor (status = 500, message = '') {
     super (message);
     this.name = 'JsonFetchError';
@@ -6,5 +6,3 @@ class JsonFetchError extends Error {
     this.stack = (new Error ()).stack;
   }
 }
-
-module.exports = JsonFetchError;

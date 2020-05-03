@@ -4,7 +4,7 @@
     "import/resolver": {
       "node": {},
       "webpack": {
-        "config": "./webpack.config.js"
+        "config": "./webpack.config.cjs"
       }
     }
   }

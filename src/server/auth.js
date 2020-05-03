@@ -1,10 +1,12 @@
-const passport = require ('passport');
-const Strategy = require ('passport-local').Strategy;
-const db = require ('./db');
-const hash = require ('./hash');
+import passport from 'passport';
+import passportLocal from 'passport-local';
+import * as db from './db.js';
+import * as hash from './hash.js';
+
+const Strategy = passportLocal.Strategy;
 
 // Initialize authentication module, with serializer and desericalizer
-function init () {
+export function init () {
   // local authentication using database for user registry
   passport.use (new Strategy (async (username, password, callback) => {
     try {
@@ -32,5 +34,3 @@ function init () {
     }
   });
 }
-
-exports.init = init;

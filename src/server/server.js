@@ -1,13 +1,13 @@
-const express = require ('express');
-const cookieSession = require ('cookie-session');
-const helmet = require ('helmet');
-const fs = require ('fs');
-const http = require ('http');
-const path = require ('path');
-const passport = require ('passport');
-const auth = require ('./auth');
-const routes = require ('./routes');
-const db = require ('./db');
+import express from 'express';
+import cookieSession from 'cookie-session';
+import helmet from 'helmet';
+import fs from 'fs';
+import http from 'http';
+import path from 'path';
+import passport from 'passport';
+import * as auth from './auth.js';
+import * as routes from './routes.js';
+import * as db from './db.js';
 
 // server instance
 let server;
@@ -27,7 +27,7 @@ const httpsOnly = (req, res, next) => {
 };
 
 // Start the server.
-async function start (port, dbLocation) {
+export async function start (port, dbLocation) {
   try {
     console.log ('INFO Starting server');
     await db.init (dbLocation);
@@ -60,7 +60,7 @@ async function start (port, dbLocation) {
     routes.init (app);
 
     app.get ('*.js', (req, res) => {
-      const file = path.join (__dirname, `public${req.path}.gz`);
+      const file = path.join (process.cwd (), `dist/public${req.path}.gz`);
       if (req.acceptsEncodings ('gzip') && fs.existsSync (file)) {
         res.set ({
           'content-type': 'text/javascript',
@@ -71,12 +71,12 @@ async function start (port, dbLocation) {
         res.set ({
           'content-type': 'text/javascript',
         });
-        res.sendFile (path.join (__dirname, `public${req.path}`));
+        res.sendFile (path.join (process.cwd (), `dist/public${req.path}`));
       }
     });
 
     // static file handling
-    app.use (express.static (path.join (__dirname, 'public')));
+    app.use (express.static (path.join (process.cwd (), 'dist/public')));
 
     // for not explicitly handled REST routes, return 404 message
     app.use ('/api/*', (req, res) => {
@@ -84,7 +84,7 @@ async function start (port, dbLocation) {
     });
     // for all other routes, let client react-router handle them
     app.get ('*', (req, res) => {
-      res.sendFile (path.join (__dirname, 'public/index.html'));
+      res.sendFile (path.join (process.cwd (), 'dist/public/index.html'));
     });
 
     server = http.createServer (app);
@@ -97,7 +97,7 @@ async function start (port, dbLocation) {
   }
 }
 
-function stop () {
+export function stop () {
   if (server) {
     return new Promise ((resolve) => {
       server.close (() => {
@@ -110,6 +110,3 @@ function stop () {
     return Promise.resolve ();
   }
 }
-
-exports.start = start;
-exports.stop = stop;

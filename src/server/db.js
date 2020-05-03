@@ -1,6 +1,8 @@
-const MongoClient = require ('mongodb').MongoClient;
-const ObjectId = require ('mongodb').ObjectId;
-const hash = require ('./hash');
+import mongodb from 'mongodb';
+import * as hash from './hash.js';
+
+const MongoClient = mongodb.MongoClient;
+const ObjectId = mongodb.ObjectId;
 
 let client = null;
 let db = null;
@@ -8,7 +10,7 @@ let users = null;
 let polls = null;
 
 // connect to database and set up collections
-async function init (uri) {
+export async function init (uri) {
   console.log ('INFO db.init');
   if (client) { return; }
 
@@ -26,7 +28,7 @@ async function init (uri) {
 }
 
 // Close database and null out references
-async function close () {
+export async function close () {
   if (client) {
     try {
       users = null;
@@ -41,13 +43,13 @@ async function close () {
 }
 
 // Find single user by user name
-function findUserByUsername (username) {
+export function findUserByUsername (username) {
   return users.findOne ({ username });
 }
 
 // Insert single user with username, password only populated. Suitable for
 // register user type functions.
-async function insertUser (username, password) {
+export async function insertUser (username, password) {
   const existing = await findUserByUsername (username);
   if (existing) {
     throw new Error ('User already exists');
@@ -66,7 +68,7 @@ async function insertUser (username, password) {
 }
 
 // Update user information (not username or password).
-function updateUser (username, name, email, theme) {
+export function updateUser (username, name, email, theme) {
   return users.updateOne (
     { username },
     { $set: { name, email, theme } },
@@ -74,58 +76,44 @@ function updateUser (username, name, email, theme) {
 }
 
 // remove user by username
-function removeUser (username) {
+export function removeUser (username) {
   return users.deleteOne ({ username });
 }
 
 // get all polls
-function getPolls () {
+export function getPolls () {
   return polls.find ().toArray ();
 }
 
 // get a single poll
-function getPoll (_id) {
+export function getPoll (_id) {
   return polls.findOne ({ _id: new ObjectId (_id) });
 }
 
 // add a new poll
-function insertPoll (poll) {
+export function insertPoll (poll) {
   return polls.insertOne (poll, { w: 1 });
 }
 
 // update a poll by _id
-function updatePoll (_id, poll) {
+export function updatePoll (_id, poll) {
   return polls.updateOne ({ _id: new ObjectId (_id) }, { $set: poll });
 }
 
 // remove a poll by _id
-function removePoll (_id) {
+export function removePoll (_id) {
   return polls.deleteOne ({ _id: new ObjectId (_id) });
 }
 
 // remove all polls
-function removePolls () {
+export function removePolls () {
   return polls.deleteMany ();
 }
 
 // vote in a poll, for a specific choice.
-function vote (_id, choice) {
+export function vote (_id, choice) {
   return polls.updateOne (
     { _id: new ObjectId (_id), 'choices.text': choice },
     { $inc: { 'choices.$.votes': 1 } },
   );
 }
-
-exports.init = init;
-exports.close = close;
-exports.findUserByUsername = findUserByUsername;
-exports.insertUser = insertUser;
-exports.updateUser = updateUser;
-exports.removeUser = removeUser;
-exports.getPolls = getPolls;
-exports.getPoll = getPoll;
-exports.insertPoll = insertPoll;
-exports.updatePoll = updatePoll;
-exports.removePoll = removePoll;
-exports.removePolls = removePolls;
-exports.vote = vote;

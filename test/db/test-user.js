@@ -1,7 +1,28 @@
-const db = require ('../../dist/db');
-const expect = require ('chai').expect;
+import chai from 'chai';
+import mongodb from 'mongodb';
+import * as db from '../../dist/db.js';
+
+const expect = chai.expect;
+const MongoClient = mongodb.MongoClient;
+const uri = 'mongodb://localhost:27017/pollsterTest';
 
 describe ('users', function () {
+  before (async function () {
+    // reset database
+    const client = await MongoClient.connect (uri, { useNewUrlParser: true });
+    const dbReset = client.db ();
+    const users = dbReset.collection ('users');
+    await users.deleteMany ();
+    await client.close ();
+
+    // initialize database for test cases
+    await db.init (uri);
+  });
+
+  after (async function () {
+    await db.close ();
+  });
+
   beforeEach (async function () {
     await db.insertUser ('amy', 'test');
   });

@@ -1,24 +1,27 @@
-const Ajv = require ('ajv');
-const passport = require ('passport');
-const db = require ('./db');
-const schemaLogin = require ('./schema/login.json');
-const schemaRegister = require ('./schema/register.json');
-const schemaUpdateProfile = require ('./schema/updateProfile.json');
+import fs from 'fs';
+import Ajv from 'ajv';
+import passport from 'passport';
+import * as db from './db.js';
 
 // object holding validator instance and pre-compiled schemas
 const validator = {};
 
 // Initialize listeners
-function init () {
+export function init () {
   validator.ajv = new Ajv ();
+  const schemaLogin = fs.readFileSync ('./dist/schema/login.json');
   validator.login = validator.ajv.compile (schemaLogin);
+  const schemaRegister = fs.readFileSync ('./dist/schema/register.json');
   validator.register = validator.ajv.compile (schemaRegister);
+  const schemaUpdateProfile = fs.readFileSync ('./dist/schema/updateProfile.json');
   validator.updateProfile = validator.ajv.compile (schemaUpdateProfile);
 }
 
 // Login, authenticating user and creating a session
-function login (req, res, next) {
+export function login (req, res, next) {
   console.log ('INFO login');
+  console.log (111, req.body);
+  console.log (222, validator.login);
   if (validator.login (req.body) === false) {
     console.log ('ERROR login (400) invalid body', validator.login.errors);
     res.status (400).json ({});
@@ -50,7 +53,7 @@ function login (req, res, next) {
 }
 
 // logout, closing session
-function logout (req, res) {
+export function logout (req, res) {
   console.log ('INFO logout', (req.user) ? req.user.username : '');
   req.logout ();
   res.status (200).json ({});
@@ -58,7 +61,7 @@ function logout (req, res) {
 
 // if already logged in, return user information
 // allows continuation of session
-function verifyLogin (req, res) {
+export function verifyLogin (req, res) {
   console.log ('INFO verifyLogin');
   let message = { authenticated: false, user: null };
   if (req.isAuthenticated ()) {
@@ -79,7 +82,7 @@ function verifyLogin (req, res) {
 }
 
 // register new user. If already existing user, return 403 (Forbidden)
-async function register (req, res) {
+export async function register (req, res) {
   console.log ('INFO register');
   if (validator.register (req.body) === false) {
     console.log ('ERROR register (400) invalid body', validator.register.errors);
@@ -96,7 +99,7 @@ async function register (req, res) {
   }
 }
 
-function getProfile (req, res) {
+export function getProfile (req, res) {
   console.log ('INFO getProfile', req.user.username);
   res.status (200).json ({
     name: req.user.name,
@@ -105,7 +108,7 @@ function getProfile (req, res) {
   });
 }
 
-async function updateProfile (req, res) {
+export async function updateProfile (req, res) {
   console.log ('INFO updateProfile', req.user.username);
   if (validator.updateProfile (req.body) === false) {
     console.log ('ERROR updateProfile (400) invalid body', validator.updateProfile.errors);
@@ -122,11 +125,3 @@ async function updateProfile (req, res) {
     }
   }
 }
-
-exports.init = init;
-exports.login = login;
-exports.logout = logout;
-exports.verifyLogin = verifyLogin;
-exports.register = register;
-exports.getProfile = getProfile;
-exports.updateProfile = updateProfile;

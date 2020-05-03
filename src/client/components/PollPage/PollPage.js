@@ -1,16 +1,18 @@
 import React, { Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { Box, Button, Flex, PageContent, Text } from 'uikit';
 import { vote } from '../../store/pollsActions';
 import { Header } from '../Header';
 import { PollItem } from './PollItem';
 
-const PollPageBase = ({ poll, dispatch }) => {
+export const PollPage = () => {
   const [selected, setSelected] = useState (-1);
   const [voted, setVoted] = useState (false);
   const history = useHistory ();
+  const params = useParams ();
+  const poll = useSelector (state => state.polls.find (a => (a._id === params._id)));
+  const dispatch = useDispatch ();
 
   async function handleVote () {
     if (selected !== -1) {
@@ -103,17 +105,4 @@ const PollPageBase = ({ poll, dispatch }) => {
       </PageContent>
     </Fragment>
   );
-};
-
-const mapStateToProps = ({ polls }, props) => {
-  const _id = props.match.params._id;
-  const poll = polls.find (p => (p._id === _id));
-  return ({ poll });
-};
-
-export const PollPage = connect (mapStateToProps) (PollPageBase);
-
-PollPageBase.propTypes = {
-  poll: PropTypes.shape ().isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
