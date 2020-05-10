@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Box, PageContent, TabContainer, TabController, Tab, TabPanel, Text } from 'uikit';
 import { Header } from '../Header';
 import { PollItem } from '../PollPage';
 
-const ResultPageBase = ({ polls }) => {
+export const ResultPage = () => {
+  const polls = useSelector (state => state.polls.filter (a => (a.creator === state.user.username)));
+
   // if no polls for user, display message
   if (polls.length === 0) {
     return (
@@ -51,21 +52,4 @@ const ResultPageBase = ({ polls }) => {
       </PageContent>
     </Fragment>
   );
-};
-
-const mapStateToProps = state => ({
-  username: state.user.username,
-  polls: state.polls.filter (poll => (poll.creator === state.user.username)),
-});
-
-export const ResultPage = connect (mapStateToProps) (ResultPageBase);
-
-ResultPageBase.propTypes = {
-  polls: PropTypes.arrayOf (PropTypes.shape ({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    choices: PropTypes.arrayOf (PropTypes.shape ({
-      votes: PropTypes.number.isRequired,
-    })).isRequired,
-  })).isRequired,
 };

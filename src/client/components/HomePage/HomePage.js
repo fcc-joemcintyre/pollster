@@ -1,17 +1,18 @@
 import React, { Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Box, Divider, PageContent, Pagination, Text } from 'uikit';
 import { Header } from '../Header';
 import { LoginPage, RegisterPage } from '../User';
 import { PollList } from './PollList';
 
-const HomePageBase = ({ authenticated, polls }) => {
+export const HomePage = () => {
   const [first, setFirst] = useState (0);
   const [current, setCurrent] = useState (0);
   const history = useHistory ();
   const location = useLocation ();
+  const authenticated = useSelector (state => state.user.authenticated);
+  const polls = useSelector (state => state.polls);
 
   return (
     <Fragment>
@@ -65,22 +66,4 @@ const HomePageBase = ({ authenticated, polls }) => {
       </PageContent>
     </Fragment>
   );
-};
-
-const mapStateToProps = state => ({
-  authenticated: state.user.authenticated,
-  polls: state.polls,
-});
-
-export const HomePage = connect (mapStateToProps) (HomePageBase);
-
-HomePageBase.propTypes = {
-  authenticated: PropTypes.bool.isRequired,
-  polls: PropTypes.arrayOf (PropTypes.shape ({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    choices: PropTypes.arrayOf (PropTypes.shape ({
-      votes: PropTypes.number.isRequired,
-    })).isRequired,
-  })).isRequired,
 };

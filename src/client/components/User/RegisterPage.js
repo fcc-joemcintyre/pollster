@@ -1,6 +1,5 @@
 import React, { Fragment, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { createField, useFields } from 'use-fields';
 import { MessageBox } from 'uikit';
@@ -28,8 +27,7 @@ function isMatch (value, fields) {
 }
 
 
-const RegisterPageBase = ({ dispatch }) => {
-  const history = useHistory ();
+export const RegisterPage = () => {
   const initialFields = useMemo (() => [
     createField ('username', '', true, [isNameChars]),
     createField ('password', '', true, [isPassword, isPasswordChars]),
@@ -38,6 +36,8 @@ const RegisterPageBase = ({ dispatch }) => {
 
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields, [isMatch]);
   const [mb, setMB] = useState (null);
+  const history = useHistory ();
+  const dispatch = useDispatch ();
 
   async function onSubmit (e) {
     e.preventDefault ();
@@ -83,10 +83,4 @@ const RegisterPageBase = ({ dispatch }) => {
       }
     </Fragment>
   );
-};
-
-export const RegisterPage = connect (null) (RegisterPageBase);
-
-RegisterPageBase.propTypes = {
-  dispatch: PropTypes.func.isRequired,
 };

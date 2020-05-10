@@ -1,19 +1,20 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PageContent, Text } from 'uikit';
 import { logout } from '../../store/userActions';
 import { Header } from '../Header';
 
-const LogoutPageBase = ({ authenticated, dispatch }) => {
+export const LogoutPage = () => {
   const [working, setWorking] = useState (true);
+  const dispatch = useDispatch ();
+  const authenticated = useSelector (state => state.user.authenticated);
 
   useEffect (() => {
     (async () => {
       await dispatch (logout ());
       setWorking (false);
     }) ();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Fragment>
@@ -34,15 +35,4 @@ const LogoutPageBase = ({ authenticated, dispatch }) => {
       </PageContent>
     </Fragment>
   );
-};
-
-const mapStateToProps = state => ({
-  authenticated: state.user.authenticated,
-});
-
-export const LogoutPage = connect (mapStateToProps) (LogoutPageBase);
-
-LogoutPageBase.propTypes = {
-  authenticated: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };

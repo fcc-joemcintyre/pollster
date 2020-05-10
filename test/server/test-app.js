@@ -1,6 +1,6 @@
-const db = require ('../../dist/db');
-const jsonFetch = require ('../util/jsonFetch');
-const JsonFetchError = require ('../util/JsonFetchError');
+import * as db from '../../src/server/db.js';
+import * as jsonFetch from '../util/jsonFetch.js';
+import { JsonFetchError } from '../util/JsonFetchError.js';
 
 describe ('polls (unauthenticated)', function () {
   beforeEach (async function () {

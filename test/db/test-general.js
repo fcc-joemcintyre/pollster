@@ -1,4 +1,4 @@
-import * as db from '../../dist/db.js';
+import * as db from '../../src/server/db.js';
 
 // mongo URI with port number not an active MongoDB instance
 const mongoUri = 'mongodb://localhost:27017/pollsterTest';

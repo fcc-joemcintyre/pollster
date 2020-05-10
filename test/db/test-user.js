@@ -1,6 +1,6 @@
 import chai from 'chai';
 import mongodb from 'mongodb';
-import * as db from '../../dist/db.js';
+import * as db from '../../src/server/db.js';
 
 const expect = chai.expect;
 const MongoClient = mongodb.MongoClient;

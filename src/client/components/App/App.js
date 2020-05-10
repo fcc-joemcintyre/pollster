@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { getTheme } from './theme';
@@ -21,9 +20,12 @@ import { ResultPage } from '../ResultPage';
 import { AboutPage } from '../AboutPage';
 import { LogoutPage } from '../LogoutPage';
 
-const AppBase = ({ themeName, authenticated, dispatch }) => {
+export const App = () => {
   const [loading, setLoading] = useState (true);
   const [message, setMessage] = useState ('Loading ...');
+  const dispatch = useDispatch ();
+  const authenticated = useSelector (state => state.user.authenticated);
+  const themeName = useSelector (state => state.user.theme || 'base');
 
   useEffect (() => {
     (async () => {
@@ -36,7 +38,7 @@ const AppBase = ({ themeName, authenticated, dispatch }) => {
         setMessage ('Network error, try again.');
       }
     }) ();
-  }, []);
+  }, [dispatch]);
 
   const theme = getTheme (themeName);
   if (loading) {
@@ -74,18 +76,4 @@ const AppBase = ({ themeName, authenticated, dispatch }) => {
       </ScrollToTop>
     </BrowserRouter>
   );
-};
-
-
-const mapStateToProps = ({ user }) => ({
-  authenticated: user.authenticated,
-  themeName: user.theme || 'base',
-});
-
-export const App = connect (mapStateToProps) (AppBase);
-
-AppBase.propTypes = {
-  authenticated: PropTypes.bool.isRequired,
-  themeName: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };

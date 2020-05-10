@@ -3,8 +3,8 @@ import mongodb from 'mongodb';
 import fetchCookie from 'fetch-cookie';
 import nodeFetch from 'node-fetch';
 
-import * as server from '../../dist/server.js';
-import * as db from '../../dist/db.js';
+import * as server from '../../src/server/server.js';
+import * as db from '../../src/server/db.js';
 
 const MongoClient = mongodb.MongoClient;
 const dbURI = 'mongodb://localhost:27017/pollsterTest';

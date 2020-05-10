@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createField, useFields } from 'use-fields';
 import { Box, MessageBox, PageContent, Text } from 'uikit';
 import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
@@ -14,11 +13,13 @@ const initialFields = [
   createField ('choice1', '', true),
 ];
 
-const ManagePageBase = ({ polls, dispatch }) => {
+export const ManagePage = () => {
   const { fields, onChange, onValidate, setFields, getValues, validateAll, addField } =
     useFields (initialFields);
   const [selected, setSelected] = useState ('');
   const [mb, setMB] = useState (null);
+  const dispatch = useDispatch ();
+  const polls = useSelector (state => state.polls.filter (poll => (poll.creator === state.user.username)));
 
   function onResetPoll () {
     setSelected ('');
@@ -130,21 +131,4 @@ const ManagePageBase = ({ polls, dispatch }) => {
       </PageContent>
     </Fragment>
   );
-};
-
-const mapStateToProps = state => ({
-  polls: state.polls.filter (poll => (poll.creator === state.user.username)),
-});
-
-export const ManagePage = connect (mapStateToProps) (ManagePageBase);
-
-ManagePageBase.propTypes = {
-  polls: PropTypes.arrayOf (PropTypes.shape ({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    choices: PropTypes.arrayOf (PropTypes.shape ({
-      votes: PropTypes.number.isRequired,
-    })).isRequired,
-  })).isRequired,
-  dispatch: PropTypes.func.isRequired,
 };

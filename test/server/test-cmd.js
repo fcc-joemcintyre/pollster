@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { processCommand } from '../../dist/cmd.js';
+import { processCommand } from '../../src/server/cmd.js';
 
 describe ('Test command line processing', function () {
   describe ('empty command', function () {
