@@ -7,7 +7,7 @@ import { Header } from '../Header';
 export const LogoutPage = () => {
   const [working, setWorking] = useState (true);
   const dispatch = useDispatch ();
-  const authenticated = useSelector (state => state.user.authenticated);
+  const authenticated = useSelector ((state) => state.user.authenticated);
 
   useEffect (() => {
     (async () => {
@@ -20,18 +20,19 @@ export const LogoutPage = () => {
     <Fragment>
       <Header />
       <PageContent>
-        {working ?
+        {working ? (
           <Text as='p' mt='30px' center>
             Logging out ...
-          </Text> :
-          authenticated ?
-            <Text as='p' mt='30px' center>
-              Logging out did not complete, please retry or close your browser.
-            </Text> :
-            <Text as='p' mt='30px' center>
-              Thank you for using Pollster, we hope to see you back again soon.
-            </Text>
-        }
+          </Text>
+        ) : authenticated ? (
+          <Text as='p' mt='30px' center>
+            Logging out did not complete, please retry or close your browser.
+          </Text>
+        ) : (
+          <Text as='p' mt='30px' center>
+            Thank you for using Pollster, we hope to see you back again soon.
+          </Text>
+        )}
       </PageContent>
     </Fragment>
   );

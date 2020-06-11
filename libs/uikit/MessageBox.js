@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -8,33 +7,33 @@ import { Flex } from './Flex';
 import { Modal } from './Modal';
 
 export const MessageBox = ({ actions, closeAction, content, data, onClose }) => {
-  function onKeydown (e) {
-    if (closeAction && (e.keyCode === 27)) {
-      onClose (closeAction, data);
-    }
-  }
-
   useEffect (() => {
+    function onKeydown (e) {
+      if (closeAction && (e.keyCode === 27)) {
+        onClose (closeAction, data);
+      }
+    }
+
     document.addEventListener ('keydown', onKeydown);
 
     return (() => {
       document.removeEventListener ('keydown', onKeydown);
     });
-  }, []);
+  }, [closeAction, data, onClose]);
 
   return (
     <Modal>
-      { closeAction &&
+      { closeAction && (
         <Box p='16px 8px 0 0'>
           <Close onClick={() => { onClose (closeAction, data); }} />
         </Box>
-      }
+      )}
       <Box p='16px 16px 16px 16px' align='center'>
         {content}
       </Box>
-      { (actions.length > 0) &&
+      { (actions.length > 0) && (
         <Flex center pb='16px' gap='6px'>
-          { actions.map (action => (
+          { actions.map ((action) => (
             <Button
               type='button'
               key={action}
@@ -44,7 +43,7 @@ export const MessageBox = ({ actions, closeAction, content, data, onClose }) => 
             </Button>
           ))}
         </Flex>
-      }
+      )}
     </Modal>
   );
 };

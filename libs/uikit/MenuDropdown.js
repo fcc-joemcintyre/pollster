@@ -22,14 +22,14 @@ const DropMenuImpl = ({ right, children, className, ...rest }) => {
       <Box m='4px 4px 4px 4px' onClick={onToggle}>
         <MenuDropdownIcon />
       </Box>
-      { show &&
+      { show && (
         <Fragment>
           <MenuSpacer right={right} />
           <MenuFloating top='0px'>
             {children}
           </MenuFloating>
         </Fragment>
-      }
+      )}
     </div>
   );
 };

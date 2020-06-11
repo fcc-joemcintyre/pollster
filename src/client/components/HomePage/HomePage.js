@@ -11,15 +11,14 @@ export const HomePage = () => {
   const [current, setCurrent] = useState (0);
   const history = useHistory ();
   const location = useLocation ();
-  const authenticated = useSelector (state => state.user.authenticated);
-  const polls = useSelector (state => state.polls);
+  const authenticated = useSelector ((state) => state.user.authenticated);
+  const polls = useSelector ((state) => state.polls);
 
   return (
     <Fragment>
       <Header />
       <PageContent>
-        {
-          (authenticated === false) &&
+        { !authenticated && (
           <Fragment>
             <Box mt='40px' center maxw='600px'>
               <Text as='p'>Welcome to Pollster, your place to vote and create new polls!</Text>
@@ -30,39 +29,39 @@ export const HomePage = () => {
             </Box>
             <Divider mt='20px' mb='30px' />
           </Fragment>
-        }
+        )}
         <Text as='h1' center>Active Polls</Text>
-        {
-          (polls.length === 0) ?
-            <Text as='p'>There are no active polls - be the first to add a new one!</Text> :
-            <Fragment>
-              <PollList polls={polls} current={current} pageItems={10} />
-              <Pagination
-                mt='12px'
-                items={polls.length}
-                pageItems={10}
-                visible={10}
-                first={first}
-                current={current}
-                onChange={(f, c) => {
-                  setFirst (f);
-                  setCurrent (c);
-                }}
-              />
-            </Fragment>
-        }
-        { location.search === '?login2' &&
+        { polls.length === 0 ? (
+          <Text as='p'>There are no active polls - be the first to add a new one!</Text>
+        ) : (
+          <Fragment>
+            <PollList polls={polls} current={current} pageItems={10} />
+            <Pagination
+              mt='12px'
+              items={polls.length}
+              pageItems={10}
+              visible={10}
+              first={first}
+              current={current}
+              onChange={(f, c) => {
+                setFirst (f);
+                setCurrent (c);
+              }}
+            />
+          </Fragment>
+        )}
+        { location.search === '?login2' && (
           <LoginPage
             location={history.location}
             onCancel={() => history.push ('/')}
           />
-        }
-        { location.search === '?register2' &&
+        )}
+        { location.search === '?register2' && (
           <RegisterPage
             history={history}
             onCancel={() => history.push ('/')}
           />
-        }
+        )}
       </PageContent>
     </Fragment>
   );

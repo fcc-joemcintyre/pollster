@@ -11,7 +11,7 @@ export const PollPage = () => {
   const [voted, setVoted] = useState (false);
   const history = useHistory ();
   const params = useParams ();
-  const poll = useSelector (state => state.polls.find (a => (a._id === params._id)));
+  const poll = useSelector ((state) => state.polls.find ((a) => (a._id === params._id)));
   const dispatch = useDispatch ();
 
   async function handleVote () {
@@ -77,16 +77,15 @@ export const PollPage = () => {
         <Box mt='20px'>
           {rows}
         </Box>
-        {
-          !voted &&
+        { !voted && (
           <Box mt='20px'>
             <Text as='p' center>
               Select your favorite, the poll results will be shown after you vote.
             </Text>
           </Box>
-        }
+        )}
         <Flex center mt='20px' gap='6px'>
-          {(voted === false) &&
+          { !voted && (
             <Button
               type='button'
               disabled={(selected === -1)}
@@ -94,7 +93,7 @@ export const PollPage = () => {
             >
               Vote
             </Button>
-          }
+          )}
           <Button
             type='button'
             onClick={() => { history.push ('/'); }}

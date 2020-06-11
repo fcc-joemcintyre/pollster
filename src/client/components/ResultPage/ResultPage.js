@@ -5,7 +5,7 @@ import { Header } from '../Header';
 import { PollItem } from '../PollPage';
 
 export const ResultPage = () => {
-  const polls = useSelector (state => state.polls.filter (a => (a.creator === state.user.username)));
+  const polls = useSelector ((state) => state.polls.filter ((a) => (a.creator === state.user.username)));
 
   // if no polls for user, display message
   if (polls.length === 0) {
@@ -27,7 +27,7 @@ export const ResultPage = () => {
         <Text as='h1' center>Poll Results</Text>
         <TabController initialValue={polls[0]._id}>
           <TabContainer>
-            { polls.map (a => <Tab key={a._id} value={a._id}>{a.title}</Tab>) }
+            { polls.map ((a) => <Tab key={a._id} value={a._id}>{a.title}</Tab>) }
           </TabContainer>
           { polls.map ((a) => {
             const totalVotes = a.choices.reduce ((c, b) => c + b.votes, 0);

@@ -29,18 +29,18 @@ export const FieldCheckbox = (
       />
       <Text as='label' htmlFor={field.name}>{label}</Text>
     </StyledCheckbox>
-    { showErrors && field.error &&
+    { showErrors && field.error && (
       <FieldError>
         { (field.error === 'required') ? 'Is required' :
             errors ? (errors[field.error] || 'Error') : 'Error'
         }
       </FieldError>
-    }
-    { showInfo && (!field.error) && info &&
+    )}
+    { showInfo && (!field.error) && info && (
       <FieldInfo>
         { (info && (info.trim () !== '')) ? info : <span>&nbsp;</span>}
       </FieldInfo>
-    }
+    )}
   </GridBoxElement>
 );
 

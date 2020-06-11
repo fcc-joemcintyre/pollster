@@ -6,7 +6,7 @@ import nodeFetch from 'node-fetch';
 import * as server from '../../src/server/server.js';
 import * as db from '../../src/server/db.js';
 
-const MongoClient = mongodb.MongoClient;
+const { MongoClient } = mongodb;
 const dbURI = 'mongodb://localhost:27017/pollsterTest';
 
 export async function setupBefore () {

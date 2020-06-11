@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Box } from './Box';
 
 export const Divider = styled (Box)`
-  height: ${props => props.h};
+  height: ${(props) => props.h};
   background: ${({ c, tc, theme }) => ((tc && theme.colors[tc]) ? theme.colors[tc] : c)};
   ${({ extend }) => extend && `
     margin-left: -${extend};

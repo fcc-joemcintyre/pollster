@@ -68,14 +68,16 @@ module.exports = (env) => {
     },
     plugins: [
       new CompressionPlugin ({
-        test: /\.js$/,
+        test: /bundle.js$/,
       }),
-      new CopyPlugin ([
-        { context: 'src/server', from: `${baseSrc}/src/server/**/*`, to: `${baseDest}/dist/` },
-        { from: `${baseSrc}/src/client/index.html`, to: `${baseDest}/dist/public/` },
-        { from: `${baseSrc}/src/client/favicon.ico`, to: `${baseDest}/dist/public/` },
-        ...stageFiles,
-      ]),
+      new CopyPlugin ({
+        patterns: [
+          { context: 'src/server', from: `${baseSrc}/src/server/**/*`, to: `${baseDest}/dist/` },
+          { from: `${baseSrc}/src/client/index.html`, to: `${baseDest}/dist/public/` },
+          { from: `${baseSrc}/src/client/favicon.ico`, to: `${baseDest}/dist/public/` },
+          ...stageFiles,
+        ],
+      }),
     ],
   };
 };

@@ -70,7 +70,7 @@ export function remove (path) {
       'content-type': 'application/json',
     },
     credentials: 'same-origin',
-  }).then (res => res.json ())
+  }).then ((res) => res.json ())
     .catch (() => {
       throw new JsonFetchError (500, 'Network error');
     });

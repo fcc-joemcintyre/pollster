@@ -17,7 +17,7 @@ export const TabContainer = styled (Box)`
     bottom: 0;
     left: 0;
     width: 100%;
-    border-bottom: 1px solid ${props => props.theme.colors.tabLineColor};
+    border-bottom: 1px solid ${(props) => props.theme.colors.tabLineColor};
     z-index: 1;
   }
 `;

@@ -30,15 +30,15 @@ const Area = styled.div`
   height: 32px;
 
   &:nth-child(even) {
-    border: 1px solid ${props => props.theme.colorRowBgEven || '#F0F8FF'};
-    background-color: ${props => props.theme.colorRowBgEven || '#F0F8FF'};
+    border: 1px solid ${(props) => props.theme.colorRowBgEven || '#F0F8FF'};
+    background-color: ${(props) => props.theme.colorRowBgEven || '#F0F8FF'};
   }
   &:nth-child(odd) {
-    border: 1px solid ${props => props.theme.colorRowBgOdd || '#FFFFF0'};
-    background-color: ${props => props.theme.colorRowBgOdd || '#FFFFF0'};
+    border: 1px solid ${(props) => props.theme.colorRowBgOdd || '#FFFFF0'};
+    background-color: ${(props) => props.theme.colorRowBgOdd || '#FFFFF0'};
   }
   &:hover {
-    border: 1px solid ${props => props.theme.colorRowHoverBorder || '#0000F8'};
+    border: 1px solid ${(props) => props.theme.colorRowHoverBorder || '#0000F8'};
   }
 `;
 
@@ -46,9 +46,9 @@ const Bar = styled.div`
   position: absolute;
   height: 100%;
   cursor: pointer;
-  width: ${props => `${props.percent}%`};
+  width: ${(props) => `${props.percent}%`};
   transition: width 3s;
-  background-color: ${props => props.theme.colorBarFill || '#B0C4DE'};
+  background-color: ${(props) => props.theme.colorBarFill || '#B0C4DE'};
 `;
 
 const LeftText = styled.div`

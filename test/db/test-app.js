@@ -2,8 +2,8 @@ import chai from 'chai';
 import mongodb from 'mongodb';
 import * as db from '../../src/server/db.js';
 
-const expect = chai.expect;
-const MongoClient = mongodb.MongoClient;
+const { expect } = chai;
+const { MongoClient } = mongodb;
 const uri = 'mongodb://localhost:27017/pollsterTest';
 
 describe ('polls', function () {

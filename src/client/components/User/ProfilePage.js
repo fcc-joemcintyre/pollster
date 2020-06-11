@@ -7,9 +7,9 @@ import { updateProfile } from '../../store/userActions';
 import { ProfileForm } from './ProfileForm';
 
 export const ProfilePage = () => {
-  const iName = useSelector (state => state.user.name);
-  const iEmail = useSelector (state => state.user.email);
-  const iTheme = useSelector (state => state.user.theme || 'base');
+  const iName = useSelector ((state) => state.user.name);
+  const iEmail = useSelector ((state) => state.user.email);
+  const iTheme = useSelector ((state) => state.user.theme || 'base');
 
   const initialFields = useMemo (() => [
     createField ('name', iName, true),
@@ -49,14 +49,14 @@ export const ProfilePage = () => {
         onValidate={onValidate}
         onSubmit={onSubmit}
       />
-      { mb &&
+      { mb && (
         <MessageBox
           actions={mb.actions}
           closeAction={mb.closeAction}
           content={mb.content}
           onClose={onCloseModal}
         />
-      }
+      )}
     </Fragment>
   );
 };

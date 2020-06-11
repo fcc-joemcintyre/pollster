@@ -16,7 +16,7 @@ const StyledMenuDropdown = styled (MenuDropdown)`
 export const Nav = ({ menu }) => {
   const [login, setLogin] = useState (false);
   const [innerWidth, setInnerWidth] = useState (window.innerWidth);
-  const authenticated = useSelector (state => state.user.authenticated);
+  const authenticated = useSelector ((state) => state.user.authenticated);
 
   useEffect (() => {
     window.addEventListener ('resize', onResize);
@@ -39,7 +39,7 @@ export const Nav = ({ menu }) => {
           { (!menu) &&
             <Title>Pollster</Title>
           }
-          { menu && collapse &&
+          { menu && collapse && (
             <StyledMenuDropdown m='10px 8px 0 4px' spacer={8}>
               <MenuItem as={NavLink} to='/' exact>Home</MenuItem>
               { authenticated && <MenuItem as={NavLink} to='/manage'>Manage</MenuItem> }
@@ -55,9 +55,9 @@ export const Nav = ({ menu }) => {
                 <MenuItem onClick={() => setLogin (!login)}>Login</MenuItem>
               }
             </StyledMenuDropdown>
-          }
+          )}
           <Title>Pollster</Title>
-          { menu && (!collapse) && authenticated &&
+          { menu && (!collapse) && authenticated && (
             <Fragment>
               <Flex mt='4px'>
                 <MenuBar>
@@ -75,8 +75,8 @@ export const Nav = ({ menu }) => {
                 </MenuBar>
               </Flex>
             </Fragment>
-          }
-          { menu && (!collapse) && (!authenticated) &&
+          )}
+          { menu && (!collapse) && (!authenticated) && (
             <Flex mt='4px'>
               <MenuBar>
                 <MenuItem as={NavLink} to='/' exact>Home</MenuItem>
@@ -90,15 +90,15 @@ export const Nav = ({ menu }) => {
                 </MenuItem>
               </MenuBar>
             </Flex>
-          }
+          )}
         </Content>
       </Container>
-      { login &&
+      { login && (
         <LoginPage
           onLogin={onCloseLogin}
           onCancel={onCloseLogin}
         />
-      }
+      )}
     </Fragment>
   );
 };

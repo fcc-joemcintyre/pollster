@@ -153,7 +153,7 @@ describe ('polls (authenticated)', function () {
     it ('should add 1 vote to a poll', async function () {
       await jsonFetch.post (`/api/polls/${pollIds[1]}/votes/No`);
       const polls = await jsonFetch.get ('/api/polls');
-      const poll = polls.find (a => pollIds[1].equals (a._id));
+      const poll = polls.find ((a) => pollIds[1].equals (a._id));
       if (poll.choices[1].votes !== 1) {
         throw new Error (`Bad vote count: ${JSON.stringify (poll, null, 2)}`);
       }

@@ -29,18 +29,18 @@ export const FieldInput = (
       onChange={onChange}
       onBlur={onValidate}
     />
-    { showErrors && field.error &&
+    { showErrors && field.error && (
       <FieldError>
         { (field.error === 'required') ? 'Is required' :
           errors ? (errors[field.error] || 'Error') : 'Error'
         }
       </FieldError>
-    }
-    { showInfo && (!field.error) &&
+    )}
+    { showInfo && (!field.error) && (
       <FieldInfo>
         { (info && (info.trim () !== '')) ? info : <span>&nbsp;</span>}
       </FieldInfo>
-    }
+    )}
   </GridBoxElement>
 );
 

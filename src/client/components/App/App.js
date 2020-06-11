@@ -24,8 +24,8 @@ export const App = () => {
   const [loading, setLoading] = useState (true);
   const [message, setMessage] = useState ('Loading ...');
   const dispatch = useDispatch ();
-  const authenticated = useSelector (state => state.user.authenticated);
-  const themeName = useSelector (state => state.user.theme || 'base');
+  const authenticated = useSelector ((state) => state.user.authenticated);
+  const themeName = useSelector ((state) => state.user.theme || 'base');
 
   useEffect (() => {
     (async () => {

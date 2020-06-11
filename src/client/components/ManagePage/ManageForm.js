@@ -47,11 +47,11 @@ export const ManageForm = (
               <Button type='submit'>
                 SAVE
               </Button>
-              { (action === 'edit') &&
+              { action === 'edit' && (
                 <Button type='button' onClick={onDelete}>
                   DELETE
                 </Button>
-              }
+              )}
             </Flex>
           </GridBoxElement>
         </GridBox>

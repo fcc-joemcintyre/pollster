@@ -16,7 +16,7 @@ export const useFields = (initialFields, validators = []) => {
   }, [dispatch]);
 
   const onChange = useCallback ((e) => {
-    const name = e.target.name;
+    const { name } = e.target;
     if (name && fields[name]) {
       const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value;
       dispatch ({ type: 'value', name: e.target.name, value });
@@ -27,13 +27,13 @@ export const useFields = (initialFields, validators = []) => {
     const name = e.target && e.target.name;
     if (name && fields[name]) {
       const errors = validate (fields[name], fields, validators);
-      const changes = errors.filter (a => a.error !== fields[a.name].error);
+      const changes = errors.filter ((a) => a.error !== fields[a.name].error);
       if (changes.length !== 0) {
         dispatch ({ type: 'errors', errors });
       }
       dispatch ({ type: 'touched', name });
     }
-  }, [dispatch, fields]);
+  }, [dispatch, fields, validators]);
 
   const getValues = useCallback (() => {
     const result = {};
@@ -52,7 +52,7 @@ export const useFields = (initialFields, validators = []) => {
 
   const setValue = useCallback ((name, value) => {
     dispatch ({ type: 'value', name, value });
-  }, [dispatch, fields]);
+  }, [dispatch]);
 
   const setRequired = useCallback ((name, value) => {
     dispatch ({ type: 'required', name, value });
@@ -63,7 +63,7 @@ export const useFields = (initialFields, validators = []) => {
     for (const key of Object.keys (fields)) {
       const t1 = validate (fields[key], fields, validators);
       for (const a of t1) {
-        const t2 = errors.find (b => b.name === a.name);
+        const t2 = errors.find ((b) => b.name === a.name);
         if (t2) {
           t2.error = t2.error || a.error;
         } else {
@@ -72,9 +72,9 @@ export const useFields = (initialFields, validators = []) => {
       }
     }
     dispatch ({ type: 'errors', errors });
-    const list = errors.filter (a => a.error !== null);
+    const list = errors.filter ((a) => a.error !== null);
     return list.length > 0 ? list : null;
-  }, [fields, dispatch]);
+  }, [fields, dispatch, validators]);
 
   const addField = useCallback ((field) => {
     dispatch ({ type: 'addfield', field });
@@ -110,7 +110,7 @@ function validate (field, fields, validators) {
     for (const fn of validators) {
       const list = fn (field, fields);
       for (const a of list) {
-        const t = errors.find (b => b.name === a.name);
+        const t = errors.find ((b) => b.name === a.name);
         if (t) {
           t.error = t.error ? t.error : a.error;
         } else {
@@ -125,7 +125,7 @@ function validate (field, fields, validators) {
       }
     }
   }
-  if (!errors.find (a => a.name === field.name)) {
+  if (!errors.find ((a) => a.name === field.name)) {
     errors.push ({ name: field.name, error: validateField (field) });
   }
   return errors;

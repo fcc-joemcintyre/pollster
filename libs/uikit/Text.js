@@ -29,7 +29,7 @@ export const Text = styled.div`
       text-overflow: ellipsis;
     ` : ''}
   `}
-  text-align: ${props => (props.center ? 'center' : props.right ? 'right' : props.left ? 'left' : null)};
+  text-align: ${(props) => (props.center ? 'center' : props.right ? 'right' : props.left ? 'left' : null)};
 `;
 
 Text.propTypes = {

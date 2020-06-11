@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
@@ -53,7 +52,7 @@ const Background = styled.div`
 
 const Panel = styled.div`
   position: fixed;
-  top: ${props => props.top};
+  top: ${(props) => props.top};
   left: 50%;
   min-width: 33%;
   transform: translate(-50%, -50%);

@@ -3,7 +3,7 @@ import passportLocal from 'passport-local';
 import * as db from './db.js';
 import * as hash from './hash.js';
 
-const Strategy = passportLocal.Strategy;
+const { Strategy } = passportLocal;
 
 // Initialize authentication module, with serializer and desericalizer
 export function init () {

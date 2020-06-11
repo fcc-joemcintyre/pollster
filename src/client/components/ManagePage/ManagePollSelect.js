@@ -12,7 +12,7 @@ export const ManagePollSelect = ({ polls, selected, onSelect }) => (
       onChange={(e) => { onSelect (e.target.value); }}
     >
       <option key='add' value=''>- Add a new poll -</option>
-      {polls.map (poll => <option key={poll._id} value={poll._id}>{poll.title}</option>)}
+      {polls.map ((poll) => <option key={poll._id} value={poll._id}>{poll.title}</option>)}
     </Select>
   </Box>
 );

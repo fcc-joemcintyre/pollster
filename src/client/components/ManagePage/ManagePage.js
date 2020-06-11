@@ -19,7 +19,7 @@ export const ManagePage = () => {
   const [selected, setSelected] = useState ('');
   const [mb, setMB] = useState (null);
   const dispatch = useDispatch ();
-  const polls = useSelector (state => state.polls.filter (poll => (poll.creator === state.user.username)));
+  const polls = useSelector ((state) => state.polls.filter ((poll) => (poll.creator === state.user.username)));
 
   function onResetPoll () {
     setSelected ('');
@@ -30,7 +30,7 @@ export const ManagePage = () => {
     if (_id === '') {
       onResetPoll ();
     } else {
-      const poll = polls.find (a => (a._id === _id));
+      const poll = polls.find ((a) => (a._id === _id));
       const choices = poll.choices.map ((a, index) => createField (`choice${index}`, a.text, false));
       setFields ([
         createField ('title', poll.title, true),
@@ -48,7 +48,7 @@ export const ManagePage = () => {
       try {
         setMB ({ content: 'Submitting poll...' });
         const { title, ...rest } = getValues ();
-        const choices = Object.values (rest).filter (a => (a !== ''));
+        const choices = Object.values (rest).filter ((a) => (a !== ''));
         if (selected === '') {
           await dispatch (addPoll (title, choices));
           const content = 'New poll has been added.';
@@ -118,7 +118,7 @@ export const ManagePage = () => {
             onDelete={onDeletePoll}
           />
         </Box>
-        { mb &&
+        { mb && (
           <MessageBox
             title={mb.title}
             actions={mb.actions}
@@ -127,7 +127,7 @@ export const ManagePage = () => {
             content={mb.content}
             onClose={onCloseModal}
           />
-        }
+        )}
       </PageContent>
     </Fragment>
   );

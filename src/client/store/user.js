@@ -11,13 +11,15 @@ const initialState = {
 export default function user (state = initialState, action) {
   switch (action.type) {
     case SET_AUTHENTICATED:
-      return Object.assign ({}, state, {
+      return ({
+        ...state,
         authenticated: action.authenticated,
         username: action.username,
       });
 
     case SET_PROFILE:
-      return Object.assign ({}, state, {
+      return ({
+        ...state,
         name: action.name,
         email: action.email,
         theme: action.theme,

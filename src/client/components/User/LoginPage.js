@@ -47,14 +47,14 @@ export const LoginPage = ({ onLogin, onCancel }) => {
         onSubmit={onSubmit}
         onCancel={onCancel}
       />
-      { mb &&
+      { mb && (
         <MessageBox
           actions={mb.actions}
           closeAction={mb.closeAction}
           content={mb.content}
           onClose={onCloseModal}
         />
-      }
+      )}
     </Fragment>
   );
 };

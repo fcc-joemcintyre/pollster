@@ -42,13 +42,13 @@ const PollItem = styled.div`
   cursor: pointer;
 
   &:nth-child(even) {
-    background-color: ${props => props.theme.colorRowBgEven || '#F0F8FF'};
+    background-color: ${(props) => props.theme.colorRowBgEven || '#F0F8FF'};
   }
   &:nth-child(odd) {
-    background-color: ${props => props.theme.colorRowBgOdd || '#FFFFF0'};
+    background-color: ${(props) => props.theme.colorRowBgOdd || '#FFFFF0'};
   }
   &:hover {
-    border: 1px solid ${props => props.theme.colorRowHoverBorder || '#0000F8'};
+    border: 1px solid ${(props) => props.theme.colorRowHoverBorder || '#0000F8'};
   }
 `;
 

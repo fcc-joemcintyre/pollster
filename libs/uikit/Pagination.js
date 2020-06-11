@@ -30,7 +30,7 @@ export const Pagination = (
   }
   return (
     <Flex gap={gap} {...rest}>
-      { start > 0 ?
+      { start > 0 ? (
         <Text
           font={font}
           fontsize={fontsize}
@@ -44,16 +44,17 @@ export const Pagination = (
           }}
         >
           &lt;
-        </Text> :
+        </Text>
+      ) : (
         <Text
           c='transparent'
           cursor='default'
         >
           &lt;
         </Text>
-      }
+      )}
       {elements}
-      { (end < (pages - 1)) &&
+      { (end < (pages - 1)) && (
         <Text
           font={font}
           fontsize={fontsize}
@@ -68,7 +69,7 @@ export const Pagination = (
         >
           &gt;
         </Text>
-      }
+      )}
     </Flex>
   );
 };

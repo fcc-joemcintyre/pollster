@@ -1,8 +1,7 @@
 import mongodb from 'mongodb';
 import * as hash from './hash.js';
 
-const MongoClient = mongodb.MongoClient;
-const ObjectId = mongodb.ObjectId;
+const { MongoClient, ObjectId } = mongodb;
 
 let client = null;
 let db = null;
