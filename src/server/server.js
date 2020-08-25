@@ -41,7 +41,17 @@ export async function start (port, dbLocation) {
     }
 
     // Express security best practices
-    app.use (helmet ());
+    app.use (helmet ({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: '\'self\'',
+          fontSrc: ['fonts.googleapis.com', 'fonts.gstatic.com'],
+          imgSrc: ['\'self\'', 'data:'],
+          scriptSrc: ['\'self\'', '\'unsafe-eval\''],
+          styleSrcElem: ['fonts.googleapis.com', '\'unsafe-inline\''],
+        },
+      },
+    }));
 
     // set up HTTP parsers and session manager
     app.use (express.json ());
