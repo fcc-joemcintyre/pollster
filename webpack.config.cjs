@@ -36,8 +36,6 @@ module.exports = (env) => {
     },
     entry: {
       app: './src/client/components/App/index.js',
-      vendor: ['prop-types', 'react', 'react-dom', 'react-redux', 'react-router', 'react-router-dom', 'redux',
-        'redux-thunk', 'styled-components'],
     },
     output: {
       filename: '[name].bundle.js',
@@ -46,25 +44,13 @@ module.exports = (env) => {
     module: {
       rules: [
         {
-          test: /\.jsx?$/,
+          test: /\.js$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
           },
         },
       ],
-    },
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          vendor: {
-            chunks: 'initial',
-            name: 'vendor',
-            test: 'vendor',
-            enforce: true,
-          },
-        },
-      },
     },
     plugins: [
       new CompressionPlugin ({
