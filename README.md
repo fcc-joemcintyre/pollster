@@ -3,7 +3,7 @@
 Internet polls done easy. Create an account, create some polls, manage your polls,
 vote on other people's polls, see your poll results !
 
-This application is built using *React (16.13.x)*, *React-Redux (7.x)* and
+This application is built using *React (17.x)*, *React-Redux (7.x)* and
 *React-Router (5.x)* on the client. The server uses *Node (14.x)* and
 *Express (4.17.x)*.
 
@@ -12,6 +12,13 @@ This application is built using *React (16.13.x)*, *React-Redux (7.x)* and
 The application can be used at https://pollster-jm.herokuapp.com
 
 ## Development setup
+
+*Note*: This project uses NPM workspaces, which requires NPM 7.x. To install
+this version of NPM, use,
+
+```
+npm i -g npm@next-7
+```
 
 Clone the *Github* repo, and switch to the project directory.
 
@@ -26,12 +33,6 @@ Then install the dependencies using *npm* or *yarn*.
 npm install
 ```
 
-or
-
-```
-yarn
-```
-
 The database supported is *MongoDB*. This can be a local or hosted instance (you
 can also choose to use a local instance for dev/test and a hosted instance for
 deployment). The database name for the application is *pollster*. The database
@@ -43,55 +44,52 @@ Scripts are provided for build, test and run. Yarn is used in the examples,
 but the NPM client can be used as well. When using the NPM client, include
 *run* before script names (e.g. npm run build).
 
-### Build
+### Build (Development)
 
-In a terminal, build can be activated with
+There are two build processes for development, one for the server and one for
+the client.
+
+In one terminal,
 
 ```
-yarn [build | build-stage]
+npm run dev:server
 ```
 
-The build uses *gulp* to run the set of tasks defined in *gulpfile.js*. The
-build options are,
+In a second terminal,
 
-- build: regular build
-- build-stage: build application ready to be deployed to Heroku or similar
+```
+npm run dev:client
+```
 
-*build* is a continuous build option - the gulp build will
-set up watches and rerun build elements as file changes are saved.
-*build-stage* is a one time build option, run again to build a new stage output.
+These development builds are continuous build - they will set up watches
+and rerun build elements as file changes are saved.
+
+### Build (Production)
+
+There is one build command that runs both server and client production builds.
+
+In a terminal,
+
+```
+npm run prod
+```
+
+This production build is a single step process, it is not continuous build.
 
 ## Testing
 
-Unit Testing can be started using,
+Testing is set up in each of the client and server directorys. Switch to the desired
+directory and run the tests.
 
 ```
-yarn test
+cd app/server
+npm test
 ```
 
-Integration Testing can be done for all components,
-
 ```
-yarn test-int
+cd app/client
+npm test
 ```
-
-### Coverage
-
-Coverage reports for the unit tests are generated using,
-
-Unit test coverage is output to the coverage2 directory
-
-```
-yarn coverage
-```
-
-Integration test coverage is output to the coverage directory
-
-```
-yarn coverage-int
-```
-
-The reports are available in *coverage/index.html* and *coverage2/index.html*
 
 ### Server (Development mode)
 
@@ -99,29 +97,10 @@ In a terminal, continuous server operation, updating on changes,
 can be activated with
 
 ```
-yarn start
+npm start
 ```
 
 The *nodemon* utility provides restart on update.
-
-### Server (Production mode)
-
-To run the server as it will run in production, set the environment variable
-NODE_ENV to PRODUCTION, then use the start script.
-
-MacOS / Linux
-
-```
-export NODE_ENV=PRODUCTION
-yarn start
-```
-
-Windows
-
-```
-SET NODE_ENV=PRODUCTION
-yarn start
-```
 
 ### Client
 

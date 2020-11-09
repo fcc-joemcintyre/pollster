@@ -1,0 +1,6 @@
+{
+  "extends": "@cygns/eslint-config-node",
+  "env": {
+    "browser": true
+  }
+}

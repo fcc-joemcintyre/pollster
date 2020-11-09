@@ -1,0 +1,6 @@
+{
+  "extends": "@cygns",
+  "env": {
+    "browser": true
+  }
+}

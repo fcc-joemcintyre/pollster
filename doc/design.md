@@ -1,8 +1,7 @@
 # Pollster Design
 
-The *Pollster* application is a full stack application project defined by
-FreeCodeCamp at
-https://www.freecodecamp.com/challenges/build-a-voting-app
+The *Pollster* application is a full stack application project for
+managing and participating in polls.
 
 ## License
 This document is licensed under a Creative Commons Attribution 4.0
@@ -85,13 +84,13 @@ authentication and sessions are essential to the applications function.
 
 ## Technology Selections
 
-The server is implemented with Node.js version 6.x and uses ES2015 Javascript
-conforming to the native ES2015 support provided in this version of Node.js.
-Data is stored in MongoDB (3.0.x).
+The server is implemented with Node.js version 14.x and uses ES2020 Javascript
+conforming to the native ES support provided in this version of Node.js.
+Data is stored in MongoDB (4.x).
 
-The client interface is implemented with React 15.0.x using ES2015 Javascript
-as supported by Babel 6.9.x. Redux and react-router are also used.
+The client interface is implemented with React 17.0.x using ES2020 Javascript
+as supported by Babel. Redux and react-router are also used.
 
-Stylesheets are defined with SCSS, with Sass used as the CSS preprocessor.
+Styling is defined using the Styled Components CSS-in-JS library.
 
-Gulp is used for build.
+Build is done with npm scripts (server) and Webpack (client).
