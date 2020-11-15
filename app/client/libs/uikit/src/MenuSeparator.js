@@ -1,5 +1,4 @@
-import styled from 'styled-components';
+import React from 'react';
+import { Divider } from './Divider';
 
-export const MenuSeparator = styled.hr`
-  margin: ${(props) => props.spacing || '4px'} 4px ${(props) => props.spacing || '4px'} 4px;
-`;
+export const MenuSeparator = () => <Divider tc='navText' tbg='navColor' />;

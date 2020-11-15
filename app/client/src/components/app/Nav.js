@@ -8,9 +8,8 @@ import { Login } from '../user';
 
 const StyledMenuDropdown = styled (MenuDropdown)`
   display: inline-block;
-  padding: 4px;
-  margin-top: 8px;
-  margin-right: 8px;
+  margin-top: 4px;
+  margin-right: 4px;
 `;
 
 export const Nav = ({ menu }) => {
@@ -36,61 +35,52 @@ export const Nav = ({ menu }) => {
     <>
       <Container>
         <Content>
-          { (!menu) &&
-            <Title>Pollster</Title>
-          }
-          { menu && collapse && (
-            <StyledMenuDropdown m='10px 8px 0 4px' spacer={8}>
-              <MenuItem as={NavLink} to='/' exact>Home</MenuItem>
-              { authenticated && <MenuItem as={NavLink} to='/manage'>Manage</MenuItem> }
-              { authenticated && <MenuItem as={NavLink} to='/results'>Results</MenuItem> }
-              <MenuItem as={NavLink} to='/about'>About</MenuItem>
-              { authenticated && <MenuItem as={NavLink} to='/profile'>Profile</MenuItem> }
-              <MenuSeparator spacing='4px' />
-              { authenticated && <MenuItem as={NavLink} to='/logout'>Logout</MenuItem> }
-              { (!authenticated) &&
-                <MenuItem as={NavLink} to='/register'>Register</MenuItem>
-              }
-              { (!authenticated) &&
-                <MenuItem onClick={() => setLogin (!login)}>Login</MenuItem>
-              }
-            </StyledMenuDropdown>
-          )}
-          <Title>Pollster</Title>
-          { menu && (!collapse) && authenticated && (
-            <>
+          <Flex>
+            <Title as={NavLink} to='/'>Pollster</Title>
+            <FlexItem grow basis='6px' />
+            { menu && collapse && (
+              <StyledMenuDropdown right spacer={8}>
+                { authenticated && <MenuItem as={NavLink} to='/manage'>Manage</MenuItem> }
+                { authenticated && <MenuItem as={NavLink} to='/results'>Results</MenuItem> }
+                <MenuItem as={NavLink} to='/about'>About</MenuItem>
+                { authenticated && <MenuItem as={NavLink} to='/profile'>Profile</MenuItem> }
+                <MenuSeparator spacing='4px' />
+                { authenticated && <MenuItem as={NavLink} to='/logout'>Logout</MenuItem> }
+                { (!authenticated) &&
+                  <MenuItem as={NavLink} to='/register'>Register</MenuItem>
+                }
+                { (!authenticated) &&
+                  <MenuItem onClick={() => setLogin (!login)}>Login</MenuItem>
+                }
+              </StyledMenuDropdown>
+            )}
+            { menu && !collapse && authenticated && (
+              <>
+                <Flex mt='4px'>
+                  <MenuBar>
+                    <MenuItem as={NavLink} to='/manage'>Manage</MenuItem>
+                    <MenuItem as={NavLink} to='/results'>Results</MenuItem>
+                    <MenuItem as={NavLink} to='/about'>About</MenuItem>
+                    <MenuSubmenu text='User' right spacer='2px'>
+                      <MenuItem as={NavLink} to='/profile'>Profile</MenuItem>
+                      <MenuItem as={NavLink} to='/logout'>Logout</MenuItem>
+                    </MenuSubmenu>
+                  </MenuBar>
+                </Flex>
+              </>
+            )}
+            { menu && (!collapse) && (!authenticated) && (
               <Flex mt='4px'>
                 <MenuBar>
-                  <MenuItem as={NavLink} to='/' exact>Home</MenuItem>
-                  <MenuItem as={NavLink} to='/manage'>Manage</MenuItem>
-                  <MenuItem as={NavLink} to='/results'>Results</MenuItem>
                   <MenuItem as={NavLink} to='/about'>About</MenuItem>
-                </MenuBar>
-                <FlexItem grow basis='6px' />
-                <MenuBar>
-                  <MenuSubmenu text='User' right spacer='8px'>
-                    <MenuItem as={NavLink} to='/profile'>Profile</MenuItem>
-                    <MenuItem as={NavLink} to='/logout'>Logout</MenuItem>
-                  </MenuSubmenu>
+                  <MenuItem as={NavLink} to='/register'>Register</MenuItem>
+                  <MenuItem onClick={() => setLogin (!login)}>
+                    Login
+                  </MenuItem>
                 </MenuBar>
               </Flex>
-            </>
-          )}
-          { menu && (!collapse) && (!authenticated) && (
-            <Flex mt='4px'>
-              <MenuBar>
-                <MenuItem as={NavLink} to='/' exact>Home</MenuItem>
-                <MenuItem as={NavLink} to='/about'>About</MenuItem>
-              </MenuBar>
-              <FlexItem grow basis='6px' />
-              <MenuBar>
-                <MenuItem as={NavLink} to='/register'>Register</MenuItem>
-                <MenuItem onClick={() => setLogin (!login)}>
-                  Login
-                </MenuItem>
-              </MenuBar>
-            </Flex>
-          )}
+            )}
+          </Flex>
         </Content>
       </Container>
       <Box h='72px' />
@@ -123,7 +113,7 @@ export const Content = styled.div`
   position: relative;
   max-width: 768px;
   margin: 0 auto;
-  height 72px;
+  padding: 4px;
 
   @media (max-width: 300px) {
     height: 40px;
@@ -133,9 +123,11 @@ export const Content = styled.div`
 export const Title = styled.div`
   font-family: 'Merriweather', sans-serif;
   font-size: 30px;
+  font-style: italic;
   display: inline-block;
   vertical-align: top;
-  margin: 8px 0 0 0;
   text-shadow: 2px 2px 2px #ffffff;
   line-height: 1.0;
+  color: #000000;
+  text-decoration: none;
 `;

@@ -18,7 +18,7 @@ const SubMenuImpl = ({ text, right, spacer, children, className, ...rest }) => {
 
   return (
     <div className={className} {...rest} onMouseLeave={onHide}>
-      <span onClick={onToggle}>{text}<span style={{ fontSize: '70%' }}> {'\u25bc'}</span></span>
+      <span onClick={onToggle}>{text}<span style={{ fontSize: '50%', paddingLeft: '4px' }}>{'\u25bc'}</span></span>
       { show && (
         <Fragment>
           <MenuSpacer right={right} h={spacer} />

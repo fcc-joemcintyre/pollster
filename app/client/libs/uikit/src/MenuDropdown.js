@@ -25,7 +25,7 @@ const DropMenuImpl = ({ right, children, className, ...rest }) => {
       { show && (
         <Fragment>
           <MenuSpacer right={right} />
-          <MenuFloating top='0px'>
+          <MenuFloating top='0px' right={right}>
             {children}
           </MenuFloating>
         </Fragment>
