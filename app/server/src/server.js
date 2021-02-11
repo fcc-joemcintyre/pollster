@@ -62,8 +62,6 @@ export async function start (port, dbLocation) {
     routes.init (app);
 
     app.get ('*.js', (req, res) => {
-      console.log ('get JS', req.path);
-      console.log (process.cwd (), `public${req.path}.gz`);
       const file = path.join (process.cwd (), `public${req.path}.gz`);
       if (req.acceptsEncodings ('gzip') && fs.existsSync (file)) {
         res.set ({

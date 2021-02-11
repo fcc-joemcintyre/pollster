@@ -20,7 +20,7 @@
     "passport-local": "1.0.0"
   },
   "scripts": {
-    "dev": "nodemon -q -w app/server -e js,html --exec 'npm run build' ",
+    "dev": "nodemon -e js,html --exec 'npm run build' ",
     "build": "mkdir -p ../../dist/public && cp -r src/* ../../dist && cp -r public/* ../../dist/public",
     "test": "mocha test/**/*",
     "lint": "eslint src/*.js && eslint test/**",
@@ -41,10 +41,5 @@
   },
   "engines": {
     "node": "^14.15"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "dist/public/js/*"
-    ]
   }
 }
