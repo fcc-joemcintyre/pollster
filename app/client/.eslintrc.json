@@ -11,7 +11,7 @@
     "import/resolver": {
       "node": {},
       "webpack": {
-        "config": "./app/client/webpack.config.js"
+        "config": "./webpack.config.js"
       }
     }
   }

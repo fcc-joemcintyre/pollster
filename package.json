@@ -3,7 +3,7 @@
   "author": "Joe McIntyre (j_h_mcintyre@yahoo.com)",
   "description": "Poll tracking application",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/fcc-joemcintyre/pollster"
@@ -13,31 +13,27 @@
     "app/client",
     "app/server"
   ],
+  "dependencies": {
+    "nodemon": "2.0.7"
+  },
   "scripts": {
-    "clean": "rimraf dist/*",
+    "clean": "rm -rf dist",
     "lint": "npm run lint:server && npm run lint:client",
     "lint:server": "cd app/server && npm run lint",
     "lint:client": "cd app/client && npm run lint",
-    "start": "cd dist && nodemon --watch . main.js -p=3000",
-    "dev:server": "nodemon -q -w app/server -e js,html --exec 'npm run dev:server1' ",
-    "dev:server1": "mkdir -p dist/public && cp -r app/server/src/* dist",
-    "dev:client": "cd app/client && webpack --env target=dev -w",
-    "prod": "npm run prod:server && npm run prod:client",
-    "prod:server": "mkdir -p ../deploy-pollster && cp package-lock.json ../deploy-pollster cp -r app/server/src/* ../deploy-pollster && cp app/server/Procfile ../deploy-pollster",
-    "prod:client": "cd app/client && webpack --env target=prod"
-  },
-  "devDependencies": {
-    "nodemon": "2.0.6",
-    "rimraf": "3.0.2"
+    "test": "npm run test:server && npm run test:client",
+    "test:server": "cd app/server && npm run test",
+    "test:client": "cd app/client && npm run test",
+    "start": "cd dist && node main.js -p=${PORT}",
+    "dev:start": "cd dist && nodemon --watch . main.js -p=3000",
+    "dev:server": "cd app/server && npm run dev",
+    "dev:client": "cd app/client && npm run dev",
+    "build": "npm run clean && npm run build:server && npm run build:client",
+    "build:server": "cd app/server && npm run build",
+    "build:client": "cd app/client && npm run build"
   },
   "engines": {
     "node": "^14.15",
-    "npm": "^7.0"
-  },
-  "nodemonConfig": {
-    "delay": 500,
-    "ignore": [
-      "dist/public/js/*"
-    ]
+    "npm": "^7.5"
   }
 }

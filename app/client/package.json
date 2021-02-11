@@ -3,7 +3,7 @@
   "author": "Joe McIntyre (j_h_mcintyre@yahoo.com)",
   "description": "Poll tracking application",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/fcc-joemcintyre/pollster"
@@ -22,8 +22,10 @@
     "styled-components": "5.2.1"
   },
   "scripts": {
+    "dev": "webpack --mode=development -w",
+    "build": "webpack --mode=production",
     "test": "jest",
-    "lint": "eslint src/** && eslint test/**",
+    "lint": "eslint src/**",
     "coverage": "jest --coverage"
   },
   "devDependencies": {
@@ -50,8 +52,7 @@
     "webpack-cli": "4.2.0"
   },
   "engines": {
-    "node": "^14.15",
-    "npm": "^7.0"
+    "node": "^14.15"
   },
   "jest": {
     "setupFilesAfterEnv": [

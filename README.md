@@ -17,7 +17,7 @@ The application can be used at https://pollster-jm.herokuapp.com
 this version of NPM, use,
 
 ```
-npm i -g npm@next-7
+npm i -g npm
 ```
 
 Clone the *Github* repo, and switch to the project directory.
