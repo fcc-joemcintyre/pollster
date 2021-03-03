@@ -1,76 +1,73 @@
+// @ts-check
+
 /**
- * Parse a string to an integer, returning null if not an integer
- * @param {String} value String to convert
- * @returns {Number} Converted number, or null
+ * @typedef { import ('./types/types').TCommandResult} TCommandResult
  */
-function getInteger (value) {
-  const result = Number (value);
-  return Number.isInteger (result) ? result : null;
-}
 
 /**
  * Valid command options
  *  [-p | --port] port to listen on, default 3000
- * @param {[String]} args Array of arguments
- * @returns {Object} code:{Integer}, exit:{Boolean}, port:{Integer}
+ * @param {string[]} args Array of arguments
+ * @returns {TCommandResult} Command parsing result
  */
-/* eslint max-statements: off */
 export function processCommand (args) {
-  let showHelp = false;
+  const values = {};
   const errors = [];
-  const defaults = {
-    port: 3000,
-  };
-  const result = {
-    code: 0,
-    exit: false,
-    port: 0,
-  };
 
   for (const arg of args) {
-    // if a settings argument, it will contain an equals sign
-    if (arg.indexOf ('=') > -1) {
-      // divide argument into left and right sides, and assign
-      const elements = arg.split ('=');
-      const key = elements[0];
-      if ((key === '-p') || (key === '--port')) {
-        result.port = elements[1];
-      } else {
-        errors.push (`Error: Invalid option (${elements[0]})`);
-      }
-    } else if ((arg === '-h') || (arg === '--help')) {
-      showHelp = true;
-    } else {
-      errors.push (`Error: Invalid option (${arg})`);
+    const [key, value] = arg.split ('=');
+    switch (key) {
+      case '-p':
+      case '--port':
+        values.p = value;
+        break;
+      case '-h':
+      case '--help':
+        values.h = true;
+        break;
+      default:
+        errors.push (`Error: Invalid option (${key})`);
     }
   }
 
-  // validate arguments, assign defaults
-  const port = getInteger (result.port);
-  if ((port === null) || (port < 0) || (port > 65535)) {
-    errors.push (`Invalid port number (${result.port}). Must be integer between 0 and 65535`);
-  } else if (port === 0) {
-    result.port = defaults.port;
+  // validate arguments
+  let port = 0;
+  if (values.p) {
+    const t = Number (values.p);
+    if (Number.isInteger (t) && (t > 0 && t < 65536)) {
+      port = t;
+    } else {
+      errors.push (`Invalid port number (${values.p}). Must be integer between 0 and 65535`);
+      port = 0;
+    }
   } else {
-    result.port = port;
+    port = 3000;
+  }
+
+  let help = false;
+  if (values.h) {
+    help = true;
   }
 
   // if help not an argument, output list of errors
-  if ((showHelp === false) && (errors.length > 0)) {
+  if ((!values.h) && (errors.length > 0)) {
     for (const error of errors) {
       console.log (error);
     }
   }
 
   // if help argument or errors, output usage message
-  if ((showHelp === true) || (errors.length > 0)) {
-    const message =
-`Usage: pollster [-p=port] [-h]
-    -p or --port      Port number to listen on. Default: ${defaults.port}
-    -h or --help      This message.`;
-    console.log (message);
-    result.code = (showHelp) ? 0 : 1;
-    result.exit = true;
+  if (values.h || (errors.length > 0)) {
+    console.log (
+      `Usage: node pollster.js [-p=port] [-h]
+    -p or --port      Port number to listen on. Default: 3000
+    -h or --help      This message.`
+    );
   }
-  return result;
+
+  return ({
+    code: errors.length === 0 ? 0 : 1,
+    exit: errors.length > 0 || help,
+    port,
+  });
 }
