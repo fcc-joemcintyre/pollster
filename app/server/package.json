@@ -4,7 +4,7 @@
   "description": "Poll tracking application",
   "private": true,
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/fcc-joemcintyre/pollster"
@@ -14,8 +14,8 @@
     "ajv": "6.12.6",
     "cookie-session": "1.4.0",
     "express": "4.17.1",
-    "helmet": "4.2.0",
-    "mongodb": "3.6.2",
+    "helmet": "4.4.1",
+    "mongodb": "3.6.4",
     "passport": "0.4.1",
     "passport-local": "1.0.0"
   },
@@ -28,18 +28,14 @@
   },
   "devDependencies": {
     "@cygns/eslint-config-node": "5.1.0",
-    "chai": "4.2.0",
-    "cross-env": "7.0.2",
-    "eslint": "7.12.1",
+    "chai": "4.3.1",
+    "eslint": "7.21.0",
     "eslint-plugin-import": "2.22.1",
     "fetch-cookie": "0.11.0",
-    "mocha": "8.2.1",
-    "nock": "13.0.4",
+    "mocha": "8.3.0",
+    "nock": "13.0.10",
     "node-fetch": "2.6.1",
     "nodemon": "2.0.7",
     "nyc": "15.1.0"
-  },
-  "engines": {
-    "node": "^14.15"
   }
 }

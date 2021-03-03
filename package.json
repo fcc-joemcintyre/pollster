@@ -3,7 +3,8 @@
   "author": "Joe McIntyre (j_h_mcintyre@yahoo.com)",
   "description": "Poll tracking application",
   "private": true,
-  "version": "1.1.1",
+  "type": "module",
+  "version": "1.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/fcc-joemcintyre/pollster"
@@ -33,7 +34,7 @@
     "build:client": "cd app/client && npm run build"
   },
   "engines": {
-    "node": "^14.15",
+    "node": "^14.16",
     "npm": "^7.5"
   }
 }
