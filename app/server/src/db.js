@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import * as hash from './hash.js';
+import { createHash } from './auth/hash.js';
 
 const { MongoClient, ObjectId } = mongodb;
 
@@ -54,7 +54,7 @@ export async function insertUser (username, password) {
   if (existing) {
     throw new Error ('User already exists');
   }
-  const userHash = hash.create (password);
+  const userHash = createHash (password);
   const user = {
     username,
     hash: userHash.hash,
