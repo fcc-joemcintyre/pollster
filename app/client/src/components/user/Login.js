@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { createField, useFields } from 'use-fields';
 import { MessageBox } from 'uikit';
-import { isPassword } from 'validators';
+import { isEmail, isPassword } from 'validators';
 import { login } from '../../store/userActions';
 import { LoginForm } from './LoginForm';
 
 const initialFields = [
-  createField ('username', '', true, []),
+  createField ('email', '', true, [isEmail]),
   createField ('password', '', true, [isPassword]),
 ];
 
@@ -24,8 +24,8 @@ export const Login = ({ onLogin, onCancel }) => {
     if (!errors) {
       setMB ({ content: 'Logging in' });
       try {
-        const { username, password } = getValues ();
-        await dispatch (login (username, password));
+        const { email, password } = getValues ();
+        await dispatch (login (email, password));
         onLogin ();
       } catch (err) {
         setMB ({ actions: ['Ok'], closeAction: 'Ok', content: 'Error logging in' });

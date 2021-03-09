@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { Button, FieldInput, Flex, GridBox, GridBoxElement, PageContent, Text } from 'uikit';
 import { fieldPropTypes } from 'use-fields';
 
-const nameErrors = {
-  format: 'Must be A-Z, a-z, 0-9',
+const emailErrors = {
+  format: 'Invalid email address',
 };
 const passwordErrors = {
   format: 'Must be A-Z, a-z, 0-9, !@#$%^&*()_+=',
@@ -12,7 +12,7 @@ const passwordErrors = {
 };
 
 export const RegisterForm = ({
-  fields: { username, password, verifyPassword },
+  fields: { email, name, password, verifyPassword },
   onChange, onValidate, onSubmit,
 }) => (
   <PageContent>
@@ -26,14 +26,20 @@ export const RegisterForm = ({
     >
       <GridBox mb='20px' w='300px' center>
         <FieldInput
-          field={username}
-          label='User name'
+          field={email}
+          label='Email'
           autoFocus
           maxLength={20}
           autoCapitalize='none'
           autoCorrect='off'
-          info='Up to 20 characters (no spaces)'
-          errors={nameErrors}
+          errors={emailErrors}
+          onChange={onChange}
+          onValidate={onValidate}
+        />
+        <FieldInput
+          field={name}
+          label='Name'
+          maxLength={40}
           onChange={onChange}
           onValidate={onValidate}
         />
@@ -72,7 +78,8 @@ export const RegisterForm = ({
 
 RegisterForm.propTypes = {
   fields: PropTypes.shape ({
-    username: PropTypes.shape (fieldPropTypes).isRequired,
+    email: PropTypes.shape (fieldPropTypes).isRequired,
+    name: PropTypes.shape (fieldPropTypes).isRequired,
     password: PropTypes.shape (fieldPropTypes).isRequired,
     verifyPassword: PropTypes.shape (fieldPropTypes).isRequired,
   }).isRequired,

@@ -7,25 +7,23 @@ const passwordErrors = {
   format: 'Invalid characters',
 };
 
-export const LoginForm = ({ fields: { username, password }, onChange, onValidate, onSubmit, onCancel }) => (
+export const LoginForm = ({ fields: { email, password }, onChange, onValidate, onSubmit, onCancel }) => (
   <Modal>
     <Text as='h1' center>Login</Text>
     <form
       onSubmit={async (e) => {
         const errors = await onSubmit (e);
-        const el = document.getElementById (errors ? errors[0].name : username.name);
+        const el = document.getElementById (errors ? errors[0].name : email.name);
         if (el) { el.focus (); }
       }}
     >
       <GridBox w='300px' p='10px 10px 20px 10px' center>
         <FieldInput
-          field={username}
-          label='User name'
+          field={email}
+          label='Email'
           autoFocus
-          maxLength={20}
           autoCapitalize='none'
           autoCorrect='off'
-          info='Your user name'
           onChange={onChange}
           onValidate={onValidate}
         />
@@ -56,7 +54,7 @@ export const LoginForm = ({ fields: { username, password }, onChange, onValidate
 
 LoginForm.propTypes = {
   fields: PropTypes.shape ({
-    username: PropTypes.shape (fieldPropTypes).isRequired,
+    email: PropTypes.shape (fieldPropTypes).isRequired,
     password: PropTypes.shape (fieldPropTypes).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,

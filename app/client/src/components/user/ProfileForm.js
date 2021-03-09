@@ -2,11 +2,7 @@ import PropTypes from 'prop-types';
 import { Button, FieldInput, FieldSelect, GridBox, GridBoxElement, PageContent, Text } from 'uikit';
 import { fieldPropTypes } from 'use-fields';
 
-const emailErrors = {
-  format: 'Invalid email address',
-};
-
-export const ProfileForm = ({ fields: { name, email, theme }, onChange, onValidate, onSubmit }) => (
+export const ProfileForm = ({ fields: { name, theme }, onChange, onValidate, onSubmit }) => (
   <PageContent>
     <Text as='h1' center>Profile</Text>
     <form
@@ -23,17 +19,6 @@ export const ProfileForm = ({ fields: { name, email, theme }, onChange, onValida
           autoFocus
           maxLength={40}
           info='Your name'
-          onChange={onChange}
-          onValidate={onValidate}
-        />
-        <FieldInput
-          field={email}
-          label='Email'
-          maxLength={60}
-          autoCapitalize='none'
-          autoCorrect='off'
-          info='Your email address'
-          errors={emailErrors}
           onChange={onChange}
           onValidate={onValidate}
         />
@@ -60,7 +45,6 @@ export const ProfileForm = ({ fields: { name, email, theme }, onChange, onValida
 ProfileForm.propTypes = {
   fields: PropTypes.shape ({
     name: PropTypes.shape (fieldPropTypes).isRequired,
-    email: PropTypes.shape (fieldPropTypes).isRequired,
     theme: PropTypes.shape (fieldPropTypes).isRequired,
   }).isRequired,
   onChange: PropTypes.func.isRequired,

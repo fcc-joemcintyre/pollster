@@ -1,7 +1,7 @@
 // @ts-check
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import { findUserByUsername } from '../db.js';
+import { findUserByEmail } from '../db/users.js';
 import { compareHash } from './hash.js';
 
 const { Strategy } = passportLocal;
@@ -12,30 +12,30 @@ const { Strategy } = passportLocal;
  */
 export function initAuth () {
   // local authentication using database for user registry
-  passport.use (new Strategy (async (username, password, callback) => {
+  const options = { usernameField: 'email', passwordField: 'password' };
+  passport.use (new Strategy (options, async (email, password, callback) => {
     try {
-      const user = await findUserByUsername (username);
-      if (!user) {
+      const t = await findUserByEmail (email);
+      if (t.status !== 200) {
+        console.log ('ERROR auth (404)');
         return callback (null, false);
       }
-      const passwordMatch = compareHash (password, user.hash, user.salt);
-      return callback (null, (passwordMatch) ? user : false);
+      if (!compareHash (password, t.user.hash, t.user.salt)) {
+        console.log ('ERROR auth (401)');
+        return callback (null, false);
+      }
+      const { key, theme } = t.user;
+      return callback (null, { key, theme });
     } catch (err) {
       return callback (err);
     }
   }));
 
-  // set function to set username as key for serialization
-  // @ts-ignore (Express.User not modified)
-  passport.serializeUser ((user, callback) => callback (null, user.username));
+  // serialize user
+  passport.serializeUser ((user, callback) => callback (null, user));
 
-  // set function to get user from username
-  passport.deserializeUser (async (username, callback) => {
-    try {
-      const user = await findUserByUsername (username);
-      return callback (null, user);
-    } catch (err) {
-      return callback (err);
-    }
-  });
+  // deserialize user
+  passport.deserializeUser ((user, callback) => (
+    callback (null, user)
+  ));
 }

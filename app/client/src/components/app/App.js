@@ -56,7 +56,7 @@ export const App = () => {
                   <Route exact path='/'><Home /></Route>
                   <Route exact path='/register'><Register /></Route>
                   <AuthRoute exact path='/profile' authenticated={authenticated}><Profile /></AuthRoute>
-                  <Route exact path='/polls/:_id'><Poll /></Route>
+                  <Route exact path='/polls/:key'><Poll /></Route>
                   <AuthRoute exact path='/manage' authenticated={authenticated}><Manage /></AuthRoute>
                   <AuthRoute exact path='/results' authenticated={authenticated}><Result /></AuthRoute>
                   <Route exact path='/about'><About /></Route>

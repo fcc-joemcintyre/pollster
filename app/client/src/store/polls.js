@@ -12,11 +12,6 @@ export default function polls (state = initialState, action) {
   }
 }
 
-export function getPoll (state, _id) {
-  for (const poll of state.polls) {
-    if (poll._id === _id) {
-      return poll;
-    }
-  }
-  return null;
+export function getPoll (state, key) {
+  return state.polls.find ((a) => a.key === key) || null;
 }

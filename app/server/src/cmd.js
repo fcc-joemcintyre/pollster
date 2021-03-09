@@ -1,14 +1,13 @@
 // @ts-check
-
 /**
- * @typedef { import ('./types/types').TCommandResult} TCommandResult
+ * @typedef { import ('./types/types').CommandResult} CommandResult
  */
 
 /**
  * Valid command options
  *  [-p | --port] port to listen on, default 3000
  * @param {string[]} args Array of arguments
- * @returns {TCommandResult} Command parsing result
+ * @returns {CommandResult} Command parsing result
  */
 export function processCommand (args) {
   const values = {};

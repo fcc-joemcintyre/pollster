@@ -10,14 +10,15 @@ export const Poll = () => {
   const [voted, setVoted] = useState (false);
   const history = useHistory ();
   const params = useParams ();
-  const poll = useSelector ((state) => state.polls.find ((a) => (a._id === params._id)));
+  const key = Number (params.key);
+  const poll = useSelector ((state) => state.polls.find ((a) => (a.key === key)));
   const dispatch = useDispatch ();
 
   async function handleVote () {
     if (selected !== -1) {
       try {
         const choice = poll.choices[selected];
-        await dispatch (vote (poll._id, choice.text));
+        await dispatch (vote (poll.key, choice.text));
         setVoted (true);
       } catch (err) {
         // no op

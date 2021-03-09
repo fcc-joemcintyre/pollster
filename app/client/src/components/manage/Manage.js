@@ -15,28 +15,28 @@ const initialFields = [
 export const Manage = () => {
   const { fields, onChange, onValidate, setFields, getValues, validateAll, addField } =
     useFields (initialFields);
-  const [selected, setSelected] = useState ('');
+  const [selected, setSelected] = useState (0);
   const [mb, setMB] = useState (null);
   const dispatch = useDispatch ();
-  const polls = useSelector ((state) => state.polls.filter ((poll) => (poll.creator === state.user.username)));
+  const polls = useSelector ((state) => state.polls.filter ((poll) => (poll.creator === state.user.key)));
 
   function onResetPoll () {
-    setSelected ('');
+    setSelected (0);
     setFields (initialFields);
   }
 
-  function onSelectPoll (_id) {
-    if (_id === '') {
+  function onSelectPoll (key) {
+    if (key === 0) {
       onResetPoll ();
     } else {
-      const poll = polls.find ((a) => (a._id === _id));
+      const poll = polls.find ((a) => (a.key === key));
       const choices = poll.choices.map ((a, index) => createField (`choice${index}`, a.text, false));
       setFields ([
         createField ('title', poll.title, true),
         ...choices,
         createField (`choice${poll.choices.length}`, '', false),
       ]);
-      setSelected (_id);
+      setSelected (key);
     }
   }
 

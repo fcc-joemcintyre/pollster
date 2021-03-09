@@ -3,8 +3,8 @@ import { Box, PageContent, TabContainer, TabController, Tab, TabPanel, Text } fr
 import { PollItem } from '../poll';
 
 export const Result = () => {
-  const polls = useSelector ((state) => state.polls.filter ((a) => (a.creator === state.user.username)));
-
+  const polls = useSelector ((state) => state.polls.filter ((a) => (a.creator === state.user.key)));
+  useSelector (state => console.log (state));
   // if no polls for user, display message
   if (polls.length === 0) {
     return (
@@ -18,9 +18,9 @@ export const Result = () => {
   return (
     <PageContent>
       <Text as='h1' center>Poll Results</Text>
-      <TabController initialValue={polls[0]._id}>
+      <TabController initialValue={polls[0].key}>
         <TabContainer>
-          { polls.map ((a) => <Tab key={a._id} value={a._id}>{a.title}</Tab>) }
+          { polls.map ((a) => <Tab key={a.key} value={a.key}>{a.title}</Tab>) }
         </TabContainer>
         { polls.map ((a) => {
           const totalVotes = a.choices.reduce ((c, b) => c + b.votes, 0);
@@ -32,7 +32,7 @@ export const Result = () => {
           });
 
           return (
-            <TabPanel key={a._id} value={a._id}>
+            <TabPanel key={a.key} value={a.key}>
               <Box>
                 <Text as='h2' center>{a.title}</Text>
                 <Text as='p' center>Total Votes: {totalVotes}</Text>

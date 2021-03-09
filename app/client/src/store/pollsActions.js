@@ -19,23 +19,23 @@ export function addPoll (title, choices) {
   };
 }
 
-export function updatePoll (_id, title, choices) {
+export function updatePoll (key, title, choices) {
   return async (dispatch) => {
-    await post (`/api/polls/${_id}`, { title, choices });
+    await post (`/api/polls/${key}`, { title, choices });
     await dispatch (initPolls ());
   };
 }
 
-export function deletePoll (_id) {
+export function deletePoll (key) {
   return async (dispatch) => {
-    await remove (`/api/polls/${_id}`);
+    await remove (`/api/polls/${key}`);
     await dispatch (initPolls ());
   };
 }
 
-export function vote (_id, choice) {
+export function vote (key, choice) {
   return async (dispatch) => {
-    await post (`/api/polls/${_id}/votes/${choice}`);
+    await post (`/api/polls/${key}/votes/${choice}`);
     await dispatch (initPolls ());
   };
 }

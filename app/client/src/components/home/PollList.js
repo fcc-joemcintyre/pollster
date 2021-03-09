@@ -11,8 +11,8 @@ export const PollList = ({ polls, current, pageItems }) => {
     const totalVotes = poll.choices.reduce ((a, b) => a + b.votes, 0);
     result.push (
       <PollItem
-        key={poll._id}
-        onClick={() => { history.push (`/polls/${poll._id}`); }}
+        key={poll.key}
+        onClick={() => { history.push (`/polls/${poll.key}`); }}
       >
         <Title>{poll.title}</Title>
         <Votes>{totalVotes} votes</Votes>
@@ -24,7 +24,7 @@ export const PollList = ({ polls, current, pageItems }) => {
 
 PollList.propTypes = {
   polls: PropTypes.arrayOf (PropTypes.shape ({
-    _id: PropTypes.string.isRequired,
+    key: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     choices: PropTypes.arrayOf (PropTypes.shape ({
       votes: PropTypes.number.isRequired,

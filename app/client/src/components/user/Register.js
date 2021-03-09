@@ -3,14 +3,9 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { createField, useFields } from 'use-fields';
 import { MessageBox } from 'uikit';
-import { isPassword } from 'validators';
+import { isEmail, isPassword } from 'validators';
 import { register, login } from '../../store/userActions';
 import { RegisterForm } from './RegisterForm';
-
-function isNameChars (value) {
-  const nameChars = /^[A-Za-z0-9]+$/;
-  return nameChars.test (value) ? null : 'format';
-}
 
 function isPasswordChars (value) {
   const passwordChars = /^[A-Za-z0-9!@#$%^&*-+_=]+$/;
@@ -28,7 +23,8 @@ function isMatch (value, fields) {
 
 export const Register = () => {
   const initialFields = useMemo (() => [
-    createField ('username', '', true, [isNameChars]),
+    createField ('email', '', true, [isEmail]),
+    createField ('name', '', true),
     createField ('password', '', true, [isPassword, isPasswordChars]),
     createField ('verifyPassword', '', true, [isPassword, isPasswordChars]),
   ], []);
@@ -44,11 +40,11 @@ export const Register = () => {
     if (!errors) {
       setMB ({ content: 'Registering ...' });
       try {
-        const { username, password } = getValues ();
-        await dispatch (register (username, password));
+        const { email, name, password } = getValues ();
+        await dispatch (register (email, name, password));
         try {
           setMB ({ content: 'Registered, logging in ...' });
-          await dispatch (login (username, password));
+          await dispatch (login (email, password));
           history.replace ('/');
         } catch (err) {
           setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error logging in' });

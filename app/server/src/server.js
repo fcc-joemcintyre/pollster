@@ -1,3 +1,4 @@
+// @ts-check
 import express from 'express';
 import cookieSession from 'cookie-session';
 import helmet from 'helmet';
@@ -6,8 +7,14 @@ import http from 'http';
 import path from 'path';
 import passport from 'passport';
 import { initAuth } from './auth/auth.js';
-import * as routes from './routes.js';
-import * as db from './db.js';
+import { initRoutes } from './routes.js';
+import { initDatabase, closeDatabase } from './db/db.js';
+
+/**
+ * @typedef { import ('express').Request} Request
+ * @typedef { import ('express').Response} Response
+ * @typedef { import ('express').NextFunction} NextFunction
+ */
 
 // server instance
 let server;
@@ -16,7 +23,13 @@ let server;
 // some random text used as a placeholder for dev
 const sessionSecret = process.env.SESSION_SECRET || 'randomtext_aseroja';
 
-// ensure HTTPS is used for all interactions
+/**
+ * Register new user
+ * @param {Request} req Request
+ * @param {Response} res Response
+ * @param {NextFunction} next Next middleware
+ * @returns {void}
+ */
 const httpsOnly = (req, res, next) => {
   if (req.headers['x-forwarded-proto'] &&
     req.headers['x-forwarded-proto'] !== 'https') {
@@ -26,11 +39,16 @@ const httpsOnly = (req, res, next) => {
   }
 };
 
-// Start the server.
-export async function start (port, dbLocation) {
+/**
+ * Start the server
+ * @param {number} port HTTP port number
+ * @param {string} dbLocation URL to database
+ * @returns {Promise<void>} Promise with no data
+ */
+export async function startServer (port, dbLocation) {
   try {
     console.log ('INFO Starting server');
-    await db.init (dbLocation);
+    await initDatabase (dbLocation);
 
     // set up static HTML serving
     const app = express ();
@@ -59,7 +77,7 @@ export async function start (port, dbLocation) {
     app.use (passport.session ());
 
     // create server with HTML and REST routes
-    routes.init (app);
+    initRoutes (app);
 
     app.get ('*.js', (req, res) => {
       const file = path.join (process.cwd (), `public${req.path}.gz`);
@@ -99,16 +117,13 @@ export async function start (port, dbLocation) {
   }
 }
 
-export function stop () {
+/**
+ * Stop the server
+ * @returns {Promise<void>} Promise with no data
+ */
+export async function stopServer () {
   if (server) {
-    return new Promise ((resolve) => {
-      server.close (() => {
-        db.close ()
-          .then (() => { resolve (); })
-          .catch (() => { resolve (); });
-      });
-    });
-  } else {
-    return Promise.resolve ();
+    await server.close ();
+    await closeDatabase ();
   }
 }
