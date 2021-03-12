@@ -21,12 +21,12 @@ export function initRoutes (app) {
   app.post ('/api/register', register);
   app.get ('/api/profile', isAuthenticated, getProfile);
   app.post ('/api/profile', isAuthenticated, updateProfile);
-  app.get ('/api/polls', getPolls);
   app.get ('/api/polls/:key', isAuthenticated, getPoll);
-  app.post ('/api/polls', isAuthenticated, createPoll);
-  app.post ('/api/polls/:key', isAuthenticated, updatePoll);
-  app.delete ('/api/polls/:key', isAuthenticated, deletePoll);
+  app.get ('/api/polls', getPolls);
   app.post ('/api/polls/:key/votes/:choice', vote);
+  app.post ('/api/polls/:key', isAuthenticated, updatePoll);
+  app.post ('/api/polls', isAuthenticated, createPoll);
+  app.delete ('/api/polls/:key', isAuthenticated, deletePoll);
 }
 
 /**
@@ -37,7 +37,6 @@ export function initRoutes (app) {
  * @returns {void}
  */
 function isAuthenticated (req, res, next) {
-  console.log ('isAuthenticated', req.path);
   if (req.isAuthenticated ()) {
     next ();
   } else {

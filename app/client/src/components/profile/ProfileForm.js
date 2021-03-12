@@ -28,8 +28,8 @@ export const ProfileForm = ({ fields: { name, theme }, onChange, onValidate, onS
           info='Pick a theme you like'
           onChange={onChange}
         >
-          <option key='base' value='base'>Cyan</option>
-          <option key='gray' value='gray'>Gray</option>
+          <option key='light' value='light'>Light</option>
+          <option key='dark' value='dark'>Dark</option>
         </FieldSelect>
 
         <GridBoxElement span={12} center>

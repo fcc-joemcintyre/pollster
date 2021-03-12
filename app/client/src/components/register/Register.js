@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { createField, useFields } from 'use-fields';
 import { MessageBox } from 'uikit';
 import { isEmail, isPassword } from 'validators';
-import { register, login } from '../../store/userActions';
+import { useLogin, useRegister } from '../../data/useAuth';
 import { RegisterForm } from './RegisterForm';
 
 function isPasswordChars (value) {
@@ -21,37 +20,36 @@ function isMatch (value, fields) {
   return result;
 }
 
-export const Register = () => {
-  const initialFields = useMemo (() => [
-    createField ('email', '', true, [isEmail]),
-    createField ('name', '', true),
-    createField ('password', '', true, [isPassword, isPasswordChars]),
-    createField ('verifyPassword', '', true, [isPassword, isPasswordChars]),
-  ], []);
+const initialFields = [
+  createField ('email', '', true, [isEmail]),
+  createField ('name', '', true),
+  createField ('password', '', true, [isPassword, isPasswordChars]),
+  createField ('verifyPassword', '', true, [isPassword, isPasswordChars]),
+];
 
+export const Register = () => {
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields, [isMatch]);
   const [mb, setMB] = useState (null);
   const history = useHistory ();
-  const dispatch = useDispatch ();
+  const login = useLogin ();
+  const register = useRegister ();
 
-  async function onSubmit (e) {
+  function onSubmit (e) {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
       setMB ({ content: 'Registering ...' });
-      try {
-        const { email, name, password } = getValues ();
-        await dispatch (register (email, name, password));
-        try {
+      const { email, name, password } = getValues ();
+      register.mutate ({ email, name, password }, {
+        onSuccess: () => {
           setMB ({ content: 'Registered, logging in ...' });
-          await dispatch (login (email, password));
-          history.replace ('/');
-        } catch (err) {
-          setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error logging in' });
-        }
-      } catch (err) {
-        setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error registering' });
-      }
+          login.mutate ({ email, password }, {
+            onSuccess: () => history.replace ('/'),
+            onError: () => setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error logging in' }),
+          });
+        },
+        onError: () => setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error registering' }),
+      });
     }
     return errors;
   }

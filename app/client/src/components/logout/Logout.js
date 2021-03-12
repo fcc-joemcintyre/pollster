@@ -1,27 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { PageContent, Text } from 'uikit';
-import { logout } from '../../store/userActions';
+import { useLogout } from '../../data/useAuth';
 
 export const Logout = () => {
-  const [working, setWorking] = useState (true);
-  const dispatch = useDispatch ();
-  const authenticated = useSelector ((state) => state.user.authenticated);
+  const logout = useLogout ();
 
-  useEffect (() => {
-    (async () => {
-      await dispatch (logout ());
-      setWorking (false);
-    }) ();
-  }, [dispatch]);
+  useEffect (() => logout.mutate ({}), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <PageContent>
-      {working ? (
+      { logout.isLoading ? (
         <Text as='p' mt='30px' center>
           Logging out ...
         </Text>
-      ) : authenticated ? (
+      ) : logout.isError ? (
         <Text as='p' mt='30px' center>
           Logging out did not complete, please retry or close your browser.
         </Text>

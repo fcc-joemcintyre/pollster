@@ -4,7 +4,11 @@ import { validatePoll } from './validators.js';
 
 export async function getPolls (req, res) {
   console.log ('INFO getPolls');
-  const t = await db.getPolls ();
+  const q = {};
+  if (req.query.own === '') {
+    q.creator = req.user.key;
+  }
+  const t = await db.getPolls (q);
   if (t.status === 200) {
     res.status (200).json (t.polls);
   } else {
@@ -14,8 +18,14 @@ export async function getPolls (req, res) {
 }
 
 export async function getPoll (req, res) {
-  console.log ('INFO getPoll', req.params.key);
-  const t = await db.getPoll (req.params.key);
+  console.log ('INFO getPoll');
+  const key = Number (req.params.key);
+  if (Number.isNaN (key)) {
+    console.log ('ERROR getPoll (400) invalid key', key);
+    res.status (400).json ({});
+    return;
+  }
+  const t = await db.getPoll (key);
   if (t.status === 200) {
     res.status (200).json (t.poll);
   } else if (t.status === 404) {

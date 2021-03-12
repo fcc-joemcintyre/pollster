@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, Button, Flex, PageContent, Text } from 'uikit';
-import { vote } from '../../store/pollsActions';
+import { usePoll, useVote } from '../../data/usePolls';
 import { PollItem } from './PollItem';
 
 export const Poll = () => {
@@ -11,22 +10,26 @@ export const Poll = () => {
   const history = useHistory ();
   const params = useParams ();
   const key = Number (params.key);
-  const poll = useSelector ((state) => state.polls.find ((a) => (a.key === key)));
-  const dispatch = useDispatch ();
+  const { data: poll, isLoading, isError } = usePoll (key);
+  const vote = useVote ();
 
-  async function handleVote () {
+  function handleVote () {
     if (selected !== -1) {
-      try {
-        const choice = poll.choices[selected];
-        await dispatch (vote (poll.key, choice.text));
-        setVoted (true);
-      } catch (err) {
-        // no op
-      }
+      const choice = poll.choices[selected];
+      vote.mutate ({ key: poll.key, choice: choice.text }, {
+        onSuccess: () => setVoted (true),
+      });
     }
   }
 
-  if (!poll) {
+  if (isLoading) {
+    return (
+      <PageContent>
+        <span>Loading...</span>
+      </PageContent>
+    );
+  }
+  if (isError) {
     return (
       <PageContent>
         <form

@@ -27,11 +27,12 @@ export function initPolls (db) {
 
 /**
  * Get all pools
+ * @param {Object} q Query
  * @returns {Promise<PollArrayResult>} Array of polls
  */
-export async function getPolls () {
+export async function getPolls (q) {
   try {
-    const polls = await c.find ().toArray ();
+    const polls = await c.find (q).toArray ();
     return ({ status: 200, polls });
   } catch (err) {
     return ({ status: 500, polls: null });
@@ -63,7 +64,7 @@ export async function getPoll (key) {
  * @returns {Promise<PollResult>} Created book
  */
 export async function createPoll (creator, title, choices) {
-  const key = getNextSequence ('polls');
+  const key = await getNextSequence ('polls');
   const t = await c.insertOne (
     { key, creator, title, choices },
     { w: 1 }

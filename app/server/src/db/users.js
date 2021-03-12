@@ -46,7 +46,7 @@ export async function findUserByEmail (email) {
 export async function registerUser (email, password) {
   const hash = createHash (password);
   try {
-    const key = getNextSequence ('users');
+    const key = await getNextSequence ('users');
     const t = await c.insertOne (
       { key, email: '', name: '', theme: 'light', hash: hash.hash, salt: hash.salt },
       { w: 1 },

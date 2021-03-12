@@ -1,17 +1,31 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
 import { Box, Divider, PageContent, Pagination, Text } from 'uikit';
-import { Login, Register } from '../user';
+import { useAuth } from '../../data/useAuth';
+import { usePolls } from '../../data/usePolls';
 import { PollList } from './PollList';
 
 export const Home = () => {
   const [first, setFirst] = useState (0);
   const [current, setCurrent] = useState (0);
-  const history = useHistory ();
-  const location = useLocation ();
-  const authenticated = useSelector ((state) => state.user.authenticated);
-  const polls = useSelector ((state) => state.polls);
+  const auth = useAuth ();
+  const polls = usePolls ();
+
+  if (auth.isLoading || polls.isLoading) {
+    return (
+      <PageContent>
+        <span>Loading...</span>
+      </PageContent>
+    );
+  }
+  if (auth.isError || polls.isError) {
+    return (
+      <PageContent>
+        <span>Error loading page...</span>
+      </PageContent>
+    );
+  }
+
+  const authenticated = auth.isSuccess && auth.data.key > 0;
 
   return (
     <PageContent>
@@ -28,14 +42,14 @@ export const Home = () => {
         </>
       )}
       <Text as='h1' center>Active Polls</Text>
-      { polls.length === 0 ? (
+      { polls.data.length === 0 ? (
         <Text as='p'>There are no active polls - be the first to add a new one!</Text>
       ) : (
         <>
-          <PollList polls={polls} current={current} pageItems={10} />
+          <PollList polls={polls.data} current={current} pageItems={10} />
           <Pagination
             mt='12px'
-            items={polls.length}
+            items={polls.data.length}
             pageItems={10}
             visible={10}
             first={first}
@@ -46,18 +60,6 @@ export const Home = () => {
             }}
           />
         </>
-      )}
-      { location.search === '?login2' && (
-        <Login
-          location={history.location}
-          onCancel={() => history.push ('/')}
-        />
-      )}
-      { location.search === '?register2' && (
-        <Register
-          history={history}
-          onCancel={() => history.push ('/')}
-        />
       )}
     </PageContent>
   );

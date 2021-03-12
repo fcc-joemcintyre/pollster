@@ -15,7 +15,7 @@ export const About = () => (
         Technologies used include:
       </Text>
       <Box as='ul'>
-        <Text as='li'>Client: React (17.x), Styled Components, React Redux, and React Router</Text>
+        <Text as='li'>Client: React (17.x), Styled Components, React Query, and React Router</Text>
         <Text as='li'>Server: Node (14.x) using Express and Passport</Text>
         <Text as='li'>Database: Mongo (4.x)</Text>
         <Text as='li'>Languages: Javascript (ES2020+), CSS</Text>

@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { createField, useFields } from 'use-fields';
 import { Box, MessageBox, PageContent, Text } from 'uikit';
-import { addPoll, updatePoll, deletePoll } from '../../store/pollsActions';
+import { useAddPoll, useDeletePoll, usePollsOwn, useUpdatePoll } from '../../data/usePolls';
 import { ManagePollSelect } from './ManagePollSelect';
 import { ManageForm } from './ManageForm';
 
@@ -17,8 +16,10 @@ export const Manage = () => {
     useFields (initialFields);
   const [selected, setSelected] = useState (0);
   const [mb, setMB] = useState (null);
-  const dispatch = useDispatch ();
-  const polls = useSelector ((state) => state.polls.filter ((poll) => (poll.creator === state.user.key)));
+  const { data: polls, isLoading, isError, isSuccess } = usePollsOwn ();
+  const addPoll = useAddPoll ();
+  const deletePoll = useDeletePoll ();
+  const updatePoll = useUpdatePoll ();
 
   function onResetPoll () {
     setSelected (0);
@@ -40,40 +41,52 @@ export const Manage = () => {
     }
   }
 
-  async function onSubmitPoll (e) {
+  function onSubmitPoll (e) {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
-      try {
-        setMB ({ content: 'Submitting poll...' });
-        const { title, ...rest } = getValues ();
-        const choices = Object.values (rest).filter ((a) => (a !== ''));
-        if (selected === '') {
-          await dispatch (addPoll (title, choices));
-          const content = 'New poll has been added.';
-          setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
-        } else {
-          await dispatch (updatePoll (selected, title, choices));
-          const content = 'Poll has been updated.';
-          setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
-        }
-      } catch (err) {
-        const content = 'Error submitting poll, try again.';
-        setMB ({ title: 'Error', content, actions: ['Close'], closeAction: 'Close' });
+      setMB ({ content: 'Submitting poll...' });
+      const { title, ...rest } = getValues ();
+      const choices = Object.values (rest).filter ((a) => (a !== ''));
+      if (selected === 0) {
+        addPoll.mutate ({ title, choices }, {
+          onSuccess: () => {
+            const content = 'New poll has been added.';
+            setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
+          },
+          onError: () => {
+            const content = 'Error creating new poll.';
+            setMB ({ content, actions: ['Close'], closeAction: 'Close' });
+          },
+        });
+      } else {
+        updatePoll.mutate ({ key: selected, title, choices }, {
+          onSuccess: () => {
+            const content = 'Poll has been updated.';
+            setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
+          },
+          onError: () => {
+            const content = 'Error updating poll.';
+            setMB ({ content, actions: ['Close'], closeAction: 'Close' });
+          },
+        });
       }
     }
     return errors;
   }
 
-  async function onDeletePoll () {
-    try {
-      setMB ({ content: 'Deleting poll...' });
-      await dispatch (deletePoll (selected));
-      setMB ({ content: 'Poll deleted', actions: ['OK'], closeAction: 'OK', data: 'reset' });
-    } catch (err) {
-      const content = 'Error deleting poll, refresh and try again.';
-      setMB ({ title: 'Error', content, actions: ['Close'], closeAction: 'Close' });
-    }
+  function onDeletePoll () {
+    setMB ({ content: 'Deleting poll...' });
+    deletePoll.mutate ({ key: selected }, {
+      onSuccess: () => {
+        const content = 'Poll has been deleted.';
+        setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
+      },
+      onError: () => {
+        const content = 'Error deleting poll.';
+        setMB ({ content, actions: ['Close'], closeAction: 'Close' });
+      },
+    });
   }
 
   function onCloseModal (action, data) {
@@ -98,23 +111,33 @@ export const Manage = () => {
   return (
     <PageContent>
       <Text as='h1' center>Manage Polls</Text>
-      <Box center>
-        <ManagePollSelect
-          polls={polls}
-          selected={selected}
-          onSelect={onSelectPoll}
-        />
-      </Box>
-      <Box center>
-        <ManageForm
-          action={selected === '' ? 'add' : 'edit'}
-          fields={fields}
-          onChange={onChange}
-          onValidate={onValidate}
-          onSubmit={onSubmitPoll}
-          onDelete={onDeletePoll}
-        />
-      </Box>
+      { isLoading && (
+        <Text>Loading ...</Text>
+      )}
+      { isError && (
+        <Text>Error loading polls</Text>
+      )}
+      { isSuccess && (
+        <>
+          <Box center>
+            <ManagePollSelect
+              polls={polls}
+              selected={selected}
+              onSelect={onSelectPoll}
+            />
+          </Box>
+          <Box center>
+            <ManageForm
+              action={selected === '' ? 'add' : 'edit'}
+              fields={fields}
+              onChange={onChange}
+              onValidate={onValidate}
+              onSubmit={onSubmitPoll}
+              onDelete={onDeletePoll}
+            />
+          </Box>
+        </>
+      )}
       { mb && (
         <MessageBox
           title={mb.title}

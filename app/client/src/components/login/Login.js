@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { createField, useFields } from 'use-fields';
 import { MessageBox } from 'uikit';
 import { isEmail, isPassword } from 'validators';
-import { login } from '../../store/userActions';
+import { useLogin } from '../../data/useAuth';
 import { LoginForm } from './LoginForm';
 
 const initialFields = [
@@ -15,21 +14,19 @@ const initialFields = [
 export const Login = ({ onLogin, onCancel }) => {
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields);
   const [mb, setMB] = useState (null);
-  const dispatch = useDispatch ();
+  const login = useLogin ();
 
-  async function onSubmit (e) {
+  function onSubmit (e) {
     e.preventDefault ();
 
     const errors = validateAll ();
     if (!errors) {
       setMB ({ content: 'Logging in' });
-      try {
-        const { email, password } = getValues ();
-        await dispatch (login (email, password));
-        onLogin ();
-      } catch (err) {
-        setMB ({ actions: ['Ok'], closeAction: 'Ok', content: 'Error logging in' });
-      }
+      const { email, password } = getValues ();
+      login.mutate ({ email, password }, {
+        onSuccess: () => onLogin (),
+        onError: setMB ({ actions: ['Ok'], closeAction: 'Ok', content: 'Error logging in' }),
+      });
     }
     return errors;
   }

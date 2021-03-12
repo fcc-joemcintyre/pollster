@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Flex, FlexItem, MenuBar, MenuDropdown, MenuItem, MenuSeparator, MenuSubmenu } from 'uikit';
-import { Login } from '../user';
+import { useAuth } from '../../data/useAuth';
+import { Login } from '../login';
 
 const StyledMenuDropdown = styled (MenuDropdown)`
   display: inline-block;
@@ -13,9 +13,10 @@ const StyledMenuDropdown = styled (MenuDropdown)`
 `;
 
 export const Nav = ({ menu }) => {
+  const query = useAuth ();
   const [login, setLogin] = useState (false);
   const [innerWidth, setInnerWidth] = useState (window.innerWidth);
-  const authenticated = useSelector ((state) => state.user.authenticated);
+  const authenticated = query.isSuccess && query.data.key !== 0;
 
   useEffect (() => {
     window.addEventListener ('resize', onResize);

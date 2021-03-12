@@ -8,7 +8,7 @@ export const ManagePollSelect = ({ polls, selected, onSelect }) => (
       style={{ width: '100%' }}
       autoFocus
       value={selected}
-      onChange={(e) => { onSelect (e.target.value); }}
+      onChange={(e) => { onSelect (Number (e.target.value)); }}
     >
       <option key='add' value=''>- Add a new poll -</option>
       {polls.map ((poll) => <option key={poll.key} value={poll.key}>{poll.title}</option>)}
@@ -24,6 +24,6 @@ ManagePollSelect.propTypes = {
       votes: PropTypes.number.isRequired,
     })).isRequired,
   })).isRequired,
-  selected: PropTypes.string.isRequired,
+  selected: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
 };
