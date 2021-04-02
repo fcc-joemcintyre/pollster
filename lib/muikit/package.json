@@ -1,0 +1,28 @@
+{
+  "name": "@cygns/muikit",
+  "author": "Joe McIntyre (j_h_mcintyre@yahoo.com)",
+  "description": "Material-UI Components",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/react": "11.1.5",
+    "@emotion/styled": "11.1.5",
+    "@material-ui/core": "5.0.0-alpha.28",
+    "@material-ui/icons": "5.0.0-alpha.28",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "scripts": {
+    "checkjs": "tsc",
+    "lint": "eslint --no-error-on-unmatched-pattern src/**"
+  },
+  "devDependencies": {
+    "@cygns/eslint-config": "5.0.0",
+    "eslint": "7.23.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-react": "7.23.1",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "typescript": "4.2.3"
+  }
+}

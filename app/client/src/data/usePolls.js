@@ -6,56 +6,47 @@ import {
 import { get, post, remove } from './api';
 
 /**
- * @typedef {object} Choice
- * @property {string} text
- * @property {number} votes
- */
-/**
- * @typedef {object} Poll
- * @property {number} key
- * @property {string} title
- * @property {Choice[]} choices
- */
-/**
- * @typedef {object} PollKey
- * @property {number} key
-*/
-/**
- * @typedef {object} PollVote
- * @property {number} key
- * @property {string} choice
+  @typedef { import ('../types/types').Poll} Poll
+  @typedef { import ('../types/types').PollResponse} PollResponse
+
+  @typedef {object} PollKey
+  @property {number} key
+
+  @typedef {object} PollVote
+  @property {number} key
+  @property {string} choice
 */
 
 /**
  * Get polls
- * @returns {QueryObserverResult} query object
+ * @param {boolean} own Own polls (true) or all polls (false)
+ * @param {number} page Pagination page
+ * @param {number} limit Pagination items per page
+ * @returns {QueryObserverResult<PollResponse, any>} query object
  */
-export const usePolls = () => (
-  useQuery ('polls', () => get ('/api/polls'))
-);
-
-/**
- * Get polls for current user
- * @returns {QueryObserverResult} query object
- */
-export const usePollsOwn = () => (
-  useQuery ('pollsOwn', () => get ('/api/polls?own'))
+export const usePolls = (own = false, page = 0, limit = 100) => (
+  useQuery (
+    ['polls', { own, page, limit }],
+    () => get (`/api/polls?own=${own}&page=${page}&limit=${limit}`)
+  )
 );
 
 /**
  * Get poll
  * @param {number} key Poll key
- * @returns {QueryObserverResult} query object
+ * @returns {QueryObserverResult<Poll, any>} query object
  */
 export const usePoll = (key) => (
-  useQuery (['polls', { key }], () => get (`/api/polls/${key}`))
+  useQuery (['polls', { key }], () => get (`/api/polls/${key}`), {
+    retry: (count, error) => (error.status === 404 ? false : count < 3),
+  })
 );
 
 /**
- * Add a poll
+ * Create a new poll
  * @returns {UseMutationResult} mutation object
  */
-export const useAddPoll = () => {
+export const useCreatePoll = () => {
   const queryClient = useQueryClient ();
   return useMutation (
     (/** @type Poll */ { title, choices }) => post ('/api/polls', { title, choices }),
@@ -109,7 +100,7 @@ export const useDeletePoll = () => {
 export const useVote = () => {
   const queryClient = useQueryClient ();
   return useMutation (
-    (/** @type PollVote */ { key, choice }) => post (`/api/polls/${key}/votes/${choice}`),
+    (/** @type PollVote */ { key, choice }) => post (`/api/polls/${key}/votes/${choice}`, {}),
     {
       onSuccess: () => {
         queryClient.invalidateQueries (['polls']);

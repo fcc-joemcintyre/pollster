@@ -1,2 +1,2 @@
-/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
-import 'jest-styled-components';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'jest-emotion';

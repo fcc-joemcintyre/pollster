@@ -1,19 +1,30 @@
+// @ts-check
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { createField, useFields } from 'use-fields';
-import { MessageBox } from 'uikit';
-import { isEmail, isPassword } from 'validators';
+import { createField, useFields } from '@cygns/use-fields';
+import { GenDialog } from '@cygns/muikit';
+import { isEmail, isPassword } from '@cygns/validators';
 import { useLogin } from '../../data/useAuth';
 import { LoginForm } from './LoginForm';
+
+/**
+  @typedef {Object} Props
+  @property {function} onLogin
+  @property {function} onClose
+*/
 
 const initialFields = [
   createField ('email', '', true, [isEmail]),
   createField ('password', '', true, [isPassword]),
 ];
 
-export const Login = ({ onLogin, onCancel }) => {
+/**
+ * Login dialog
+ * @param {Props} param0 Props
+ * @returns {JSX.Element} Component
+ */
+export const Login = ({ onLogin, onClose }) => {
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields);
-  const [mb, setMB] = useState (null);
+  const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
   const login = useLogin ();
 
   function onSubmit (e) {
@@ -21,18 +32,22 @@ export const Login = ({ onLogin, onCancel }) => {
 
     const errors = validateAll ();
     if (!errors) {
-      setMB ({ content: 'Logging in' });
+      setDialog (<GenDialog>Logging in</GenDialog>);
       const { email, password } = getValues ();
       login.mutate ({ email, password }, {
         onSuccess: () => onLogin (),
-        onError: setMB ({ actions: ['Ok'], closeAction: 'Ok', content: 'Error logging in' }),
+        onError: () => setDialog (
+          <GenDialog actions={['Close']} onClose={onCloseDialog}>
+            Error logging in
+          </GenDialog>
+        ),
       });
     }
     return errors;
   }
 
-  function onCloseModal () {
-    setMB (null);
+  function onCloseDialog () {
+    setDialog (null);
   }
 
   return (
@@ -42,21 +57,9 @@ export const Login = ({ onLogin, onCancel }) => {
         onChange={onChange}
         onValidate={onValidate}
         onSubmit={onSubmit}
-        onCancel={onCancel}
+        onCancel={onClose}
       />
-      { mb && (
-        <MessageBox
-          actions={mb.actions}
-          closeAction={mb.closeAction}
-          content={mb.content}
-          onClose={onCloseModal}
-        />
-      )}
+      {dialog}
     </>
   );
-};
-
-Login.propTypes = {
-  onLogin: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
 };

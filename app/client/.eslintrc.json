@@ -5,14 +5,12 @@
   },
   "rules": {
     "react/jsx-uses-react": "off",
+    "react/prop-types": "off",
     "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "import/resolver": {
-      "node": {},
-      "webpack": {
-        "config": "webpack.config.js"
-      }
+      "node": {}
     }
   }
 }

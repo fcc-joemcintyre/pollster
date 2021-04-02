@@ -1,3 +1,4 @@
+// @ts-check
 import { Poll } from './Poll';
 import { PollItem } from './PollItem';
 

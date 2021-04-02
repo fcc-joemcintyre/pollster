@@ -1,51 +1,49 @@
+// @ts-check
 import { useState } from 'react';
-import { MessageBox } from 'uikit';
+import { Typography } from '@material-ui/core';
+import { GenDialog } from '@cygns/muikit';
 import { useProfile, useUpdateProfile } from '../../data/useProfile';
+import { PageContent } from '../util';
 import { ProfileController } from './ProfileController';
 
 export const Profile = () => {
-  const query = useProfile ();
+  const { data: profile, isLoading, isError } = useProfile ();
   const updateProfile = useUpdateProfile ();
-  const [mb, setMB] = useState (null);
-
-  let message;
-  if (query.isLoading) {
-    message = 'Loading';
-  }
-  if (query.isError) {
-    message = 'Error loading profile';
-  }
-  if (message) {
-    return <span>{message}</span>;
-  }
+  const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
 
   function onSave (name, theme) {
-    setMB ({ content: 'Updating profile ...' });
+    setDialog (<GenDialog>Updating profile ...</GenDialog>);
     updateProfile.mutate ({ name, theme }, {
-      onSuccess: () => setMB ({ actions: ['Ok'], closeAction: 'Ok', content: 'Profile saved' }),
-      onError: () => setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error saving profile' }),
+      onSuccess: () => setDialog (
+        <GenDialog actions={['Ok']} onClose={onClose}>Profile saved</GenDialog>
+      ),
+      onError: () => setDialog (
+        <GenDialog actions={['Close']} onClose={onClose}>Error saving profile</GenDialog>
+      ),
     });
   }
 
-  function onCloseModal () {
-    setMB (null);
+  function onClose () {
+    setDialog (null);
   }
 
   return (
-    <>
-      <ProfileController
-        name={query.data.name}
-        theme={query.data.theme}
-        onSave={onSave}
-      />
-      { mb && (
-        <MessageBox
-          actions={mb.actions}
-          closeAction={mb.closeAction}
-          content={mb.content}
-          onClose={onCloseModal}
+    <PageContent>
+      <Typography variant='h1' textAlign='center' gutterBottom>
+        Profile
+      </Typography>
+      { isLoading ? (
+        <Typography>Loading...</Typography>
+      ) : (isError || !profile) ? (
+        <Typography>Error loading your profile</Typography>
+      ) : (
+        <ProfileController
+          name={profile.name}
+          theme={profile.theme}
+          onSave={onSave}
         />
       )}
-    </>
+      {dialog}
+    </PageContent>
   );
 };

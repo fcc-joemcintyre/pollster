@@ -4,13 +4,20 @@ import { validatePoll } from './validators.js';
 
 export async function getPolls (req, res) {
   console.log ('INFO getPolls');
+  const page = req.query.page ? Number (req.query.page) : 0;
+  const limit = req.query.limit ? Number (req.query.limit) : 100;
+  if (Number.isNaN (page) || Number.isNaN (limit)) {
+    console.log ('ERROR getPolls (400) Invalid page or limit');
+    res.status (400).json ({});
+    return;
+  }
   const q = {};
-  if (req.query.own === '') {
+  if (req.query.own === 'true') {
     q.creator = req.user.key;
   }
-  const t = await db.getPolls (q);
+  const t = await db.getPolls (q, page * limit, limit);
   if (t.status === 200) {
-    res.status (200).json (t.polls);
+    res.status (200).json ({ page, count: t.count, polls: t.polls });
   } else {
     console.log (`ERROR getPolls (${t.status})`);
     res.status (t.status).json ({});

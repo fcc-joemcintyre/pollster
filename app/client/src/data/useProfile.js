@@ -6,14 +6,14 @@ import {
 import { get, post } from './api';
 
 /**
- * @typedef {object} Profile
- * @property {string} name
- * @property {string} theme
- */
+  @typedef {object} Profile
+  @property {string} name
+  @property {string} theme
+*/
 
 /**
  * Get profile
- * @returns {QueryObserverResult} query object
+ * @returns {QueryObserverResult<Profile, any>} query object
  */
 export const useProfile = () => (
   useQuery ('profile', () => get ('/api/profile'))

@@ -1,62 +1,35 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// @ts-check
 import { useHistory } from 'react-router-dom';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 
-export const PollList = ({ polls, current, pageItems }) => {
+/**
+  @typedef { import ('../../types/types').Poll} Poll
+
+  @typedef {Object} Props
+  @property {Poll[]} polls
+*/
+
+/**
+ * List of polls
+ * @param {Props} param0 Props
+ * @returns {JSX.Element} React component
+ */
+export const PollList = ({ polls }) => {
   const history = useHistory ();
-  const end = Math.min (polls.length, (current + 1) * pageItems);
-  const result = [];
-  for (let i = (current * pageItems); i < end; i ++) {
-    const poll = polls[i];
-    const totalVotes = poll.choices.reduce ((a, b) => a + b.votes, 0);
-    result.push (
-      <PollItem
-        key={poll.key}
-        onClick={() => { history.push (`/polls/${poll.key}`); }}
-      >
-        <Title>{poll.title}</Title>
-        <Votes>{totalVotes} votes</Votes>
-      </PollItem>
-    );
-  }
-  return result;
+  return (
+    <List component='nav' aria-label='polls'>
+      { polls.map ((a) => (
+        <ListItem
+          key={a.key}
+          button
+          onClick={() => { history.push (`/polls/${a.key}`); }}
+        >
+          <ListItemText
+            primary={a.title}
+            secondary={`${a.choices.reduce ((acc, b) => acc + b.votes, 0)} votes`}
+          />
+        </ListItem>
+      ))}
+    </List>
+  );
 };
-
-PollList.propTypes = {
-  polls: PropTypes.arrayOf (PropTypes.shape ({
-    key: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    choices: PropTypes.arrayOf (PropTypes.shape ({
-      votes: PropTypes.number.isRequired,
-    })).isRequired,
-  })).isRequired,
-  current: PropTypes.number.isRequired,
-  pageItems: PropTypes.number.isRequired,
-};
-
-const PollItem = styled.div`
-  display: flex;
-  font-family: 'Lato', sans-serif;
-  padding: 8px;
-  cursor: pointer;
-
-  &:nth-child(even) {
-    background-color: ${(props) => props.theme.colorRowBgEven || '#F0F8FF'};
-  }
-  &:nth-child(odd) {
-    background-color: ${(props) => props.theme.colorRowBgOdd || '#FFFFF0'};
-  }
-  &:hover {
-    border: 1px solid ${(props) => props.theme.colorRowHoverBorder || '#0000F8'};
-  }
-`;
-
-const Title = styled.div`
-  flex: 1 1;
-}`;
-
-const Votes = styled.div`
-  flex: 0 0;
-  white-space: nowrap;
-  text-align: right;
-}`;

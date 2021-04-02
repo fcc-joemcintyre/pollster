@@ -3,11 +3,11 @@ import { getProfile, login, logout, register, updateProfile, verifyLogin } from 
 import { createPoll, deletePoll, getPoll, getPolls, updatePoll, vote } from './listener/app.js';
 
 /**
- * @typedef { import ('express').Application} Application
- * @typedef { import ('express').Request} Request
- * @typedef { import ('express').Response} Response
- * @typedef { import ('express').NextFunction} NextFunction
- */
+  @typedef { import ('express').Application} Application
+  @typedef { import ('express').Request} Request
+  @typedef { import ('express').Response} Response
+  @typedef { import ('express').NextFunction} NextFunction
+*/
 
 /**
  * Initialize routes.
@@ -21,7 +21,7 @@ export function initRoutes (app) {
   app.post ('/api/register', register);
   app.get ('/api/profile', isAuthenticated, getProfile);
   app.post ('/api/profile', isAuthenticated, updateProfile);
-  app.get ('/api/polls/:key', isAuthenticated, getPoll);
+  app.get ('/api/polls/:key', getPoll);
   app.get ('/api/polls', getPolls);
   app.post ('/api/polls/:key/votes/:choice', vote);
   app.post ('/api/polls/:key', isAuthenticated, updatePoll);

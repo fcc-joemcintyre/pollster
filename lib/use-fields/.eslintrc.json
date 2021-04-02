@@ -1,0 +1,11 @@
+{
+  "extends": "@cygns",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "import/extensions": ["error", "ignorePackages", {
+      "js": "always"
+    }]
+  }
+}

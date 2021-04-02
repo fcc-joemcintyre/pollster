@@ -2,16 +2,14 @@
 import { getNextSequence } from './counters.js';
 
 /**
- * @typedef { import ('mongodb').Collection} mongodb.Collection
- * @typedef { import ('mongodb').Db} mongodb.Db
- */
+  @typedef { import ('mongodb').Collection} mongodb.Collection
+  @typedef { import ('mongodb').Db} mongodb.Db
 
-/**
- * @typedef { import ('../types/types').Poll} Poll
- * @typedef { import ('../types/types').PollChoice} PollChoice
- * @typedef { import ('../types/types').PollResult} PollResult
- * @typedef { import ('../types/types').PollArrayResult} PollArrayResult
- */
+  @typedef { import ('../types/app').Poll} Poll
+  @typedef { import ('../types/app').PollChoice} PollChoice
+  @typedef { import ('../types/app').PollResult} PollResult
+  @typedef { import ('../types/app').PollArrayResult} PollArrayResult
+*/
 
 /** @type mongodb.Collection */
 let c;
@@ -28,14 +26,18 @@ export function initPolls (db) {
 /**
  * Get all pools
  * @param {Object} q Query
+ * @param {number} offset Pagination offset
+ * @param {number} limit Pagination limit
  * @returns {Promise<PollArrayResult>} Array of polls
  */
-export async function getPolls (q) {
+export async function getPolls (q, offset, limit) {
   try {
-    const polls = await c.find (q).toArray ();
-    return ({ status: 200, polls });
+    const t = c.find (q);
+    const count = await t.count ();
+    const polls = await t.skip (offset).limit (limit).toArray ();
+    return ({ status: 200, count, polls });
   } catch (err) {
-    return ({ status: 500, polls: null });
+    return ({ status: 500, count: 0 });
   }
 }
 
@@ -52,7 +54,7 @@ export async function getPoll (key) {
       poll,
     });
   } catch (err) {
-    return ({ status: 500, poll: null });
+    return ({ status: 500 });
   }
 }
 
@@ -67,7 +69,6 @@ export async function createPoll (creator, title, choices) {
   const key = await getNextSequence ('polls');
   const t = await c.insertOne (
     { key, creator, title, choices },
-    { w: 1 }
   );
   return ({
     status: t.ops[0] ? 200 : 500,
@@ -102,9 +103,9 @@ export async function updatePoll (key, title, choices) {
 export function removePoll (key) {
   try {
     c.deleteOne ({ key });
-    return { status: 200, poll: null };
+    return { status: 200 };
   } catch (err) {
-    return { status: 404, poll: null };
+    return { status: 404 };
   }
 }
 

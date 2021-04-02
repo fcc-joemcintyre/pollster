@@ -4,10 +4,10 @@ import * as db from '../db/users.js';
 import { validateLogin, validateRegister, validateProfile } from './validators.js';
 
 /**
- * @typedef { import ('express').Request} Request
- * @typedef { import ('express').Response} Response
- * @typedef { import ('express').NextFunction} NextFunction
- */
+  @typedef { import ('express').Request} Request
+  @typedef { import ('express').Response} Response
+  @typedef { import ('express').NextFunction} NextFunction
+*/
 
 /**
  * Login, authenticating user and creating a session
@@ -92,7 +92,8 @@ export async function register (req, res) {
     console.log ('ERROR register (400) invalid body', validateRegister.errors);
     res.status (400).json ({});
   } else {
-    const t = await db.registerUser (req.body.email, req.body.password);
+    const { email, name, password } = req.body;
+    const t = await db.registerUser (email, name, password);
     if (t.status === 200) {
       console.log ('INFO register ok', req.body.email);
       res.status (200).json ({});
@@ -113,7 +114,7 @@ export async function register (req, res) {
 export async function getProfile (req, res) {
   console.log ('INFO getProfile');
   const t = await db.getProfile (req.user.key);
-  if (t.status === 200) {
+  if (t.status === 200 && t.user) {
     const { name, theme } = t.user;
     res.status (200).json ({ name, theme });
   } else {

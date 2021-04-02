@@ -16,7 +16,7 @@ export function initAuth () {
   passport.use (new Strategy (options, async (email, password, callback) => {
     try {
       const t = await findUserByEmail (email);
-      if (t.status !== 200) {
+      if (t.status !== 200 || !t.user) {
         console.log ('ERROR auth (404)');
         return callback (null, false);
       }

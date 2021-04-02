@@ -6,21 +6,21 @@ import {
 import { get, post } from './api';
 
 /**
- * @typedef {object} Register
- * @property {string} email
- * @property {string} name
- * @property {string} password
- */
+  @typedef { import ('../types/types').AuthResponse} AuthResponse
 
-/**
- * @typedef {object} Login
- * @property {string} email
- * @property {string} password
- */
+  @typedef {object} Register
+  @property {string} email
+  @property {string} name
+  @property {string} password
+
+  @typedef {object} Login
+  @property {string} email
+  @property {string} password
+*/
 
 /**
  * Get authentication status
- * @returns {QueryObserverResult} query object
+ * @returns {QueryObserverResult<AuthResponse>} query object
  */
 export const useAuth = () => (
   useQuery ('auth', () => get ('/api/verifylogin'), { staleTime: Infinity })
@@ -32,7 +32,7 @@ export const useAuth = () => (
  */
 export const useRegister = () => (
   useMutation ((/** @type Register */ { email, name, password }) => (
-    post ('/api/profile', { email, name, password })
+    post ('/api/register', { email, name, password })
   ))
 );
 

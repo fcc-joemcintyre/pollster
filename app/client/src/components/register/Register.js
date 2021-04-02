@@ -1,8 +1,9 @@
+// @ts-check
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { createField, useFields } from 'use-fields';
-import { MessageBox } from 'uikit';
-import { isEmail, isPassword } from 'validators';
+import { createField, useFields } from '@cygns/use-fields';
+import { GenDialog } from '@cygns/muikit';
+import { isEmail, isPassword } from '@cygns/validators';
 import { useLogin, useRegister } from '../../data/useAuth';
 import { RegisterForm } from './RegisterForm';
 
@@ -29,7 +30,7 @@ const initialFields = [
 
 export const Register = () => {
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields, [isMatch]);
-  const [mb, setMB] = useState (null);
+  const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
   const history = useHistory ();
   const login = useLogin ();
   const register = useRegister ();
@@ -38,24 +39,24 @@ export const Register = () => {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
-      setMB ({ content: 'Registering ...' });
+      setDialog (<GenDialog>Registering ...</GenDialog>);
       const { email, name, password } = getValues ();
       register.mutate ({ email, name, password }, {
         onSuccess: () => {
-          setMB ({ content: 'Registered, logging in ...' });
+          setDialog (<GenDialog>Registered, logging in ...</GenDialog>);
           login.mutate ({ email, password }, {
             onSuccess: () => history.replace ('/'),
-            onError: () => setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error logging in' }),
+            onError: () => setDialog (<GenDialog actions={['Close']} onClose={onClose}>Error logging in</GenDialog>),
           });
         },
-        onError: () => setMB ({ actions: ['Close'], closeAction: 'Close', content: 'Error registering' }),
+        onError: () => setDialog (<GenDialog actions={['Close']} onClose={onClose}>Error registering</GenDialog>),
       });
     }
     return errors;
   }
 
-  function onCloseModal () {
-    setMB (null);
+  function onClose () {
+    setDialog (null);
   }
 
   return (
@@ -66,14 +67,7 @@ export const Register = () => {
         onValidate={onValidate}
         onSubmit={onSubmit}
       />
-      { mb && (
-        <MessageBox
-          actions={mb.actions}
-          closeAction={mb.closeAction}
-          content={mb.content}
-          onCloseModal={onCloseModal}
-        />
-      )}
+      {dialog}
     </>
   );
 };

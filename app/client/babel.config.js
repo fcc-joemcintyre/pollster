@@ -8,7 +8,6 @@ module.exports = {
           'ios >= 10.3',
           'safari >= 10.1',
         ],
-        node: '14.14.0',
       },
     }],
     ['@babel/preset-react', {
@@ -16,6 +15,6 @@ module.exports = {
     }],
   ],
   plugins: [
-    'babel-plugin-styled-components',
+    '@emotion',
   ],
 };

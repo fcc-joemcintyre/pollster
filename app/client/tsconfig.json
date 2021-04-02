@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "moduleResolution": "node",
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

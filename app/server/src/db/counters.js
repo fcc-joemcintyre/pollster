@@ -1,8 +1,8 @@
 // @ts-check
 /**
- * @typedef { import ('mongodb').Collection} mongodb.Collection
- * @typedef { import ('mongodb').Db} mongodb.Db
- */
+  @typedef { import ('mongodb').Collection} mongodb.Collection
+  @typedef { import ('mongodb').Db} mongodb.Db
+*/
 
 /** @type mongodb.Collection */
 let c;

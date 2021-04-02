@@ -3,14 +3,12 @@ import { createHash } from '../auth/hash.js';
 import { getNextSequence } from './counters.js';
 
 /**
- * @typedef { import ('mongodb').Collection} mongodb.Collection
- * @typedef { import ('mongodb').Db} mongodb.Db
- */
+  @typedef { import ('mongodb').Collection} mongodb.Collection
+  @typedef { import ('mongodb').Db} mongodb.Db
 
-/**
- * @typedef { import ('../types/types').User} User
- * @typedef { import ('../types/types').UserResult} UserResult
- */
+  @typedef { import ('../types/app').User} User
+  @typedef { import ('../types/app').UserResult} UserResult
+*/
 
 /** @type mongodb.Collection */
 let c;
@@ -40,16 +38,16 @@ export async function findUserByEmail (email) {
 /**
  * Register user, creating skeleton user document
  * @param {string} email Email
+ * @param {string} name Name
  * @param {string} password Password
  * @returns {Promise<UserResult>} Result for new user
  */
-export async function registerUser (email, password) {
+export async function registerUser (email, name, password) {
   const hash = createHash (password);
   try {
     const key = await getNextSequence ('users');
     const t = await c.insertOne (
-      { key, email: '', name: '', theme: 'light', hash: hash.hash, salt: hash.salt },
-      { w: 1 },
+      { key, email, name, theme: 'light', hash: hash.hash, salt: hash.salt },
     );
     return ({
       status: t.ops[0] ? 200 : 400,
@@ -58,7 +56,6 @@ export async function registerUser (email, password) {
   } catch (err) {
     return ({
       status: err.code === 11000 ? 409 : 500,
-      user: null,
     });
   }
 }
@@ -71,9 +68,9 @@ export async function registerUser (email, password) {
 export async function deleteUser (key) {
   try {
     await c.deleteOne ({ key });
-    return { status: 200, user: null };
+    return { status: 200 };
   } catch (err) {
-    return { status: 500, user: null };
+    return { status: 500 };
   }
 }
 

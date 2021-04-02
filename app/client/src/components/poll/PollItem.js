@@ -1,66 +1,44 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// @ts-check
+import { Grid, Typography } from '@material-ui/core';
 
-export const PollItem = ({ text, percent, selected, onClick }) => (
-  <Area onClick={onClick}>
-    <Bar percent={percent} selected={selected} />
-    <LeftText>{text}</LeftText>
-    <RightText>{percent}%</RightText>
-  </Area>
+/**
+  @typedef {Object} Props
+  @property {string} text Choice text
+  @property {number=} percent Percentage of votes
+  @property {React.MouseEventHandler=} onClick onClick handler
+  @returns {JSX.Element} Bar component
+*/
+
+/**
+ * Poll item bar
+ * @param {Props} param0 Props
+ * @returns {JSX.Element} Bar component
+ */
+export const PollItem = ({
+  text,
+  percent = 0,
+  onClick = () => { /* no op */ },
+}) => (
+  <Grid
+    container
+    justifyContent='space-between'
+    onClick={onClick}
+    sx={{
+      padding: '4px',
+      '&:nth-of-type(even)': {
+        border: '1px solid #f0f8ff',
+        background: `linear-gradient(to right,#b0c4dE ${percent}%, #f0f8ff ${percent}%)`,
+      },
+      '&:nth-of-type(odd)': {
+        border: '1px solid #fffff0',
+        background: `linear-gradient(to right,#b0c4dE ${percent}%, #fffff0 ${percent}%)`,
+      },
+      '&:hover': {
+        border: '1px solid #0000f8',
+      },
+    }}
+  >
+    <Typography>{text}</Typography>
+    <Typography>{percent}%</Typography>
+  </Grid>
 );
-
-PollItem.propTypes = {
-  text: PropTypes.string,
-  percent: PropTypes.number,
-  selected: PropTypes.bool,
-  onClick: PropTypes.func,
-};
-
-PollItem.defaultProps = {
-  text: '',
-  percent: 0,
-  selected: false,
-  onClick: null,
-};
-
-const Area = styled.div`
-  position: relative;
-  font-family: 'Lato', sans-serif;
-  height: 32px;
-
-  &:nth-child(even) {
-    border: 1px solid ${(props) => props.theme.colorRowBgEven || '#F0F8FF'};
-    background-color: ${(props) => props.theme.colorRowBgEven || '#F0F8FF'};
-  }
-  &:nth-child(odd) {
-    border: 1px solid ${(props) => props.theme.colorRowBgOdd || '#FFFFF0'};
-    background-color: ${(props) => props.theme.colorRowBgOdd || '#FFFFF0'};
-  }
-  &:hover {
-    border: 1px solid ${(props) => props.theme.colorRowHoverBorder || '#0000F8'};
-  }
-`;
-
-const Bar = styled.div`
-  position: absolute;
-  height: 100%;
-  cursor: pointer;
-  width: ${(props) => `${props.percent}%`};
-  transition: width 3s;
-  background-color: ${(props) => props.theme.colorBarFill || '#B0C4DE'};
-`;
-
-const LeftText = styled.div`
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  white-space: nowrap;
-}`;
-
-const RightText = styled.div`
-  position: absolute;
-  top: 8px;
-  right: 0;
-  text-align: right;
-  white-space: nowrap;
-}`;

@@ -1,5 +1,12 @@
-import { Text } from 'uikit';
+// @ts-check
+import { Typography } from '@material-ui/core';
 
+/**
+ * Display 404 message
+ * @returns {JSX.Element} Message component
+ */
 export const NotFound = () => (
-  <Text center>Sorry, could not find that page for you.</Text>
+  <Typography textAlign='center'>
+    Sorry, could not find that page for you.
+  </Typography>
 );

@@ -1,9 +1,9 @@
 // @ts-check
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 /**
- * @typedef { import ('../types/types').THash} THash
- */
+  @typedef { import ('../types/app').Hash} Hash
+*/
 
 /**
  * Following recommendations of NIST for PBDKF2 implementation
@@ -14,7 +14,7 @@ import crypto from 'crypto';
 /**
  * Create a hash and salt for a provided password
  * @param {string} password Password to generate hash from
- * @returns {THash} Hash object
+ * @returns {Hash} Hash object
  */
 export function createHash (password) {
   const salt = crypto.randomBytes (16).toString ('hex');

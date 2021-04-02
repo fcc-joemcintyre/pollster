@@ -1,34 +1,39 @@
-import { Box, LinkExternal, PageContent, Text } from 'uikit';
+// @ts-check
+import { Box, List, ListItem, Typography } from '@material-ui/core';
+import { LinkExternal } from '@cygns/muikit';
+import { PageContent } from '../util';
 
 export const About = () => (
   <PageContent>
-    <Text as='h1' center>About Pollster</Text>
-    <Box center noborder maxw='500px'>
-      <Text as='p'>
+    <Typography variant='h1' textAlign='center' gutterBottom>
+      About Pollster
+    </Typography>
+    <Box maxWidth='500px'>
+      <Typography paragraph>
         Pollster is a poll taking and management application.
-      </Text>
-      <Text as='p'>
-        The <LinkExternal to='https://github.com/fcc-joemcintyre/pollster'>source code</LinkExternal> is
+      </Typography>
+      <Typography paragraph>
+        The <LinkExternal href='https://github.com/fcc-joemcintyre/pollster'>source code</LinkExternal> is
         published on GitHub under a MIT LIcense.
-      </Text>
-      <Text as='p'>
+      </Typography>
+      <Typography>
         Technologies used include:
-      </Text>
-      <Box as='ul'>
-        <Text as='li'>Client: React (17.x), Styled Components, React Query, and React Router</Text>
-        <Text as='li'>Server: Node (14.x) using Express and Passport</Text>
-        <Text as='li'>Database: Mongo (4.x)</Text>
-        <Text as='li'>Languages: Javascript (ES2020+), CSS</Text>
-      </Box>
-      <Text as='p'>
+      </Typography>
+      <List dense>
+        <ListItem>Client: React (17.x), Material-UI, Emotion, React Query, and React Router</ListItem>
+        <ListItem>Server: Node (14.x) using Express and Passport</ListItem>
+        <ListItem>Database: Mongo (4.x)</ListItem>
+        <ListItem>Languages: Javascript (ES2020+), CSS</ListItem>
+      </List>
+      <Typography>
         Thanks to:
-      </Text>
-      <Box as='ul'>
-        <Text as='li'>GitHub (source hosting)</Text>
-        <Text as='li'>Heroku (app hosting)</Text>
-        <Text as='li'>MongoDB Atlas (database hosting)</Text>
-        <Text as='li'>TravisCI (continuous integration testing)</Text>
-      </Box>
+      </Typography>
+      <List dense>
+        <ListItem>GitHub (source hosting)</ListItem>
+        <ListItem>Heroku (app hosting)</ListItem>
+        <ListItem>MongoDB Atlas (database hosting)</ListItem>
+        <ListItem>TravisCI (continuous integration testing)</ListItem>
+      </List>
     </Box>
   </PageContent>
 );

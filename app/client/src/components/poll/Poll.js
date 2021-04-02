@@ -1,6 +1,8 @@
+// @ts-check
 import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Box, Button, Flex, PageContent, Text } from 'uikit';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { PageContent } from '../util';
 import { usePoll, useVote } from '../../data/usePolls';
 import { PollItem } from './PollItem';
 
@@ -8,13 +10,14 @@ export const Poll = () => {
   const [selected, setSelected] = useState (-1);
   const [voted, setVoted] = useState (false);
   const history = useHistory ();
+  /** @type {{ key: string }} */
   const params = useParams ();
   const key = Number (params.key);
   const { data: poll, isLoading, isError } = usePoll (key);
   const vote = useVote ();
 
   function handleVote () {
-    if (selected !== -1) {
+    if (poll && selected !== -1) {
       const choice = poll.choices[selected];
       vote.mutate ({ key: poll.key, choice: choice.text }, {
         onSuccess: () => setVoted (true),
@@ -25,11 +28,11 @@ export const Poll = () => {
   if (isLoading) {
     return (
       <PageContent>
-        <span>Loading...</span>
+        <Typography>Loading...</Typography>
       </PageContent>
     );
   }
-  if (isError) {
+  if (isError || !poll) {
     return (
       <PageContent>
         <form
@@ -38,31 +41,36 @@ export const Poll = () => {
             history.push ('/');
           }}
         >
-          <Text as='p' center>Sorry, could not find that poll for you.</Text>
-          <Flex center mt='16px'>
-            <Button type='submit' center autoFocus>Back to Polls</Button>
-          </Flex>
+          <Typography paragraph textAlign='center'>
+            Sorry, could not find that poll for you.
+          </Typography>
+          <Box m='16px auto 0 auto'>
+            <Button type='submit' autoFocus variant='contained'>
+              Back to Polls
+            </Button>
+          </Box>
         </form>
       </PageContent>
     );
   }
 
-  const totalVotes = poll.choices.reduce ((a, b) => a + b.votes, 0);
+  const votes = poll.choices.reduce ((a, b) => a + b.votes, 0);
   const rows = poll.choices.map ((choice, index) => {
     const text = (index === selected) ? `\u2713 ${choice.text}` : choice.text;
-    let percent = 0;
     if (voted) {
-      if (totalVotes > 0) {
-        percent = Math.floor ((choice.votes / totalVotes) * 100);
-      }
-      return <PollItem key={text} text={text} percent={percent} selected={false} />;
+      return (
+        <PollItem
+          key={text}
+          text={text}
+          percent={votes > 0 ? Math.floor ((choice.votes / votes) * 100) : 0}
+        />
+      );
     } else {
       return (
         <PollItem
           key={text}
           text={text}
-          percent={percent}
-          selected={selected !== -1}
+          percent={0}
           onClick={() => { setSelected (index); }}
         />
       );
@@ -71,34 +79,38 @@ export const Poll = () => {
 
   return (
     <PageContent>
-      <Text as='h1' center>{poll.title}</Text>
+      <Typography variant='h1' textAlign='center'>{poll.title}</Typography>
       <Box mt='20px'>
         {rows}
       </Box>
       { !voted && (
         <Box mt='20px'>
-          <Text as='p' center>
+          <Typography textAlign='center'>
             Select your favorite, the poll results will be shown after you vote.
-          </Text>
+          </Typography>
         </Box>
       )}
-      <Flex center mt='20px' gap='6px'>
+      <Grid container spacing={1} width='100%' mt='1rem' justifyContent='center'>
         { !voted && (
+          <Grid item>
+            <Button
+              type='button'
+              disabled={(selected === -1)}
+              onClick={handleVote}
+            >
+              Vote
+            </Button>
+          </Grid>
+        )}
+        <Grid item>
           <Button
             type='button'
-            disabled={(selected === -1)}
-            onClick={handleVote}
+            onClick={() => { history.push ('/'); }}
           >
-            Vote
+            Back to Polls
           </Button>
-        )}
-        <Button
-          type='button'
-          onClick={() => { history.push ('/'); }}
-        >
-          Back to Polls
-        </Button>
-      </Flex>
+        </Grid>
+      </Grid>
     </PageContent>
   );
 };

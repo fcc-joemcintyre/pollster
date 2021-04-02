@@ -4,14 +4,6 @@ const CompressionPlugin = require ('compression-webpack-plugin');
 const baseDest = path.resolve (__dirname, '../../dist');
 
 module.exports = {
-  resolve: {
-    extensions: ['.js'],
-    alias: {
-      uikit: path.resolve (__dirname, 'libs/uikit'),
-      'use-fields': path.resolve (__dirname, 'libs/use-fields'),
-      validators: path.resolve (__dirname, 'libs/validators'),
-    },
-  },
   entry: {
     app: './src/components/app/index.js',
   },

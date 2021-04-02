@@ -1,134 +1,135 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
-import { Box, Flex, FlexItem, MenuBar, MenuDropdown, MenuItem, MenuSeparator, MenuSubmenu } from 'uikit';
+// @ts-check
+import { useState } from 'react';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { AppBar, Divider, Drawer, IconButton, ListItemText, MenuItem, MenuList, Toolbar, Typography }
+  from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from '../../data/useAuth';
 import { Login } from '../login';
 
-const StyledMenuDropdown = styled (MenuDropdown)`
-  display: inline-block;
-  margin-top: 4px;
-  margin-right: 4px;
-`;
+const unauthItems = [
+  { key: 1, text: 'Home', to: '/', exact: true, when: 0 },
+  { key: 2, text: 'About', to: '/about', exact: true, when: 0 },
+  { key: -1 },
+  { key: 3, text: 'Register', to: '/register', exact: true, when: 0 },
+  { key: 4, text: 'Log in', to: '/login', exact: true, when: 0 },
+];
+const authItems = [
+  { key: 10, text: 'Home', to: '/', exact: true, when: 0 },
+  { key: 11, text: 'Manage', to: '/manage', exact: true, when: 0 },
+  { key: 12, text: 'Results', to: '/results', exact: true, when: 0 },
+  { key: 13, text: 'About', to: '/about', exact: true, when: 0 },
+  { key: 14, text: 'Profile', to: '/profile', exact: true, when: 0 },
+  { key: -10 },
+  { key: 15, text: 'Log out', to: '/logout', exact: true, when: 0 },
+];
 
-export const Nav = ({ menu }) => {
+export const Nav = () => {
   const query = useAuth ();
+  const [drawer, setDrawer] = useState (false);
   const [login, setLogin] = useState (false);
-  const [innerWidth, setInnerWidth] = useState (window.innerWidth);
+  const history = useHistory ();
+  const path = useLocation ().pathname;
   const authenticated = query.isSuccess && query.data.key !== 0;
 
-  useEffect (() => {
-    window.addEventListener ('resize', onResize);
-    return (() => window.removeEventListener ('resize', onResize));
-  }, []);
+  const onToggleDrawer = (open) => (e) => {
+    // ignore if tab or shift keys to allow keyboard navigation
+    if (!((e.type === 'keydown') && (e.key === 'Tab' || e.key === 'Shift'))) {
+      setDrawer (open);
+    }
+  };
 
-  function onResize () {
-    setInnerWidth (window.innerWidth);
+  function onLogin () {
+    setDrawer (false);
+    setLogin (true);
   }
 
   function onCloseLogin () {
     setLogin (false);
   }
 
-  const collapse = innerWidth < 420;
+  let menus;
+  if (query.isLoading) {
+    menus = null;
+  }
+  const items = authenticated ? authItems : unauthItems;
+  menus = (
+    <MenuList>
+      {items.map ((a) => {
+        if (a.key < 0) {
+          return <Divider key={a.key} />;
+        }
+        if (a.key === 4) {
+          return (
+            <a key={a.key} href='#' style={{ textDecoration: 'none' }}>
+              <MenuItem selected={false} onClick={onLogin}>
+                <ListItemText>{a.text}</ListItemText>
+              </MenuItem>
+            </a>
+          );
+        }
+        return (
+          <NavLink key={a.key} to={a.to} exact={a.exact} style={{ textDecoration: 'none' }}>
+            <MenuItem selected={path === a.to}>
+              <ListItemText>{a.text}</ListItemText>
+            </MenuItem>
+          </NavLink>
+        );
+      })}
+    </MenuList>
+  );
+
   return (
     <>
-      <Container>
-        <Content>
-          <Flex>
-            <Title as={NavLink} to='/'>Pollster</Title>
-            <FlexItem grow basis='6px' />
-            { menu && collapse && (
-              <StyledMenuDropdown right spacer={8}>
-                { authenticated && <MenuItem as={NavLink} to='/manage'>Manage</MenuItem> }
-                { authenticated && <MenuItem as={NavLink} to='/results'>Results</MenuItem> }
-                <MenuItem as={NavLink} to='/about'>About</MenuItem>
-                { authenticated && <MenuItem as={NavLink} to='/profile'>Profile</MenuItem> }
-                <MenuSeparator spacing='4px' />
-                { authenticated && <MenuItem as={NavLink} to='/logout'>Logout</MenuItem> }
-                { (!authenticated) &&
-                  <MenuItem as={NavLink} to='/register'>Register</MenuItem>
-                }
-                { (!authenticated) &&
-                  <MenuItem onClick={() => setLogin (!login)}>Login</MenuItem>
-                }
-              </StyledMenuDropdown>
-            )}
-            { menu && !collapse && authenticated && (
-              <>
-                <Flex mt='4px'>
-                  <MenuBar>
-                    <MenuItem as={NavLink} to='/manage'>Manage</MenuItem>
-                    <MenuItem as={NavLink} to='/results'>Results</MenuItem>
-                    <MenuItem as={NavLink} to='/about'>About</MenuItem>
-                    <MenuSubmenu text='User' right spacer='2px'>
-                      <MenuItem as={NavLink} to='/profile'>Profile</MenuItem>
-                      <MenuItem as={NavLink} to='/logout'>Logout</MenuItem>
-                    </MenuSubmenu>
-                  </MenuBar>
-                </Flex>
-              </>
-            )}
-            { menu && (!collapse) && (!authenticated) && (
-              <Flex mt='4px'>
-                <MenuBar>
-                  <MenuItem as={NavLink} to='/about'>About</MenuItem>
-                  <MenuItem as={NavLink} to='/register'>Register</MenuItem>
-                  <MenuItem onClick={() => setLogin (!login)}>
-                    Login
-                  </MenuItem>
-                </MenuBar>
-              </Flex>
-            )}
-          </Flex>
-        </Content>
-      </Container>
-      <Box h='72px' />
-      { login && (
-        <Login
-          onLogin={onCloseLogin}
-          onCancel={onCloseLogin}
-        />
-      )}
+      <AppBar position='fixed'>
+        <StyledToolbar>
+          <Title onClick={() => history.push ('/')}>
+            Pollster
+          </Title>
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
+            onClick={onToggleDrawer (true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer
+            anchor='right'
+            open={drawer}
+            onClose={onToggleDrawer (false)}
+          >
+            <Toolbar sx={{ backgroundColor: (theme) => theme.palette.primary.main }} />
+            <Divider />
+            <div
+              role='presentation'
+              onClick={onToggleDrawer (false)}
+              onKeyDown={onToggleDrawer (false)}
+            >
+              {menus}
+            </div>
+          </Drawer>
+        </StyledToolbar>
+      </AppBar>
+      { login && <Login onLogin={onCloseLogin} onClose={onCloseLogin} /> }
+      <Toolbar />
     </>
   );
 };
 
-Nav.propTypes = {
-  menu: PropTypes.bool.isRequired,
-};
-
-export const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  ${({ theme }) => `
-    color: ${theme.colors.navTextColor};
-    background-color: ${theme.colors.navColor};
-  `}
-`;
-
-export const Content = styled.div`
-  position: relative;
-  max-width: 768px;
+const StyledToolbar = styled (Toolbar)`
+  width: 100%;
+  max-width: 1024px;
   margin: 0 auto;
-  padding: 4px;
-
-  @media (max-width: 300px) {
-    height: 40px;
-  }
+  padding: 0 4px;
 `;
 
-export const Title = styled.div`
-  font-family: 'Merriweather', sans-serif;
+const Title = styled (Typography)`
   font-size: 30px;
-  font-style: italic;
-  display: inline-block;
+  flex-grow: 1;
   vertical-align: top;
-  text-shadow: 2px 2px 2px #ffffff;
+  text-shadow: 1px 1px 1px #3333ff;
   line-height: 1.0;
-  color: #000000;
-  text-decoration: none;
+  cursor: pointer;
 `;

@@ -1,5 +1,7 @@
+// @ts-check
 import { useEffect } from 'react';
-import { PageContent, Text } from 'uikit';
+import { Typography } from '@material-ui/core';
+import { PageContent } from '../util';
 import { useLogout } from '../../data/useAuth';
 
 export const Logout = () => {
@@ -10,17 +12,17 @@ export const Logout = () => {
   return (
     <PageContent>
       { logout.isLoading ? (
-        <Text as='p' mt='30px' center>
+        <Typography mt='30px' textAlign='center'>
           Logging out ...
-        </Text>
+        </Typography>
       ) : logout.isError ? (
-        <Text as='p' mt='30px' center>
+        <Typography mt='30px' textAlign='center'>
           Logging out did not complete, please retry or close your browser.
-        </Text>
+        </Typography>
       ) : (
-        <Text as='p' mt='30px' center>
+        <Typography mt='30px' textAlign='center'>
           Thank you for using Pollster, we hope to see you back again soon.
-        </Text>
+        </Typography>
       )}
     </PageContent>
   );

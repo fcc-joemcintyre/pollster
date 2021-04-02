@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "moduleResolution": "node",
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "jsx": "preserve"
+  },
+  "files": [
+    "index.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

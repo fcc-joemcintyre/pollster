@@ -53,23 +53,32 @@ Data Exchange:
 
 #### User
 
-| Field    | Description |
-| -------- | ----------- |
-| username | Unique, indexed. Short text name for user |
-| hash     | Password hash |
-| salt     | Password salt |
-| name     | Full name |
-| email    | Email address |
+| Field    | Type   | Description     |
+| -------- | ------ | --------------- |
+| key      | number | Unique, indexed |
+| hash     | string | Password hash   |
+| salt     | string | Password salt   |
+| name     | string | Full name       |
+| email    | string | Email address   |
+| theme    | string | light or dark   |
 
 #### Polls
 
-| Field      | Description |
-| ---------- | ----------- |
-| creator    | FKey users.username. Poll creator. |
-| title      | Poll title. |
-| choices    | Array of poll choices. |
-|  > text    | Choice text. |
-|  > votes   | Number of votes. |
+| Field      | Type   | Description                   |
+| ---------- | ------ | ----------------------------- |
+| key        | number | Unique, indexed               |
+| creator    | number | Poll creater (FKey users.key) |
+| title      | string | Poll title.                   |
+| choices    | array  | Poll choices                  |
+|  > text    | string | Choice text                   |
+|  > votes   | number | Number of votes               |
+
+#### Counters
+
+| Field    | Type   | Description                  |
+| -------- | ------ | ---------------------------- |
+| _id      | string | Counter name (users | polls) |
+| sequence | number | Next key value               |
 
 ## Non-Functional Requirements
 
@@ -85,12 +94,13 @@ authentication and sessions are essential to the applications function.
 ## Technology Selections
 
 The server is implemented with Node.js version 14.x and uses ES2020 Javascript
-conforming to the native ES support provided in this version of Node.js.
-Data is stored in MongoDB (4.x).
+conforming to the native ES support provided in this version of Node.js. Type
+support is added using JSDoc, using Intellisense and Typescript compiler for
+type checking.
+
+Data is stored in MongoDB (4.x), and accessed through the mongodb Nodejs driver.
 
 The client interface is implemented with React 17.0.x using ES2020 Javascript
-as supported by Babel. Redux and react-router are also used.
+as supported by Babel. React-router is used for routing. Components use the Material-UI library and the Emotion CSS-in-JS library.
 
-Styling is defined using the Styled Components CSS-in-JS library.
-
-Build is done with npm scripts (server) and Webpack (client).
+Build is performed with npm scripts (server) and Webpack (client). Workspaces (npm version 7 or yarn version 1) are used for project organization.

@@ -2,19 +2,19 @@
 import express from 'express';
 import cookieSession from 'cookie-session';
 import helmet from 'helmet';
-import fs from 'fs';
-import http from 'http';
-import path from 'path';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as path from 'path';
 import passport from 'passport';
 import { initAuth } from './auth/auth.js';
 import { initRoutes } from './routes.js';
 import { initDatabase, closeDatabase } from './db/db.js';
 
 /**
- * @typedef { import ('express').Request} Request
- * @typedef { import ('express').Response} Response
- * @typedef { import ('express').NextFunction} NextFunction
- */
+  @typedef { import ('express').Request} Request
+  @typedef { import ('express').Response} Response
+  @typedef { import ('express').NextFunction} NextFunction
+*/
 
 // server instance
 let server;

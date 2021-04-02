@@ -1,153 +1,105 @@
+// @ts-check
 import { useState } from 'react';
-import { createField, useFields } from 'use-fields';
-import { Box, MessageBox, PageContent, Text } from 'uikit';
-import { useAddPoll, useDeletePoll, usePollsOwn, useUpdatePoll } from '../../data/usePolls';
-import { ManagePollSelect } from './ManagePollSelect';
-import { ManageForm } from './ManageForm';
-
-const initialFields = [
-  createField ('title', '', true),
-  createField ('choice0', '', true),
-  createField ('choice1', '', true),
-];
+import { useHistory } from 'react-router-dom';
+import { Box, IconButton, List, ListItem, ListItemText,
+  ListItemSecondaryAction, Tooltip, Typography } from '@material-ui/core';
+import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
+import { GenDialog } from '@cygns/muikit';
+import { useDeletePoll, usePolls } from '../../data/usePolls';
+import { PageContent } from '../util';
 
 export const Manage = () => {
-  const { fields, onChange, onValidate, setFields, getValues, validateAll, addField } =
-    useFields (initialFields);
-  const [selected, setSelected] = useState (0);
-  const [mb, setMB] = useState (null);
-  const { data: polls, isLoading, isError, isSuccess } = usePollsOwn ();
-  const addPoll = useAddPoll ();
+  const history = useHistory ();
+  const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
+  const { data: polls, isLoading, isError, isSuccess } = usePolls (true);
   const deletePoll = useDeletePoll ();
-  const updatePoll = useUpdatePoll ();
 
-  function onResetPoll () {
-    setSelected (0);
-    setFields (initialFields);
+  function onEditPoll (key) {
+    history.push (`/manage/${key}`);
   }
 
-  function onSelectPoll (key) {
-    if (key === 0) {
-      onResetPoll ();
-    } else {
-      const poll = polls.find ((a) => (a.key === key));
-      const choices = poll.choices.map ((a, index) => createField (`choice${index}`, a.text, false));
-      setFields ([
-        createField ('title', poll.title, true),
-        ...choices,
-        createField (`choice${poll.choices.length}`, '', false),
-      ]);
-      setSelected (key);
-    }
-  }
-
-  function onSubmitPoll (e) {
-    e.preventDefault ();
-    const errors = validateAll ();
-    if (!errors) {
-      setMB ({ content: 'Submitting poll...' });
-      const { title, ...rest } = getValues ();
-      const choices = Object.values (rest).filter ((a) => (a !== ''));
-      if (selected === 0) {
-        addPoll.mutate ({ title, choices }, {
-          onSuccess: () => {
-            const content = 'New poll has been added.';
-            setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
-          },
-          onError: () => {
-            const content = 'Error creating new poll.';
-            setMB ({ content, actions: ['Close'], closeAction: 'Close' });
-          },
-        });
-      } else {
-        updatePoll.mutate ({ key: selected, title, choices }, {
-          onSuccess: () => {
-            const content = 'Poll has been updated.';
-            setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
-          },
-          onError: () => {
-            const content = 'Error updating poll.';
-            setMB ({ content, actions: ['Close'], closeAction: 'Close' });
-          },
-        });
-      }
-    }
-    return errors;
-  }
-
-  function onDeletePoll () {
-    setMB ({ content: 'Deleting poll...' });
-    deletePoll.mutate ({ key: selected }, {
+  function onDeletePoll (key) {
+    setDialog (<GenDialog>Deleting poll...</GenDialog>);
+    deletePoll.mutate ({ key }, {
       onSuccess: () => {
-        const content = 'Poll has been deleted.';
-        setMB ({ content, actions: ['OK'], closeAction: 'OK', data: 'reset' });
+        setDialog (
+          <GenDialog
+            actions={['Ok']}
+            data='reset'
+            onClose={onClose}
+          >
+            Poll has been deleted.
+          </GenDialog>
+        );
       },
       onError: () => {
-        const content = 'Error deleting poll.';
-        setMB ({ content, actions: ['Close'], closeAction: 'Close' });
+        setDialog (
+          <GenDialog
+            actions={['Close']}
+            onClose={onClose}
+          >
+            Error deleting poll.
+          </GenDialog>
+        );
       },
     });
   }
 
-  function onCloseModal (action, data) {
-    setMB (null);
-    if (data === 'reset') {
-      onResetPoll ();
-    }
-  }
-
-  // determine if all choice fields have content
-  const { title, ...rest } = getValues ();
-  if (rest) {
-    const values = Object.values (rest);
-    const anyEmpty = values.reduce ((acc, a) => acc || (a === ''), false);
-    // if all choice fields have content, add another choice field
-    if (!anyEmpty) {
-      const next = `choice${values.length}`;
-      addField (createField (next, '', false));
-    }
+  function onClose () {
+    setDialog (null);
   }
 
   return (
     <PageContent>
-      <Text as='h1' center>Manage Polls</Text>
+      <Typography variant='h1' textAlign='center'>Manage Polls</Typography>
       { isLoading && (
-        <Text>Loading ...</Text>
+        <Typography>Loading ...</Typography>
       )}
       { isError && (
-        <Text>Error loading polls</Text>
+        <Typography>Error loading polls</Typography>
       )}
       { isSuccess && (
         <>
-          <Box center>
-            <ManagePollSelect
-              polls={polls}
-              selected={selected}
-              onSelect={onSelectPoll}
-            />
+          <Box textAlign='right'>
+            <Tooltip title='Create a new poll'>
+              <IconButton onClick={() => history.push ('/manage/create')}>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
-          <Box center>
-            <ManageForm
-              action={selected === '' ? 'add' : 'edit'}
-              fields={fields}
-              onChange={onChange}
-              onValidate={onValidate}
-              onSubmit={onSubmitPoll}
-              onDelete={onDeletePoll}
-            />
-          </Box>
+          <List component='nav' aria-label='polls'>
+            { (polls?.polls || []).map ((a) => (
+              <ListItem key={a.key}>
+                <ListItemText
+                  primary={a.title}
+                  secondary={`${a.choices.reduce ((acc, b) => acc + b.votes, 0)} votes`}
+                />
+                <ListItemSecondaryAction>
+                  <Tooltip title='Edit poll'>
+                    <IconButton
+                      edge='end'
+                      aria-label='edit'
+                      onClick={() => onEditPoll (a.key)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title='Delete poll'>
+                    <IconButton
+                      edge='end'
+                      aria-label='delete'
+                      onClick={() => onDeletePoll (a.key)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
         </>
       )}
-      { mb && (
-        <MessageBox
-          title={mb.title}
-          actions={mb.actions}
-          closeAction={mb.closeAction}
-          data={mb.data}
-          content={mb.content}
-          onClose={onCloseModal}
-        />
-      )}
+      {dialog}
     </PageContent>
   );
 };

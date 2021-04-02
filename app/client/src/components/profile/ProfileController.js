@@ -1,8 +1,20 @@
+// @ts-check
 import { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { createField, useFields } from 'use-fields';
+import { createField, useFields } from '@cygns/use-fields';
 import { ProfileForm } from './ProfileForm';
 
+/**
+  @typedef {Object} Props
+  @property {string} name
+  @property {string} theme
+  @property {function} onSave
+*/
+
+/**
+ * Profile form controller
+ * @param {Props} param0 Props
+ * @returns {JSX.Element} Component
+ */
 export const ProfileController = ({ name, theme, onSave }) => {
   const initial = useMemo (() => [
     createField ('name', name, true),
@@ -29,10 +41,4 @@ export const ProfileController = ({ name, theme, onSave }) => {
       onSubmit={onSubmit}
     />
   );
-};
-
-ProfileController.propTypes = {
-  name: PropTypes.string.isRequired,
-  theme: PropTypes.string.isRequired,
-  onSave: PropTypes.func.isRequired,
 };

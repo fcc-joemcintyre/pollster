@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
-import { Text } from 'uikit';
+// @ts-check
+import { Typography } from '@material-ui/core';
 
-export const Loading = ({ message }) => (
-  <Text center>{message}</Text>
+/**
+ * Display loading message
+ * @returns {JSX.Element} Message component
+ */
+export const Loading = () => (
+  <Typography textAlign='center'>
+    Loading...
+  </Typography>
 );
-
-Loading.propTypes = {
-  message: PropTypes.string.isRequired,
-};
