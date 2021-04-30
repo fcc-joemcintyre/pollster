@@ -7,7 +7,7 @@ import { createPoll, deletePoll, getPoll, getPolls, updatePoll, vote } from './l
   @typedef { import ('express').Request} Request
   @typedef { import ('express').Response} Response
   @typedef { import ('express').NextFunction} NextFunction
-*/
+ */
 
 /**
  * Initialize routes.

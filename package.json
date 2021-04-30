@@ -4,7 +4,7 @@
   "description": "Poll tracking application",
   "private": true,
   "type": "module",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/fcc-joemcintyre/pollster"
@@ -37,7 +37,6 @@
     "build:client": "cd app/client && npm run build"
   },
   "engines": {
-    "node": "^14.16",
-    "npm": "^7.5"
+    "node": "^16.0"
   }
 }

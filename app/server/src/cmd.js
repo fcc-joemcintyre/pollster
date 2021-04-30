@@ -1,7 +1,7 @@
 // @ts-check
 /**
   @typedef { import ('./types/app').CommandResult} CommandResult
-*/
+ */
 
 /**
  * Valid command options
