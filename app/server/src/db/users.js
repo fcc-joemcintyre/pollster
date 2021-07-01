@@ -98,7 +98,7 @@ export async function updateProfile (key, name, theme) {
   const user = await c.findOneAndUpdate (
     { key },
     { $set: { name, theme } },
-    { returnOriginal: false },
+    { returnDocument: 'after' },
   );
   return ({
     status: user.value ? 200 : 404,

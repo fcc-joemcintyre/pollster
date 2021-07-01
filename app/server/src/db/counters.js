@@ -25,7 +25,7 @@ export async function getNextSequence (_id) {
   const t = await c.findOneAndUpdate (
     { _id },
     { $inc: { sequence: 1 } },
-    { returnOriginal: false },
+    { returnDocument: 'after' },
   );
   return t.value.sequence;
 }

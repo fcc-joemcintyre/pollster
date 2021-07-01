@@ -87,7 +87,7 @@ export async function updatePoll (key, title, choices) {
   const t = await c.findOneAndUpdate (
     { key },
     { $set: { title, choices } },
-    { returnOriginal: false }
+    { returnDocument: 'after' }
   );
   return ({
     status: t.value ? 200 : 500,
@@ -119,7 +119,7 @@ export async function vote (key, choice) {
   const t = await c.findOneAndUpdate (
     { key, 'choices.text': choice },
     { $inc: { 'choices.$.votes': 1 } },
-    { returnOriginal: false },
+    { returnDocument: 'after' },
   );
   return ({
     status: t.value ? 200 : 500,
