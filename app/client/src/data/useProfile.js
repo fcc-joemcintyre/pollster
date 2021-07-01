@@ -1,7 +1,7 @@
 // @ts-check
 import {
   QueryObserverResult, UseMutationResult, // eslint-disable-line no-unused-vars
-  useMutation, useQuery,
+  useMutation, useQuery, useQueryClient,
 } from 'react-query';
 import { get, post } from './api';
 
@@ -23,6 +23,12 @@ export const useProfile = () => (
  * Update profile
  * @returns {UseMutationResult} mutation object
  */
-export const useUpdateProfile = () => (
-  useMutation ((/** @type Profile */ { name, theme }) => post ('/api/profile', { name, theme }))
-);
+export const useUpdateProfile = () => {
+  const queryClient = useQueryClient ();
+  return useMutation ((/** @type Profile */ { name, theme }) => post ('/api/profile', { name, theme }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries (['profile']);
+      },
+    });
+};
