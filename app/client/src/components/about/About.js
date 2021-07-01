@@ -21,7 +21,7 @@ export const About = () => (
       </Typography>
       <List dense>
         <ListItem>Client: React (17.x), Material-UI, Emotion, React Query, and React Router</ListItem>
-        <ListItem>Server: Node (14.x) using Express and Passport</ListItem>
+        <ListItem>Server: Node (16.x) using Express and Passport</ListItem>
         <ListItem>Database: Mongo (4.x)</ListItem>
         <ListItem>Languages: Javascript (ES2020+), CSS</ListItem>
       </List>
