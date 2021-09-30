@@ -18,7 +18,7 @@
     "lib/validators"
   ],
   "dependencies": {
-    "nodemon": "2.0.9"
+    "nodemon": "2.0.13"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -37,6 +37,6 @@
     "build:client": "cd app/client && npm run build"
   },
   "engines": {
-    "node": "^16.0"
+    "node": "^16.10"
   }
 }
