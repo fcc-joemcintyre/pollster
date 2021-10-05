@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { createField, useFields } from '@cygns/use-fields';
 import { GenDialog } from '@cygns/muikit';
@@ -35,7 +35,11 @@ export const Register = () => {
   const login = useLogin ();
   const register = useRegister ();
 
-  function onSubmit (e) {
+  const onClose = useCallback (() => {
+    setDialog (null);
+  }, [setDialog]);
+
+  const onSubmit = useCallback ((e) => {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
@@ -53,11 +57,7 @@ export const Register = () => {
       });
     }
     return errors;
-  }
-
-  function onClose () {
-    setDialog (null);
-  }
+  }, [getValues, history, login, onClose, register, validateAll]);
 
   return (
     <>

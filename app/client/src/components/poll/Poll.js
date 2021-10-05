@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { PageContent } from '../util';
@@ -16,14 +16,14 @@ export const Poll = () => {
   const { data: poll, isLoading, isError } = usePoll (key);
   const vote = useVote ();
 
-  function handleVote () {
+  const handleVote = useCallback (() => {
     if (poll && selected !== -1) {
       const choice = poll.choices[selected];
       vote.mutate ({ key: poll.key, choice: choice.text }, {
         onSuccess: () => setVoted (true),
       });
     }
-  }
+  }, [poll, selected, vote]);
 
   if (isLoading) {
     return (

@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Typography } from '@material-ui/core';
 import { GenDialog } from '@cygns/muikit';
 import { useProfile, useUpdateProfile } from '../../data/useProfile';
@@ -11,7 +11,11 @@ export const Profile = () => {
   const updateProfile = useUpdateProfile ();
   const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
 
-  function onSave (name, theme) {
+  const onClose = useCallback (() => {
+    setDialog (null);
+  }, [setDialog]);
+
+  const onSave = useCallback ((name, theme) => {
     setDialog (<GenDialog>Updating profile ...</GenDialog>);
     updateProfile.mutate ({ name, theme }, {
       onSuccess: () => setDialog (
@@ -21,11 +25,7 @@ export const Profile = () => {
         <GenDialog actions={['Close']} onClose={onClose}>Error saving profile</GenDialog>
       ),
     });
-  }
-
-  function onClose () {
-    setDialog (null);
-  }
+  }, [onClose, updateProfile]);
 
   return (
     <PageContent>

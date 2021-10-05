@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Typography } from '@material-ui/core';
 import { GenDialog } from '@cygns/muikit';
 import { createField, useFields } from '@cygns/use-fields';
@@ -19,7 +19,11 @@ export const CreatePoll = () => {
   const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
   const createPoll = useCreatePoll ();
 
-  function onSubmitPoll (e) {
+  const onClose = useCallback (() => {
+    setDialog (null);
+  }, [setDialog]);
+
+  const onSubmitPoll = useCallback ((e) => {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
@@ -51,11 +55,7 @@ export const CreatePoll = () => {
       });
     }
     return errors;
-  }
-
-  function onClose () {
-    setDialog (null);
-  }
+  }, [createPoll, getValues, onClose, validateAll]);
 
   // determine if all choice fields have content
   const { title, ...rest } = getValues ();

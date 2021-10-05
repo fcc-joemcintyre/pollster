@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { GenDialog } from '@cygns/muikit';
 import { createField, useFields } from '@cygns/use-fields';
 import { useUpdatePoll } from '../../data/usePolls';
@@ -22,7 +22,11 @@ export const UpdatePollController = ({ pollKey, initial }) => {
   const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
   const updatePoll = useUpdatePoll ();
 
-  function onSubmitPoll (e) {
+  const onClose = useCallback (() => {
+    setDialog (null);
+  }, [setDialog]);
+
+  const onSubmitPoll = useCallback ((e) => {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
@@ -54,11 +58,7 @@ export const UpdatePollController = ({ pollKey, initial }) => {
       });
     }
     return errors;
-  }
-
-  function onClose () {
-    setDialog (null);
-  }
+  }, [getValues, onClose, pollKey, updatePoll, validateAll]);
 
   // determine if all choice fields have content
   const { title, ...rest } = getValues ();

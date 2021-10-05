@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { createField, useFields } from '@cygns/use-fields';
 import { GenDialog } from '@cygns/muikit';
 import { isEmail, isPassword } from '@cygns/validators';
@@ -27,7 +27,11 @@ export const Login = ({ onLogin, onClose }) => {
   const [dialog, setDialog] = useState (/** @type {GenDialog=} */ (undefined));
   const login = useLogin ();
 
-  function onSubmit (e) {
+  const onCloseDialog = useCallback (() => {
+    setDialog (null);
+  }, [setDialog]);
+
+  const onSubmit = useCallback ((e) => {
     e.preventDefault ();
 
     const errors = validateAll ();
@@ -44,11 +48,7 @@ export const Login = ({ onLogin, onClose }) => {
       });
     }
     return errors;
-  }
-
-  function onCloseDialog () {
-    setDialog (null);
-  }
+  }, [getValues, login, onCloseDialog, onLogin, setDialog, validateAll]);
 
   return (
     <>

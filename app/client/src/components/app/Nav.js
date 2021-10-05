@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { AppBar, Divider, Drawer, IconButton, ListItemText, MenuItem, MenuList, Toolbar, Typography }
@@ -40,14 +40,14 @@ export const Nav = () => {
     }
   };
 
-  function onLogin () {
+  const onLogin = useCallback (() => {
     setDrawer (false);
     setLogin (true);
-  }
+  }, [setDrawer, setLogin]);
 
-  function onCloseLogin () {
+  const onCloseLogin = useCallback (() => {
     setLogin (false);
-  }
+  }, [setLogin]);
 
   let menus;
   if (query.isLoading) {

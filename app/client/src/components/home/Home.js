@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Divider, Pagination, Typography } from '@material-ui/core';
 import { useAuth } from '../../data/useAuth';
 import { usePolls } from '../../data/usePolls';
@@ -13,9 +13,9 @@ export const Home = () => {
   const auth = useAuth ();
   const { data: polls, isLoading, isError } = usePolls (false, page - 1, perPage);
 
-  function onChange (e, value) {
+  const onChange = useCallback ((e, value) => {
     setPage (value);
-  }
+  }, [setPage]);
 
   if (auth.isLoading || isLoading) {
     return (

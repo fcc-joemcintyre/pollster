@@ -1,5 +1,5 @@
 // @ts-check
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { createField, useFields } from '@cygns/use-fields';
 import { ProfileForm } from './ProfileForm';
 
@@ -22,7 +22,7 @@ export const ProfileController = ({ name, theme, onSave }) => {
   ], [name, theme]);
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initial);
 
-  function onSubmit (e) {
+  const onSubmit = useCallback ((e) => {
     e.preventDefault ();
     const errors = validateAll ();
     if (!errors) {
@@ -31,7 +31,7 @@ export const ProfileController = ({ name, theme, onSave }) => {
       onSave (name, theme);
     }
     return errors;
-  }
+  }, [getValues, onSave, validateAll]);
 
   return (
     <ProfileForm

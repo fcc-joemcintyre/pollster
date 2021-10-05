@@ -1,5 +1,5 @@
 // @ts-check
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Tab, Tabs, Typography } from '@material-ui/core';
 import { PollItem } from '../poll';
 
@@ -18,9 +18,9 @@ import { PollItem } from '../poll';
 export const ResultContent = ({ polls }) => {
   const [tab, setTab] = useState (polls[0].key);
 
-  function onTab (e, value) {
+  const onTab = useCallback ((e, value) => {
     setTab (value);
-  }
+  }, [setTab]);
 
   const panels = polls.map ((a) => {
     const totalVotes = a.choices.reduce ((c, b) => c + b.votes, 0);
