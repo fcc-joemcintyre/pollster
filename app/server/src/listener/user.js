@@ -38,8 +38,8 @@ export function login (req, res, next) {
         if (err2) {
           return next (err2);
         }
-        console.log ('INFO login ok', user.email);
-        const { key, theme } = req.user;
+        const { key, theme } = user;
+        console.log ('INFO login ok', key, req.body.email);
         return res.status (200).json ({ key, theme });
       });
     }) (req, res, next);
