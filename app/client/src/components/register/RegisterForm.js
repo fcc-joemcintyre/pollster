@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@mui/material';
 import { FieldTextInput } from '@cygns/muikit';
 import { PageContent } from '../util';
 

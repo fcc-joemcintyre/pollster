@@ -1,7 +1,7 @@
 // @ts-check
 import { useCallback, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { PageContent } from '../util';
 import { usePoll, useVote } from '../../data/usePolls';
 import { PollItem } from './PollItem';

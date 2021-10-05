@@ -1,6 +1,6 @@
 // @ts-check
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useAuth } from '../../data/useAuth';
 import { Home } from '../home';
 import { Register } from '../register';

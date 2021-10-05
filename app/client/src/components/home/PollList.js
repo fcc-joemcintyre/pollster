@@ -1,6 +1,6 @@
 // @ts-check
 import { useHistory } from 'react-router-dom';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemText } from '@mui/material';
 
 /**
   @typedef { import ('../../types/types').Poll} Poll

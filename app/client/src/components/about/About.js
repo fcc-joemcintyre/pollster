@@ -1,5 +1,5 @@
 // @ts-check
-import { Box, List, ListItem, Typography } from '@material-ui/core';
+import { Box, List, ListItem, Typography } from '@mui/material';
 import { LinkExternal } from '@cygns/muikit';
 import { PageContent } from '../util';
 

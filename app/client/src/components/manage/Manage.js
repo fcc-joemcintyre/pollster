@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, IconButton, List, ListItem, ListItemText,
-  ListItemSecondaryAction, Tooltip, Typography } from '@material-ui/core';
-import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
+  ListItemSecondaryAction, Tooltip, Typography } from '@mui/material';
+import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { GenDialog } from '@cygns/muikit';
 import { useDeletePoll, usePolls } from '../../data/usePolls';
 import { PageContent } from '../util';

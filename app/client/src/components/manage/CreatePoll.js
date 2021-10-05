@@ -1,6 +1,6 @@
 // @ts-check
 import { useCallback, useState } from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { GenDialog } from '@cygns/muikit';
 import { createField, useFields } from '@cygns/use-fields';
 import { useCreatePoll } from '../../data/usePolls';

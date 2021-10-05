@@ -1,5 +1,5 @@
 // @ts-check
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, Grid } from '@mui/material';
 import { FieldTextInput } from '@cygns/muikit';
 
 /**

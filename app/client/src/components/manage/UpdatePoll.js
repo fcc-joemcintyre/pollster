@@ -1,6 +1,6 @@
 // @ts-check
 import { useParams } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { createField } from '@cygns/use-fields';
 import { usePoll } from '../../data/usePolls';
 import { PageContent } from '../util';

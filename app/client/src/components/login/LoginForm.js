@@ -1,5 +1,5 @@
 // @ts-check
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import { FieldTextInput, GenDialog } from '@cygns/muikit';
 
 /**

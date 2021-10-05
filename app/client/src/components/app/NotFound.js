@@ -1,5 +1,5 @@
 // @ts-check
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 /**
  * Display 404 message

@@ -1,5 +1,5 @@
 // @ts-check
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material';
 
 export function getTheme (name) {
   return createTheme ({

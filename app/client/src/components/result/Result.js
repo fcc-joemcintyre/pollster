@@ -1,5 +1,5 @@
 // @ts-check
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { usePolls } from '../../data/usePolls';
 import { PageContent } from '../util';
 import { ResultContent } from './ResultContent';

@@ -1,6 +1,6 @@
 // @ts-check
 import { useCallback, useState } from 'react';
-import { Box, Divider, Pagination, Typography } from '@material-ui/core';
+import { Box, Divider, Pagination, Typography } from '@mui/material';
 import { useAuth } from '../../data/useAuth';
 import { usePolls } from '../../data/usePolls';
 import { PageContent } from '../util';
