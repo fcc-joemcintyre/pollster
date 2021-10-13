@@ -14,7 +14,8 @@ import { getTheme } from './theme';
 import { AuthRoute } from './AuthRoute';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
-import { Nav } from './Nav';
+import { NavUnauth } from './NavUnauth';
+import { NavAuth } from './NavAuth';
 import { ScrollToTop } from './ScrollToTop';
 
 export const App = () => {
@@ -33,7 +34,7 @@ export const App = () => {
         <ThemeProvider theme={theme}>
           <>
             <CssBaseline />
-            <Nav />
+            { authenticated ? <NavAuth /> : <NavUnauth /> }
             <Switch>
               <Route exact path='/'><Home /></Route>
               <Route exact path='/register'><Register /></Route>
