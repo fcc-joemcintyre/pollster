@@ -1,5 +1,4 @@
-// @ts-check
-import { isPassword } from '../src/isPassword.js';
+import { isPassword } from '../lib/isPassword.js';
 
 test ('valid', () => {
   expect (isPassword ('abcdef')).toBe (null);

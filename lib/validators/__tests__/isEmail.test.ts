@@ -1,5 +1,4 @@
-// @ts-check
-import { isEmail } from '../src/isEmail.js';
+import { isEmail } from '../lib/isEmail.js';
 
 test ('valid', () => {
   expect (isEmail ('john@example.com')).toBe (null);

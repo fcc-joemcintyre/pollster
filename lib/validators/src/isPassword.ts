@@ -1,11 +1,11 @@
-// @ts-check
+type Result = 'format' | 'length' | null;
 
 /**
  * Is valid password (minimum 4 characters, no spaces)
- * @param {string} value String to validate
- * @returns {'format' | 'length' | null} Error string or null if valid
+ * @param value String to validate
+ * @returns Error string or null if valid
  */
-export function isPassword (value) {
+export function isPassword (value: string): Result {
   if (value.length < 4) {
     return 'length';
   } else {

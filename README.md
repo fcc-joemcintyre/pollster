@@ -46,6 +46,15 @@ but the NPM client can be used as well. When using the NPM client, include
 
 ### Build (Development)
 
+There are general purpose libraries used by the application in the lib
+directory. These are built independently of the dev build processes for the
+client and server, and only need to have their build step run once (or after
+any changes are made to files under the lib directory).
+
+```
+npm run build:libs
+```
+
 There are two build processes for development, one for the server and one for
 the client.
 
@@ -66,20 +75,26 @@ and rerun build elements as file changes are saved.
 
 ### Build (Production)
 
-There is one build command that runs both server and client production builds.
+There is one build command that runs the lib, server and client production
+builds.
 
 In a terminal,
 
 ```
-npm run prod
+npm run build
 ```
 
 This production build is a single step process, it is not continuous build.
 
 ## Testing
 
-Testing is set up in each of the client and server directorys. Switch to the desired
-directory and run the tests.
+Testing is set up in each of the lib, client and server directorys. Switch to the
+desired directory and run the tests. For example,
+
+```
+cd lib/validators
+npm test
+```
 
 ```
 cd app/server
