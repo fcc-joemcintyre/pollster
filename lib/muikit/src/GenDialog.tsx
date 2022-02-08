@@ -1,35 +1,33 @@
-// @ts-check
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle,
   Grid, IconButton, Typography } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 
-/**
- * @typedef {Object} Props
- * @property {string=} formid
- * @property {string[]=} actions
- * @property {string=} defaultAction
- * @property {string=} closeAction
- * @property {string=} title
- * @property {string | number | Object=} data
- * @property {function=} onClose
- * @property {React.ReactNode} children
- */
+type Props = {
+  formid?: string,
+  actions?: string[],
+  defaultAction?: string,
+  closeAction?: string,
+  title?: string,
+  data?: unknown,
+  onClose?: (action: string | undefined, data: unknown) => void,
+  children: React.ReactNode,
+};
 
 /**
  * Create a dialog for messages with defined actions
- * @param {Props} param0 Props
- * @returns {JSX.Element} Component
+ * @param Props
+ * @returns Dialog instance
  */
 export const GenDialog = ({
-  formid,
+  formid = undefined,
   actions = [],
-  defaultAction,
-  closeAction,
+  defaultAction = undefined,
+  closeAction = undefined,
   title = '',
   data = null,
   onClose = () => { /* no op */ },
   children,
-}) => {
+}: Props) => {
   if (actions.length === 1) {
     defaultAction = actions[0]; // eslint-disable-line no-param-reassign
     closeAction = actions[0]; // eslint-disable-line no-param-reassign

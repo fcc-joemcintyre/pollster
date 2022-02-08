@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
-    "noEmit": true,
-    "allowJs": true,
-    "checkJs": true,
-    "moduleResolution": "node",
-    "alwaysStrict": true,
+    "target": "ES2020",
+    "module": "ES2020",
+    "strict": true,
     "strictNullChecks": true,
-    "jsx": "preserve"
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./lib",
+    "declaration": true,
+    "jsx": "react-jsx"
   },
-  "files": [
-    "index.js"
+  "references": [
+    { "@cygns/use-fields": "../use-fields/lib/index.js" }
+  ],
+  "include": [
+    "./src"
   ],
   "exclude": [
     "node_modules"

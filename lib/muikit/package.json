@@ -5,7 +5,10 @@
   "private": true,
   "version": "0.0.1",
   "license": "MIT",
+  "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "dependencies": {
+    "@cygns/use-fields": "0.0.1",
     "@emotion/react": "11.7.1",
     "@emotion/styled": "11.6.0",
     "@mui/material": "5.4.0",
@@ -14,8 +17,8 @@
     "react-dom": "17.0.2"
   },
   "scripts": {
-    "lint": "eslint --no-error-on-unmatched-pattern src/**",
-    "typecheck": "tsc"
+    "build": "tsc",
+    "lint": "eslint --ext .js,.ts,.tsx --no-error-on-unmatched-pattern ."
   },
   "devDependencies": {
     "@cygns/eslint-config": "5.0.0",

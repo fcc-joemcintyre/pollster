@@ -7,6 +7,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "dependencies": {
     "prop-types": "15.8.1",
     "react": "17.0.2",
