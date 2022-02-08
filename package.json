@@ -21,7 +21,7 @@
     "nodemon": "2.0.15"
   },
   "scripts": {
-    "clean": "rm -rf dist && rm -rf lib/validators/lib",
+    "clean": "rm -rf dist && rm -rf lib/validators/lib && rm -rf lib/use-fields/lib",
     "lint": "npm run lint:server && npm run lint:client",
     "lint:server": "cd app/server && npm run lint",
     "lint:client": "cd app/client && npm run lint",
@@ -35,7 +35,9 @@
     "build": "npm run clean && npm run build:libs && npm run build:server && npm run build:client",
     "build:server": "cd app/server && npm run build",
     "build:client": "cd app/client && npm run build",
-    "build:libs": "cd lib/validators && npm run build"
+    "build:libs": "npm run build:libs:use-fields && npm run build:libs:validators",
+    "build:libs:use-fields": "cd lib/use-fields && npm run build",
+    "build:libs:validators": "cd lib/validators && npm run build"
   },
   "engines": {
     "node": "^16.10"

@@ -1,26 +1,25 @@
-// @ts-check
 /**
  * Convert field string to string
- * @param {string | number | boolean} value Field string
- * @return {string} String
+ * @param value Field value
+ * @returns Value as string
  */
-export function outString (value = '') {
+export function outString (value: string | number | boolean = '') {
   return value === null ? '' : typeof value === 'string' ? value : value.toString ();
 }
 
 /**
- * Convert array of field strings to strings
- * @param {any[]} value Field values
- * @return {string[]} Array of strings
+ * Convert array of field values to strings
+ * @param value Field values
+ * @returns Array of values as strings
  */
-export function outStringArray (value = []) {
+export function outStringArray (value: (string | number | boolean)[] = []) {
   return Array.isArray (value) ? value.map (outString) : [];
 }
 
 /**
  * Convert field string to trimmed string, by trimming leading/trailing spaces
- * @param {string } value Field string
- * @return {string} Trimmed string
+ * @param value Field value string
+ * @returns Trimmed string
  */
 export function outTrim (value = '') {
   return outString (value).trim ();
@@ -28,19 +27,19 @@ export function outTrim (value = '') {
 
 /**
  * Convert array of field strings to strings
- * @param {any[]} value Field values
- * @return {string[]} Array of strings
+ * @param value Field values
+ * @returns Array of values as trimmed strings
  */
-export function outTrimArray (value = []) {
+export function outTrimArray (value: string[] = []) {
   return Array.isArray (value) ? value.map (outTrim) : [];
 }
 
 /**
  * Convert date to field string. Accepts Date object or date string.
- * @param {string | Date} value Input date
- * @return {string} Date in m/d/yyyy format, or '' if no valid date provided
+ * @param value Input date
+ * @returns Date in m/d/yyyy format, or '' if no valid date provided
  */
-export function inDate (value = '') {
+export function inDate (value: string | Date = ''): string {
   if (value === null) {
     return '';
   }
@@ -50,10 +49,10 @@ export function inDate (value = '') {
 
 /**
  * Convert input date string to Date object.
- * @param {string} value Input date (mm/dd/yyyy) or Date object
- * @return {Date | null} Date object, or null if no valid date provided
+ * @param value Input date (mm/dd/yyyy) or Date object
+ * @returns Date object, or null if no valid date provided
  */
-function parseDate (value) {
+function parseDate (value: string): Date | null {
   if (value) {
     const parts = value.split (/\D/);
     if (parts.length === 3) {
@@ -73,17 +72,17 @@ function parseDate (value) {
 
 /**
  * Convert field string to Date
- * @param {string} value Date string
- * @return {string | Date} Date object, or '' if field is empty
+ * @param value Date string
+ * @returns Date object, or '' if field is empty
  */
-export function outDate (value = '') {
+export function outDate (value = ''): string | Date {
   return parseDate (value) || '';
 }
 
 /**
  * Convert field string to date string ('YYYY-MM-DD')
- * @param {string} value Date string
- * @return {string} Date as a string ('YYYY-MM-DD'), or '' if field is empty
+ * @param value Date string
+ * @returns Date as a string ('YYYY-MM-DD'), or '' if field is empty
  */
 export function outDateString (value = '') {
   const date = parseDate (value);
@@ -97,8 +96,8 @@ export function outDateString (value = '') {
 
 /**
  * Convert field string to ISO date string
- * @param {string} value Date string
- * @return {string} ISO date string, or '' if field is empty
+ * @param value Date string
+ * @returns ISO date string, or '' if field is empty
  */
 export function outDateISO (value = '') {
   const date = parseDate (value);
@@ -107,19 +106,17 @@ export function outDateISO (value = '') {
 
 /**
  * Validate and return integer value for a value
- * @param {number | string} value Value to convert
- * @return {number} Integer value
+ * @param value Value to convert
+ * @returns Integer value
  */
-function integer (value) {
-  let n;
+function integer (value: number | string): number {
+  let n = 0;
   if (typeof value === 'number') {
     n = value;
   } else if (typeof value === 'string') {
     const period = value.indexOf ('.');
     const t1 = (period === -1) ? value : value.substr (0, period);
     n = Number (t1.replace (/[^0-9]/g, ''));
-  } else {
-    n = 0;
   }
   n = Math.floor (n);
   return n;
@@ -127,45 +124,45 @@ function integer (value) {
 
 /**
  * Integer input value
- * @param {string | number} value Input value
- * @return {number} Validated integer
+ * @param value Input value
+ * @returns Validated integer
  */
-export function inInteger (value = 0) {
+export function inInteger (value: string | number = 0) {
   return integer (value);
 }
 
 /**
  * Convert field string to integer
- * @param {string | number} value Field string
- * @return {number} Integer
+ * @param value Field string
+ * @returns Integer
  */
-export function outInteger (value = 0) {
+export function outInteger (value: string | number = 0) {
   return integer (value);
 }
 
 /**
  * Array of integers input value
- * @param {any[]} value Input values
- * @return {number[]} Array of field integers
+ * @param value Input values
+ * @returns Array of field integers
  */
-export function inIntegerArray (value = []) {
+export function inIntegerArray (value: (string | number)[] = []) {
   return Array.isArray (value) ? value.map (inInteger) : [];
 }
 
 /**
  * Convert array of field strings to integers
- * @param {any[]} value Input values
- * @return {number[]} Array of integers
+ * @param value Input values
+ * @returns Array of integers
  */
-export function outIntegerArray (value = []) {
+export function outIntegerArray (value: (string | number)[] = []) {
   return Array.isArray (value) ? value.map (outInteger) : [];
 }
 
 /**
  * Convert field value to boolean value
- * @param {string | boolean} value Date string
- * @return {boolean} Boolean value
+ * @param value Field value
+ * @returns Boolean value
  */
-export function outBoolean (value = false) {
+export function outBoolean (value: string | boolean = false) {
   return (value === true || value === 'true');
 }

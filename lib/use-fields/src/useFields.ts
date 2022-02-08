@@ -1,25 +1,29 @@
-// @ts-check
+/* eslint-disable import/no-unresolved */
 import { useCallback, useReducer } from 'react';
-import { reducer, init } from './useFieldsReducer.js';
+import { Field, FieldError, FieldValue, CrossFieldValidatorFn } from './index.js';
+import { FieldAction, init, reducer } from './useFieldsReducer.js';
 
 /**
   useFields hook
-  @param {Object[]} initialFields Array of initial fields
-  @param {function[]} validators Array of validators
-  @returns {Object} Hook data (fields) and operations
+  @param initialFields Array of initial fields
+  @param validators Array of validators
+  @returns Hook data (fields) and operations
  */
-export const useFields = (initialFields, validators = []) => {
+export const useFields = (
+  initialFields: Field[],
+  validators: CrossFieldValidatorFn[] = []
+) => {
   const [fields, dispatch] = useReducer (reducer, initialFields, init);
 
   const setFields = useCallback ((data) => {
-    dispatch ({ type: 'set', data: init (data) });
+    dispatch ({ type: FieldAction.SET, fields: init (data) });
   }, [dispatch]);
 
   const onChange = useCallback ((e) => {
     const { name } = e.target;
     if (name && fields[name]) {
       const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value;
-      dispatch ({ type: 'value', name: e.target.name, value });
+      dispatch ({ type: FieldAction.VALUE, name: e.target.name, value });
     }
   }, [dispatch, fields]);
 
@@ -29,14 +33,14 @@ export const useFields = (initialFields, validators = []) => {
       const errors = validate (fields[name], fields, validators);
       const changes = errors.filter ((a) => a.error !== fields[a.name].error);
       if (changes.length !== 0) {
-        dispatch ({ type: 'errors', errors });
+        dispatch ({ type: FieldAction.ERRORS, errors });
       }
-      dispatch ({ type: 'touched', name });
+      dispatch ({ type: FieldAction.TOUCHED, name, touched: true });
     }
   }, [dispatch, fields, validators]);
 
   const getValues = useCallback (() => {
-    const result = {};
+    const result: Record<string, FieldValue> = {};
     for (const key of Object.keys (fields)) {
       if (Array.isArray (fields[key])) {
         for (const a of [fields[key]]) {
@@ -51,15 +55,15 @@ export const useFields = (initialFields, validators = []) => {
   }, [fields]);
 
   const setValue = useCallback ((name, value) => {
-    dispatch ({ type: 'value', name, value });
+    dispatch ({ type: FieldAction.VALUE, name, value });
   }, [dispatch]);
 
-  const setRequired = useCallback ((name, value) => {
-    dispatch ({ type: 'required', name, value });
+  const setRequired = useCallback ((name, required) => {
+    dispatch ({ type: FieldAction.REQUIRED, name, required });
   }, [dispatch]);
 
   const validateAll = useCallback (() => {
-    const errors = [];
+    const errors: FieldError[] = [];
     for (const key of Object.keys (fields)) {
       const t1 = validate (fields[key], fields, validators);
       for (const a of t1) {
@@ -71,17 +75,17 @@ export const useFields = (initialFields, validators = []) => {
         }
       }
     }
-    dispatch ({ type: 'errors', errors });
+    dispatch ({ type: FieldAction.ERRORS, errors });
     const list = errors.filter ((a) => a.error !== null);
     return list.length > 0 ? list : null;
   }, [fields, dispatch, validators]);
 
   const addField = useCallback ((field) => {
-    dispatch ({ type: 'addfield', field });
+    dispatch ({ type: FieldAction.ADDFIELD, field });
   }, [dispatch]);
 
-  const removeField = useCallback ((field) => {
-    dispatch ({ type: 'removefield', field });
+  const removeField = useCallback ((name) => {
+    dispatch ({ type: FieldAction.REMOVEFIELD, name });
   }, [dispatch]);
 
   return {
@@ -99,13 +103,18 @@ export const useFields = (initialFields, validators = []) => {
 };
 
 /**
- * @param {Object} field Field to validate
- * @param {Object[]} fields All fields
- * @param {function[]} validators Validators
- * @return {Object[]} Array of errors found
+ * Validate field content
+ * @param field Field to validate
+ * @param fields Object containing all fields
+ * @param validators Validators
+ * @returns Array of errors found
  */
-function validate (field, fields, validators) {
-  const errors = [];
+function validate (
+  field: Field,
+  fields: Record<string, Field>,
+  validators: CrossFieldValidatorFn[]
+) {
+  const errors: FieldError[] = [];
   if (validators.length > 0) {
     for (const fn of validators) {
       const list = fn (field, fields);
@@ -132,10 +141,10 @@ function validate (field, fields, validators) {
 }
 
 /**
- * @param {Object} field Field to validate
- * @return {string | null} Error string, or null if no error
+ * @param field Field to validate
+ * @returns Error string, or null if no error
  */
-function validateField (field) {
+function validateField (field: Field): string | null {
   const content = hasContent (field.value);
   if (!field.required && !content) {
     return null;
@@ -157,10 +166,12 @@ function validateField (field) {
 
 /**
  * Does field have any content
- * @param {Object} value Value to check
- * @returns {boolean} true if it has content, false if not. Default true for unknown types.
+ * @param value Value to check
+ * @returns true if it has content, false if not. Return Boolean(value) for unknown types.
  */
-function hasContent (value) {
+function hasContent (
+  value: FieldValue | null
+): boolean {
   if (typeof value === 'string') {
     return value.trim () !== '';
   } else if (Array.isArray (value)) {

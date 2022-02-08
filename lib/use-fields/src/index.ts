@@ -1,11 +1,11 @@
-// @ts-check
+/* eslint-disable import/no-unresolved */
 import * as PropTypes from 'prop-types';
-import { createField } from './src/helpers.js';
+import { createField } from './helpers.js';
 import {
   inDate, inInteger, inIntegerArray, outBoolean, outDate, outDateISO, outDateString, outInteger,
   outIntegerArray, outString, outStringArray, outTrim, outTrimArray,
-} from './src/formatters.js';
-import { useFields } from './src/useFields.js';
+} from './formatters.js';
+import { useFields } from './useFields.js';
 
 /** PropTypes for fields passed into forms */
 export const fieldPropTypes = {
@@ -30,27 +30,26 @@ export const fieldArrayPropTypes = {
   touched: PropTypes.bool.isRequired,
 };
 
-/** JSDoc types
-  @typedef {Object} Field
-  @property {string} name
-  @property {boolean | number | string | Date | null} initial
-  @property {boolean | number | string | Date | null} value
-  @property {boolean} required
-  @property {Function[]} validators
-  @property {Function} formatOut
-  @property {string} error
-  @property {boolean} touched
+export type FieldValue = boolean | number | string | Date | boolean[] | number[] | string[] | Date[] | null;
+export type ValidatorFn = (value: FieldValue) => string | null;
+export type FormatOutFn = (value: FieldValue) => FieldValue;
 
-  @typedef {Object} FieldArray
-  @property {string} name
-  @property {boolean[] | number[] | string[] | Date[] | null} initial
-  @property {boolean[] | number[] | string[] | Date[] | null} value
-  @property {boolean} required
-  @property {Function[]} validators
-  @property {Function} formatOut
-  @property {string} error
-  @property {boolean} touched
-*/
+export type Field = {
+  name: string,
+  initial: FieldValue,
+  value: FieldValue,
+  required: boolean,
+  validators: ValidatorFn[],
+  formatOut?: FormatOutFn,
+  error: string | null,
+  touched: boolean,
+};
+
+export type FieldError = {
+  name: string,
+  error: string | null,
+};
+export type CrossFieldValidatorFn = (field: Field, fields: Record<string, Field>) => FieldError[];
 
 export {
   createField, inDate, inInteger, inIntegerArray, outBoolean, outDate, outDateISO, outDateString, outInteger,
