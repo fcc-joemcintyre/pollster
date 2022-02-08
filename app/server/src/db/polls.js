@@ -70,10 +70,15 @@ export async function createPoll (creator, title, choices) {
   const t = await c.insertOne (
     { key, creator, title, choices },
   );
-  return ({
-    status: t.ops[0] ? 200 : 500,
-    poll: t.ops[0] || null,
-  });
+  if (t.acknowledged) {
+    const poll = await c.findOne (t.insertedId);
+    return ({
+      status: 200,
+      poll,
+    });
+  } else {
+    return ({ status: 500, poll: undefined });
+  }
 }
 
 /**
