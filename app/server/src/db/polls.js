@@ -9,7 +9,7 @@ import { getNextSequence } from './counters.js';
   @typedef { import ('../types/app').PollChoice} PollChoice
   @typedef { import ('../types/app').PollResult} PollResult
   @typedef { import ('../types/app').PollArrayResult} PollArrayResult
-*/
+ */
 
 /** @type mongodb.Collection */
 let c;
@@ -35,6 +35,7 @@ export async function getPolls (q, offset, limit) {
     const t = c.find (q);
     const count = await t.count ();
     const polls = await t.skip (offset).limit (limit).toArray ();
+    // @ts-ignore
     return ({ status: 200, count, polls });
   } catch (err) {
     return ({ status: 500, count: 0 });
@@ -51,6 +52,7 @@ export async function getPoll (key) {
     const poll = await c.findOne ({ key });
     return ({
       status: poll ? 200 : 404,
+      // @ts-ignore
       poll,
     });
   } catch (err) {
@@ -74,6 +76,7 @@ export async function createPoll (creator, title, choices) {
     const poll = await c.findOne (t.insertedId);
     return ({
       status: 200,
+      // @ts-ignore
       poll,
     });
   } else {
@@ -96,6 +99,7 @@ export async function updatePoll (key, title, choices) {
   );
   return ({
     status: t.value ? 200 : 500,
+    // @ts-ignore
     poll: t.value,
   });
 }
@@ -128,6 +132,7 @@ export async function vote (key, choice) {
   );
   return ({
     status: t.value ? 200 : 500,
+    // @ts-ignore
     poll: t.value,
   });
 }

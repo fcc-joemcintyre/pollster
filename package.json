@@ -35,7 +35,7 @@
     "build": "npm run clean && npm run build:libs && npm run build:server && npm run build:client",
     "build:server": "cd app/server && npm run build",
     "build:client": "cd app/client && npm run build",
-    "build:libs": "npm run build:libs:muikit && npm run build:libs:use-fields && npm run build:libs:validators",
+    "build:libs": "npm run build:libs:validators && npm run build:libs:use-fields && npm run build:libs:muikit",
     "build:libs:muikit": "cd lib/muikit && npm run build",
     "build:libs:use-fields": "cd lib/use-fields && npm run build",
     "build:libs:validators": "cd lib/validators && npm run build"

@@ -13,4 +13,4 @@ declare global {
 }
 
 // dummy export to allow declare definition context
-export function dummy ()
+export function dummy (): void

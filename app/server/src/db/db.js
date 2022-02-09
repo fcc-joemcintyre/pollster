@@ -5,32 +5,45 @@ import { initPolls } from './polls.js';
 import { initUsers } from './users.js';
 
 const { MongoClient } = mongodb;
+
+// connection status to share connection
+let status = 0;
 /** @type mongodb.MongoClient */
-let client = null;
+let client;
 /** @type mongodb.Db */
-let db = null;
+let db;
 
 /**
  * Connect to database and set up collections
  * @param {string} uri Database connection string
- * @returns {Promise<mongodb.Db>} Database interface
+ * @returns {Promise<mongodb.Db | null>} Database interface
  */
 export async function initDatabase (uri) {
   console.log ('INFO initDatabase');
-  if (!client) {
-    try {
-      const options = { useNewUrlParser: true, useUnifiedTopology: true };
-      // eslint-disable-next-line require-atomic-updates
-      client = await MongoClient.connect (uri, options);
-      db = client.db ();
-      initCounters (db);
-      initPolls (db);
-      initUsers (db);
-    } catch (err) {
-      console.log ('ERROR initDatabase', err);
-      throw err;
-    }
+  // existing connection
+  if (status === 2) {
+    return db;
   }
+  // connection being set up already
+  if (status === 1) {
+    return null;
+  }
+  status = 1; // setting up connection
+
+  try {
+    const options = {};
+    client = await MongoClient.connect (uri, options);
+    db = client.db ();
+    initCounters (db);
+    initPolls (db);
+    initUsers (db);
+  } catch (err) {
+    status = 0; // eslint-disable-line require-atomic-updates
+    console.log ('ERROR initDatabase', err);
+    throw err;
+  }
+
+  status = 2; // eslint-disable-line require-atomic-updates
   return db;
 }
 
@@ -41,12 +54,7 @@ export async function initDatabase (uri) {
 export async function closeDatabase () {
   console.log ('INFO closeDatabase');
   if (client) {
-    try {
-      await client.close ();
-    } finally {
-      db = null;
-      // eslint-disable-next-line require-atomic-updates
-      client = null;
-    }
+    await client.close ();
   }
+  status = 0;
 }

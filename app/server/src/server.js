@@ -17,6 +17,7 @@ import { initDatabase, closeDatabase } from './db/db.js';
  */
 
 // server instance
+/** @type http.Server | undefined */
 let server;
 
 // the secret for the session, should be set in an environment variable

@@ -27,5 +27,5 @@ export async function getNextSequence (_id) {
     { $inc: { sequence: 1 } },
     { returnDocument: 'after' },
   );
-  return t.value.sequence;
+  return t?.value?.sequence;
 }

@@ -8,7 +8,7 @@ import { getNextSequence } from './counters.js';
 
   @typedef { import ('../types/app').User} User
   @typedef { import ('../types/app').UserResult} UserResult
-*/
+ */
 
 /** @type mongodb.Collection */
 let c;
@@ -31,6 +31,7 @@ export async function findUserByEmail (email) {
   const user = await c.findOne ({ email });
   return ({
     status: user ? 200 : 404,
+    // @ts-ignore
     user,
   });
 }
@@ -49,12 +50,17 @@ export async function registerUser (email, name, password) {
     const t = await c.insertOne (
       { key, email, name, theme: 'light', hash: hash.hash, salt: hash.salt },
     );
-    return ({
-      status: t.ops[0] ? 200 : 400,
-      user: t.ops[0] || null,
-    });
+    if (t.acknowledged) {
+      const user = c.findOne (t.insertedId);
+      // @ts-ignore
+      return ({ status: 200, user });
+    } else {
+      // @ts-ignore
+      return ({ status: 400 });
+    }
   } catch (err) {
     return ({
+      // @ts-ignore
       status: err.code === 11000 ? 409 : 500,
     });
   }
@@ -83,6 +89,7 @@ export async function getProfile (key) {
   const user = await c.findOne ({ key });
   return ({
     status: user ? 200 : 404,
+    // @ts-ignore
     user,
   });
 }
@@ -102,6 +109,7 @@ export async function updateProfile (key, name, theme) {
   );
   return ({
     status: user.value ? 200 : 404,
+    // @ts-ignore
     user: user.value,
   });
 }

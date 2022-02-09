@@ -113,6 +113,7 @@ export async function register (req, res) {
  */
 export async function getProfile (req, res) {
   console.log ('INFO getProfile');
+  // @ts-ignore
   const t = await db.getProfile (req.user.key);
   if (t.status === 200 && t.user) {
     const { name, theme } = t.user;
@@ -137,6 +138,7 @@ export async function updateProfile (req, res) {
     res.status (400).json ({});
   } else {
     const { name, theme } = req.body;
+    // @ts-ignore
     const t = await db.updateProfile (req.user.key, name, theme);
     if (t.status === 200) {
       res.status (200).json ({ name, theme });

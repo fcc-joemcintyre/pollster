@@ -7,10 +7,10 @@ import Ajv from 'ajv';
 const ajv = new Ajv ();
 const dir = dirname (fileURLToPath (import.meta.url));
 
-export const validateLogin = compile ('schema/login.json');
-export const validatePoll = compile ('schema/poll.json');
-export const validateRegister = compile ('schema/register.json');
-export const validateProfile = compile ('schema/profile.json');
+export const validateLogin = compile ('../schema/login.json');
+export const validatePoll = compile ('../schema/poll.json');
+export const validateRegister = compile ('../schema/register.json');
+export const validateProfile = compile ('../schema/profile.json');
 
 /**
  * Compile JSON schema
