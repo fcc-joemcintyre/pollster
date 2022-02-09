@@ -1,4 +1,3 @@
-// @ts-check
 import assert from 'assert';
 import { processCommand } from '../src/cmd.js';
 
