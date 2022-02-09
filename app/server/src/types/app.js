@@ -33,11 +33,6 @@
   @typedef {Object} Hash
   @property {string} hash
   @property {string} salt
-
-  @typedef {Object} CommandResult
-  @property {number} code: number,
-  @property {boolean} exit: boolean,
-  @property {number} port: number,
 */
 
 // dummy function so Intellisense sees file as a module for imports

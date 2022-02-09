@@ -1,16 +1,24 @@
-// @ts-check
-/**
-  @typedef { import ('./types/app').CommandResult} CommandResult
- */
+export type CommandResult = {
+  code: number,
+  exit: boolean,
+  port: number,
+};
+
+type Options = {
+  p?: string,
+  h?: boolean,
+};
 
 /**
  * Valid command options
  *  [-p | --port] port to listen on, default 3000
- * @param {string[]} args Array of arguments
- * @returns {CommandResult} Command parsing result
+ *  [-h | --help] display help info
+ *
+ * @param args Array of arguments
+ * @returns Command parsing result
  */
-export function processCommand (args) {
-  const values = {};
+export function processCommand (args: string[]): CommandResult {
+  const values: Options = {};
   const errors = [];
 
   for (const arg of args) {
