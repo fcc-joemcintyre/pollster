@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 
 /**
   @typedef { import ('../types/app').Hash} Hash
-*/
+ */
 
 /**
  * Following recommendations of NIST for PBDKF2 implementation

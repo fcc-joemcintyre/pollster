@@ -14,11 +14,11 @@ describe ('db / counters', function () {
       initCounters (db);
     }
   });
-  
+
   after (() => {
     closeDatabase ();
   });
-  
+
   describe ('initial counter', function () {
     it ('should create new counter with value 1', async function () {
       const key = await getNextSequence ('test');
