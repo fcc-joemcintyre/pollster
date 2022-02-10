@@ -1,24 +1,19 @@
-// @ts-check
-import mongodb from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 import { initCounters } from './counters.js';
 import { initPolls } from './polls.js';
 import { initUsers } from './users.js';
 
-const { MongoClient } = mongodb;
-
 // connection status to share connection
 let status = 0;
-/** @type mongodb.MongoClient */
-let client;
-/** @type mongodb.Db */
-let db;
+let client: MongoClient;
+let db: Db;
 
 /**
  * Connect to database and set up collections
- * @param {string} uri Database connection string
- * @returns {Promise<mongodb.Db | null>} Database interface
+ * @param uri Database connection string
+ * @returns Database instance
  */
-export async function initDatabase (uri) {
+export async function initDatabase (uri: string): Promise<Db | null> {
   console.log ('INFO initDatabase');
   // existing connection
   if (status === 2) {
@@ -49,7 +44,7 @@ export async function initDatabase (uri) {
 
 /**
  * Close database and null out references
- * @returns {Promise<void>} Promise with no data
+ * @returns Promise with no data
  */
 export async function closeDatabase () {
   console.log ('INFO closeDatabase');
