@@ -1,25 +1,19 @@
-// @ts-check
+import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import * as db from '../db/users.js';
 import { validateLogin, validateRegister, validateProfile } from './validators.js';
 
 /**
-  @typedef { import ('express').Request} Request
-  @typedef { import ('express').Response} Response
-  @typedef { import ('express').NextFunction} NextFunction
-*/
-
-/**
  * Login, authenticating user and creating a session
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  *  200 logged in, data { user, theme }
  *  400 error data {}
  *  401 unauthorized data {}
  * @param {NextFunction} next Next middleware
  * @returns {void}
  */
-export function login (req, res, next) {
+export function login (req: Request, res: Response, next: NextFunction) {
   console.log ('INFO login');
   if (validateLogin (req.body) === false) {
     console.log ('ERROR login (400) invalid body', validateLogin.errors);
@@ -48,30 +42,32 @@ export function login (req, res, next) {
 
 /**
  * Logout, closing session
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  *  200 logged out, data {}
  * @returns {void}
  */
-export function logout (req, res) {
-  console.log ('INFO logout', req.user?.key || 0);
+export function logout (req: Request, res: Response): void {
+  const user = req.user as db.User;
+  console.log ('INFO logout', user?.key || 0);
   req.logout ();
   res.status (200).json ({});
 }
 
 /**
  * If already logged in, return user information and continue session
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  *  200 user info {user, theme} with defaults if not logged in
  * @returns {void}
  */
-export function verifyLogin (req, res) {
+export function verifyLogin (req: Request, res: Response): void {
   console.log ('INFO verifyLogin');
   if (req.isAuthenticated ()) {
-    const { key, theme } = req.user;
+    const user = req.user as db.User;
+    const { key, theme } = user;
     res.status (200).json ({ key, theme });
-    console.log ('INFO verified', req.user.key);
+    console.log ('INFO verified', key);
   } else {
     console.log ('INFO not verified');
     res.status (200).json ({ key: 0 });
@@ -80,13 +76,13 @@ export function verifyLogin (req, res) {
 
 /**
  * Register new user
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  *  200 user registered, data {}
  *  409 user already exists, data {}
- * @returns {Promise<void>} Promise with no value
+ * @returns Promise with no value
  */
-export async function register (req, res) {
+export async function register (req: Request, res: Response): Promise<void> {
   console.log ('INFO register');
   if (validateRegister (req.body) === false) {
     console.log ('ERROR register (400) invalid body', validateRegister.errors);
@@ -106,15 +102,15 @@ export async function register (req, res) {
 
 /**
  * Get user profile
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  *  200, data {name, email, theme}
- * @returns {Promise<void>} Promise with no data
+ * @returns Promise with no data
  */
-export async function getProfile (req, res) {
+export async function getProfile (req: Request, res: Response): Promise<void> {
   console.log ('INFO getProfile');
-  // @ts-ignore
-  const t = await db.getProfile (req.user.key);
+  const user = req.user as db.User;
+  const t = await db.getProfile (user.key);
   if (t.status === 200 && t.user) {
     const { name, theme } = t.user;
     res.status (200).json ({ name, theme });
@@ -126,20 +122,20 @@ export async function getProfile (req, res) {
 
 /**
  * Update user profile
- * @param {Request} req Request
- * @param {Response} res Response
+ * @param req Request
+ * @param res Response
  *  200, data {name, email, theme}
- * @returns {Promise<void>} Promise with no data
+ * @returns Promise with no data
  */
-export async function updateProfile (req, res) {
+export async function updateProfile (req: Request, res: Response): Promise<void> {
   console.log ('INFO updateProfile');
   if (validateProfile (req.body) === false) {
     console.log ('ERROR updateProfile (400) invalid body', validateProfile.errors);
     res.status (400).json ({});
   } else {
     const { name, theme } = req.body;
-    // @ts-ignore
-    const t = await db.updateProfile (req.user.key, name, theme);
+    const user = req.user as db.User;
+    const t = await db.updateProfile (user.key, name, theme);
     if (t.status === 200) {
       res.status (200).json ({ name, theme });
     } else {

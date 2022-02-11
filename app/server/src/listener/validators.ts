@@ -1,4 +1,3 @@
-// @ts-check
 import { readFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,10 +13,10 @@ export const validateProfile = compile ('../schema/profile.json');
 
 /**
  * Compile JSON schema
- * @param {string} schema Input schema
- * @returns {any} Schema processing interface
+ * @param schema Input schema
+ * @returns Schema processing interface
  */
-function compile (schema) {
+function compile (schema: string) {
   const json = readFileSync (resolve (dir, schema), 'utf8');
   const t = JSON.parse (json);
   return ajv.compile (t);

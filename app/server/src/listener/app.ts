@@ -1,19 +1,14 @@
-// @ts-check
+import { Request, Response } from 'express';
 import * as db from '../db/polls.js';
+import { User } from '../db/users.js';
 import { validatePoll } from './validators.js';
 
 /**
-  @typedef { import ('express').Request} Request
-  @typedef { import ('express').Response} Response
-  @typedef { import ('express').NextFunction} NextFunction
- */
-
-/**
  * Get all polls
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param req Request object
+ * @param res Response object
  */
-export async function getPolls (req, res) {
+export async function getPolls (req: Request, res: Response) {
   console.log ('INFO getPolls');
   const page = req.query.page ? Number (req.query.page) : 0;
   const limit = req.query.limit ? Number (req.query.limit) : 100;
@@ -22,10 +17,10 @@ export async function getPolls (req, res) {
     res.status (400).json ({});
     return;
   }
-  const q = {};
+  const q: db.PollQuery = {};
   if (req.query.own === 'true') {
-    // @ts-ignore
-    q.creator = req.user.key;
+    const user = req.user as User;
+    q.creator = user.key;
   }
   const t = await db.getPolls (q, page * limit, limit);
   if (t.status === 200) {
@@ -38,10 +33,10 @@ export async function getPolls (req, res) {
 
 /**
  * Get single poll
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param req Request object
+ * @param res Response object
  */
-export async function getPoll (req, res) {
+export async function getPoll (req: Request, res: Response) {
   console.log ('INFO getPoll');
   const key = Number (req.params.key);
   if (Number.isNaN (key)) {
@@ -62,10 +57,10 @@ export async function getPoll (req, res) {
 
 /**
  * Create a new poll
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param req Request object
+ * @param res Response object
  */
-export async function createPoll (req, res) {
+export async function createPoll (req: Request, res: Response) {
   console.log ('INFO createPoll', req.body);
   if (validatePoll (req.body) === false) {
     console.log ('ERROR createPoll (400) invalid body', validatePoll.errors);
@@ -75,8 +70,8 @@ export async function createPoll (req, res) {
     for (const choice of req.body.choices) {
       choices.push ({ text: choice, votes: 0 });
     }
-    // @ts-ignore
-    const t = await db.createPoll (req.user.key, req.body.title, choices);
+    const user = req.user as User;
+    const t = await db.createPoll (user.key, req.body.title, choices);
     if (t.status === 200) {
       console.log ('INFO addPoll ok');
       res.status (200).json (t.poll);
@@ -89,10 +84,10 @@ export async function createPoll (req, res) {
 
 /**
  * Update a poll
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param req Request object
+ * @param res Response object
  */
-export async function updatePoll (req, res) {
+export async function updatePoll (req: Request, res: Response) {
   console.log ('INFO updatePoll');
   const key = Number (req.params.key);
   if (Number.isNaN (key)) {
@@ -119,10 +114,10 @@ export async function updatePoll (req, res) {
 
 /**
  * Delete a poll
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param req Request object
+ * @param res Response object
  */
-export async function deletePoll (req, res) {
+export async function deletePoll (req: Request, res: Response) {
   console.log ('INFO deletePoll');
   const key = Number (req.params.key);
   if (Number.isNaN (key)) {
@@ -135,10 +130,10 @@ export async function deletePoll (req, res) {
 
 /**
  * Vote in a poll
- * @param {Request} req Request object
- * @param {Response} res Response object
+ * @param req Request object
+ * @param res Response object
  */
-export async function vote (req, res) {
+export async function vote (req: Request, res: Response) {
   console.log ('INFO vote');
   const key = Number (req.params.key);
   const { choice } = req.params;

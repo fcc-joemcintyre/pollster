@@ -39,7 +39,7 @@ export function initPolls (db: Db) {
 }
 
 /**
- * Get all pools
+ * Get all polls
  * @param q Query
  * @param offset Pagination offset
  * @param limit Pagination limit

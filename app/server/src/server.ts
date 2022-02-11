@@ -1,5 +1,4 @@
-// @ts-check
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cookieSession from 'cookie-session';
 import helmet from 'helmet';
 import * as fs from 'fs';
@@ -10,15 +9,8 @@ import { initAuth } from './auth/auth.js';
 import { initRoutes } from './routes.js';
 import { initDatabase, closeDatabase } from './db/db.js';
 
-/**
-  @typedef { import ('express').Request} Request
-  @typedef { import ('express').Response} Response
-  @typedef { import ('express').NextFunction} NextFunction
- */
-
 // server instance
-/** @type http.Server | undefined */
-let server;
+let server: http.Server | undefined;
 
 // the secret for the session, should be set in an environment variable
 // some random text used as a placeholder for dev
@@ -26,12 +18,11 @@ const sessionSecret = process.env.SESSION_SECRET || 'randomtext_aseroja';
 
 /**
  * Register new user
- * @param {Request} req Request
- * @param {Response} res Response
- * @param {NextFunction} next Next middleware
- * @returns {void}
+ * @param req Request
+ * @param res Response
+ * @param next Next middleware
  */
-const httpsOnly = (req, res, next) => {
+const httpsOnly = (req: Request, res: Response, next: NextFunction): void => {
   if (req.headers['x-forwarded-proto'] &&
     req.headers['x-forwarded-proto'] !== 'https') {
     res.redirect (['https://', req.hostname, req.url].join (''));
@@ -42,11 +33,11 @@ const httpsOnly = (req, res, next) => {
 
 /**
  * Start the server
- * @param {number} port HTTP port number
- * @param {string} dbLocation URL to database
- * @returns {Promise<void>} Promise with no data
+ * @param port HTTP port number
+ * @param dbLocation URL to database
+ * @returns Promise with no data
  */
-export async function startServer (port, dbLocation) {
+export async function startServer (port: number, dbLocation: string): Promise<void> {
   try {
     console.log ('INFO Starting server');
     await initDatabase (dbLocation);
@@ -120,9 +111,9 @@ export async function startServer (port, dbLocation) {
 
 /**
  * Stop the server
- * @returns {Promise<void>} Promise with no data
+ * @returns Promise with no data
  */
-export async function stopServer () {
+export async function stopServer (): Promise<void> {
   if (server) {
     await server.close ();
     await closeDatabase ();

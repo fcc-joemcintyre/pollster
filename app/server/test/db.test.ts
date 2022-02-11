@@ -35,7 +35,7 @@ describe ('db / counters', function () {
   });
 });
 
-describe.only ('db / users', function () {
+describe ('db / users', function () {
   before (async () => {
     db = await initDatabase ('mongodb://localhost:27018/pollster');
     if (db) {

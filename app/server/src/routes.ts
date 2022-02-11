@@ -1,20 +1,12 @@
-// @ts-check
+import { Application, NextFunction, Request, Response } from 'express';
 import { getProfile, login, logout, register, updateProfile, verifyLogin } from './listener/user.js';
 import { createPoll, deletePoll, getPoll, getPolls, updatePoll, vote } from './listener/app.js';
 
 /**
-  @typedef { import ('express').Application} Application
-  @typedef { import ('express').Request} Request
-  @typedef { import ('express').Response} Response
-  @typedef { import ('express').NextFunction} NextFunction
- */
-
-/**
  * Initialize routes.
- * @param {Application} app Express app object
- * @returns {void}
+ * @param app Express app object
  */
-export function initRoutes (app) {
+export function initRoutes (app: Application): void {
   app.post ('/api/login', login);
   app.post ('/api/logout', logout);
   app.get ('/api/verifylogin', verifyLogin);
@@ -31,12 +23,11 @@ export function initRoutes (app) {
 
 /**
  * Authenticate, if passing continue, otherwise return 401 (auth failure)
- * @param {Request} req Request
- * @param {Response} res Response
- * @param {NextFunction} next Next middleware
- * @returns {void}
+ * @param req Request
+ * @param res Response
+ * @param next Next middleware
  */
-function isAuthenticated (req, res, next) {
+function isAuthenticated (req: Request, res: Response, next: NextFunction): void {
   if (req.isAuthenticated ()) {
     next ();
   } else {
