@@ -1,9 +1,9 @@
-// @ts-check
 import * as crypto from 'crypto';
 
-/**
-  @typedef { import ('../types/app').Hash} Hash
- */
+export type Hash = {
+  hash: string,
+  salt: string,
+};
 
 /**
  * Following recommendations of NIST for PBDKF2 implementation
@@ -13,10 +13,10 @@ import * as crypto from 'crypto';
 
 /**
  * Create a hash and salt for a provided password
- * @param {string} password Password to generate hash from
- * @returns {Hash} Hash object
+ * @param password Password to generate hash from
+ * @returns Hash object
  */
-export function createHash (password) {
+export function createHash (password: string): Hash {
   const salt = crypto.randomBytes (16).toString ('hex');
   const hash = crypto.pbkdf2Sync (password, salt, 2000, 64, 'sha512').toString ('hex');
   return { salt, hash };
@@ -24,12 +24,12 @@ export function createHash (password) {
 
 /**
  * Compare provided password with previously generated hash
- * @param {string} password Password to compare with
- * @param {string} hash Previously generated hash
- * @param {string} salt Previously generated salt
- * @returns {boolean} Compare result
+ * @param password Password to compare with
+ * @param hash Previously generated hash
+ * @param salt Previously generated salt
+ * @returns Compare result
  */
-export function compareHash (password, hash, salt) {
+export function compareHash (password: string, hash: string, salt: string): boolean {
   const key = crypto.pbkdf2Sync (password, salt, 2000, 64, 'sha512').toString ('hex');
   return hash === key;
 }

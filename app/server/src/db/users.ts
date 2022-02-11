@@ -2,7 +2,7 @@ import { Collection, Db, MongoServerError } from 'mongodb';
 import { createHash } from '../auth/hash.js';
 import { getNextSequence } from './counters.js';
 
-type User = {
+export type User = {
   key: number,
   email: string,
   name: string,

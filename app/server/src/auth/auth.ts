@@ -1,16 +1,14 @@
-// @ts-check
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import { findUserByEmail } from '../db/users.js';
+import { findUserByEmail, User } from '../db/users.js';
 import { compareHash } from './hash.js';
 
 const { Strategy } = passportLocal;
 
 /**
  * Initialize authentication module, with serializer and desericalizer
- * @returns {void}
  */
-export function initAuth () {
+export function initAuth (): void {
   // local authentication using database for user registry
   const options = { usernameField: 'email', passwordField: 'password' };
   passport.use (new Strategy (options, async (email, password, callback) => {
@@ -35,7 +33,7 @@ export function initAuth () {
   passport.serializeUser ((user, callback) => callback (null, user));
 
   // deserialize user
-  passport.deserializeUser ((user, callback) => (
+  passport.deserializeUser ((user: User | false | undefined | null, callback) => (
     callback (null, user)
   ));
 }
