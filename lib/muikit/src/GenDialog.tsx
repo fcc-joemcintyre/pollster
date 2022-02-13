@@ -18,7 +18,7 @@ type Props = {
  * @param Props
  * @returns Dialog instance
  */
-export const GenDialog = ({
+export const GenDialog: React.FC<Props> = ({
   formid = undefined,
   actions = [],
   defaultAction = undefined,

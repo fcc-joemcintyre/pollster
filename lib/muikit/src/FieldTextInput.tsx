@@ -29,7 +29,7 @@ type Props = {
  * @param Props
  * @returns Field instance
  */
-export const FieldTextInput = (
+export const FieldTextInput: React.FC<Props> = (
   {
     field,
     type = 'text',

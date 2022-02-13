@@ -16,7 +16,7 @@ type Props = {
   errors?: Record<string, string>,
   onChange: React.ChangeEventHandler,
   onValidate?: React.FocusEventHandler,
-  children: JSX.Element,
+  children: React.ReactNode,
 };
 
 /**
@@ -24,7 +24,7 @@ type Props = {
  * @param Props
  * @returns Field instance
  */
-export const FieldSelect = (
+export const FieldSelect: React.FC<Props> = (
   {
     field,
     label,
