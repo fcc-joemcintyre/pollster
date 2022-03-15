@@ -67,7 +67,7 @@ export const CreatePoll = () => {
       addField (createField (next, '', false));
     }
   }
-console.log (fields);
+
   return (
     <PageContent>
       <Typography variant='h1' textAlign='center' gutterBottom>
