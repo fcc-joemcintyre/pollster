@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, IconButton, List, ListItem, ListItemText,
   ListItemSecondaryAction, Tooltip, Typography } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
@@ -8,13 +8,13 @@ import { useDeletePoll, usePolls } from '../../data/usePolls';
 import { PageContent } from '../util';
 
 export const Manage = () => {
-  const history = useHistory ();
+  const navigate = useNavigate ();
   const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
   const { data: polls, isLoading, isError, isSuccess } = usePolls (true);
   const deletePoll = useDeletePoll ();
 
   function onEditPoll (key) {
-    history.push (`/manage/${key}`);
+    navigate (`/manage/${key}`);
   }
 
   function onDeletePoll (key) {
@@ -61,7 +61,7 @@ export const Manage = () => {
         <>
           <Box textAlign='right'>
             <Tooltip title='Create a new poll'>
-              <IconButton onClick={() => history.push ('/manage/create')}>
+              <IconButton onClick={() => navigate ('/manage/create')}>
                 <AddIcon />
               </IconButton>
             </Tooltip>

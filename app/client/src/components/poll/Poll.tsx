@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { PageContent } from '../util';
 import { usePoll, useVote } from '../../data/usePolls';
@@ -8,7 +8,7 @@ import { PollItem } from './PollItem';
 export const Poll = () => {
   const [selected, setSelected] = useState (-1);
   const [voted, setVoted] = useState (false);
-  const history = useHistory ();
+  const navigate = useNavigate ();
   const params = useParams ();
   const key = Number (params.key);
   const { data: poll, isLoading, isError } = usePoll (key);
@@ -36,7 +36,7 @@ export const Poll = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault ();
-            history.push ('/');
+            navigate ('/');
           }}
         >
           <Typography paragraph textAlign='center'>
@@ -103,7 +103,7 @@ export const Poll = () => {
         <Grid item>
           <Button
             type='button'
-            onClick={() => { history.push ('/'); }}
+            onClick={() => { navigate ('/'); }}
           >
             Back to Polls
           </Button>

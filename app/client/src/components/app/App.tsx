@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useAuth } from '../../data/useAuth';
 import { Home } from '../home';
@@ -34,19 +34,19 @@ export const App = () => {
           <>
             <CssBaseline />
             { authenticated ? <NavAuth /> : <NavUnauth /> }
-            <Switch>
-              <Route exact path='/'><Home /></Route>
-              <Route exact path='/register'><Register /></Route>
-              <AuthRoute exact path='/profile' authenticated={authenticated}><Profile /></AuthRoute>
-              <Route exact path='/polls/:key'><Poll /></Route>
-              <AuthRoute exact path='/manage/create' authenticated={authenticated}><CreatePoll /></AuthRoute>
-              <AuthRoute exact path='/manage/:key' authenticated={authenticated}><UpdatePoll /></AuthRoute>
-              <AuthRoute exact path='/manage' authenticated={authenticated}><Manage /></AuthRoute>
-              <AuthRoute exact path='/results' authenticated={authenticated}><Result /></AuthRoute>
-              <Route exact path='/about'><About /></Route>
-              <Route exact path='/logout'><Logout /></Route>
-              <Route path='*'><NotFound /></Route>
-            </Switch>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/profile' element={<AuthRoute><Profile /></AuthRoute>} />
+              <Route path='/polls/:key' element={<Poll />} />
+              <Route path='/manage/create' element={<AuthRoute><CreatePoll /></AuthRoute>} />
+              <Route path='/manage/:key' element={<AuthRoute><UpdatePoll /></AuthRoute>} />
+              <Route path='/manage' element={<AuthRoute><Manage /></AuthRoute>} />
+              <Route path='/results' element={<AuthRoute><Result /></AuthRoute>} />
+              <Route path='/about' element={<About />} />
+              <Route path='/logout' element={<Logout />} />
+              <Route path='*' element={<NotFound />} />
+            </Routes>
           </>
         </ThemeProvider>
       </ScrollToTop>

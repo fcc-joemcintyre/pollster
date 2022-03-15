@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createField, useFields } from '@cygns/use-fields';
 import { GenDialog } from '@cygns/muikit';
 import { isEmail, isPassword } from '@cygns/validators';
@@ -30,7 +30,7 @@ const initialFields = [
 export const Register = () => {
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields, [isMatch]);
   const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
-  const history = useHistory ();
+  const navigate = useNavigate ();
   const login = useLogin ();
   const register = useRegister ();
 
@@ -48,7 +48,7 @@ export const Register = () => {
         onSuccess: () => {
           setDialog (<GenDialog>Registered, logging in ...</GenDialog>);
           login.mutate ({ email, password }, {
-            onSuccess: () => history.replace ('/'),
+            onSuccess: () => navigate ('/', { replace: true }),
             onError: () => setDialog (<GenDialog actions={['Close']} onClose={onClose}>Error logging in</GenDialog>),
           });
         },
@@ -56,7 +56,7 @@ export const Register = () => {
       });
     }
     return errors;
-  }, [getValues, history, login, onClose, register, validateAll]);
+  }, [getValues, login, onClose, register, validateAll]);
 
   return (
     <>

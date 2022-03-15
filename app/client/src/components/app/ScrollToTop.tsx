@@ -1,18 +1,10 @@
 import { useEffect } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
-/**
- * Function called on route change
- * @param props Props
- * @returns Children to render
- */
-const C = ((props: RouteComponentProps) => {
-  const { children, location: { pathname } } = props;
+export const ScrollToTop = ({ children }) => {
+  const { pathname, search } = useLocation ();
   useEffect (() => {
     window.scrollTo (0, 0);
-  }, [pathname]);
-
+  }, [pathname, search]);
   return children || null;
-});
-
-export const ScrollToTop = withRouter (C);
+};

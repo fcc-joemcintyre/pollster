@@ -93,16 +93,13 @@ authentication and sessions are essential to the applications function.
 
 ## Technology Selections
 
-The server is implemented with Node.js version 16.x and uses ES2020 Javascript
-conforming to the native ES support provided in this version of Node.js. Type
-support is added using JSDoc, using Intellisense and Typescript compiler for
-type checking.
+The server is implemented with Typescript and runs on Node.js version 16.x.
 
-Data is stored in MongoDB (4.x), and accessed through the mongodb Nodejs driver.
+Data is stored in MongoDB (5.x), and accessed through the mongodb Nodejs driver.
 
-The client interface is implemented with React 17.0.x using ES2020 Javascript
-as supported by Babel. React-router is used for routing. Components use the Material-UI library and the Emotion CSS-in-JS library.
+The client interface is implemented with React 17 using Typescript.
+React-router is used for routing. Components use the Material-UI library and the Emotion CSS-in-JS library.
 
 Build is performed with npm scripts (server) and Webpack (client). Workspaces (npm version 7 or later) are used for project organization.
 
-Libraries are implemented with ES2020 Javascript, or Typescript (with ES2020 output).
+Libraries are implemented with Typescript.

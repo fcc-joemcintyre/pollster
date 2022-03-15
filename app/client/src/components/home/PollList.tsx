@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { Poll } from '../../data/usePolls.js';
 
@@ -12,14 +12,14 @@ type Props = {
  * @returns React component
  */
 export const PollList = ({ polls }: Props) => {
-  const history = useHistory ();
+  const navigate = useNavigate ();
   return (
     <List component='nav' aria-label='polls'>
       { polls.map ((a) => (
         <ListItem
           key={a.key}
           button
-          onClick={() => { history.push (`/polls/${a.key}`); }}
+          onClick={() => { navigate (`/polls/${a.key}`); }}
         >
           <ListItemText
             primary={a.title}

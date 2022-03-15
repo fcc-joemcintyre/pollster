@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem,
   Toolbar, Typography, useMediaQuery }
@@ -38,7 +38,7 @@ export const NavUnauth = () => {
 
 const MobileNav = ({ onLogin }) => {
   const [drawer, setDrawer] = useState (false);
-  const history = useHistory ();
+  const navigate = useNavigate ();
   const path = useLocation ().pathname;
 
   const onToggleDrawer = (open) => (e) => {
@@ -52,7 +52,7 @@ const MobileNav = ({ onLogin }) => {
     <>
       <AppBar position='fixed'>
         <StyledToolbar>
-          <Title onClick={() => history.push ('/')}>
+          <Title onClick={() => navigate ('/')}>
             Pollster
           </Title>
           <IconButton
@@ -105,14 +105,14 @@ MobileNav.propTypes = {
 };
 
 const DesktopNav = ({ onLogin }) => {
-  const history = useHistory ();
+  const navigate = useNavigate ();
 
   return (
     <>
       <AppBar position='fixed'>
         <StyledToolbar>
           <div>
-            <Title onClick={() => history.push ('/')}>
+            <Title onClick={() => navigate ('/')}>
               Pollster
             </Title>
           </div>
