@@ -104,7 +104,7 @@ export async function updatePoll (req: Request, res: Response) {
     }
     const t = await db.updatePoll (key, req.body.title, choices);
     if (t.status === 200) {
-      res.status (200).json ({});
+      res.status (200).json (t.poll);
     } else {
       console.log (`ERROR updatePoll (${t.status})`);
       res.status (t.status).json ({});
