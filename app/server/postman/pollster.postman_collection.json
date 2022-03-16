@@ -265,6 +265,127 @@
 			"response": []
 		},
 		{
+			"name": "Get profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test ('status to be 200', () => {",
+							"    pm.response.to.have.status (200);",
+							"})",
+							"",
+							"pm.test ('verify initial profile data', () => {",
+							"    var data = pm.response.json ();",
+							"    pm.expect (data.name).to.eq ('A A');",
+							"    pm.expect (data.theme).to.eq ('light');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/profile",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test ('status to be 200', () => {",
+							"    pm.response.to.have.status (200);",
+							"})",
+							"",
+							"pm.test ('verify updated profile data', () => {",
+							"    var data = pm.response.json ();",
+							"    pm.expect (data.name).to.eq ('B B');",
+							"    pm.expect (data.theme).to.eq ('dark');",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"B B\",\n    \"theme\": \"dark\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/profile",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify profile update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test ('status to be 200', () => {",
+							"    pm.response.to.have.status (200);",
+							"})",
+							"",
+							"pm.test ('verify updated profile data', () => {",
+							"    var data = pm.response.json ();",
+							"    pm.expect (data.name).to.eq ('B B');",
+							"    pm.expect (data.theme).to.eq ('dark');",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/profile",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get polls, initial",
 			"event": [
 				{
