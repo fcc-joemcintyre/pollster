@@ -51,8 +51,8 @@ export async function getPolls (
   limit: number
 ): Promise<PollArrayResult> {
   try {
+    const count = await c.countDocuments (q);
     const t = c.find (q);
-    const count = await t.count ();
     const polls = await t.skip (offset).limit (limit).toArray ();
     return ({ status: 200, count, polls });
   } catch (err) {
