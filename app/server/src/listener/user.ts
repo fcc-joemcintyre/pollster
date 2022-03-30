@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
-import * as db from '../db/users.js';
+import * as db from '../db/index.js';
 import { validateLogin, validateRegister, validateProfile } from './validators.js';
 
 /**

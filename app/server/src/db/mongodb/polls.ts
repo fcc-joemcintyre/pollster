@@ -1,32 +1,6 @@
 import { Collection, Db } from 'mongodb';
+import { Poll, PollArrayResult, PollChoice, PollQuery, PollResult } from '../index.js';
 import { getNextSequence } from './counters.js';
-
-export type PollChoice = {
-  text: string,
-  votes: number,
-};
-
-export type Poll = {
-  key: number,
-  creator: number,
-  title: string,
-  choices: PollChoice[],
-};
-
-export type PollResult = {
-  status: number,
-  poll?: Poll | null,
-};
-
-export type PollArrayResult = {
-  status: number,
-  count: number,
-  polls?: Poll[],
-};
-
-export type PollQuery = {
-  creator?: number,
-};
 
 let c: Collection<Poll>;
 
@@ -136,9 +110,9 @@ export async function updatePoll (
  * @param key Poll key
  * @returns Result (0 - ok, 404 - not deleted)
  */
-export function removePoll (key: number): PollResult {
+export async function removePoll (key: number): Promise<PollResult> {
   try {
-    c.deleteOne ({ key });
+    await c.deleteOne ({ key });
     return { status: 200 };
   } catch (err) {
     return { status: 404 };

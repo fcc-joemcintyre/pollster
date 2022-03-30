@@ -7,7 +7,7 @@ import * as path from 'path';
 import passport from 'passport';
 import { initAuth } from './auth/auth.js';
 import { initRoutes } from './routes.js';
-import { initDatabase, closeDatabase } from './db/db.js';
+import { initDatabase, closeDatabase } from './db/index.js';
 
 // server instance
 let server: http.Server | undefined;

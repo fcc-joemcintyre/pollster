@@ -1,6 +1,6 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import { findUserByEmail, User } from '../db/users.js';
+import { findUserByEmail, User } from '../db/index.js';
 import { compareHash } from './hash.js';
 
 const { Strategy } = passportLocal;

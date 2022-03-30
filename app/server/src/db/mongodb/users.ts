@@ -1,20 +1,7 @@
 import { Collection, Db, MongoServerError } from 'mongodb';
-import { createHash } from '../auth/hash.js';
+import { createHash } from '../../auth/hash.js';
+import { User, UserResult } from '../index.js';
 import { getNextSequence } from './counters.js';
-
-export type User = {
-  key: number,
-  email: string,
-  name: string,
-  theme: string,
-  hash: string,
-  salt: string,
-};
-
-type UserResult = {
-  status: number,
-  user?: User | null,
-};
 
 let c: Collection<User>;
 

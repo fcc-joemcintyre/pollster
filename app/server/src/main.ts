@@ -13,6 +13,7 @@ function main (): void {
   }
 
   const port = Number (process.env.PORT) || command.port;
-  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/pollster';
+  const uri = command.db === 'mongodb' ?
+    process.env.MONGODB_URI || 'mongodb://localhost:27017/pollster' : '';
   startServer (port, uri);
 }

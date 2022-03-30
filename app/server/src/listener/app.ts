@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import * as db from '../db/polls.js';
-import { User } from '../db/users.js';
+import * as db from '../db/index.js';
 import { validatePoll } from './validators.js';
 
 /**
@@ -19,7 +18,7 @@ export async function getPolls (req: Request, res: Response) {
   }
   const q: db.PollQuery = {};
   if (req.query.own === 'true') {
-    const user = req.user as User;
+    const user = req.user as db.User;
     q.creator = user.key;
   }
   const t = await db.getPolls (q, page * limit, limit);
@@ -70,7 +69,7 @@ export async function createPoll (req: Request, res: Response) {
     for (const choice of req.body.choices) {
       choices.push ({ text: choice, votes: 0 });
     }
-    const user = req.user as User;
+    const user = req.user as db.User;
     const t = await db.createPoll (user.key, req.body.title, choices);
     if (t.status === 200) {
       console.log ('INFO addPoll ok');

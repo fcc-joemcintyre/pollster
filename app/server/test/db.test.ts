@@ -1,8 +1,8 @@
 import { expect } from 'earljs';
 import { Db } from 'mongodb';
-import { initDatabase, closeDatabase } from '../src/db/db.js';
-import { initCounters, getNextSequence } from '../src/db/counters.js';
-import { initUsers, registerUser } from '../src/db/users.js';
+import { initDatabase, closeDatabase } from '../src/db/mongodb/db.js';
+import { initCounters, getNextSequence } from '../src/db/mongodb/counters.js';
+import { initUsers, registerUser } from '../src/db/mongodb/users.js';
 
 let db: Db | null;
 

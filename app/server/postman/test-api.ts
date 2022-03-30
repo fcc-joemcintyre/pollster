@@ -2,8 +2,7 @@ import express from 'express';
 import http from 'http';
 import { MongoClient } from 'mongodb';
 import newman from 'newman'; // eslint-disable-line
-import { Poll } from '../src/db/polls.js';
-import { User } from '../src/db/users.js';
+import { Poll, User } from '../src/db/index.js';
 import { startServer, stopServer } from '../src/server.js';
 
 const port = 3000;
