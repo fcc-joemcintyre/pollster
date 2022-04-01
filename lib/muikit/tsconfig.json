@@ -9,15 +9,13 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./lib",
     "declaration": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
   },
   "references": [
     { "@cygns/use-fields": "../use-fields/lib/index.js" }
   ],
   "include": [
     "./src"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
