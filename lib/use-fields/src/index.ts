@@ -1,34 +1,10 @@
 /* eslint-disable import/no-unresolved */
-import * as PropTypes from 'prop-types';
 import { createField } from './helpers.js';
 import {
   inDate, inInteger, inIntegerArray, outBoolean, outDate, outDateISO, outDateString, outInteger,
   outIntegerArray, outString, outStringArray, outTrim, outTrimArray,
 } from './formatters.js';
 import { useFields } from './useFields.js';
-
-/** PropTypes for fields passed into forms */
-export const fieldPropTypes = {
-  name: PropTypes.string.isRequired,
-  initial: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-  required: PropTypes.bool.isRequired,
-  validators: PropTypes.arrayOf (PropTypes.func).isRequired,
-  formatOut: PropTypes.func.isRequired,
-  error: PropTypes.string.isRequired,
-  touched: PropTypes.bool.isRequired,
-};
-
-export const fieldArrayPropTypes = {
-  name: PropTypes.string.isRequired,
-  initial: PropTypes.arrayOf (PropTypes.any).isRequired,
-  value: PropTypes.arrayOf (PropTypes.any).isRequired,
-  required: PropTypes.bool.isRequired,
-  validators: PropTypes.arrayOf (PropTypes.func).isRequired,
-  formatOut: PropTypes.func.isRequired,
-  error: PropTypes.string.isRequired,
-  touched: PropTypes.bool.isRequired,
-};
 
 export type FieldValue = boolean | number | string | Date | boolean[] | number[] | string[] | Date[] | null;
 export type ValidatorFn = (value: FieldValue) => string | null;

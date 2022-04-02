@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem,
@@ -7,6 +6,10 @@ import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem,
   from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Login } from '../login';
+
+type Props = {
+  onLogin: () => void,
+};
 
 export const NavUnauth = () => {
   const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
@@ -36,7 +39,7 @@ export const NavUnauth = () => {
   );
 };
 
-const MobileNav = ({ onLogin }) => {
+const MobileNav = ({ onLogin }: Props) => {
   const [drawer, setDrawer] = useState (false);
   const navigate = useNavigate ();
   const path = useLocation ().pathname;
@@ -100,11 +103,7 @@ const MobileNav = ({ onLogin }) => {
   );
 };
 
-MobileNav.propTypes = {
-  onLogin: PropTypes.func.isRequired,
-};
-
-const DesktopNav = ({ onLogin }) => {
+const DesktopNav = ({ onLogin }: Props) => {
   const navigate = useNavigate ();
 
   return (
@@ -132,10 +131,6 @@ const DesktopNav = ({ onLogin }) => {
       <Toolbar />
     </>
   );
-};
-
-DesktopNav.propTypes = {
-  onLogin: PropTypes.func.isRequired,
 };
 
 const StyledToolbar = styled (Toolbar)`
