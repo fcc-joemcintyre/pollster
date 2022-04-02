@@ -13,8 +13,7 @@ import { getTheme } from './theme';
 import { AuthRoute } from './AuthRoute';
 import { Loading } from './Loading';
 import { NotFound } from './NotFound';
-import { NavUnauth } from './NavUnauth';
-import { NavAuth } from './NavAuth';
+import { NavAuth, NavUnauth } from '../nav';
 import { ScrollToTop } from './ScrollToTop';
 
 export const App = () => {

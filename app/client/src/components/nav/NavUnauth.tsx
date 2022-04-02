@@ -1,42 +1,13 @@
 import { useCallback, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
-import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem,
-  Toolbar, Typography, useMediaQuery }
+import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem, Toolbar, useMediaQuery }
   from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Login } from '../login';
+import { StyledToolbar, Title } from './NavStyles';
 
 type Props = {
   onLogin: () => void,
-};
-
-export const NavUnauth = () => {
-  const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
-  const mobile = useMediaQuery ('(max-width: 767px)');
-
-  const onClose = useCallback (() => {
-    setDialog (undefined);
-  }, [setDialog]);
-
-  const onLoggedIn = useCallback (() => {
-    /* no op */
-  }, []);
-
-  const onLogin = useCallback (() => {
-    setDialog (<Login onClose={onClose} onLogin={onLoggedIn} />);
-  }, [setDialog, onClose, onLoggedIn]);
-
-  return (
-    <>
-      { mobile ? (
-        <MobileNav onLogin={onLogin} />
-      ) : (
-        <DesktopNav onLogin={onLogin} />
-      )}
-      {dialog}
-    </>
-  );
 };
 
 const MobileNav = ({ onLogin }: Props) => {
@@ -133,19 +104,30 @@ const DesktopNav = ({ onLogin }: Props) => {
   );
 };
 
-const StyledToolbar = styled (Toolbar)`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 0 4px;
-`;
+export const NavUnauth = () => {
+  const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
+  const mobile = useMediaQuery ('(max-width: 767px)');
 
-const Title = styled (Typography)`
-  font-size: 30px;
-  vertical-align: top;
-  text-shadow: 1px 1px 1px #3333ff;
-  line-height: 1.0;
-  cursor: pointer;
-`;
+  const onClose = useCallback (() => {
+    setDialog (undefined);
+  }, [setDialog]);
+
+  const onLoggedIn = useCallback (() => {
+    /* no op */
+  }, []);
+
+  const onLogin = useCallback (() => {
+    setDialog (<Login onClose={onClose} onLogin={onLoggedIn} />);
+  }, [setDialog, onClose, onLoggedIn]);
+
+  return (
+    <>
+      { mobile ? (
+        <MobileNav onLogin={onLogin} />
+      ) : (
+        <DesktopNav onLogin={onLogin} />
+      )}
+      {dialog}
+    </>
+  );
+};

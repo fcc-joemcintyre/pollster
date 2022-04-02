@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
-import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem,
-  Toolbar, Typography, useMediaQuery }
+import { AppBar, Button, Drawer, IconButton, List, ListItemText, ListItem, Toolbar, useMediaQuery }
   from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { StyledToolbar, Title } from './NavStyles';
 
 const items = [
   { key: 1, text: 'Results', to: '/results', exact: true, when: 0 },
@@ -13,11 +12,6 @@ const items = [
   { key: 4, text: 'About', to: '/about', exact: true, when: 0 },
   { key: 5, text: 'Logout', to: '/logout', exact: true, when: 0 },
 ];
-
-export const NavAuth = () => {
-  const mobile = useMediaQuery ('(max-width: 767px)');
-  return mobile ? <MobileNav /> : <DesktopNav />;
-};
 
 const MobileNav = () => {
   const [drawer, setDrawer] = useState (false);
@@ -107,19 +101,7 @@ const DesktopNav = () => {
   );
 };
 
-const StyledToolbar = styled (Toolbar)`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 0 4px;
-`;
-
-const Title = styled (Typography)`
-  font-size: 30px;
-  vertical-align: top;
-  text-shadow: 1px 1px 1px #3333ff;
-  line-height: 1.0;
-  cursor: pointer;
-`;
+export const NavAuth = () => {
+  const mobile = useMediaQuery ('(max-width: 767px)');
+  return mobile ? <MobileNav /> : <DesktopNav />;
+};
