@@ -15,7 +15,7 @@ export const PollItem = ({
   text,
   percent = 0,
   onClick = () => { /* no op */ },
-}) => (
+}: Props) => (
   <Grid
     container
     justifyContent='space-between'

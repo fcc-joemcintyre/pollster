@@ -4,7 +4,7 @@ import { PollItem } from '../poll';
 import { Poll } from '../../data/usePolls.js';
 
 type Props = {
-  polls: Poll,
+  polls: Poll[],
 }
 
 /**
@@ -12,7 +12,7 @@ type Props = {
  * @param Props
  * @returns Component
  */
-export const ResultContent = ({ polls }) => {
+export const ResultContent = ({ polls }: Props) => {
   const [tab, setTab] = useState (polls[0].key);
 
   const onTab = useCallback ((e, value) => {

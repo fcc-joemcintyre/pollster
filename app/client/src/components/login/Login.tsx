@@ -20,7 +20,7 @@ const initialFields = [
  * @param Props
  * @returns Component
  */
-export const Login = ({ onLogin, onClose }) => {
+export const Login = ({ onLogin, onClose }: Props) => {
   const { fields, onChange, onValidate, getValues, validateAll } = useFields (initialFields);
   const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
   const login = useLogin ();

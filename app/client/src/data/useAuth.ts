@@ -1,5 +1,5 @@
 import {
-  QueryObserverResult, UseMutationResult, useMutation, useQuery, useQueryClient,
+  QueryObserverResult, useMutation, useQuery, useQueryClient,
 } from 'react-query';
 import { get, post } from './api';
 

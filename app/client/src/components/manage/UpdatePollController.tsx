@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react';
 import { GenDialog } from '@cygns/muikit';
 import { createField, Field, useFields } from '@cygns/use-fields';
-import { PollChoice, useUpdatePoll } from '../../data/usePolls';
+import { useUpdatePoll } from '../../data/usePolls';
 import { PollForm } from './PollForm';
-import { ConstructionOutlined } from '@mui/icons-material';
 
 type Props = {
   pollKey: number,

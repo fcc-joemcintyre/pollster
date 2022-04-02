@@ -28,7 +28,7 @@
     "dev": "webpack --mode=development -w",
     "build": "webpack --mode=production",
     "test": "echo No tests yet",
-    "lint": "eslint --no-error-on-unmatched-pattern src/**",
+    "lint": "eslint --ext .js,.ts,.tsx --no-error-on-unmatched-pattern .",
     "typecheck": "tsc"
   },
   "devDependencies": {

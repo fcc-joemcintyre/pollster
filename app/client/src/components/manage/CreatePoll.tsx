@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { Typography } from '@mui/material';
 import { GenDialog } from '@cygns/muikit';
 import { createField, useFields } from '@cygns/use-fields';
-import { PollChoice, useCreatePoll } from '../../data/usePolls';
+import { useCreatePoll } from '../../data/usePolls';
 import { PageContent } from '../util';
 import { PollForm } from './PollForm';
 

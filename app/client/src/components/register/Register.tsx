@@ -56,7 +56,7 @@ export const Register = () => {
       });
     }
     return errors;
-  }, [getValues, login, onClose, register, validateAll]);
+  }, [getValues, login, navigate, onClose, register, validateAll]);
 
   return (
     <>

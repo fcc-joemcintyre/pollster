@@ -1,4 +1,4 @@
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { Poll } from '../../data/usePolls.js';
 

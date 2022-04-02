@@ -28,7 +28,7 @@ export const PollForm = ({
     >
       <Grid container spacing={2}>
         <FieldTextInput
-          field={fields['title']}
+          field={fields.title}
           label='Title'
           maxLength={40}
           info='Poll title'
