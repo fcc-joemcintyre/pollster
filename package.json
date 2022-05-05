@@ -42,6 +42,6 @@
     "build:libs:validators": "cd lib/validators && npm run build"
   },
   "engines": {
-    "node": "^16.10"
+    "node": "^16.15"
   }
 }
