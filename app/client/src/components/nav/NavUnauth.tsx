@@ -107,14 +107,15 @@ const DesktopNav = ({ onLogin }: Props) => {
 export const NavUnauth = () => {
   const [dialog, setDialog] = useState<JSX.Element | undefined> (undefined);
   const mobile = useMediaQuery ('(max-width: 767px)');
+  const navigate = useNavigate ();
 
   const onClose = useCallback (() => {
     setDialog (undefined);
   }, [setDialog]);
 
   const onLoggedIn = useCallback (() => {
-    /* no op */
-  }, []);
+    navigate ('/', { replace: true });
+  }, [navigate]);
 
   const onLogin = useCallback (() => {
     setDialog (<Login onClose={onClose} onLogin={onLoggedIn} />);
