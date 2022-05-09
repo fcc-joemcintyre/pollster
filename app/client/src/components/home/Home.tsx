@@ -37,13 +37,13 @@ export const Home = () => {
     <PageContent>
       { !authenticated && (
         <>
-          <Box m='40px auto 0 auto' maxWidth='600px'>
+          <Box m='20px auto 0 auto' maxWidth='600px'>
             <Typography paragraph>
-              Welcome to Pollster, your place to vote and create new polls!
+              Welcome to Pollster, your place to create and participate in polls!
             </Typography>
             <Typography paragraph>
-              To create your own polls, <i>Register</i> to create a free account
-              and then <i>Login</i> anytime to manage your polls and see the results.
+              To create your own polls, <strong>Register</strong> to create a free account
+              and then <strong>Login</strong> anytime to manage your polls and see the results.
             </Typography>
           </Box>
           <Divider sx={{ margin: '20px 0 30px 0' }} />
