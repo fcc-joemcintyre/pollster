@@ -20,7 +20,7 @@ export const PollList = ({ polls }: Props) => {
           key={a.key}
           button
           onClick={() => { navigate (`/polls/${a.key}`); }}
-          sx={{ backgroundColor: (index % 2 ? '#c8e6c9' : '#dcedc8') }}
+          sx={{ backgroundColor: (index % 2 ? '#ddf2fa' : '#cae5ef') }}
         >
           <ListItemText
             primary={a.title}

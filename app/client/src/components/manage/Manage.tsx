@@ -67,8 +67,11 @@ export const Manage = () => {
             </Tooltip>
           </Box>
           <List component='nav' aria-label='polls'>
-            { (polls?.polls || []).map ((a) => (
-              <ListItem key={a.key}>
+            { (polls?.polls || []).map ((a, index) => (
+              <ListItem
+                key={a.key}
+                sx={{ backgroundColor: (index % 2 ? '#ddf2fa' : '#cae5ef') }}
+              >
                 <ListItemText
                   primary={a.title}
                   secondary={`${a.choices.reduce ((acc, b) => acc + b.votes, 0)} votes`}

@@ -23,12 +23,12 @@ export const PollItem = ({
     sx={{
       padding: '4px',
       '&:nth-of-type(even)': {
-        border: '1px solid #f0f8ff',
-        background: `linear-gradient(to right,#b0c4dE ${percent}%, #f0f8ff ${percent}%)`,
+        border: '1px solid #ddf2fa',
+        background: `linear-gradient(to right,#b0c4dE ${percent}%, #ddf2fa ${percent}%)`,
       },
       '&:nth-of-type(odd)': {
-        border: '1px solid #fffff0',
-        background: `linear-gradient(to right,#b0c4dE ${percent}%, #fffff0 ${percent}%)`,
+        border: '1px solid #cae5ef',
+        background: `linear-gradient(to right,#b0c4dE ${percent}%, #cae5ef ${percent}%)`,
       },
       '&:hover': {
         border: '1px solid #0000f8',
