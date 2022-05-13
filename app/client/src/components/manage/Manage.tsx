@@ -74,7 +74,17 @@ export const Manage = () => {
               >
                 <ListItemText
                   primary={a.title}
-                  secondary={`${a.choices.reduce ((acc, b) => acc + b.votes, 0)} votes`}
+                  secondary={(
+                    <>
+                      <span>
+                        Sharable link: {window.location.origin}/{a.key}
+                      </span>
+                      <br />
+                      <span>
+                        {a.choices.reduce ((acc, b) => acc + b.votes, 0)} votes
+                      </span>
+                    </>
+                  )}
                 />
                 <ListItemSecondaryAction>
                   <Tooltip title='Edit poll'>
