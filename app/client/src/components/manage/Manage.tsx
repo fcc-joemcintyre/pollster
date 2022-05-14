@@ -77,7 +77,7 @@ export const Manage = () => {
                   secondary={(
                     <>
                       <span>
-                        Sharable link: {window.location.origin}/{a.key}
+                        Sharable link: {window.location.origin}/polls/{a.key}
                       </span>
                       <br />
                       <span>

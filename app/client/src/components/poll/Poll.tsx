@@ -86,6 +86,10 @@ export const Poll = () => {
           <Typography textAlign='center'>
             Select your favorite, the poll results will be shown after you vote.
           </Typography>
+          <Typography textAlign='center'>
+            Want others to participate in this poll, share the following link,<br />
+            {window.origin}/polls/{key}
+          </Typography>
         </Box>
       )}
       <Grid container spacing={1} width='100%' mt='1rem' justifyContent='center'>
