@@ -70,7 +70,7 @@ let db:Database | undefined;
  * @returns Database instance
  */
 export async function initDatabase (uri: string): Promise<Db | null> {
-  db = uri.startsWith ('mongodb:') ? mongo : undefined;
+  db = uri.startsWith ('mongodb') ? mongo : undefined;
   const t = await db?.initDatabase (uri);
   return t || null;
 }
