@@ -4,22 +4,15 @@ Internet polls done easy. Create an account, create some polls, manage your poll
 vote on other people's polls, see your poll results !
 
 This application is built using *React (17.x)*, *React Query* and
-*React-Router (6.x)* on the client. The server uses *Node (16.x)* and
+*React-Router (6.x)* on the client. The server uses *Node (18.x)* and
 *Express (4.17.x)* and MongoDB (5.x). Typescript is used for client
 and server.
 
 ## Live instance
 
-The application can be used at https://pollster-jm.herokuapp.com
+The application can be used at https://pollster-jm.onrender.com
 
 ## Development setup
-
-*Note*: This project uses NPM workspaces, which requires NPM 7.x. To install
-this version of NPM, use,
-
-```
-npm i -g npm
-```
 
 Clone the *Github* repo, and switch to the project directory.
 
@@ -28,10 +21,10 @@ git clone https://github.com/fcc-joemcintyre/pollster.git
 cd pollster
 ```
 
-Then install the dependencies using *npm* or *yarn*.
+Then install the dependencies using *npm*.
 
 ```
-npm install
+npm i
 ```
 
 The database supported is *MongoDB*. This can be a local or hosted instance (you
@@ -41,9 +34,7 @@ name used by the test runner is *pollsterTest*.
 
 ## Scripts
 
-Scripts are provided for build, test and run. Yarn is used in the examples,
-but the NPM client can be used as well. When using the NPM client, include
-*run* before script names (e.g. npm run build).
+Scripts are provided for development tools, test and run.
 
 ### Build (Development)
 
@@ -113,7 +104,7 @@ In a terminal, continuous server operation, updating on changes,
 can be activated with
 
 ```
-npm start
+npm run dev:server
 ```
 
 The *nodemon* utility provides restart on update.
