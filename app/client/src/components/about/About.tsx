@@ -20,8 +20,8 @@ export const About = () => (
       </Typography>
       <List dense>
         <ListItem>Client: React (17.x), Material-UI, Emotion, React Query, and React Router</ListItem>
-        <ListItem>Server: Node (16.x) using Express and Passport</ListItem>
-        <ListItem>Database: Mongo (4.x)</ListItem>
+        <ListItem>Server: Node (18.x) using Express and Passport</ListItem>
+        <ListItem>Database: Mongo (5.x)</ListItem>
         <ListItem>Languages: Typescript, CSS</ListItem>
       </List>
       <Typography>
@@ -29,7 +29,7 @@ export const About = () => (
       </Typography>
       <List dense>
         <ListItem>GitHub (source hosting)</ListItem>
-        <ListItem>Heroku (app hosting)</ListItem>
+        <ListItem>Render and Heroku (app hosting)</ListItem>
         <ListItem>MongoDB Atlas (database hosting)</ListItem>
       </List>
     </Box>
