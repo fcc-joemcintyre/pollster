@@ -19,7 +19,7 @@ export function login (req: Request, res: Response, next: NextFunction) {
     console.log ('ERROR login (400) invalid body', validateLogin.errors);
     res.status (400).json ({});
   } else {
-    passport.authenticate ('local', (err, user) => {
+    passport.authenticate ('local', (err: unknown, user: db.User) => {
       if (err) {
         return next (err);
       }
@@ -50,8 +50,9 @@ export function login (req: Request, res: Response, next: NextFunction) {
 export function logout (req: Request, res: Response): void {
   const user = req.user as db.User;
   console.log ('INFO logout', user?.key || 0);
-  req.logout ();
-  res.status (200).json ({});
+  req.logout (() => {
+    res.status (200).json ({});
+  });
 }
 
 /**

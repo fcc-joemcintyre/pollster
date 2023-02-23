@@ -32,6 +32,22 @@ const httpsOnly = (req: Request, res: Response, next: NextFunction): void => {
 };
 
 /**
+ * Extend cookie session with passportjs methods
+ * @param req HTTP request
+ * @param res HTTP response
+ * @param next Next function in middleware chain
+ */
+function cookieSessionExtension (req: Request, res: Response, next: NextFunction) {
+  if (req.session && !req.session.regenerate) {
+    req.session.regenerate = (cb: () => void) => cb ();
+  }
+  if (req.session && !req.session.save) {
+    req.session.save = (cb: () => void) => cb ();
+  }
+  next ();
+}
+
+/**
  * Start the server
  * @param port HTTP port number
  * @param dbLocation URL to database
@@ -62,6 +78,7 @@ export async function startServer (port: number, dbLocation: string): Promise<vo
       name: 'session',
       secret: sessionSecret,
     }));
+    app.use (cookieSessionExtension);
 
     // set up passport authentication, attach to express session manager
     initAuth ();
